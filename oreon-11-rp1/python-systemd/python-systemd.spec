@@ -1,81 +1,85 @@
-%global source0_hash 4e57f39797fd5d9e2d22b8806a252d7c0106c936039d1e71c8c6b8008e695c0a
+%global source0_hash fc2c2ff4f03bf1a110f6ba2cadb874f51a7c0ce4fa0261d2bbe3371548ddbc88
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+Name:           python-systemd
+Version:        236
+Release:        1%{?dist}
+Summary:        Python module wrapping libsystemd functionality
 
-Name: python-systemd
-Version: 235
-Release: 1%{?dist}
-Summary: Python bindings for systemd
-License: LGPL-2.1-or-later
-URL: https://github.com/systemd/python-systemd
-Source0: https://files.pythonhosted.org/packages/10/9e/ab4458e00367223bda2dd7ccf0849a72235ee3e29b36dce732685d9b7ad9/systemd-python-%{version}.tar.gz
+License:        LGPL-2.1-or-later
+URL:            https://github.com/systemd/python-systemd
+Source0:        https://github.com/systemd/python-systemd/archive/v%{version}.tar.gz#/python-systemd-%{version}.tar.gz
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: oreon-rpm-macros-python
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: pkgconf
-BuildRequires: python3-devel
-BuildRequires: python3-build
-BuildRequires: python3-installer
-BuildRequires: python3-setuptools
-BuildRequires: python3-wheel
-BuildRequires: systemd-devel
-BuildRequires: patchelf
+BuildRequires:  meson
+BuildRequires:  gcc
+BuildRequires:  systemd-devel
+BuildRequires:  python3-devel
+BuildRequires:  web-assets-devel
+BuildRequires:  oreon-rpm-macros
 
-Provides: python3-systemd = %{version}-%{release}
-Requires: python3
-Requires: systemd
+%global _description %{expand:
+Python module for native access to the libsystemd facilities. Functionality
+includes sending of structured messages to the journal and reading journal
+files, querying machine and boot identifiers and a lists of message identifiers
+provided by systemd. Other functionality provided the library is also wrapped.}
 
-%description
-python-systemd talks to libsystemd.
+# generated BuildRequires, refresh with: orbscli plan bake
+BuildRequires: (python3dist(tomli) if python3-devel < 3.11)
+BuildRequires: pyproject-rpm-macros
+BuildRequires: python3dist(meson-python)
+BuildRequires: python3dist(packaging)
+BuildRequires: python3dist(pip) >= 19
+BuildRequires: python3dist(pytest)
+BuildRequires: python3dist(sphinx)
+
+%description %_description
+
+%package -n python3-systemd
+Summary:        %{summary}
+
+%{?python_provide:%python_provide python3-systemd}
+Provides:       systemd-python3 = %{version}-%{release}
+Provides:       systemd-python3%{?_isa} = %{version}-%{release}
+Obsoletes:      systemd-python3 < 230
+
+%description -n python3-systemd %_description
+
+%package doc
+Summary:        HTML documentation for %{name}
+Requires:       js-jquery
+
+%description doc
+%{summary}.
 
 %prep
 %oreon_sha256
-%autosetup -n systemd-python-%{version} -p1
-cat > pyproject.toml << 'EOF'
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-EOF
+
+%autosetup -p1
+# do not test coverage
+sed -i -e 's/"pytest-cov"//' pyproject.toml
 
 %build
-%oreon_py_build
+%pyproject_wheel -Csetup-args="-Ddocs=true"
 
 %install
-%oreon_py_install
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_py_save_files systemd
-python3 - %{oreon_py_files} << 'PY'
-import os
-import sys
-from pathlib import Path
-p = Path(sys.argv[1])
-lines = p.read_text().splitlines()
-seen = set(lines)
-extra = []
-for line in lines:
-    path = line.strip().strip('"')
-    if not path.endswith(".py"):
-        continue
-    if "/lib/python3." not in path and "/lib64/python3." not in path:
-        continue
-    glob = os.path.dirname(path) + "/__pycache__/*"
-    if glob not in seen:
-        seen.add(glob)
-        extra.append(glob)
-text = "\n".join(lines + extra)
-p.write_text(text + ("\n" if text else ""))
-PY
+%pyproject_install
+%pyproject_save_files -L systemd
 
-%files -f %{oreon_py_files}
+mkdir -p %{buildroot}%{_pkgdocdir}
+mv %{buildroot}/usr/doc/python-systemd/html %{buildroot}%{_pkgdocdir}/
+ln -vsf --relative %{_jsdir}/jquery/latest/jquery.min.js %{buildroot}%{_pkgdocdir}/html/_static/jquery.js
+cp -p README.md NEWS %{buildroot}%{_pkgdocdir}/
+
+%check
+%pytest -v %{buildroot}%{python3_sitearch}/systemd/test/
+
+%files -n python3-systemd -f %{pyproject_files}
 %license LICENSE.txt
+%doc %{_pkgdocdir}
+%exclude %{_pkgdocdir}/html
+
+%files doc
+%doc %{_pkgdocdir}/html
+

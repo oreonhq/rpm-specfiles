@@ -1,52 +1,107 @@
 %global source0_hash b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: C library for multiple-precision floating-point computations
 Name: mpfr
-Version: 4.2.2
-Release: 1%{?dist}
-Summary: GNU MPFR, the Multiple Precision Floating-Point Reliable Library
-License: LGPL-3.0-or-later
+Version:        4.2.2
+Release:        1%{?dist}
 URL: https://www.mpfr.org/
-Source0: https://ftp.gnu.org/gnu/mpfr/mpfr-%{version}.tar.xz
+VCS: git:https://gitlab.inria.fr/mpfr/mpfr.git
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gmp-devel
+License: LGPL-3.0-or-later
 BuildRequires: gcc
-BuildRequires: glibc-devel
+BuildRequires: gmp-devel
 BuildRequires: make
+BuildRequires: texinfo
+BuildRequires:  oreon-rpm-macros
+
+Source0:        https://www.mpfr.org/mpfr-%{version}/mpfr-%{version}.tar.xz
+
+# Upstream post-release patches.  This currently contains:
+#Patch0: https://www.mpfr.org/%%{name}-%%{version}/allpatches
 
 %description
-This manual documents how to install and use the Multiple Precision Floating-Point Reliable Library, version 4.2.2.
+The MPFR library is a C library for multiple-precision floating-point
+computations with "correct rounding". The MPFR is efficient and
+also has a well-defined semantics. It copies the good ideas from the
+ANSI/IEEE-754 standard for double-precision floating-point arithmetic
+(53-bit mantissa). MPFR is based on the GMP multiple-precision library.
 
 %package devel
-Summary: GNU MPFR, the Multiple Precision Floating-Point Reliable Library
-Requires: mpfr%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(mpfr)
+Summary: Development files for the MPFR library
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: gmp-devel%{?_isa}
 
 %description devel
-This manual documents how to install and use the Multiple Precision Floating-Point Reliable Library, version 4.2.2.
+Header files and documentation for using the MPFR
+multiple-precision floating-point library in applications.
+
+If you want to develop applications which will use the MPFR library,
+you'll need to install the mpfr-devel package. You'll also need to
+install the mpfr package.
+
+%package doc
+Summary: Documentation for the MPFR library
+License: GFDL-1.2-no-invariants-or-later
+BuildArch: noarch
+
+%description doc
+Documentation for the MPFR library.
 
 %prep
 %oreon_sha256
+
 %autosetup -p1
 
 %build
-# stock configure fails on this compiler
-export CFLAGS="-O2 -g -std=gnu17"
-export CXXFLAGS="-O2 -g -std=gnu17"
-export LDFLAGS="-Wl,-z,relro -Wl,-z,now -Wl,--as-needed"
-./configure --prefix=%{_prefix} --libdir=%{_libdir} --enable-shared
-make -s -j%{?_smp_build_ncpus}
+%configure --disable-assert --disable-static
+
+# Get rid of undesirable hardcoded rpaths; workaround libtool reordering
+# -Wl,--as-needed after all the libraries.
+sed -e 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' \
+    -e 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' \
+    -e 's|CC="\(g..\)"|CC="\1 -Wl,--as-needed"|' \
+    -i libtool
+
+%make_build
 
 %install
-make -s install DESTDIR=%{buildroot}
-rm -f %{buildroot}%{_libdir}/*.a
-%oreon_filelist_devel
+%make_install
+cp -p ChangeLog PATCHES README %{buildroot}%{_pkgdocdir}
+rm -f %{buildroot}%{_libdir}/*.la
+rm -f %{buildroot}%{_infodir}/dir
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+#these go into licenses, not doc
+rm -f %{buildroot}%{_pkgdocdir}/COPYING{,.LESSER}
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%check
+export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
+%make_build check
+
+%files
+%license COPYING COPYING.LESSER
+%dir %{_pkgdocdir}
+%{_pkgdocdir}/NEWS
+%{_pkgdocdir}/README
+%{_libdir}/libmpfr.so.6*
+
+%files devel
+%{_libdir}/libmpfr.so
+%{_includedir}/mpfr.h
+%{_includedir}/mpf2mpfr.h
+%{_libdir}/pkgconfig/mpfr.pc
+
+%files doc
+%license COPYING COPYING.LESSER
+%dir %{_pkgdocdir}
+%{_pkgdocdir}/AUTHORS
+%{_pkgdocdir}/BUGS
+%{_pkgdocdir}/ChangeLog
+%{_pkgdocdir}/FAQ.html
+%{_pkgdocdir}/PATCHES
+%{_pkgdocdir}/TODO
+%{_pkgdocdir}/examples
+%{_infodir}/mpfr.info*
+

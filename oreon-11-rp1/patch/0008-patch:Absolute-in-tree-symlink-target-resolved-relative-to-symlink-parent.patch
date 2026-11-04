@@ -1,0 +1,150 @@
+commit a2b192295d7046bafc18d54973436bb3faa659d7
+Author: Andreas Gruenbacher <andreas.gruenbacher@gmail.com>
+Date:   Fri May 15 01:12:04 2026 +0200
+
+    Absolute in-tree symlink target resolved relative to symlink parent
+    
+    When resolving an absolute symlink that points back into patch's working
+    directory, patch resolved the remainder of the symlink relative to the
+    directory containing the symlink rather than the working directory.  With
+    symlinks in subdirectories, this can lead to patching the wrong file.
+    * src/safe.c (struct symlink): Store the cached_dirfd a symlink resolves to.
+    (cwd): Turn into a global variable that can be accessed from read-symlink().
+    (read_symlink): Pass the current cached_dirfd and return the cached_dirfd the
+    symlink needs to be resolved in.
+    (traverse_next): Continue traversal in the directory returned by
+    read_symlink().
+    * tests/symlinks: Add absolute symlink test case.
+    
+    This closes bug #68311:
+    https://savannah.gnu.org/bugs/?68311
+
+diff --git a/src/safe.c b/src/safe.c
+index c40657f..273133f 100644
+--- a/src/safe.c
++++ b/src/safe.c
+@@ -286,6 +286,7 @@ count_path_components (const char *path)
+ /* A symlink to resolve. */
+ struct symlink {
+   struct symlink *prev;
++  struct cached_dirfd *dir;
+   char *path;
+ };
+ 
+@@ -302,10 +303,15 @@ static void pop_symlink (struct symlink **stack)
+   free (top);
+ }
+ 
++static struct cached_dirfd cwd = {
++  .children = LIST_HEAD_INIT(cwd.children),
++  .fd = AT_FDCWD,
++};
++
+ static int cwd_stat_errno = -1;
+ static struct stat cwd_stat;
+ 
+-static struct symlink *read_symlink(int dirfd, const char *name)
++static struct symlink *read_symlink(struct cached_dirfd *dir, const char *name)
+ {
+   int saved_errno = errno;
+   struct stat st;
+@@ -313,7 +319,7 @@ static struct symlink *read_symlink(int dirfd, const char *name)
+   char *buffer;
+   ssize_t ret;
+ 
+-  if (fstatat (dirfd, name, &st, AT_SYMLINK_NOFOLLOW)
++  if (fstatat (dir->fd, name, &st, AT_SYMLINK_NOFOLLOW)
+       || ! S_ISLNK (st.st_mode))
+     {
+       errno = saved_errno;
+@@ -324,10 +330,11 @@ static struct symlink *read_symlink(int dirfd, const char *name)
+     xalloc_die ();
+   symlink = ximalloc (symlinksize);
+   buffer = (char *)(symlink + 1);
+-  ret = readlinkat (dirfd, name, buffer, st.st_size);
++  ret = readlinkat (dir->fd, name, buffer, st.st_size);
+   if (ret <= 0)
+     goto fail;
+   buffer[ret] = 0;
++  symlink->dir = dir;
+   symlink->path = buffer;
+   if (ISSLASH (*buffer))
+     {
+@@ -355,6 +362,7 @@ static struct symlink *read_symlink(int dirfd, const char *name)
+ 	    {
+ 	      while (ISSLASH (*end))
+ 		end++;
++	      symlink->dir = &cwd;
+ 	      symlink->path = end;
+ 	      return symlink;
+ 	    }
+@@ -378,7 +386,7 @@ fail:
+ }
+ 
+ /* Resolve the next path component in PATH inside DIR.  If it is a symlink,
+-   read it and returned it in TOP. */
++   read it and return it in SYMLINK. */
+ static struct cached_dirfd *
+ traverse_next (struct cached_dirfd *dir, char **path, int keepfd,
+ 	       struct symlink **symlink)
+@@ -417,9 +425,12 @@ traverse_next (struct cached_dirfd *dir, char **path, int keepfd,
+ 		  /* NetBSD 6.1: Inappropriate file type or format.  */)
+ 	      || errno == ENOTDIR)
+ 	    {
+-	      *symlink = read_symlink (dir->fd, *path);
++	      *symlink = read_symlink (dir, *path);
+ 	      if (*symlink)
+-		entry = dir;
++	        {
++		  entry = (*symlink)->dir;
++		  (*symlink)->dir = nullptr;
++		}
+ 	      errno = ELOOP;
+ 	    }
+ 	}
+@@ -459,17 +470,11 @@ traverse_another_path (char **pathname, bool reject_nl, int keepfd)
+   if (unsafe || last == path || IS_ABSOLUTE_FILE_NAME (path))
+     return AT_FDCWD;
+ 
+-  static struct cached_dirfd cwd = {
+-    .fd = AT_FDCWD,
+-  };
+-
+   intmax_t misses = dirfd_cache_misses;
+   struct cached_dirfd *dir = &cwd;
+   struct symlink *stack = nullptr;
+   idx_t steps = count_path_components (path);
+ 
+-  INIT_LIST_HEAD (&cwd.children);
+-
+   if (steps > MAX_PATH_COMPONENTS)
+     {
+       errno = ELOOP;
+diff --git a/tests/symlinks b/tests/symlinks
+index 53afa56..3ca2439 100644
+--- a/tests/symlinks
++++ b/tests/symlinks
+@@ -435,3 +435,23 @@ ncheck 'ln -sf d l'
+ check 'patch -p1 -i l/ab.diff' <<EOF
+ patching file foo
+ EOF
++
++cat > wrong-base.diff <<EOF
++--- d1/link/target
+++++ d1/link/target
++@@ -1 +1 @@
++-old
+++new
++EOF
++
++mkdir -p sub d1
++echo old > sub/target
++ln -s "$PWD/sub" d1/link
++
++check 'patch -p0 < wrong-base.diff' <<EOF
++patching file d1/link/target
++EOF
++
++check 'cat sub/target' <<EOF
++new
++EOF

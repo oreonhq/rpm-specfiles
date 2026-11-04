@@ -1,5 +1,5 @@
 # Convenience macro for the transition to merged-sbin
-# (/usr/sbin merged into /usr/bin)
+# (https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin)
 # Usage:
 #   List all files listed in %%files as %%_sbindir/foo.
 # Example:

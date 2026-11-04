@@ -1,62 +1,99 @@
 %global source0_hash fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: A library for editing typed command lines
 Name: readline
-Version: 8.3.6
-Release: 1%{?dist}
-Summary: GNU Readline
-License: GPL-3.0-or-later
-URL: https://tiswww.case.edu/php/chet/readline/rltop.html
-Source0: https://ftp.gnu.org/gnu/readline/readline-8.3.tar.gz
-Patch1: https://ftp.gnu.org/gnu/readline/readline-8.3-patches/readline83-001
-Patch2: https://ftp.gnu.org/gnu/readline/readline-8.3-patches/readline83-002
-Patch3: https://ftp.gnu.org/gnu/readline/readline-8.3-patches/readline83-003
-Patch4: https://ftp.gnu.org/gnu/readline/readline-8.3-patches/readline83-004
-Patch5: https://ftp.gnu.org/gnu/readline/readline-8.3-patches/readline83-005
-Patch6: https://ftp.gnu.org/gnu/readline/readline-8.3-patches/readline83-006
+Version:        8.3
+Release:        1%{?dist}
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: ncurses-devel
-BuildRequires: gcc
-BuildRequires: glibc-devel
+# * Main sources are GPL-3.0-or-later
+# * examples/rlfe are GPL-2.0-or-later
+# * docs are GFDL-1.3-no-invariants-or-later
+License: GPL-3.0-or-later AND GPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
+
+URL: https://tiswww.case.edu/php/chet/readline/rltop.html
+Source0:        https://mirrors.kernel.org/gnu/readline/readline-%{version}.tar.gz
+
+# Official upstream patches
+# Patches are converted to apply with '-p1'
+Patch1:        readline-8.3-patch-1.patch
+Patch2:        readline-8.3-patch-2.patch
+Patch3:        readline-8.3-patch-3.patch
+
+# Other patches
+# Remove RPATH, use CFLAGS
+Patch101:        readline-8.0-shlib.patch
+
 BuildRequires: make
+BuildRequires: gcc
+BuildRequires: ncurses-devel
+BuildRequires:  oreon-rpm-macros
 
 %description
-The Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in. Both Emacs and vi editing modes are available. The Readline library includes additional functions to maintain a list of previously-entered command lines, to recall and perhaps reedit those lines, and perform csh-like history expansion on previous commands.
-
-The history facilities are also placed into a separate library, the History library, as part of the build process. The History library may be used without Readline in applications which desire its capabilities.
+The Readline library provides a set of functions that allow users to
+edit command lines. Both Emacs and vi editing modes are available. The
+Readline library includes additional functions for maintaining a list
+of previously-entered command lines for recalling or editing those
+lines, and for performing csh-like history expansion on previous
+commands.
 
 %package devel
-Summary: GNU Readline
-Requires: readline%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(readline)
-Provides: pkgconfig(history)
+Summary: Files needed to develop programs which use the readline library
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-The Readline library provides a set of functions for use by applications that allow users to edit command lines as they are typed in. Both Emacs and vi editing modes are available. The Readline library includes additional functions to maintain a list of previously-entered command lines, to recall and perhaps reedit those lines, and perform csh-like history expansion on previous commands.
+The Readline library provides a set of functions that allow users to
+edit typed command lines. If you want to develop programs that will
+use the readline library, you need to have the readline-devel package
+installed. You also need to have the readline package installed.
 
-The history facilities are also placed into a separate library, the History library, as part of the build process. The History library may be used without Readline in applications which desire its capabilities.
+%package static
+Summary: Static libraries for the readline library
+Requires: %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static
+The readline-static package contains the static version of the readline
+library.
 
 %prep
 %oreon_sha256
-%autosetup -n readline-8.3 -p0
-sed -i 's|-Wl,-rpath,$(libdir) ||' support/shobj-conf
+
+%autosetup -p1
 
 %build
-%oreon_configure --disable-static --with-curses
-%oreon_make SHLIB_LIBS=-lncursesw
+%configure --with-curses --disable-install-examples
+%make_build
 
 %install
-%oreon_make_install SHLIB_LIBS=-lncursesw
-rm -f %{buildroot}%{_libdir}/*.a %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
+%make_install
 
-%oreon_filelist_devel
+rm -vrf %{buildroot}%{_docdir}/readline
+rm -vf %{buildroot}%{_infodir}/dir*
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+%ldconfig_scriptlets
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files
+%license COPYING USAGE
+%{_libdir}/libreadline.so.*
+%{_libdir}/libhistory.so.*
+%{_infodir}/history.info*
+%{_infodir}/rluserman.info*
+
+%files devel
+%doc CHANGES NEWS README
+%doc examples/*.c examples/*.h examples/rlfe
+%{_includedir}/readline/
+%{_libdir}/libreadline.so
+%{_libdir}/libhistory.so
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/pkgconfig/history.pc
+%{_mandir}/man3/readline.3*
+%{_mandir}/man3/history.3*
+%{_infodir}/readline.info*
+
+%files static
+%{_libdir}/libreadline.a
+%{_libdir}/libhistory.a
+

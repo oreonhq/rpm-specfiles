@@ -1,55 +1,67 @@
-%global source0_hash 53626fddce753c454a3fea581cbbc7fe9bbcf0bc70416d48fdbbf5d87ef6c72e
+%global source0_hash 10053dbc2fa342516b780a6bbf6e7b2a2360b8d49c5ac426936bf3df82526732
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global with_check 1
 
-Name: libb2
-Version: 0.98.1
-Release: 1%{?dist}
-Summary: BLAKE2 hash library
-License: CC0-1.0
-URL: https://github.com/BLAKE2/libb2
-Source0: https://github.com/BLAKE2/libb2/releases/download/v%{version}/libb2-%{version}.tar.gz
+Name:    libb2
+Summary: C library providing BLAKE2b, BLAKE2s, BLAKE2bp, BLAKE2sp
+Version:        0.98.1
+Release:        1%{?dist}
+License: CC0-1.0 OR Apache-1.0 OR Apache-2.0
+URL:     https://blake2.net/
+Source0:        https://github.com/BLAKE2/libb2/archive/v%{version}/libb2-%{version}.tar.gz
 
-BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
-BuildRequires: glibc-devel
+BuildRequires: automake
+BuildRequires: libtool
 BuildRequires: make
-BuildRequires: patchelf
+BuildRequires:  oreon-rpm-macros
 
 %description
-BLAKE2 hash library
+C library providing BLAKE2b, BLAKE2s, BLAKE2bp, BLAKE2sp.
 
-%package devel
-Summary: BLAKE2 hash library
-Requires: libb2%{?_isa} = %{version}-%{release}
+BLAKE2 is a cryptographic hash function faster than MD5, SHA-1, SHA-2,
+and SHA-3, yet is at least as secure as the latest standard SHA-3.
 
-%description devel
-BLAKE2 hash library
+%package        devel
+Summary:        Development files for the Blake2 library
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+%{summary}.
 
 %prep
 %oreon_sha256
-%autosetup -n libb2-0.98.1 -p1
+
+%autosetup -n libb2-%{version}
+
+sed -e 's|CFLAGS=-O3|CFLAGS="%{optflags}"|g' -i configure.ac
+autoreconf -ivf
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+%configure --disable-silent-rules --enable-static=no --enable-native=no
+%make_build
+
+%if 0%{with_check}
+%check
+make check
+%endif
 
 %install
-%oreon_make_install
+%make_install
 rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
 
-%files -f %{_builddir}/%{name}.files
+%ldconfig_scriptlets
+
+%files
 %license COPYING
+%{_libdir}/libb2.so.1
+%{_libdir}/libb2.so.1.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_libdir}/libb2.so
+%{_libdir}/pkgconfig/libb2.pc
+%{_includedir}/blake2.h
+

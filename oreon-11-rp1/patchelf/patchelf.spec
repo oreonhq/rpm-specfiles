@@ -1,40 +1,64 @@
-%global source0_hash 20dbe23e9dbc4ad769078a867ad002c04297a069ff93c95fb72242dd55d4dd6f
+%global source0_hash 491108728f120ce05b539934b41a750235031a6df8abc6b47e57aff7de15094d
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# hardening breaks the set-interpreter-long test on i686, x86_64, ppc64le, s390x
+%undefine _hardened_build
 
-Name: patchelf
-Version: 0.19.3
-Release: 1%{?dist}
-Summary: Modify the dynamic linker and RPATH of ELF executables
-License: GPL-3.0-or-later
-URL: https://github.com/NixOS/patchelf
-Source0: https://github.com/NixOS/patchelf/releases/download/%{version}/patchelf-%{version}.tar.bz2
+Name:           patchelf
+Version:        0.19.1
+Release:        1%{?dist}
+Summary:        A utility for patching ELF binaries
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: glibc-devel
-BuildRequires: make
+# Automatically converted from old format: GPLv3+ - review is highly recommended.
+License:        GPL-3.0-or-later
+URL:            http://nixos.org/patchelf.html
+Source0:        https://github.com/NixOS/patchelf/releases/download/%{version}/patchelf-%{version}.tar.gz
+
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  coreutils
+BuildRequires:  libacl-devel
+BuildRequires:  libattr-devel
+BuildRequires:  oreon-rpm-macros
 
 %description
-PatchELF changes the dynamic linker, RPATH and DT_NEEDED entries of ELF
-executables and shared libraries.
+PatchELF is a simple utility for modifying an existing ELF executable
+or library.  It can change the dynamic loader ("ELF interpreter")
+of an executable and change the RPATH of an executable or library.
 
 %prep
 %oreon_sha256
-%autosetup -n patchelf-%{version} -p1
+
+%autosetup -p1
+
+# package ships elf.h - delete to use glibc-headers one
+rm src/elf.h
 
 %build
-%oreon_configure
-%oreon_make
+%configure
+%make_build
+
+%check
+make check || (cat tests/*.log; exit 1)
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-%oreon_filelist
+%make_install
 
-%files -f %{_builddir}/%{name}.files
+# the docs get put in a funny place, so delete and include in the
+# standard way in the docs section below
+rm -rf %{buildroot}/usr/share/doc/%{name}
+
+%files
 %license COPYING
+%doc README.md
+%{_bindir}/patchelf
+%{_mandir}/man1/patchelf.1*
+%dir %{_datadir}/zsh
+%dir %{_datadir}/zsh/site-functions
+%{_datadir}/zsh/site-functions/_patchelf
+

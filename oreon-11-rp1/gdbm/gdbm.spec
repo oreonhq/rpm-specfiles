@@ -1,63 +1,124 @@
-%global source0_hash 6a24504a14de4a744103dcb936be976df6fbe88ccff26065e54c1c47946f4a5e
+%global source0_hash 74b1081d21fff13ae4bd7c16e5d6e504a4c26f7cde1dca0d963a484174bbcacd
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%bcond_with largefile
 
+Summary: A GNU set of database routines which use extensible hashing
 Name: gdbm
-Version: 1.26
-Release: 1%{?dist}
-Summary: GNU database routines
+Version:        1.23
+Release:        1%{?dist}
+Epoch: 1
 License: GPL-3.0-or-later
-URL: https://www.gnu.org.ua/software/gdbm/
-Source0: https://ftp.gnu.org/gnu/gdbm/gdbm-%{version}.tar.gz
+URL: http://www.gnu.org/software/gdbm/
 
-BuildRequires: oreon-rpm-macros
+Source0:        http://ftp.gnu.org/gnu/gdbm/gdbm-%{version}.tar.gz
+
 BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
+BuildRequires: libtool
+BuildRequires: gettext
 BuildRequires: readline-devel
+BuildRequires: make
+BuildRequires:  oreon-rpm-macros
+
+# when -libs subpkg was introduced
+Obsoletes: gdbm < 1:1.14.1-4
+
+Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 
 %description
-GNU dbm is a library of database functions that use extensible hashing and work similarly to the standard UNIX dbm functions.
+Gdbm is a GNU database indexing library, including routines which use
+extensible hashing.  Gdbm works in a similar way to standard UNIX dbm
+routines.  Gdbm is useful for developers who write C applications and
+need access to a simple and efficient database or who are building C
+applications which will use such a database.
+
+If you're a C developer and your programs need access to simple
+database routines, you should install gdbm.  You'll also need to
+install gdbm-devel.
+
+%package libs
+Summary: Libraries files for gdbm
+# when -libs subpkg was introduced
+Obsoletes: gdbm < 1:1.14.1-4
+
+%description libs
+Libraries for the Gdbm GNU database indexing library
 
 %package devel
-Summary: GNU database routines
-Requires: gdbm%{?_isa} = %{version}-%{release}
+Summary: Development libraries and header files for the gdbm library
+Requires: %{name}%{?_isa} = %{epoch}:%{version}-%{release}
+Requires(post): info
+Requires(preun): info
 
 %description devel
-GNU dbm is a library of database functions that use extensible hashing and work similarly to the standard UNIX dbm functions.
+Gdbm-devel contains the development libraries and header files for
+gdbm, the GNU database system.  These libraries and header files are
+necessary if you plan to do development using the gdbm database.
+
+Install gdbm-devel if you are developing C programs which will use the
+gdbm database library.  You'll also need to install the gdbm package.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%setup -q
 
 %build
-%oreon_configure --disable-static --disable-nls --enable-libgdbm-compat
-%oreon_make
+
+CFLAGS="$CFLAGS -std=gnu11"
+export CFLAGS
+
+%configure \
+    --disable-static \
+%{!?with_largefile: --disable-largefile} \
+    --disable-rpath \
+    --enable-libgdbm-compat
+
+# currently --disable-rpath doesn't work for gdbm_dump|load, gdbmtool and libgdbm_compat.so.4
+# https://puszcza.gnu.org.ua/bugs/index.php?359
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+
+%make_build
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -rf %{buildroot}%{_infodir}
+%make_install
 
-%files
+%find_lang %{name}
+
+# create symlinks for compatibility
+mkdir -p $RPM_BUILD_ROOT/%{_includedir}/gdbm
+ln -sf ../gdbm.h $RPM_BUILD_ROOT/%{_includedir}/gdbm/gdbm.h
+ln -sf ../ndbm.h $RPM_BUILD_ROOT/%{_includedir}/gdbm/ndbm.h
+ln -sf ../dbm.h $RPM_BUILD_ROOT/%{_includedir}/gdbm/dbm.h
+
+# Remove libtool archives
+find %{buildroot} -type f -name "*.la" -delete
+
+rm -f $RPM_BUILD_ROOT/%{_infodir}/dir
+
+%check
+export LD_LIBRARY_PATH=`pwd`/src/.libs/:`pwd`/compat/.libs/
+make check
+
+%ldconfig_scriptlets libs
+
+%files -f %{name}.lang
+%doc NEWS README THANKS AUTHORS NOTE-WARNING
+%{_bindir}/gdbm*
+%{_mandir}/man1/gdbm*
+
+%files libs
 %license COPYING
-%{_bindir}/gdbm_dump
-%{_bindir}/gdbm_load
-%{_bindir}/gdbmtool
-%{_libdir}/libgdbm.so.6
-%{_libdir}/libgdbm.so.6.*
-%{_libdir}/libgdbm_compat.so.4
-%{_libdir}/libgdbm_compat.so.4.*
-%{_mandir}/man1/gdbm_dump.1*
-%{_mandir}/man1/gdbm_load.1*
-%{_mandir}/man1/gdbmtool.1*
-%{_mandir}/man3/gdbm.3*
+%{_libdir}/libgdbm.so.6*
+%{_libdir}/libgdbm_compat.so.4*
 
 %files devel
-%{_includedir}/gdbm.h
-%{_includedir}/dbm.h
-%{_includedir}/ndbm.h
 %{_libdir}/libgdbm.so
 %{_libdir}/libgdbm_compat.so
+%{_includedir}/*
+%{_infodir}/*.info*
+%{_mandir}/man3/*
+

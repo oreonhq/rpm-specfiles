@@ -1,0 +1,72 @@
+commit 51bb61305c2b5c14ffc62787d2f537ddfbf6374f
+Author: Andreas Gruenbacher <andreas.gruenbacher@gmail.com>
+Date:   Fri May 15 01:17:14 2026 +0200
+
+    Remove symlink caching
+    
+    * src/safe.c (traverse_another_path): No longer cache resolved symlinks.
+
+diff --git a/src/safe.c b/src/safe.c
+index 532fbfb..c40657f 100644
+--- a/src/safe.c
++++ b/src/safe.c
+@@ -467,7 +467,6 @@ traverse_another_path (char **pathname, bool reject_nl, int keepfd)
+   struct cached_dirfd *dir = &cwd;
+   struct symlink *stack = nullptr;
+   idx_t steps = count_path_components (path);
+-  struct cached_dirfd *traversed_symlink = nullptr;
+ 
+   INIT_LIST_HEAD (&cwd.children);
+ 
+@@ -488,7 +487,6 @@ traverse_another_path (char **pathname, bool reject_nl, int keepfd)
+     {
+       struct cached_dirfd *entry;
+       struct symlink *symlink = nullptr;
+-      char *prev = path;
+ 
+       entry = traverse_next (dir, stack ? &stack->path : &path, keepfd, &symlink);
+       if (! entry)
+@@ -501,14 +499,6 @@ traverse_another_path (char **pathname, bool reject_nl, int keepfd)
+ 	  goto fail;
+ 	}
+       dir = entry;
+-      if (! stack && symlink)
+-	{
+-	  const char *p = prev;
+-	  while (*p && ! ISSLASH (*p))
+-	    p++;
+-	  char *name = ximemdup0 (prev, p - prev);
+-	  traversed_symlink = new_cached_dirfd (dir, name, DIRFD_INVALID);
+-	}
+       if (stack && ! *stack->path)
+ 	pop_symlink (&stack);
+       if (symlink && *symlink->path)
+@@ -523,19 +513,6 @@ traverse_another_path (char **pathname, bool reject_nl, int keepfd)
+ 	}
+       else if (symlink)
+ 	pop_symlink (&symlink);
+-      if (traversed_symlink && ! stack)
+-	{
+-	  traversed_symlink->fd =
+-	    entry->fd == AT_FDCWD ? AT_FDCWD : dup (entry->fd);
+-	  if (traversed_symlink->fd < 0)
+-	    free_cached_dirfd (traversed_symlink);
+-	  else
+-	    {
+-	      insert_cached_dirfd (traversed_symlink, keepfd);
+-	      list_add (&traversed_symlink->lru_link, &lru_list);
+-	    }
+-	  traversed_symlink = nullptr;
+-	}
+     }
+   *pathname = last;
+   if (debug & 32)
+@@ -550,8 +527,6 @@ traverse_another_path (char **pathname, bool reject_nl, int keepfd)
+   return put_path (dir);
+ 
+ fail:
+-  if (traversed_symlink)
+-    free_cached_dirfd (traversed_symlink);
+   put_path (dir);
+   while (stack)
+     pop_symlink (&stack);

@@ -1,64 +1,118 @@
 %global source0_hash 79f3d2c88f44b7eb5cf54d9792e03232297e17f97a179163f2750099a00f164d
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: SELinux binary policy manipulation library
 Name: libsepol
-Version: 3.11
-Release: 1%{?dist}
-Summary: SELinux binary policy library
+Version:        3.11
+Release:        1%{?dist}
 License: LGPL-2.1-or-later
-URL: https://github.com/SELinuxProject/selinux
-Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz
-
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz
+Source1:        libsepol-3.11.tar.gz.asc
+Source2:        bachradsusi.gpg
+URL: https://github.com/SELinuxProject/selinux/wiki
+# $ cd selinux
+# $ git format-patch -N libsepol-3.11 -- libsepol
+# $ i=1; for j in 0*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
+# Patch list start
+# Patch list end
 BuildRequires: make
+BuildRequires: gcc
 BuildRequires: flex
+BuildRequires: gnupg2
+BuildRequires:  oreon-rpm-macros
+Obsoletes: %{name}-compat = 3.1-4
 
 %description
-libsepol is the library for manipulating SELinux binary policies.
+Security-enhanced Linux is a feature of the Linux® kernel and a number
+of utilities with enhanced security functionality designed to add
+mandatory access controls to Linux.  The Security-enhanced Linux
+kernel contains new architectural components originally developed to
+improve the security of the Flask operating system. These
+architectural components provide general support for the enforcement
+of many kinds of mandatory access control policies, including those
+based on the concepts of Type Enforcement®, Role-based Access
+Control, and Multi-level Security.
+
+libsepol provides an API for the manipulation of SELinux binary policies.
+It is used by checkpolicy (the policy compiler) and similar tools, as well
+as by programs like load_policy that need to perform specific transformations
+on binary policies such as customizing policy boolean settings.
 
 %package devel
-Summary: SELinux binary policy library
-Requires: libsepol%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(libsepol)
+Summary: Header files and libraries used to build policy manipulation tools
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-libsepol is the library for manipulating SELinux binary policies.
+The libsepol-devel package contains the libraries and header files
+needed for developing applications that manipulate binary policies. 
+
+%package static
+Summary: static libraries used to build policy manipulation tools
+Requires: %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static
+The libsepol-static package contains the static libraries and header files
+needed for developing applications that manipulate binary policies. 
+
+%package utils
+Summary: SELinux libsepol utilities
+Requires: %{name}%{?_isa} = %{version}-%{release}
+
+%description utils
+The libsepol-utils package contains the utilities
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+%autosetup -p 2 -n libsepol-%{version}
+
+# sparc64 is an -fPIC arch, so we need to fix it here
+%ifarch sparc64
+sed -i 's/fpic/fPIC/g' src/Makefile
+%endif
 
 %build
-export CFLAGS="%{_oreon_cflags}"
-export LDFLAGS="%{_oreon_ldflags}"
-make %{?_smp_mflags} PREFIX=%{_prefix} LIBDIR=%{_libdir} SHLIBDIR=%{_libdir}
+%set_build_flags
+CFLAGS="$CFLAGS -fno-semantic-interposition"
+%make_build LIBDIR="%{_libdir}"
 
 %install
-export CFLAGS="%{_oreon_cflags}"
-export LDFLAGS="%{_oreon_ldflags}"
-make install DESTDIR=%{buildroot} PREFIX=%{_prefix} LIBDIR=%{_libdir} SHLIBDIR=%{_libdir}
-rm -f %{buildroot}%{_libdir}/*.a
+mkdir -p ${RPM_BUILD_ROOT}%{_libdir} 
+mkdir -p ${RPM_BUILD_ROOT}%{_includedir} 
+mkdir -p ${RPM_BUILD_ROOT}%{_bindir} 
+mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man3
+mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man8
+%make_install LIBDIR="%{_libdir}" SHLIBDIR="%{_libdir}"
+rm -rf ${RPM_BUILD_ROOT}%{_mandir}/man8/gen*
+rm -rf ${RPM_BUILD_ROOT}%{_mandir}/ru/man8
+
+%files static
+%{_libdir}/libsepol.a
+
+%files devel
+%{_libdir}/libsepol.so
+%{_libdir}/pkgconfig/libsepol.pc
+%{_includedir}/sepol/*.h
+%{_mandir}/man3/*.3*
+%dir %{_includedir}/sepol
+%dir %{_includedir}/sepol/policydb
+%{_includedir}/sepol/policydb/*.h
+%dir %{_includedir}/sepol/cil
+%{_includedir}/sepol/cil/*.h
 
 %files
 %license LICENSE
+%{_libdir}/libsepol.so.2
+
+%files utils
 %{_bindir}/chkcon
 %{_bindir}/sepol_check_access
 %{_bindir}/sepol_compute_av
 %{_bindir}/sepol_compute_member
 %{_bindir}/sepol_compute_relabel
 %{_bindir}/sepol_validate_transition
-%{_libdir}/libsepol.so.2
 %{_mandir}/man8/chkcon.8*
-%{_mandir}/man8/genpolbools.8*
-%{_mandir}/man8/genpolusers.8*
 
-%files devel
-%{_includedir}/sepol
-%{_libdir}/libsepol.so
-%{_libdir}/pkgconfig/libsepol.pc
-%{_mandir}/man3/sepol_*.3*

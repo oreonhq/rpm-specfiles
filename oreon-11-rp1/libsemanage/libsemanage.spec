@@ -1,66 +1,169 @@
 %global source0_hash e76160286bbfb0821602c6c0c3220ebcf366ad3246d3b9d0a0fbefcd35e86043
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%define libsepolver 3.11-1
+%define libselinuxver 3.11-1
 
+Summary: SELinux binary policy manipulation library
 Name: libsemanage
-Version: 3.11
-Release: 5%{?dist}
-Summary: SELinux policy management library
+Version:        3.11
+Release:        1%{?dist}
 License: LGPL-2.1-or-later
-URL: https://github.com/SELinuxProject/selinux
-Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz
-Source1: libsemanage-%{version}.tar.gz.asc
-Source2: semanage-key.gpg
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz
+Source1:        libsemanage-3.11.tar.gz.asc
+Source2:        bachradsusi.gpg
+# git format-patch -N 3.11 -- libsemanage
+# i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
+# Patch list start
+Patch0001:        0001-libsemanage-optionally-sort-file_contexts.local-by-s.patch
+Patch0002:        0002-libsemanage-genhomedircon-reject-users-with-a-relati.patch
+# Patch list end
+URL: https://github.com/SELinuxProject/selinux/wiki
+VCS: git:https://github.com/SELinuxProject/selinux.git
 Source3: semanage.conf
 
-Requires: libselinux%{?_isa} >= 3.11
-Requires: bzip2
-Requires: audit%{?_isa} >= 4.2.1
-
-BuildRequires: oreon-rpm-macros
+BuildRequires: gcc make
+BuildRequires: libselinux-devel >= %{libselinuxver} swig
+BuildRequires: libsepol-devel >= %{libsepolver} 
+BuildRequires: audit-libs-devel
+BuildRequires: bison flex bzip2-devel
 BuildRequires: gnupg2
-BuildRequires: gcc
-BuildRequires: make
-BuildRequires: bison
-BuildRequires: flex
+
 BuildRequires: python3
-BuildRequires: libselinux-devel >= 3.11
-BuildRequires: libsepol-devel >= 3.11
-BuildRequires: audit-libs-devel >= 4.2.1
-BuildRequires: bzip2-devel
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
+BuildRequires:  oreon-rpm-macros
+
+Requires: bzip2-libs audit-libs
+Requires: libselinux%{?_isa} >= %{libselinuxver}
+Obsoletes: libsemanage-compat = 3.1-4
 
 %description
-libsemanage manages the active SELinux policy.
+Security-enhanced Linux is a feature of the Linux® kernel and a number
+of utilities with enhanced security functionality designed to add
+mandatory access controls to Linux.  The Security-enhanced Linux
+kernel contains new architectural components originally developed to
+improve the security of the Flask operating system. These
+architectural components provide general support for the enforcement
+of many kinds of mandatory access control policies, including those
+based on the concepts of Type Enforcement®, Role-based Access
+Control, and Multi-level Security.
+
+libsemanage provides an API for the manipulation of SELinux binary policies.
+It is used by checkpolicy (the policy compiler) and similar tools, as well
+as by programs like load_policy that need to perform specific transformations
+on binary policies such as customizing policy boolean settings.
+
+%package static
+Summary: Static library used to build policy manipulation tools
+Requires: libsemanage-devel%{_isa} = %{version}-%{release}
+
+%description static
+The semanage-static package contains the static libraries 
+needed for developing applications that manipulate binary policies. 
 
 %package devel
-Summary: Development files for libsemanage
-Requires: libsemanage%{?_isa} = %{version}-%{release}
-Requires: libselinux-devel%{?_isa} >= 3.11
+Summary: Header files and libraries used to build policy manipulation tools
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Headers and the libsemanage link library.
+The semanage-devel package contains the libraries and header files
+needed for developing applications that manipulate binary policies. 
+
+%package -n python3-libsemanage
+Summary: semanage python 3 bindings for libsemanage
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: libselinux-python3
+%{?python_provide:%python_provide python3-libsemanage}
+# Remove before F30
+Provides: %{name}-python3 = %{version}-%{release}
+Provides: %{name}-python3%{?_isa} = %{version}-%{release}
+Obsoletes: %{name}-python3 < %{version}-%{release}
+
+%description -n python3-libsemanage
+The libsemanage-python3 package contains the python 3 bindings for developing
+SELinux management applications.
 
 %prep
 %oreon_sha256
+
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n libsemanage-%{version} -p1
+%autosetup -p 2 -n libsemanage-%{version}
+
 
 %build
-%oreon_make LIBDIR=%{_libdir} SHLIBDIR=%{_libdir} all
+%set_build_flags
+CFLAGS="$CFLAGS -fno-semantic-interposition"
+
+# To support building the Python wrapper against multiple Python runtimes
+# Define a function, for how to perform a "build" of the python wrapper against
+# a specific runtime:
+BuildPythonWrapper() {
+  BinaryName=$1
+
+  # Perform the build from the upstream Makefile:
+  make \
+    PYTHON=$BinaryName \
+    LIBDIR="%{_libdir}" SHLIBDIR="%{_lib}" \
+    pywrap
+}
+
+make clean
+make swigify
+%make_build LIBDIR="%{_libdir}" SHLIBDIR="%{_lib}" all
+
+BuildPythonWrapper \
+  %{__python3}
 
 %install
-%oreon_make_install LIBDIR=%{_libdir} SHLIBDIR=%{_libdir}
-mkdir -p %{buildroot}%{_sysconfdir}/selinux
-install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/selinux/semanage.conf
-rm -f %{buildroot}%{_libdir}/*.a
-%oreon_filelist_devel
-sed -i '\|%{_sysconfdir}/selinux/semanage.conf|d' %{_builddir}/%{name}.files
+InstallPythonWrapper() {
+  BinaryName=$1
 
-%files -f %{_builddir}/%{name}.files
+  make \
+    PYTHON=$BinaryName \
+    DESTDIR="${RPM_BUILD_ROOT}" LIBDIR="%{_libdir}" SHLIBDIR="%{_libdir}" \
+    install-pywrap
+}
+
+mkdir -p ${RPM_BUILD_ROOT}%{_libdir}
+mkdir -p ${RPM_BUILD_ROOT}%{_includedir} 
+mkdir -p ${RPM_BUILD_ROOT}%{_sharedstatedir}/selinux
+mkdir -p ${RPM_BUILD_ROOT}%{_sharedstatedir}/selinux/tmp
+%make_install LIBDIR="%{_libdir}" SHLIBDIR="%{_libdir}"
+
+InstallPythonWrapper \
+  %{__python3} \
+  $(python3-config --extension-suffix)
+  
+cp %{SOURCE3} ${RPM_BUILD_ROOT}%{_sysconfdir}/selinux/semanage.conf
+
+%files
 %license LICENSE
 %dir %{_sysconfdir}/selinux
 %config(noreplace) %{_sysconfdir}/selinux/semanage.conf
+%{_libdir}/libsemanage.so.2
+%{_mandir}/man5/*
+%dir %{_libexecdir}/selinux
+%dir %{_sharedstatedir}/selinux
+%dir %{_sharedstatedir}/selinux/tmp
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%ldconfig_scriptlets
+
+%files static
+%{_libdir}/libsemanage.a
+
+%files devel
+%{_libdir}/libsemanage.so
+%{_libdir}/pkgconfig/libsemanage.pc
+%dir %{_includedir}/semanage
+%{_includedir}/semanage/*.h
+%{_mandir}/man3/*
+
+%files -n python3-libsemanage
+%{python3_sitearch}/*.so
+%{python3_sitearch}/semanage.py*
+%{python3_sitearch}/__pycache__/semanage*
+%{_libexecdir}/selinux/semanage_migrate_store
+

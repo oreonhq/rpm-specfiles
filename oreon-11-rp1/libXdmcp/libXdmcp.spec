@@ -1,57 +1,66 @@
 %global source0_hash d8a5222828c3adab70adf69a5583f1d32eb5ece04304f7f8392b6a353aa2228c
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: X Display Manager Control Protocol library
 Name: libXdmcp
-Version: 1.1.5
-Release: 6%{?dist}
-Summary: X11 Display Manager Control Protocol library
-License: MIT
-URL: https://www.x.org/
-Source0: https://www.x.org/releases/individual/lib/libXdmcp-%{version}.tar.xz
+Version:        1.1.5
+Release:        1%{?dist}
+License: MIT-open-group
+URL: http://www.x.org
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+Source0:        https://www.x.org/pub/individual/lib/libXdmcp-%{version}.tar.xz
+
 BuildRequires: make
-BuildRequires: patchelf
-BuildRequires: xorgproto
-BuildRequires: pkgconf
+BuildRequires: xorg-x11-util-macros
+BuildRequires: autoconf automake libtool
+BuildRequires: xorg-x11-proto-devel
+BuildRequires: xmlto
+BuildRequires:  oreon-rpm-macros
 
 %description
-X11 Display Manager Control Protocol library
+X Display Manager Control Protocol library.
 
 %package devel
-Summary: X11 Display Manager Control Protocol library
-Requires: libXdmcp%{?_isa} = %{version}-%{release}
+Summary: Development files for %{name}
+Requires: %{name} = %{version}-%{release}
 
 %description devel
-X11 Display Manager Control Protocol library
+libXdmcp development package.
 
 %prep
 %oreon_sha256
-%autosetup -n libXdmcp-1.1.5 -p1
+
+%autosetup
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+autoreconf -v --install --force
+%configure --disable-static
+make V=1 %{?_smp_mflags}
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+rm -rf $RPM_BUILD_ROOT
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 
-%files devel -f %{_builddir}/%{name}-devel.files
+# We intentionally don't ship *.la files
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+
+# manual fixup later
+rm -rf $RPM_BUILD_ROOT%{_docdir}
+
+%ldconfig_post
+%ldconfig_postun
+
+%files
+%doc AUTHORS COPYING ChangeLog Wraphelp.README.crypto
+%{_libdir}/libXdmcp.so.6
+%{_libdir}/libXdmcp.so.6.0.0
+
+%files devel
+%doc README.md
+%{_includedir}/X11/Xdmcp.h
+%{_libdir}/libXdmcp.so
+%{_libdir}/pkgconfig/xdmcp.pc
+

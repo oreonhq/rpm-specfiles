@@ -13,7 +13,7 @@ Summary: Network exploration tool and security scanner
 URL: http://nmap.org/
 License: LicenseRef-Nmap
 
-Source0: http://nmap.org/dist/%{name}-%{version}%{?prerelease}.tar.bz2
+Source0:        http://nmap.org/dist/nmap-%{version}.tar.bz2
 Source1:        nmap-7.92.tar.bz2.asc
 Source2:        https://svn.nmap.org/nmap/docs/nmap_gpgkeys.txt
 

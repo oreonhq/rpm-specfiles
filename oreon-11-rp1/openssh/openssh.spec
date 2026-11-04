@@ -4,7 +4,11 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 # Do we want SELinux & Audit
+%if 0%{?!noselinux:1}
 %global WITH_SELINUX 1
+%else
+%global WITH_SELINUX 0
+%endif
 
 %global _hardened_build 1
 
@@ -41,7 +45,7 @@ Name: openssh
 Version:        10.6p1
 Release:        1%{?dist}
 URL: http://www.openssh.com/portable.html
-Source0: https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
+Source0:        https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
 Source1:        openssh-10.6p1.tar.gz.asc
 Source2: sshd.pam
 Source3: gpgkey-736060BA.gpg
@@ -118,8 +122,14 @@ Patch0053:        0053-gssapi-tests.patch
 License: BSD-3-Clause AND BSD-2-Clause AND ISC AND SSH-OpenSSH AND ssh-keyscan AND snprintf AND LicenseRef-Oreon-Public-Domain AND X11-distribute-modifications-variant
 Requires: openssl-libs >= 1:3.5.0
 
+%if ! %{no_gnome_askpass}
 BuildRequires: libX11-devel
+%if %{gtk3}
 BuildRequires: gtk3-devel
+%else
+BuildRequires: gtk2-devel
+%endif
+%endif
 
 BuildRequires: autoconf, automake, perl-interpreter, perl-generators, zlib-devel
 BuildRequires: audit-libs-devel >= 2.0.5
@@ -136,17 +146,23 @@ BuildRequires: libxcrypt-devel
 Obsoletes: openssh-ldap < 8.3p1-4
 Obsoletes: openssh-cavs < 8.4p1-5
 
+%if %{kerberos5}
 BuildRequires: krb5-devel
 BuildRequires: krb5-workstation
 BuildRequires: krb5-server
 BuildRequires: nss_wrapper
+%endif
 
+%if %{libedit}
 BuildRequires: libedit-devel ncurses-devel
+%endif
 
+%if %{WITH_SELINUX}
 Requires: libselinux >= 2.3-5
 BuildRequires: libselinux-devel >= 2.3-5
 Requires: audit-libs >= 1.0.8
 BuildRequires: audit-libs >= 1.0.8
+%endif
 
 BuildRequires: xauth
 # for tarball signature verification
@@ -243,8 +259,11 @@ autoreconf
 
 %build
 %set_build_flags
+%if %{pie}
 %ifarch s390 s390x sparc sparcv9 sparc64
 CFLAGS="$CFLAGS -fPIC"
+%else
+CFLAGS="$CFLAGS -fpic"
 %endif
 SAVE_LDFLAGS="$LDFLAGS"
 LDFLAGS="$LDFLAGS -pie -z relro -z now"
@@ -252,6 +271,8 @@ LDFLAGS="$LDFLAGS -pie -z relro -z now"
 export CFLAGS
 export LDFLAGS
 
+%endif
+%if %{kerberos5}
 if test -r /etc/profile.d/krb5-devel.sh ; then
 	source /etc/profile.d/krb5-devel.sh
 fi
@@ -265,6 +286,7 @@ else
 	CPPFLAGS="-I%{_includedir}/gssapi"; export CPPFLAGS
 	CFLAGS="$CFLAGS -I%{_includedir}/gssapi"
 fi
+%endif
 
 %configure \
 	--sysconfdir=%{_sysconfdir}/ssh \
@@ -281,18 +303,33 @@ fi
 	--with-default-pkcs11-provider=yes \
 	--with-security-key-builtin=yes \
 	--with-pam \
+%if %{WITH_SELINUX}
 	--with-selinux --with-audit=linux \
 	--with-sandbox=seccomp_filter \
+%endif
+%if %{kerberos5}
 	--with-kerberos5${krb5_prefix:+=${krb5_prefix}} \
+%else
+	--without-kerberos5 \
+%endif
+%if %{libedit}
 	--with-libedit
+%else
+	--without-libedit
+%endif
 
 %make_build
 make regress/misc/sk-dummy/sk-dummy.so
 
 # Define a variable to toggle gtk2/gtk3 building.  This is necessary
 # because RPM doesn't handle nested %%if statements.
+%if %{gtk3}
 	gtk3=yes
+%else
+	gtk3=no
+%endif
 
+%if ! %{no_gnome_askpass}
 pushd contrib
 if [ $gtk3 = yes ] ; then
 	CFLAGS="$CFLAGS %{?__global_ldflags}" \
@@ -304,6 +341,7 @@ else
 	mv gnome-ssh-askpass2 gnome-ssh-askpass
 fi
 popd
+%endif
 
 %check
 OPENSSL_CONF=/dev/null %{SOURCE22} %{SOURCE23}  # ./parallel_tests.sh parallel_tests.Makefile
@@ -323,9 +361,9 @@ install -d $RPM_BUILD_ROOT%{_libexecdir}/openssh
 install -m644 %{SOURCE2} $RPM_BUILD_ROOT/etc/pam.d/sshd
 install -m644 %{SOURCE6} $RPM_BUILD_ROOT/etc/pam.d/ssh-keycat
 install -m644 %{SOURCE7} $RPM_BUILD_ROOT/etc/sysconfig/sshd
-install -m644 ssh_config_redhat $RPM_BUILD_ROOT%{_sysconfdir}/ssh/ssh_config.d/50-oreon.conf
-install -m644 sshd_config_redhat_cp $RPM_BUILD_ROOT%{_sysconfdir}/ssh/sshd_config.d/40-oreon-crypto-policies.conf
-install -m644 sshd_config_redhat $RPM_BUILD_ROOT%{_sysconfdir}/ssh/sshd_config.d/50-oreon.conf
+install -m644 ssh_config_redhat $RPM_BUILD_ROOT%{_sysconfdir}/ssh/ssh_config.d/50-redhat.conf
+install -m644 sshd_config_redhat_cp $RPM_BUILD_ROOT%{_sysconfdir}/ssh/sshd_config.d/40-redhat-crypto-policies.conf
+install -m644 sshd_config_redhat $RPM_BUILD_ROOT%{_sysconfdir}/ssh/sshd_config.d/50-redhat.conf
 install -d -m755 $RPM_BUILD_ROOT/%{_unitdir}
 install -m644 %{SOURCE9} $RPM_BUILD_ROOT/%{_unitdir}/sshd@.service
 install -m644 %{SOURCE10} $RPM_BUILD_ROOT/%{_unitdir}/sshd.socket
@@ -346,13 +384,20 @@ install -m644 %{SOURCE21} $RPM_BUILD_ROOT/%{_unitdir}/ssh-host-keys-migration.se
 install -d $RPM_BUILD_ROOT/%{_localstatedir}/lib
 touch $RPM_BUILD_ROOT/%{_localstatedir}/lib/.ssh-host-keys-migration
 
+%if ! %{no_gnome_askpass}
 install contrib/gnome-ssh-askpass $RPM_BUILD_ROOT%{_libexecdir}/openssh/gnome-ssh-askpass
+%endif
 
+%if ! %{no_gnome_askpass}
 ln -s gnome-ssh-askpass $RPM_BUILD_ROOT%{_libexecdir}/openssh/ssh-askpass
 install -m 755 -d $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/
 install -m 755 contrib/redhat/gnome-ssh-askpass.csh $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/
 install -m 755 contrib/redhat/gnome-ssh-askpass.sh $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/
+%endif
 
+%if %{no_gnome_askpass}
+rm -f $RPM_BUILD_ROOT/etc/profile.d/gnome-ssh-askpass.*
+%endif
 
 perl -pi -e "s|$RPM_BUILD_ROOT||g" $RPM_BUILD_ROOT%{_mandir}/man*/*
 
@@ -412,7 +457,7 @@ test -f %{sysconfig_anaconda} && \
 %attr(0644,root,root) %{_mandir}/man1/scp.1*
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/ssh/ssh_config
 %dir %attr(0755,root,root) %{_sysconfdir}/ssh/ssh_config.d/
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/ssh/ssh_config.d/50-oreon.conf
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/ssh/ssh_config.d/50-redhat.conf
 %attr(0644,root,root) %{_mandir}/man5/ssh_config.5*
 %attr(0755,root,root) %{_bindir}/ssh-agent
 %attr(0755,root,root) %{_bindir}/ssh-add
@@ -448,8 +493,8 @@ test -f %{sysconfig_anaconda} && \
 %attr(0644,root,root) %{_mandir}/man8/sftp-server.8*
 %attr(0600,root,root) %config(noreplace) %{_sysconfdir}/ssh/sshd_config
 %dir %attr(0700,root,root) %{_sysconfdir}/ssh/sshd_config.d/
-%attr(0600,root,root) %config(noreplace) %{_sysconfdir}/ssh/sshd_config.d/40-oreon-crypto-policies.conf
-%attr(0600,root,root) %config(noreplace) %{_sysconfdir}/ssh/sshd_config.d/50-oreon.conf
+%attr(0600,root,root) %config(noreplace) %{_sysconfdir}/ssh/sshd_config.d/40-redhat-crypto-policies.conf
+%attr(0600,root,root) %config(noreplace) %{_sysconfdir}/ssh/sshd_config.d/50-redhat.conf
 %attr(0644,root,root) %config(noreplace) /etc/pam.d/sshd
 %attr(0640,root,root) %config(noreplace) /etc/sysconfig/sshd
 %attr(0644,root,root) %{_unitdir}/sshd.service
@@ -467,10 +512,12 @@ test -f %{sysconfig_anaconda} && \
 %attr(0755,root,root) %{_libexecdir}/openssh/ssh-keycat
 %attr(0644,root,root) %config(noreplace) /etc/pam.d/ssh-keycat
 
+%if ! %{no_gnome_askpass}
 %files askpass
 %attr(0644,root,root) %{_sysconfdir}/profile.d/gnome-ssh-askpass.*
 %attr(0755,root,root) %{_libexecdir}/openssh/gnome-ssh-askpass
 %{_libexecdir}/openssh/ssh-askpass
+%endif
 
 %files sk-dummy
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so

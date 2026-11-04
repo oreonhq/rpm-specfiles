@@ -1,0 +1,48 @@
+From fefb1873363a79a4bdb290779cfae50bbbf17028 Mon Sep 17 00:00:00 2001
+From: Stefan Eissing <stefan@eissing.org>
+Date: Mon, 12 Oct 2026 07:40:45 +0200
+Subject: [PATCH] multi: adjust the cleanup order in multi_done
+
+Closes #23370
+
+(cherry picked from commit 8b0744af5b1b631da5b938ca31c3f9895ad5a321)
+
+Resolves: CVE-2026-92392
+---
+ lib/multi.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/lib/multi.c b/lib/multi.c
+index 681ed2838d..046d3ccd52 100644
+--- a/lib/multi.c
++++ b/lib/multi.c
+@@ -755,12 +755,6 @@ static CURLcode multi_done(struct Curl_easy *data,
+   /* Make sure that transfer client writes are really done now. */
+   result = Curl_1st_fatal(result, Curl_xfer_write_done(data, premature));
+ 
+-  /* Inform connection filters that this transfer is done */
+-  if(conn)
+-    Curl_conn_ev_data_done(data, premature);
+-
+-  process_pending_handles(data->multi); /* connection / multiplex */
+-
+   if(!result)
+     result = Curl_req_done(&data->req, data, premature);
+ 
+@@ -769,9 +763,16 @@ static CURLcode multi_done(struct Curl_easy *data,
+      * do with the transfer's connection. */
+     struct multi_done_ctx mdctx;
+ 
++    /* Inform connection filters that this transfer is done and they
++     * need to give up any references to `data`. */
++    Curl_conn_ev_data_done(data, premature);
++
+     memset(&mdctx, 0, sizeof(mdctx));
+     mdctx.premature = premature;
+     Curl_cpool_do_locked(data, data->conn, multi_done_locked, &mdctx);
++
++    if(data->multi)
++      process_pending_handles(data->multi); /* connection / multiplex */
+   }
+ 
+   /* flush the netrc cache */

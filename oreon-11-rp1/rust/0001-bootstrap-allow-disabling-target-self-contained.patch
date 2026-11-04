@@ -1,0 +1,112 @@
+From 455a2d207713e677828e8913a3bfe1e5d0e44fb1 Mon Sep 17 00:00:00 2001
+From: Josh Stone <jistone@redhat.com>
+Date: Mon, 18 Aug 2025 17:11:07 -0700
+Subject: [PATCH 1/2] bootstrap: allow disabling target self-contained
+
+---
+ bootstrap.example.toml                        | 5 +++++
+ src/bootstrap/src/core/build_steps/compile.rs | 4 ++++
+ src/bootstrap/src/core/config/config.rs       | 4 ++++
+ src/bootstrap/src/core/config/toml/target.rs  | 5 +++++
+ src/bootstrap/src/lib.rs                      | 5 +++++
+ 5 files changed, 23 insertions(+)
+
+diff --git a/bootstrap.example.toml b/bootstrap.example.toml
+index 418c5a4a9cb..9b5c6c6ff82 100644
+--- a/bootstrap.example.toml
++++ b/bootstrap.example.toml
+@@ -1217,3 +1217,8 @@
+ # pass `off`:
+ # - x86_64-unknown-linux-gnu
+ #default-linker-linux-override = "off" (for most targets)
++
++# Copy libc and CRT objects into the target lib/self-contained/ directory.
++# Enabled by default on `musl`, `wasi`, and `windows-gnu` targets. Other
++# targets may ignore this setting if they have nothing to be contained.
++#self-contained = <platform-specific> (bool)
+diff --git a/src/bootstrap/src/core/build_steps/compile.rs b/src/bootstrap/src/core/build_steps/compile.rs
+index 6b659206fbc..60fd83a6e0c 100644
+--- a/src/bootstrap/src/core/build_steps/compile.rs
++++ b/src/bootstrap/src/core/build_steps/compile.rs
+@@ -377,6 +377,10 @@ fn copy_self_contained_objects(
+     compiler: &Compiler,
+     target: TargetSelection,
+ ) -> Vec<(PathBuf, DependencyType)> {
++    if builder.self_contained(target) != Some(true) {
++        return vec![];
++    }
++
+     let libdir_self_contained =
+         builder.sysroot_target_libdir(*compiler, target).join("self-contained");
+     t!(fs::create_dir_all(&libdir_self_contained));
+diff --git a/src/bootstrap/src/core/config/config.rs b/src/bootstrap/src/core/config/config.rs
+index 20319e4f400..dc73140dc0f 100644
+--- a/src/bootstrap/src/core/config/config.rs
++++ b/src/bootstrap/src/core/config/config.rs
+@@ -980,6 +980,7 @@ pub(crate) fn parse_inner(
+                     optimized_compiler_builtins: target_optimized_compiler_builtins,
+                     allocator: target_allocator,
+                     jemalloc: target_jemalloc,
++                    self_contained: target_self_contained
+                 } = cfg;
+ 
+                 let mut target = Target::from_triple(&triple);
+@@ -1037,6 +1038,9 @@ pub(crate) fn parse_inner(
+                 if let Some(s) = target_no_std {
+                     target.no_std = s;
+                 }
++                if let Some(s) = target_self_contained {
++                    target.self_contained = s;
++                }
+                 target.cc = target_cc.map(PathBuf::from);
+                 target.cxx = target_cxx.map(PathBuf::from);
+                 target.ar = target_ar.map(PathBuf::from);
+diff --git a/src/bootstrap/src/core/config/toml/target.rs b/src/bootstrap/src/core/config/toml/target.rs
+index 32e0477f118..191131a2aad 100644
+--- a/src/bootstrap/src/core/config/toml/target.rs
++++ b/src/bootstrap/src/core/config/toml/target.rs
+@@ -51,6 +51,7 @@ struct TomlTarget {
+         optimized_compiler_builtins: Option<CompilerBuiltins> = "optimized-compiler-builtins",
+         allocator: Option<Allocator> = "allocator",
+         jemalloc: Option<bool> = "jemalloc",
++        self_contained: Option<bool> = "self-contained",
+     }
+ }
+ 
+@@ -86,6 +87,7 @@ pub struct Target {
+     pub codegen_backends: Option<Vec<CodegenBackendKind>>,
+     pub optimized_compiler_builtins: Option<CompilerBuiltins>,
+     pub allocator: Option<Allocator>,
++    pub self_contained: bool,
+ }
+ 
+ impl Target {
+@@ -97,6 +99,9 @@ pub fn from_triple(triple: &str) -> Self {
+         if triple.contains("emscripten") {
+             target.runner = Some("node".into());
+         }
++        if triple.contains("-musl") || triple.contains("-wasi") || triple.contains("-windows-gnu") {
++            target.self_contained = true;
++        }
+         target
+     }
+ }
+diff --git a/src/bootstrap/src/lib.rs b/src/bootstrap/src/lib.rs
+index eb68daa0cf0..2bdd5554aab 100644
+--- a/src/bootstrap/src/lib.rs
++++ b/src/bootstrap/src/lib.rs
+@@ -1399,6 +1399,11 @@ fn no_std(&self, target: TargetSelection) -> Option<bool> {
+         self.config.target_config.get(&target).map(|t| t.no_std)
+     }
+ 
++    /// Returns `true` if this is a self-contained `target`, if defined
++    fn self_contained(&self, target: TargetSelection) -> Option<bool> {
++        self.config.target_config.get(&target).map(|t| t.self_contained)
++    }
++
+     /// Returns `true` if the target will be tested using the `remote-test-client`
+     /// and `remote-test-server` binaries.
+     fn remote_tested(&self, target: TargetSelection) -> bool {
+-- 
+2.55.0
+

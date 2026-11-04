@@ -26,7 +26,7 @@ Release:        1%{?dist}
 Summary:	Zlib replacement with optimizations
 License:	Zlib
 Url:		https://github.com/zlib-ng/zlib-ng
-Source0:	https://github.com/zlib-ng/zlib-ng/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/zlib-ng/zlib-ng/archive/%{version}/zlib-ng-%{version}.tar.gz
 
 Patch:        pr2152.patch
 Patch:        pr2152.patch
@@ -49,6 +49,7 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for developing
 application that use %{name}.
 
+%if %{with compat}
 
 %package	compat
 Summary:	Zlib implementation provided by %{name}
@@ -87,6 +88,7 @@ Obsoletes:	zlib-static < %{zlib_obsoletes}
 The %{name}-compat-static package contains static libraries needed for
 developing applications that use zlib.
 
+%endif
 
 %prep
 %oreon_sha256
@@ -119,6 +121,7 @@ _EOF_
 %cmake %{cmake_param}
 %cmake_build
 
+%if %{with compat}
 cat <<_EOF_
 ###########################################################################
 #
@@ -133,6 +136,7 @@ _EOF_
 # Disable new strategies in order to keep compatibility with zlib.
 %cmake %{cmake_param} -DZLIB_COMPAT=ON -DWITH_NEW_STRATEGIES=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 %cmake_build
+%endif
 
 %check
 cat <<_EOF_
@@ -149,16 +153,21 @@ _EOF_
 %ifarch ppc64le
 # Workaround Copr, that sets _target_cpu to ppc64le.
 %global target_cpu powerpc64le
+%else
+%global target_cpu %{_target_cpu}
 %endif
 
 %ifarch x86_64
 %global cpu_vendor pc
+%else
+%global cpu_vendor unknown
 %endif
 
 %ifarch %{supported_abi_test}
 CHOST=%{target_cpu}-%{cpu_vendor}-linux-gnu sh test/abicheck.sh
 %endif
 
+%if %{with compat}
 cat <<_EOF_
 ###########################################################################
 #
@@ -172,14 +181,17 @@ _EOF_
 %ifarch %{supported_abi_test}
 CHOST=%{target_cpu}-%{cpu_vendor}-linux-gnu sh test/abicheck.sh --zlib-compat
 %endif
+%endif
 
 
 %install
 %global __cmake_builddir %{_vpath_builddir}
 %cmake_install
 
+%if %{with compat}
 %global __cmake_builddir %{_vpath_builddir}-compat
 %cmake_install
+%endif
 
 %files
 %license LICENSE.md
@@ -196,6 +208,7 @@ CHOST=%{target_cpu}-%{cpu_vendor}-linux-gnu sh test/abicheck.sh --zlib-compat
 %dir %{_libdir}/cmake/zlib-ng/
 %{_libdir}/cmake/zlib-ng/*
 
+%if %{with compat}
 
 %files compat
 %{_libdir}/%{compat_soname}
@@ -214,5 +227,6 @@ CHOST=%{target_cpu}-%{cpu_vendor}-linux-gnu sh test/abicheck.sh --zlib-compat
 %{_libdir}/libz.a
 
 
+%endif
 
 

@@ -18,7 +18,7 @@ BuildRequires: automake openssl-devel libpcap-devel git-core gcc
 BuildRequires: systemd-rpm-macros
 BuildRequires:  oreon-rpm-macros
 
-Source0: http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz
+Source0:        http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz
 Source1:        http://www.tcpdump.org/release/tcpslice-1.8.tar.gz
 Source2:        tcpdump-4.99.6.tar.xz.sig
 Source3: tcpdump-sysusers.conf
@@ -28,10 +28,12 @@ Patch0003:        0003-Drop-root-priviledges-before-opening-first-savefile-.patc
 Patch0007:        0007-Introduce-nn-option.patch
 Patch0009:        0009-Change-n-flag-to-nn-in-TESTonce.patch
 
+%if "%{_sbindir}" == "%{_bindir}"
 # Compat symlinks for Requires in other packages.
 # We rely on filesystem to create the symlinks for us.
 Requires:       filesystem(unmerged-sbin-symlinks)
 Provides:       /usr/sbin/tcpdump
+%endif
 
 %description
 Tcpdump is a command-line tool for monitoring network traffic.

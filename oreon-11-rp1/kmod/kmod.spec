@@ -1,107 +1,200 @@
-%global source0_hash 985554de49c21a58abd68c6cda2251384e1e5bb08b3b14c7f02b51f4c90c2958
+%global source0_hash 5a5d5073070cc7e0c7a7a3c6ec2a0e1780850c8b47b3e3892226b93ffcb9cb54
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# weak-modules is useless at best, and can be actively harmful.
+# turn it on there by default.
+%bcond_with weak_modules
+%bcond_with dist_conf
 
-Name: kmod
-Version: 34.3
-Release: 2%{?dist}
-Summary: Linux kernel module management utilities
-License: GPL-2.0-or-later AND LGPL-2.1-or-later
-URL: https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
-Source0: https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kmod/kmod-%{version}.tar.xz
-Source1: kmod-%{version}.tar.sign
-Source2: kmod-key.asc
-Provides: module-init-tools = 4.0-1
-Obsoletes: module-init-tools < 4.0-1
+%bcond_without zlib
+%bcond_without xz
+%bcond_without zstd
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
-BuildRequires: xz
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: meson
-BuildRequires: ninja-build
-BuildRequires: pkgconf
-BuildRequires: patchelf
-BuildRequires: openssl-devel
-BuildRequires: xz-devel
-BuildRequires: zlib-devel
-BuildRequires: libzstd-devel
-Requires: kmod-libs%{?_isa} = %{version}-%{release}
+Name:		kmod
+Version:        34.2
+Release:        1%{?dist}
+Summary:	Linux kernel module management utilities
+
+# GPL-2.0-or-later:
+#   build-aux/compile
+#   build-aux/depcomp
+#   build-aux/ltmain.sh
+#   build-aux/ltmain.sh
+#   build-aux/missing
+#   build-aux/py-compile
+#   build-aux/test-driver
+#   m4/attributes.m4
+#   m4/features.m4
+#   tools
+# GPL-3.0-or-later:
+#   build-aux/config.guess
+#   build-aux/config.sub
+#   build-aux/git-version-gen
+#   libkmod/docs/gtk-doc.make
+#   m4/gtk-doc.m4
+# FSFUL:
+#   configure
+# FSFULLRWD:
+#   aclocal.m4
+#   libkmod/docs/Makefile.in
+#   m4/libtool.m4
+#   m4/lt~obsolete.m4
+#   m4/ltoptions.m4
+#   m4/ltsugar.m4
+#   m4/ltversion.m4
+#   Makefile.in
+# LGPL-2.1-only:
+#   libkmod/python/kmod/error.py
+#   libkmod/python/kmod/__init__.py
+#   libkmod/python/kmod/version.py
+#   libkmod/python/kmod/version.py.in
+# LGPL-2.1-or-later:
+#   config.h.in (no explicit license, the one in COPYING is assumed)
+#   libkmod
+#   man (no explicit license, the one in COPYING is assumed)
+#   shared
+#   shell-completion/bash/kmod
+#   testsuite
+# X11:
+#   build-aux/install-sh
+License:	GPL-2.0-or-later AND GPL-3.0-or-later AND FSFUL AND FSFULLRWD AND LGPL-2.1-only AND LGPL-2.1-or-later AND X11
+URL:		https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
+Source0:        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-%{version}.tar.xz
+Source1:	weak-modules
+Source2:	depmod.conf.dist
+Exclusiveos:	Linux
+
+BuildRequires:  gcc
+BuildRequires:	chrpath
+%if %{with zlib}
+BuildRequires:	zlib-devel
+%endif
+%if %{with xz}
+BuildRequires:	xz-devel
+%endif
+BuildRequires:  scdoc gtk-doc
+BuildRequires:  openssl-devel
+BuildRequires:  make automake libtool
+%if %{with zstd}
+BuildRequires:  libzstd-devel
+BuildRequires:  oreon-rpm-macros
+%endif
+
+Provides:	module-init-tools = 4.0-1
+Obsoletes:	module-init-tools < 4.0-1
+Provides:	/sbin/modprobe
+
+%if "%{_sbindir}" == "%{_bindir}"
+# Compat symlinks for Requires in other packages.
+# We rely on filesystem to create the symlinks for us.
+Requires:       filesystem(unmerged-sbin-symlinks)
+Provides:       /usr/sbin/modprobe
+Provides:       /usr/sbin/modinfo
+Provides:       /usr/sbin/insmod
+Provides:       /usr/sbin/rmmod
+Provides:       /usr/sbin/lsmod
+Provides:       /usr/sbin/depmod
+%endif
 
 %description
-kmod provides tools to insert, remove, list, check properties and resolve
-dependencies of Linux kernel modules, and the libkmod library.
-
-%package devel
-Summary: Development files for libkmod
-Requires: kmod-libs%{?_isa} = %{version}-%{release}
-
-%description devel
-Headers and libraries for developing against libkmod.
+The kmod package provides various programs needed for automatic
+loading and unloading of modules under 2.6, 3.x, and later kernels, as well
+as other module management programs. Device drivers and filesystems are two
+examples of loaded and unloaded modules.
 
 %package libs
-Summary: Library to manage Linux kernel modules
-License: LGPL-2.1-or-later
-Obsoletes: kmod < 34.3-2
+Summary:	Libraries to handle kernel module loading and unloading
 
 %description libs
-libkmod provides an API for insertion, removal, listing and dependency
-resolution of Linux kernel modules.
+The kmod-libs package provides runtime libraries for any application that
+wishes to load or unload Linux kernel modules from the running system.
+
+%package devel
+Summary:	Header files for kmod development
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
+
+%description devel
+The kmod-devel package provides header files used for development of
+applications that wish to load or unload Linux kernel modules.
 
 %prep
 %oreon_sha256
-xz -dc %{SOURCE0} > %{_builddir}/kmod-%{version}.tar
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{_builddir}/kmod-%{version}.tar
-rm -f %{_builddir}/kmod-%{version}.tar
-%autosetup -n kmod-%{version} -p1
+
+%autosetup -p1
 
 %build
-%oreon_meson -Dmanpages=false -Ddocs=false -Dbuild-tests=false \
-  -Dopenssl=enabled -Dxz=enabled -Dzlib=enabled -Dzstd=enabled \
-  -Dbashcompletiondir=%{_datadir}/bash-completion/completions \
-  -Dfishcompletiondir=%{_datadir}/fish/vendor_completions.d \
-  -Dzshcompletiondir=%{_datadir}/zsh/site-functions
-%oreon_meson_build
+autoreconf --install
+%configure \
+  --with-openssl \
+%if %{with zlib}
+  --with-zlib \
+%endif
+%if %{with xz}
+  --with-xz \
+%endif
+%if %{with zstd}
+  --with-zstd \
+%endif
+  --enable-debug
+
+%{make_build} V=1
 
 %install
-%oreon_meson_install
-mkdir -p %{buildroot}%{_sysconfdir}/depmod.d %{buildroot}%{_sysconfdir}/modprobe.d
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f" 2>/dev/null || true)
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
+%{make_install}
+
+pushd $RPM_BUILD_ROOT%{_mandir}/man5
+ln -s modprobe.d.5.gz modprobe.conf.5.gz
+popd
+
+find %{buildroot} -type f -name "*.la" -delete
+
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/modprobe.d
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/depmod.d
+mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/modprobe.d
+
+%if %{with weak_modules}
+install -pm 755 %{SOURCE1} $RPM_BUILD_ROOT%{_sbindir}/weak-modules
+%endif
+
+%if %{with dist_conf}
+install -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/depmod.d/dist.conf
+%endif
 
 %files
-%license COPYING
-%{_bindir}/depmod
-%{_bindir}/insmod
-%{_bindir}/kmod
-%{_bindir}/lsmod
-%{_bindir}/modinfo
-%{_bindir}/modprobe
-%{_bindir}/rmmod
-%{_datadir}/pkgconfig/kmod.pc
-%{_datadir}/bash-completion/completions/*
-%{_datadir}/fish/vendor_completions.d/*
-%{_datadir}/zsh/site-functions/*
 %dir %{_sysconfdir}/depmod.d
 %dir %{_sysconfdir}/modprobe.d
-
-%ldconfig_scriptlets libs
+%dir %{_prefix}/lib/modprobe.d
+%{_bindir}/kmod
+%{_sbindir}/modprobe
+%{_sbindir}/modinfo
+%{_sbindir}/insmod
+%{_sbindir}/rmmod
+%{_sbindir}/lsmod
+%{_sbindir}/depmod
+%if %{with weak_modules}
+%{_sbindir}/weak-modules
+%endif
+%{_datadir}/bash-completion/
+%{_datadir}/fish/vendor_functions.d/*
+%{_datadir}/zsh/site-functions/*
+%if %{with dist_conf}
+%{_sysconfdir}/depmod.d/dist.conf
+%endif
+%{_datadir}/pkgconfig/kmod.pc
+%attr(0644,root,root) %{_mandir}/man5/mod*.d*.5*
+%attr(0644,root,root) %{_mandir}/man5/depmod.d.5*
+%{_mandir}/man5/modprobe.conf.5*
+%attr(0644,root,root) %{_mandir}/man8/*.8*
+%doc NEWS README.md
 
 %files libs
 %license COPYING
-%{_libdir}/libkmod.so.2
-%{_libdir}/libkmod.so.2.*
+%{_libdir}/libkmod.so.*
 
 %files devel
 %{_includedir}/libkmod.h
-%{_libdir}/libkmod.so
 %{_libdir}/pkgconfig/libkmod.pc
+%{_libdir}/libkmod.so
+

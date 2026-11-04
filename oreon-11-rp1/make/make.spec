@@ -1,36 +1,134 @@
 %global source0_hash dd16fb1d67bfab79a72f5e8390735c49e3e8e70b4945a15ab1f81ddb78658fb3
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+# -*- coding: utf-8 -*-
+# This decides the SRPM name.  Set to "make" for a rolling release
+# optional versioned updates.
 Name: make
-Version: 4.4.1
-Release: 1%{?dist}
-Summary: GNU Make
-License: GPL-3.0-or-later
+Epoch: 1
+Version:        4.4.1
+Release:        1%{?dist}
+License: GPL-3.0-or-later AND LGPL-2.1-or-later AND GFDL-1.3-or-later AND FSFULLR
 URL: https://www.gnu.org/software/make/
-Source0: https://ftp.gnu.org/gnu/make/make-%{version}.tar.gz
+Source0:        https://mirrors.kernel.org/gnu/make/make-%{version}.tar.gz
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+%if "%{name}" != "make"
+# Set this to the sub-package base name, for "make-latest"
+%global make %(echo make%{version} | tr -d .)
+# need this functionality, and letting it error avoids accidents.
+%{error:"Each downstream must specify its own /opt namespace"}
+Summary: Meta package to include latest version of make
+%else
+%global make %{name}
+Summary: A GNU tool which simplifies the build process for users
+Provides:   make-latest = %{version}-%{release}
+Provides:   %(echo make%{version} | tr -d .) = %{version}-%{release}
+%endif
+
+# This gives the user the option of saying --with guile, but defaults to WITHOUT
+%bcond_with guile
+
+Patch0:        make-4.3-getcwd.patch
+
+# Assume we don't have clock_gettime in configure, so that
+# make is not linked against -lpthread (and thus does not
+# limit stack to 2MB).
+Patch1:        make-4.0-noclock_gettime.patch
+
+# BZs #142691, #17374
+Patch2:        make-4.3-j8k.patch
+
+# autoreconf
 BuildRequires: make
+BuildRequires: autoconf, automake, gettext-devel
+BuildRequires: procps
+BuildRequires: perl
+%if %{with guile}
+BuildRequires: pkgconfig(guile-3.0)
+%endif
+BuildRequires: gcc
+BuildRequires:  oreon-rpm-macros
 
-%description
-This directory contains the 4.4.1 release of GNU Make.
+%if "%{name}" != "make"
+# We're still on the make-latest package
+Requires: %{make}
+%description -n make-latest
+The latest GNU Make, with a version-specific install
+%files -n make-latest
+
+%package -n %{make}
+Summary: A GNU tool which simplifies the build process for users
+%endif
+
+%description -n %{make}
+A GNU tool for controlling the generation of executables and other
+non-source files of a program from the program's source files. Make
+allows users to build and install packages without any significant
+knowledge about the details of the build process. The details about
+how the program should be built are provided for make in the program's
+makefile.
+
+%package -n %{make}-devel
+Summary: Header file for externally visible definitions
+
+%description -n %{make}-devel
+The %{make}-devel package contains gnumake.h.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%autosetup -n make-%{version} -p1
+
+rm -f tests/scripts/features/parallelism.orig
 
 %build
-%oreon_configure
-%oreon_make
+autoreconf -vfi
+
+%configure \
+%if %{with guile}
+    --with-guile
+%else
+    --without-guile
+%endif
+
+%make_build
 
 %install
-%oreon_make_install
-%oreon_filelist
+%make_install
+ln -sf make ${RPM_BUILD_ROOT}/%{_bindir}/gmake
+ln -sf make.1 ${RPM_BUILD_ROOT}/%{_mandir}/man1/gmake.1
+rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
 
-%files -f %{_builddir}/%{name}.files
+%if "%{name}" != "make"
+install -d -m 755 ${RPM_BUILD_ROOT}/etc/scl/prefixes
+dirname %{_prefix} > %{make}.prefix
+install -p -m 644 %{make}.prefix ${RPM_BUILD_ROOT}/etc/scl/prefixes/%{make}
+
+echo "export PATH=%{_prefix}/bin:\$PATH" > enable.scl
+install -p -m 755 enable.scl ${RPM_BUILD_ROOT}/%{_prefix}/enable
+%endif
+
+%find_lang make
+
+%check
+echo ============TESTING===============
+/usr/bin/env LANG=C make check && true
+echo ============END TESTING===========
+
+%files -n %{make} -f make.lang
 %license COPYING
+%doc NEWS README AUTHORS
+%{_bindir}/*
+%{_mandir}/man*/*
+%{_infodir}/*.info*
+%{_includedir}/gnumake.h
+%if "%{name}" != "make"
+/etc/scl/prefixes/%{make}
+%{_prefix}/enable
+%endif
+
+%files -n %{make}-devel
+%{_includedir}/gnumake.h
+

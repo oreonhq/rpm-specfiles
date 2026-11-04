@@ -1,0 +1,50 @@
+From d81d358a460007fc58d6584cad396101e7e71669 Mon Sep 17 00:00:00 2001
+From: Tulio Magno Quites Machado Filho <tuliom@redhat.com>
+Date: Wed, 30 Sep 2026 17:12:52 -0300
+Subject: [PATCH 1/2] [flang-rt][test] Skip Driver/safe-trampoline-gnustack.f90
+ on RISC-V
+
+-fsafe-trampoline option as it is not currently supported on RISC-V.
+---
+ flang-rt/test/Driver/safe-trampoline-gnustack.f90 | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/flang-rt/test/Driver/safe-trampoline-gnustack.f90 b/flang-rt/test/Driver/safe-trampoline-gnustack.f90
+index f586e17ff86c6..4c18d6410f131 100644
+--- a/flang-rt/test/Driver/safe-trampoline-gnustack.f90
++++ b/flang-rt/test/Driver/safe-trampoline-gnustack.f90
+@@ -2,6 +2,7 @@
+ ! UNSUPPORTED: offload-cuda
+ ! UNSUPPORTED: system-darwin
+ ! UNSUPPORTED: target=powerpc{{.*}}
++! UNSUPPORTED: target=riscv{{.*}}
+ ! UNSUPPORTED: target={{.*solaris.*}}
+ 
+ ! Verify that -fsafe-trampoline produces an executable whose
+
+From add617b1c7a52688706689a30970232380b2d038 Mon Sep 17 00:00:00 2001
+From: Tulio Magno Quites Machado Filho <tuliom@redhat.com>
+Date: Fri, 2 Oct 2026 17:37:11 -0300
+Subject: [PATCH 2/2] Replace multiple UNSUPPORTED lines by a single REQUIRES
+
+---
+ flang-rt/test/Driver/safe-trampoline-gnustack.f90 | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/flang-rt/test/Driver/safe-trampoline-gnustack.f90 b/flang-rt/test/Driver/safe-trampoline-gnustack.f90
+index 4c18d6410f131..3fa659e334f82 100644
+--- a/flang-rt/test/Driver/safe-trampoline-gnustack.f90
++++ b/flang-rt/test/Driver/safe-trampoline-gnustack.f90
+@@ -1,9 +1,7 @@
+-! UNSUPPORTED: system-windows
++! -fsafe-trampoline is supported on x86-64 and AArch64 targets.
++! REQUIRES: target=x86_64{{.*}}-linux-gnu || target=aarch64{{.*}}-linux-gnu
+ ! UNSUPPORTED: offload-cuda
+-! UNSUPPORTED: system-darwin
+-! UNSUPPORTED: target=powerpc{{.*}}
+-! UNSUPPORTED: target=riscv{{.*}}
+-! UNSUPPORTED: target={{.*solaris.*}}
++
+ 
+ ! Verify that -fsafe-trampoline produces an executable whose
+ ! GNU_STACK program header is RW (not RWE), proving W^X compliance.

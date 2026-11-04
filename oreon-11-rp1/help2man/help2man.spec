@@ -1,44 +1,67 @@
 %global source0_hash 4d7e4fdef2eca6afe07a2682151cea78781e0a4e8f9622142d9f70c083a2fd4f
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# Supported build option:
+#
+# --with nls ... build this package with --enable-nls 
 
-Name: help2man
-Version: 1.49.3
-Release: 1%{?dist}
-Summary: Create manual pages from --help output
-License: GPL-3.0-or-later
-URL: https://www.gnu.org/software/help2man/
-Source0: https://ftp.gnu.org/gnu/help2man/help2man-%{version}.tar.xz
-Source1: help2man-%{version}.tar.xz.sig
-Source2: help2man-key.asc
-BuildArch: noarch
+Name:           help2man
+Summary:        Create simple man pages from --help output
+Version:        1.49.3
+Release:        1%{?dist}
+License:        GPL-3.0-or-later
+URL:            https://www.gnu.org/software/help2man/
+Source0:        https://mirrors.kernel.org/gnu/help2man/help2man-%{version}.tar.xz
 
-Requires: perl
+%bcond_with nls
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: perl
-BuildRequires: make
-BuildRequires: gnupg2
+%{!?with_nls:BuildArch: noarch}
+
+BuildRequires:  gcc
+BuildRequires:  %{__make}
+BuildRequires:  perl-generators
+BuildRequires:  perl(Getopt::Long)
+BuildRequires:  perl(POSIX)
+BuildRequires:  perl(Text::ParseWords)
+BuildRequires:  perl(Text::Tabs)
+BuildRequires:  perl(strict)
+BuildRequires:  oreon-rpm-macros
+%{?with_nls:BuildRequires: perl(Locale::gettext) /usr/bin/msgfmt}
+%{?with_nls:BuildRequires: perl(Encode)}
+%{?with_nls:BuildRequires: perl(I18N::Langinfo)}
 
 %description
-help2man builds a simple manual page from the --help and --version
-output of a program.
+help2man is a script to create simple man pages from the --help and
+--version output of programs.
+
+Since most GNU documentation is now in info format, this provides a
+way to generate a placeholder man page pointing to that resource while
+still providing some useful information.
 
 %prep
 %oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n help2man-%{version} -p1
+
+%setup -q -n help2man-%{version}
 
 %build
-%oreon_configure --disable-nls
-%oreon_make
+%configure --%{!?with_nls:disable}%{?with_nls:enable}-nls --libdir=%{_libdir}/help2man
+%{make_build}
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_infodir}/dir
-%oreon_filelist
+%{__make} install_l10n DESTDIR=$RPM_BUILD_ROOT
+%{make_install}
+%find_lang %name --with-man
 
-%files -f %{_builddir}/%{name}.files
+%files -f %name.lang
+%doc README NEWS THANKS
 %license COPYING
+%{_bindir}/help2man
+%{_infodir}/*
+%{_mandir}/man1/*
+
+%if %{with nls}
+%{_libdir}/help2man
+%endif
+

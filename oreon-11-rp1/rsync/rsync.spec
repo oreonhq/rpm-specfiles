@@ -11,7 +11,7 @@ Version:        3.5.1
 Release:        1%{?dist}
 URL: https://rsync.samba.org/
 
-Source0: https://download.samba.org/pub/rsync/src/rsync-%{version}%{?prerelease}.tar.gz
+Source0:        https://download.samba.org/pub/rsync/src/rsync-%{version}.tar.gz
 Source2: rsyncd.socket
 Source3: rsyncd.service
 Source4: rsyncd.conf
@@ -89,6 +89,8 @@ may be used to setup a restricted rsync users via ssh logins.
 # This test is failing on x86 only, all other arches pass, disabling for now
 %ifarch i686
 RSYNC_EXCLUDE=partial-protected-regular-retry-linux make check
+%else
+make check
 %endif
 chmod -x support/*
 

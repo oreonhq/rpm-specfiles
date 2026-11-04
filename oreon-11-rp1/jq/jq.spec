@@ -12,7 +12,7 @@ Summary:        Command-line JSON processor
 
 License:        MIT AND ICU AND CC-BY-3.0
 URL:            https://jqlang.org/
-Source0:        https://github.com/jqlang/jq/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/jqlang/jq/releases/download/jq-%{version}/jq-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  flex
@@ -79,10 +79,12 @@ Development files for %{name}
 find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_docdir}/%{name}/COPYING
 
+%if %{with check}
 %check
 # Valgrind used, so restrict architectures for check
 %ifarch x86_64
 make check
+%endif
 %endif
 
 %files

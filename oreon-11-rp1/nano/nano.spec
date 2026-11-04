@@ -12,7 +12,7 @@ Release:        1%{?dist}
 License:         GPL-3.0-or-later
 URL:             https://www.nano-editor.org
 
-Source0:         https://www.nano-editor.org/dist/latest/%{name}-%{version}.tar.xz
+Source0:        https://www.nano-editor.org/dist/latest/nano-%{version}.tar.xz
 Source1:        nano-9.2.tar.xz.asc
 # gpg --keyserver keyserver.ubuntu.com --recv-key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
 # gpg --output bensberg.pgp --armor --export bensberg@telfort.nl
@@ -40,6 +40,7 @@ Conflicts:       filesystem < 3
 %description
 GNU nano is a small and friendly text editor.
 
+%if %{with default_editor}
 %package default-editor
 Summary:         Sets GNU nano as the default editor
 Requires:        nano = %{version}-%{release}
@@ -62,11 +63,12 @@ BuildArch:       noarch
 The package acts as a placeholder in DNF group 'Standard', which will
 install nano-default-editor on fresh installs and it will not block users
 who don't have nano as a default editor during upgrade.
+%endif
 
 %prep
 %oreon_sha256
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -S git_am
 
 %build
@@ -101,10 +103,12 @@ rm -rf %{buildroot}%{_datadir}/nano/extra
 
 %find_lang %{name}
 
+%if %{with default_editor}
 # install nano-default-editor snippets
 install -Dpm 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/profile.d/%{basename:%{S:11}}
 install -Dpm 0644 %{SOURCE12} %{buildroot}%{_sysconfdir}/profile.d/%{basename:%{S:12}}
 install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basename:%{S:13}}
+%endif
 
 %files -f build/%{name}.lang
 %license COPYING
@@ -118,6 +122,7 @@ install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basen
 %{_infodir}/nano.info*
 %{_datadir}/nano
 
+%if %{with default_editor}
 %files default-editor
 %dir %{_sysconfdir}/profile.d
 %config(noreplace) %{_sysconfdir}/profile.d/nano-default-editor.*
@@ -125,5 +130,6 @@ install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basen
 %{_datadir}/fish/vendor_conf.d/nano-default-editor.fish
 
 %files -n default-editor
+%endif
 
 

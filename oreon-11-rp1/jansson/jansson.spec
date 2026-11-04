@@ -1,61 +1,76 @@
-%global source0_hash f9aa4b3ec8496fee69db94f06f3d76fd4a26b012ee9bf1e917078c2cd2841881
+%global source0_hash c739578bf6b764aa0752db9a2fdadcfe921c78f1228c7ec0bb47fa804c55d17b
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global forgeurl https://github.com/akheron/jansson
+Version:        2.14
+%forgemeta
 
-Name: jansson
-Version: 2.15.1
-Release: 1%{?dist}
-Summary: C library for encoding, decoding and manipulating JSON
-License: MIT
-URL: https://github.com/akheron/jansson
-Source0: https://github.com/akheron/jansson/releases/download/v%{version}/jansson-%{version}.tar.bz2
-Source1: jansson-%{version}.tar.bz2.asc
-Source2: jansson-key.asc
+Name:		jansson
+Release:        1%{?dist}
+Summary:	C library for encoding, decoding and manipulating JSON data
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: patchelf
+License:	MIT AND LicenseRef-Oreon-Public-Domain
+URL:		%{forgeurl}
+Source0:        https://github.com/akheron/jansson/archive/v%{version}/jansson-%{version}.tar.gz
+
+# Fix the tests.
+# Upstream commit 0677666f65b988b2dd44d02966a08fea490d5883
+Patch:        0001-Fix-the-check-exports-tests-for-versioned-symbols.patch
+
+BuildRequires:	gcc
+BuildRequires:	python3-sphinx
+BuildRequires:  make
+BuildRequires:  autoconf, automake, libtool
+BuildRequires:  oreon-rpm-macros
 
 %description
-Jansson is a C library for encoding, decoding and manipulating JSON data.
+Small library for parsing and writing JSON documents.
 
 %package devel
-Summary: Development files for jansson
-Requires: jansson%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(jansson)
+Summary: Header files for jansson
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Headers and libraries for developing against jansson.
+Header files for developing applications making use of jansson.
+
+%package devel-doc
+Summary: Development documentation for jansson
+BuildArch: noarch
+
+%description devel-doc
+Development documentation for jansson.
 
 %prep
 %oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n jansson-%{version} -p1
+
+%forgeautosetup -p1
+
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+autoreconf -f -i -v
+%configure --disable-static
+%make_build
+make html
+
+%check
+make check
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f" 2>/dev/null || true)
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+%make_install
+rm "$RPM_BUILD_ROOT%{_libdir}"/*.la
 
-%files -f %{_builddir}/%{name}.files
+%files
 %license LICENSE
+%doc CHANGES
+%{_libdir}/*.so.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/%{name}.pc
+%{_includedir}/*
+
+%files devel-doc
+%doc doc/_build/html/*
+

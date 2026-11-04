@@ -24,6 +24,7 @@ BuildRequires:  gnupg2
 Provides:       libusbx = %{version}-%{release}
 Obsoletes:      libusbx < %{version}-%{release}
 
+%if %{with mingw}
 BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc-c++
 BuildRequires:  mingw64-filesystem >= 95
@@ -32,6 +33,7 @@ BuildRequires:  oreon-rpm-macros
 # mingw-libusbx was removed in F42
 Provides:       mingw-libusbx = %{version}-%{release}
 Obsoletes:      mingw-libusbx < %{version}-%{release}
+%endif
 
 %description
 This package provides a way for applications to access USB devices.
@@ -75,6 +77,7 @@ Obsoletes:      libusbx-tests-examples < %{version}-%{release}
 %description tests-examples
 This package contains tests and examples for %{name}.
 
+%if %{with mingw}
 %package -n mingw32-%{name}
 Summary:       MinGW Windows %{name} library
 Provides:      mingw32-libusbx = %{version}-%{release}
@@ -90,12 +93,13 @@ Obsoletes:     mingw64-libusbx < %{version}-%{release}
 
 %description -n mingw64-%{name}
 MinGW Windows %{name} library.
+%endif
 
 %prep
 %oreon_sha256
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -p1 -n libusb-%{version}
 
 %build
@@ -114,9 +118,11 @@ make
 popd
 popd
 
+%if %{with mingw}
 # MinGW build
 %mingw_configure --disable-static
 %mingw_make_build
+%endif
 
 
 %install
@@ -139,7 +145,9 @@ done
 rm $RPM_BUILD_ROOT%{_libdir}/*.la
 popd
 
+%if %{with mingw}
 %mingw_make_install
+%endif
 
 
 %check
@@ -181,6 +189,7 @@ popd
 %{_bindir}/libusb-test-umockdev
 %{_bindir}/libusb-test-libusb
 
+%if %{with mingw}
 %files -n mingw32-libusb1
 %license COPYING
 %doc AUTHORS README ChangeLog
@@ -196,4 +205,5 @@ popd
 %{mingw64_includedir}/libusb-1.0
 %{mingw64_libdir}/*.dll.a
 %{mingw64_libdir}/pkgconfig/libusb-1.0.pc
+%endif
 

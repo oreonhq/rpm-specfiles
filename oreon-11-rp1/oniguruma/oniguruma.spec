@@ -7,8 +7,19 @@
 
 %global git_snapshot 0
 
+%if 0%{?git_snapshot}
+%define apply_git_patch git am
+%else
 %define apply_git_patch patch -p1
+%endif
 
+%if 0%{?git_snapshot}
+%global         gitdate       20230501
+%global         gitcommit     41a3b802af2155eef6d648aa3608e39605110642
+%global         shortcommit   %(c=%{gitcommit}; echo ${c:0:7})
+
+%global         gitversion    %{gitdate}git%{shortcommit}
+%endif
 
 %global	mainver	6.9.10
 #%%global	postver	1
@@ -25,12 +36,16 @@ Summary:	Regular expressions library
 # SPDX confirmed
 License:	BSD-2-Clause
 URL:		https://github.com/kkos/oniguruma/
-Source0:	https://github.com/kkos/oniguruma/releases/download/v%{mainver}%{?betaver:_%betaver}/onig-%{mainver}%{?postver:.%postver}%{?betaver:-%betaver}%{?gitversion:-%{?gitversion}}.tar.gz
+Source0:        https://github.com/kkos/oniguruma/releases/download/v%{version}/onig-%{version}.tar.gz
 Source1:	create-tarball-from-git.sh
 
 BuildRequires:	make
 BuildRequires:	gcc
+%if 0%{?git_snapshot}
+BuildRequires:  automake
+BuildRequires:  libtool
 BuildRequires:  oreon-rpm-macros
+%endif
 
 %description
 Oniguruma is a regular expressions library.
@@ -60,6 +75,9 @@ developing applications that use %{name}.
 # Disable LTO
 %define _lto_cflags %{nil}
 
+%if 0%{?git_snapshot}
+autoreconf -fi
+%endif
 
 %configure \
 	--enable-posix-api \

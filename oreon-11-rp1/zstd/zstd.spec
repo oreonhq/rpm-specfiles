@@ -1,77 +1,154 @@
 %global source0_hash eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# enable asm implementations by default
+%bcond_without asm
 
-Name: zstd
-Version: 1.5.7
-Release: 8%{?dist}
-Summary: Zstandard compression
-License: BSD-3-Clause OR GPL-2.0-only
-URL: https://facebook.github.io/zstd/
-Source0: https://github.com/facebook/zstd/releases/download/v%{version}/zstd-%{version}.tar.gz
+# enable .lz4 support by default
+%bcond_without lz4
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
+# enable .xz/.lzma support by default
+%bcond_without lzma
 
-Requires: libzstd%{?_isa} = %{version}-%{release}
+# enable .gz support by default
+%bcond_without zlib
+
+# enable pzstd support by default
+%bcond_without pzstd
+
+%bcond gtest %[ !0 ]
+
+Name:           zstd
+Version:        1.5.7
+Release:        2%{?dist}
+Summary:        Zstd compression library
+
+License:        BSD-3-Clause OR GPL-2.0-only
+URL:            https://github.com/facebook/zstd
+Source0:        https://github.com/facebook/zstd/releases/download/v%{version}/zstd-%{version}.tar.gz
+
+Patch1:        man-pages-1.5.7.patch
+
+BuildRequires:  cmake
+BuildRequires:  make
+BuildRequires:  gcc %{?with_gtest:gtest-devel}
+%if %{with lz4}
+BuildRequires:  lz4-devel
+%endif
+%if %{with lzma}
+BuildRequires:  xz-devel
+%endif
+%if %{with pzstd}
+BuildRequires:  gcc-c++
+%endif
+%if %{with zlib}
+BuildRequires:  zlib-devel
+%endif
+BuildRequires:  execstack
+BuildRequires:  oreon-rpm-macros
 
 %description
-Zstandard is a real time compression algorithm, providing high compression ratios.
+Zstd, short for Zstandard, is a fast lossless compression algorithm,
+targeting real-time compression scenarios at zlib-level compression ratio.
 
-%package -n libzstd
-Summary: Zstandard compression library
+%package -n lib%{name}
+Summary:        Zstd shared library
 
-%description -n libzstd
-Shared library for the Zstandard compression format.
+%description -n lib%{name}
+Zstandard compression shared library.
 
-%package -n libzstd-devel
-Summary: Development files for the Zstandard library
-Requires: libzstd%{?_isa} = %{version}-%{release}
-Obsoletes: zstd-devel < 1.5.7-8
+%package -n lib%{name}-devel
+Summary:        Header files for Zstd library
+Requires:       lib%{name}%{?_isa} = %{version}-%{release}
 
-%description -n libzstd-devel
-Header files and pkg-config file for the Zstandard library.
+%package -n lib%{name}-static
+Summary:        Static variant of the Zstd library
+Requires:       lib%{name}-devel = %{version}-%{release}
+
+%description -n lib%{name}-devel
+Header files for Zstd library.
+
+%description -n lib%{name}-static
+Static variant of the Zstd library.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%setup -q
+find -name .gitignore -delete
+%patch 1 -p1
 
 %build
-make -s -C lib %{?_smp_mflags} PREFIX=%{_prefix} LIBDIR=%{_libdir} PKGCONFIGDIR=%{_libdir}/pkgconfig CFLAGS="%{_oreon_cflags} -fPIC"
-make -s -C programs %{?_smp_mflags} prefix=%{_prefix} bindir=%{_bindir} mandir=%{_mandir} CFLAGS="%{_oreon_cflags} -fPIE"
+%if !%{with asm}
+export CPPFLAGS=-DZSTD_DISABLE_ASM
+%endif
+%global _vpath_srcdir build/cmake
+%global _vpath_builddir build/shared
+%cmake %{?with_pzstd:-DZSTD_BUILD_CONTRIB=ON} -DZSTD_BUILD_STATIC=NO -DZSTD_PROGRAMS_LINK_SHARED=YES
+%cmake_build
+%global _vpath_builddir build/static
+%cmake %{?with_pzstd:-DZSTD_BUILD_CONTRIB=ON} -DZSTD_BUILD_SHARED=NO -DBUILD_TESTING=YES
+%cmake_build
 
 %install
-make -s -C lib install-shared install-includes install-pc DESTDIR=%{buildroot} PREFIX=%{_prefix} LIBDIR=%{_libdir} PKGCONFIGDIR=%{_libdir}/pkgconfig
-make -s -C programs install DESTDIR=%{buildroot} prefix=%{_prefix} bindir=%{_bindir} mandir=%{_mandir}
+%global _vpath_builddir build/static
+%cmake_install
+# Install shared second so that cmake config files reference the shared library
+%global _vpath_builddir build/shared
+%cmake_install
+%if %{with pzstd}
+install -D -m644 programs/%{name}.1 %{buildroot}%{_mandir}/man1/p%{name}.1
+%endif
+
+%check
+execstack %{_vpath_builddir}/lib/libzstd.so.1
+
+%global _vpath_builddir build/static
+%ctest --verbose
+%if %{with pzstd} && %{with gtest}
+# No pzstd tests with the cmake build at the moment
+export CFLAGS="$RPM_OPT_FLAGS"
+export LDFLAGS="$RPM_LD_FLAGS"
+export CXXFLAGS="$RPM_OPT_FLAGS"
+make PZSTD_CXX_STD=-std=c++17 -C contrib/pzstd tests check
+%endif
 
 %files
-%license LICENSE
-%{_bindir}/zstd
-%{_bindir}/zstdmt
-%{_bindir}/unzstd
-%{_bindir}/zstdcat
-%{_bindir}/zstdgrep
-%{_bindir}/zstdless
-%{_mandir}/man1/zstd.1*
-%{_mandir}/man1/unzstd.1*
-%{_mandir}/man1/zstdcat.1*
-%{_mandir}/man1/zstdgrep.1*
-%{_mandir}/man1/zstdless.1*
+%doc CHANGELOG README.md
+%{_bindir}/%{name}
+%if %{with pzstd}
+%{_bindir}/p%{name}
+%{_mandir}/man1/p%{name}.1*
+%endif
+%{_bindir}/%{name}mt
+%{_bindir}/un%{name}
+%{_bindir}/%{name}cat
+%{_bindir}/%{name}grep
+%{_bindir}/%{name}less
+%{_mandir}/man1/%{name}.1*
+%{_mandir}/man1/un%{name}.1*
+%{_mandir}/man1/%{name}cat.1*
+%{_mandir}/man1/%{name}grep.1*
+%{_mandir}/man1/%{name}less.1*
+%{_pkgdocdir}/zstd_manual.html
+%license COPYING LICENSE
 
-%ldconfig_scriptlets -n libzstd
+%files -n lib%{name}
+%{_libdir}/libzstd.so.*
+%license COPYING LICENSE
 
-%files -n libzstd
-%license LICENSE
-%{_libdir}/libzstd.so.1
-%{_libdir}/libzstd.so.1.*
-
-%files -n libzstd-devel
+%files -n lib%{name}-devel
+%{_includedir}/zdict.h
 %{_includedir}/zstd.h
 %{_includedir}/zstd_errors.h
-%{_includedir}/zdict.h
-%{_libdir}/libzstd.so
 %{_libdir}/pkgconfig/libzstd.pc
+%{_libdir}/libzstd.so
+%{_libdir}/cmake/zstd/
+
+%files -n lib%{name}-static
+%{_libdir}/libzstd.a
+
+%ldconfig_scriptlets -n lib%{name}
+

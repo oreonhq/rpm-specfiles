@@ -16,7 +16,7 @@ URL: http://www.infradead.org/~tgr/libnl/
 # Disable python3 build by default
 %bcond_with python3
 
-Source0: https://github.com/thom311/libnl/releases/download/%{version_path}/libnl-%{version}.tar.gz
+Source0:        https://github.com/thom311/libnl/releases/download/libnl3_12_0/libnl-%{version}.tar.gz
 Source1:        https://github.com/thom311/libnl/releases/download/libnl3_12_0/libnl-doc-%{version}.tar.gz
 
 #Patch1: some.patch
@@ -28,7 +28,6 @@ BuildRequires: bison
 BuildRequires: flex
 BuildRequires: libtool
 BuildRequires: swig
-BuildRequires:  oreon-rpm-macros
 
 
 %description
@@ -64,6 +63,20 @@ Requires: %{name} = %{version}-%{release}
 This package contains libnl3 API documentation
 
 
+%if %{with python3}
+%package -n python3-libnl3
+Summary: libnl3 binding for Python 3
+%{?python_provide:%python_provide python3-libnl3}
+BuildRequires: python3-devel
+BuildRequires: python3-pip
+BuildRequires: python3-setuptools
+BuildRequires: make
+BuildRequires:  oreon-rpm-macros
+Requires: %{name} = %{version}-%{release}
+
+%description -n python3-libnl3
+Python 3 bindings for libnl3
+%endif
 
 %prep
 %oreon_sha256
@@ -78,16 +91,33 @@ autoreconf -vif
 %configure
 make %{?_smp_mflags}
 
+%if %{with python3}
+pushd ./python/
+# build twice, otherwise capi.py is not copied to the build directory.
+CFLAGS="$RPM_OPT_FLAGS" %pyproject_wheel
+CFLAGS="$RPM_OPT_FLAGS" %pyproject_wheel
+popd
+%endif
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT
 
 find $RPM_BUILD_ROOT -name \*.la -delete
 
+%if %{with python3}
+pushd ./python/
+%pyproject_install
+popd
+%endif
 
 %check
 make check
 
+%if %{with python3}
+pushd ./python/
+%{__python3} setup.py check
+popd
+%endif
 
 %ldconfig_scriptlets
 %ldconfig_scriptlets cli
@@ -123,4 +153,9 @@ make check
 %doc libnl-doc-%{version}/images/icons/callouts/*
 %doc libnl-doc-%{version}/api/*
 
+%if %{with python3}
+%files -n python3-libnl3
+%{python3_sitearch}/netlink
+%{python3_sitearch}/netlink-*.dist-info
+%endif
 

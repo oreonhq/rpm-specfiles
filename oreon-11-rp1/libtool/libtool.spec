@@ -1,74 +1,206 @@
 %global source0_hash f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675
 
-Name: libtool
-Version: 2.5.4
-Release: 1%{?dist}
-Summary: Generic shared library support script
-License: GPL-2.0-or-later AND LGPL-2.0-or-later
-URL: https://www.gnu.org/software/libtool/
-Source0: https://ftp.gnu.org/gnu/libtool/libtool-%{version}.tar.xz
+%global oreon_bootstrap %{nil}
+%bcond bootstrap 0
+%oreon_bootstrap
+# See the bug #429880
+%global gcc_major  %(gcc -dumpversion || echo "666")
+# See rhbz#1193591
+%global automake_version %(set -- `automake --version | head -n 1` ; echo ${4-unknown})
 
-BuildRequires: gcc
+%bcond_without check
+
+Summary: The GNU Portable Library Tool
+Name:    libtool
+Version:        2.5.4
+Release:        1%{?dist}
+
+# To help future rebase, the following licenses were seen in the following files/folders:
+# '*' is anything that was not explicitly listed earlier in the folder
+#
+# From libtool package:
+# usr/bin/:
+#  libtool - GPL-2.0-or-later WITH Libtool-exception AND MIT
+#  libtoolize - GPL-2.0-or-later AND MIT
+# usr/share/:
+#  aclocal/* - FSFULLR
+#  doc/libtool:
+#    AUTHORS - GPL-2.0-or-later
+#    * - FSFAP
+#  info/* - GFDL-1.3-or-later
+#  libtool/build-aux/:
+#    {compile,depcomp,missing} - GPL-2.0-or-later WITH Autoconf-exception-generic
+#    config.{guess,sub} - GPL-3.0-or-later WITH Autoconf-exception-generic-3.0
+#    ltmain.sh - GPL-2.0-or-later WITH Libtool-exception AND MIT
+# usr/share/man/man1/*: generated from usr/bin/libtool{,ize} using help2man
+#
+# From libtool-ltdl package:
+# usr/lib64/
+#  * - LGPL-2.0-or-later WITH Libtool-exception
+#
+# From libtool-ltdl-devel package:
+# usr/include/* - LGPL-2.0-or-later WITH Libtool-exception
+# usr/share/:
+#  README - FSFAP
+#  {*.c,*.h,Makefile.am,configure.ac,ltdl.mk} - LGPL-2.0-or-later WITH Libtool-exception
+#  Makefile.in - FSFULLRWD
+#  aclocal.m4 - FSFULLR AND FSFULLRWD
+#  configure - FSFUL
+License: GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-2.0-or-later WITH Libtool-exception AND LGPL-2.0-or-later WITH Libtool-exception AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND MIT AND FSFAP AND FSFULLR AND FSFULLRWD AND GFDL-1.3-or-later AND X11 AND LicenseRef-Oreon-public-domain
+URL:     http://www.gnu.org/software/libtool/
+
+Source0:        https://mirrors.kernel.org/gnu/libtool/libtool-%{version}.tar.xz
+
+# ~> downstream
+# ~> remove possibly once #1158915 gets fixed somehow
+Patch:        libtool-nodocs.patch
+
+# See the rhbz#1289759 and rhbz#1214506.  We disable hardening namely because
+# that bakes the CFLAGS/LDFLAGS into installed /bin/libtool and ltmain.sh files.
+# At the same time we want to have libltdl.so hardened.  Downstream-only patch.
+%undefine _hardened_build
+Patch:        libtool-nodocs.patch
+
+# non-PIC libraries are not supported on ARMv7
+# Since we removed "-fPIC" from global CFLAGS this test fails on this arch (as expected)
+# Please refer to the following ticket regarding PIC support on ARM:
+# https://bugs.launchpad.net/ubuntu/+source/gcc-4.4/+bug/503448
+Patch:        libtool-nodocs.patch
+
+# Discussion re-opened upstream:
+# https://lists.gnu.org/archive/html/bug-libtool/2025-01/msg00004.html
+# Patch was already sent in 2022:
+# https://lists.gnu.org/archive/html/libtool-patches/2022-02/msg00000.html
+Patch:        libtool-nodocs.patch
+
+# Patch sent upstream
+# https://lists.gnu.org/archive/html/libtool-patches/2024-02/msg00002.html
+Patch:        libtool-nodocs.patch
+
+%if ! 0%{?_module_build}
+Patch:        libtool-nodocs.patch
+%endif
+
+# /usr/bin/libtool includes paths within gcc's versioned directories
+# Libtool must be rebuilt whenever a new upstream gcc is built
+# number changes need libtool rebuilding.
+Requires: gcc(major) = %{gcc_major}
+Requires: autoconf, automake, sed, tar, findutils
+
+%if ! 0%{?_module_build}
+BuildRequires: texinfo
+%endif
+BuildRequires: autoconf, automake
+BuildRequires: help2man
+
+# make sure we can configure all supported langs
+BuildRequires: libstdc++-devel, gcc-gfortran
+
+BuildRequires: gcc, gcc-c++
 BuildRequires: make
-BuildRequires: m4
-BuildRequires: oreon-rpm-macros
+BuildRequires:  oreon-rpm-macros
+
 
 %description
-The libtool scripts and the libltdl library.
+GNU Libtool is a set of shell scripts which automatically configure UNIX and
+UNIX-like systems to generically build shared libraries. Libtool provides a
+consistent, portable interface which simplifies the process of using shared
+libraries.
+
+If you are developing programs which will use shared libraries, but do not use
+the rest of the GNU Autotools (such as GNU Autoconf and GNU Automake), you
+should install the libtool package.
+
+The libtool package also includes all files needed to integrate the GNU
+Portable Library Tool (libtool) and the GNU Libtool Dynamic Module Loader
+(ltdl) into a package built using the GNU Autotools (including GNU Autoconf
+and GNU Automake).
+
 
 %package ltdl
-Summary: Runtime library for libtool modules
-Provides: libtool-ltdl = %{version}-%{release}
+Summary:  Runtime libraries for GNU Libtool Dynamic Module Loader
+Provides: %{name}-libs = %{version}-%{release}
+License:  LGPL-2.0-or-later WITH Libtool-exception
+
 
 %description ltdl
-The libltdl library that loads libtool modules.
+The libtool-ltdl package contains the GNU Libtool Dynamic Module Loader, a
+library that provides a consistent, portable interface which simplifies the
+process of using dynamic modules.
+
+These runtime libraries are needed by programs that link directly to the
+system-installed ltdl libraries; they are not needed by software built using
+the rest of the GNU Autotools (including GNU Autoconf and GNU Automake).
+
 
 %package ltdl-devel
-Summary: Development files for libltdl
-Requires: libtool-ltdl%{?_isa} = %{version}-%{release}
-Provides: libtool-ltdl-devel = %{version}-%{release}
+Summary: Tools needed for development using the GNU Libtool Dynamic Module Loader
+Requires: automake = %automake_version
+Requires: %{name}-ltdl = %{version}-%{release}
+License:  LGPL-2.0-or-later WITH Libtool-exception
+
 
 %description ltdl-devel
-Headers and the pkgconfig file for libltdl.
+Static libraries and header files for development with ltdl.
+
 
 %prep
-%autosetup -n libtool-%{version} -p1
 %oreon_sha256
 
+%autosetup -n libtool-%{version} -p1
+
+autoreconf -v
+
 %build
-%oreon_configure --disable-static
-%oreon_make
+
+%configure
+
+%make_build \
+    CUSTOM_LTDL_CFLAGS="%_hardening_cflags" \
+    CUSTOM_LTDL_LDFLAGS="%_hardening_ldflags"
+
+
+%check
+%if %{with check}
+make check VERBOSE=yes || { cat tests/testsuite.dir/*/testsuite.log ; false ; }
+%endif
+
 
 %install
-%oreon_make_install
-find %{buildroot} -name '*.la' -delete
-rm -rf %{buildroot}%{_infodir}
-%oreon_filelist
-python3 - %{buildroot} %{_builddir}/%{name}.files %{_builddir}/%{name}-ltdl.files %{_builddir}/%{name}-ltdl-devel.files <<'PY'
-import sys
-root, src, ltdl, devel = sys.argv[1:]
-main, l, d = [], [], []
-for line in open(src):
-    path = line.strip()
-    if not path or path.startswith("%"):
-        main.append(line)
-        continue
-    bare = path.split()[-1]
-    if (bare.endswith(".pc") and "ltdl" in bare) or bare.endswith("ltdl.h") or bare.endswith("libltdl.so"):
-        d.append(line)
-    elif "libltdl.so" in bare:
-        l.append(line)
-    else:
-        main.append(line)
-open(src, "w").writelines(main)
-open(ltdl, "w").writelines(l)
-open(devel, "w").writelines(d)
-PY
+%make_install
+# info's TOP dir (by default owned by info)
+rm -f %{buildroot}%{_infodir}/dir
+# *.la *.a files generated by libtool shouldn't be distributed (and the
+# `./configure --disable-static' breaks testsuite)
+rm -f %{buildroot}%{_libdir}/libltdl.{a,la}
 
-%files -f %{_builddir}/%{name}.files
+
+%files
 %license COPYING
+%doc AUTHORS NEWS README THANKS TODO ChangeLog*
+%{_infodir}/libtool.info*.gz
+%{_mandir}/man1/libtool.1*
+%{_mandir}/man1/libtoolize.1*
+%{_bindir}/libtool
+%{_bindir}/libtoolize
+%{_datadir}/aclocal/*.m4
+%dir %{_datadir}/libtool
+%{_datadir}/libtool/build-aux
 
-%files ltdl -f %{_builddir}/%{name}-ltdl.files
+
+%files ltdl
 %license libltdl/COPYING.LIB
+%{_libdir}/libltdl.so.*
 
-%files ltdl-devel -f %{_builddir}/%{name}-ltdl-devel.files
+
+%files ltdl-devel
+%license libltdl/COPYING.LIB
+%doc libltdl/README
+%{_datadir}/libtool
+%exclude %{_datadir}/libtool/build-aux
+%{_includedir}/ltdl.h
+%{_includedir}/libltdl
+# .so files without version must be in -devel subpackage
+%{_libdir}/libltdl.so
+
+

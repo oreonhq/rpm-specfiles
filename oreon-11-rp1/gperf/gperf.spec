@@ -1,53 +1,45 @@
-%global source0_hash fd87e0aba7e43ae054837afd6cd4db03a3f2693deb3619085e6ed9d8d9604ad8
+%global source0_hash ed5ad317858e0a9badbbada70df40194002e16e8834ac24491307c88f96f9702
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: A perfect hash function generator
 Name: gperf
-Version: 3.3
-Release: 1%{?dist}
-Summary: Perfect hash function generator
+Version:        3.2.1
+Release:        1%{?dist}
 License: GPL-3.0-or-later
-URL: https://www.gnu.org/software/gperf/
-Source0: https://ftp.gnu.org/gnu/gperf/gperf-%{version}.tar.gz
-Source1: gperf-%{version}.tar.gz.sig
-Source2: gperf-key.asc
+Source0:        https://ftp.gnu.org/pub/gnu/gperf/gperf-%{version}.tar.gz
+URL: http://www.gnu.org/software/gperf/
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: patchelf
+BuildRequires:  gcc-c++
+BuildRequires:  make
+BuildRequires:  oreon-rpm-macros
 
 %description
-gperf generates perfect hash functions for a set of keywords, as C or
-C++ source.
+Gperf is a perfect hash function generator written in C++. Simply
+stated, a perfect hash function is a hash function and a data
+structure that allows recognition of a key word in a set of words
+using exactly one probe into the data structure.
 
 %prep
 %oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n gperf-%{version} -p1
+
+%setup -q
 
 %build
-%oreon_configure
-%oreon_make
+%configure
+%make_build
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist
+#mkdir -p $RPM_BUILD_ROOT/usr/share/{man,info}
+%make_install
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+# remove the stuff from the buildroot
+rm -rf $RPM_BUILD_ROOT{%{_mandir}/{dvi,html},%{_datadir}/doc}
+
+%files
+%doc README NEWS doc/*.{html,pdf} COPYING
+%{_bindir}/%{name}
+%{_mandir}/man1/gperf.1*
+%{_infodir}/gperf.info*
+

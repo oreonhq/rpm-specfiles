@@ -1,1233 +1,1532 @@
 %global source0_hash 100fc873b848b9b0297d8a705e8e2ed326256c8483d9960ee1ffe264c8a5c3e3
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# We ship a .pc file but don't want to have a dep on pkg-config. We
+# strip the automatically generated dep here and instead co-own the
+# directory.
+%global __requires_exclude pkg-config
 
-Name: systemd
-Version: 262.1
-Release: 2%{?dist}
-Summary: System and service manager
-License: LGPL-2.1-or-later AND GPL-2.0-or-later
-URL: https://systemd.io/
-Source0: https://github.com/systemd/systemd/archive/refs/tags/v%{version}.tar.gz
-Requires: systemd-libs%{?_isa} = %{version}-%{release}
-Requires: systemd-udev%{?_isa} = %{version}-%{release}
-%if %{without bootstrap} && !0%{?bootstrap}
-Requires: systemd-pam%{?_isa} = %{version}-%{release}
+%global pkgdir %{_prefix}/lib/systemd
+%global system_unit_dir %{pkgdir}/system
+%global user_unit_dir %{pkgdir}/user
+
+%bcond bzip2     1
+%bcond gnutls    1
+%bcond lz4       1
+%bcond xz        1
+%bcond zlib      1
+%bcond zstd      1
+
+# Bootstrap may be needed to break circular dependencies with cryptsetup,
+# e.g. when re-building cryptsetup on a json-c SONAME-bump.
+%bcond bootstrap 0
+%bcond tests     1
+
+# When enabled, rely on filesystem(unmerged-sbin-symlinks) file triggers to
+# create /usr/sbin symlinks instead of shipping them in the package. This
+# avoids file conflicts when installing on merged-sbin systems and eliminates
+# bootstrap ordering issues with the bin/sbin merge.
+#
+# triggers and the required matching virtual provides.
+%bcond sbin_compat %[1 >= 43]
+
+# riscv64 has LTO disabled globally
+%bcond lto       %["%_arch" != "riscv64"]
+
+# Build docs on 64-bit architectures only
+%bcond docs      %[%{?__isa_bits} >= 64]
+
+# Build from git main
+%bcond upstream  0
+
+# Build with OBS-specific quirks
+%bcond obs       0
+
+# When bootstrap, libcryptsetup is disabled
+# but auto-features causes many options to be turned on
+# that depend on libcryptsetup (e.g. libcryptsetup-plugins, homed)
+%if %{with bootstrap}
+%global __meson_auto_features disabled
+# If we're building for upstream, don't unconditionally enable all
+# new features as new features might be introduced for which we're
+# missing build dependencies.
+%elif %{with upstream}
+%global __meson_auto_features auto
 %endif
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: glibc-devel
-BuildRequires: meson
-BuildRequires: ninja-build
-BuildRequires: pkgconf
-BuildRequires: patchelf
-BuildRequires: gperf
-BuildRequires: python3
-BuildRequires: libcap-devel
-BuildRequires: libxcrypt-devel
-BuildRequires: libmount-devel
-BuildRequires: libblkid-devel
-BuildRequires: libselinux-devel
-BuildRequires: libacl-devel
-BuildRequires: openssl-devel
-BuildRequires: zlib-devel
-BuildRequires: bzip2-devel
-BuildRequires: xz-devel
-BuildRequires: lz4-devel
-BuildRequires: libzstd-devel
-BuildRequires: libarchive-devel
-BuildRequires: pcre2-devel
-BuildRequires: libseccomp-devel
-BuildRequires: audit-libs-devel
-BuildRequires: libmicrohttpd-devel
-BuildRequires: libcurl-devel
-BuildRequires: libidn2-devel
-BuildRequires: libgcrypt-devel
-BuildRequires: gnutls-devel
-BuildRequires: p11-kit-devel
-BuildRequires: elfutils-devel
-BuildRequires: python3-jinja2
-BuildRequires: libfdisk-devel
-BuildRequires: gettext
-BuildRequires: kmod-devel
-%if %{without bootstrap} && !0%{?bootstrap}
-BuildRequires: dbus-devel
-BuildRequires: glib2-devel
-BuildRequires: cryptsetup-devel
-BuildRequires: pam-devel
-BuildRequires: libpwquality-devel
+# Override %%autorelease. This is ugly, but rpmautospec doesn't implement
+# autorelease correctly if the macro is conditionalized in the Release field.
+%{?release_override:%global autorelease %{release_override}%{?dist}}
+
+# In OBS, noarch packages are shared between all architectures and
+# independent architectures can be rebuilt automatically without all
+# the other architectures getting rebuilt. This can result in the noarch
+# packages being newer than the archful packages for some architectures,
+# which means our current strict deps from the noarch packages on the
+# archful packages can't be satisfied.
+#
+# To address this problem, let's relax the dependencies from the noarch
+# packages on the archful packages for OBS builds. Let's only do this for
+# build a package for only some of the architectures.
+%if %{with obs}
+%define noarch_requires_version %{version}
+%else
+%define noarch_requires_version %{version}-%{release}
 %endif
+
+%if 0%{?__isa_bits} == 64
+%global elf_bits (64bit)
+%global elf_suffix ()%{elf_bits}
+%endif
+
+Name:           systemd
+Url:            https://systemd.io
+# Allow users to specify the version and release when building the rpm by
+# setting the %%version_override and %%release_override macros.
+# But don't do that on OBS, otherwise the version subst fails, and will be
+# like 257-123-gabcd257.1 instead of 257-123-gabcd
+%if %{without obs}
+Version:        262.1
+%else
+Version:        %{?version_override}%{!?version_override:%(cat meson.version)}
+%endif
+Release:        1%{?dist}
+
+%global stable %(c="%version"; [ "$c" = "${c#*.*}" ]; echo $?)
+
+# Temporary macro to enable systemd-report.standalone
+%bcond report_standalone %[ v"%{version}" >= v"261.999" || %{defined commit} ]
+
+# For a breakdown of the licensing, see README
+License:        LGPL-2.1-or-later AND MIT AND GPL-2.0-or-later
+Summary:        System and Service Manager
+
+# download tarballs with "spectool -g systemd.spec"
+# packit will always rewrite the first Source0 it finds, ignoring any conditionals so list
+# the fallback source that's used if neither %%branch, %%commit or %%obs are defined first.
+%if %{undefined branch} && %{undefined commit} && %{without obs}
+Source0:        https://github.com/systemd/systemd/archive/v%{version}/systemd-%{version}.tar.gz
+%elif %{defined branch}
+Source0:        https://github.com/systemd/systemd/archive/v%{version}/systemd-%{version}.tar.gz
+%elif %{defined commit}
+Source0:        https://github.com/systemd/systemd/archive/v%{version}/systemd-%{version}.tar.gz
+%elif %{with obs}
+Source0:        https://github.com/systemd/systemd/archive/v%{version}/systemd-%{version}.tar.gz
+%endif
+# This file must be available before %%prep.
+# It is generated during systemd build and can be found at build/src/rpm/triggers.systemd.sh.
+Source1:        triggers.systemd
+Source2:        split-files.py
+Source4:        test_sysusers_defined.py
+
+Source6:        inittab
+Source7:        sysctl.conf.README
+Source8:        systemd-journal-remote.xml
+Source9:        systemd-journal-gatewayd.xml
+Source11:       systemd-udev-trigger-no-reload.conf
+Source13:       libabigail.abignore
+
+Source14:       10-oomd-defaults.conf
+Source15:       10-oomd-per-slice-defaults.conf
+Source16:       10-timeout-abort.conf
+Source17:       10-map-count.conf
+Source18:       60-block-scheduler.rules
+Source19:       99-kernel-hardening.conf
+Source20:       macros.sysusers.compat
+Source21:       macros.sysusers
+Source22:       sysusers.attr
+Source23:       sysusers.prov
+Source24:       sysusers.generate-pre.sh
+
+Source25:       98-default-mac-none.link
+
+Source26:       systemd-user
+
+
+%if %{without upstream}
+# Those are downstream-only patches, but we don't want them in packit builds.
+
+# Create user journals for users with high UIDs
+Patch:        0002-machined-continue-without-resolve.hook-socket.patch
+
+# userdb: create userdb root directory with correct label
+# We can drop this after SELinux policy is updated to handle the transition.
+Patch:        0002-machined-continue-without-resolve.hook-socket.patch
+
+Patch:        0002-machined-continue-without-resolve.hook-socket.patch
+
+%endif
+
+%ifarch %{ix86} x86_64 aarch64 riscv64 loongarch64
+%global want_bootloader 1
+%endif
+
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+BuildRequires:  clang
+BuildRequires:  coreutils
+BuildRequires:  rpmdevtools
+BuildRequires:  libmount-devel
+BuildRequires:  libfdisk-devel
+BuildRequires:  libpwquality-devel
+BuildRequires:  libxcrypt-devel
+BuildRequires:  pam-devel
+BuildRequires:  libselinux-devel
+BuildRequires:  audit-libs-devel
+%if %{without bootstrap}
+BuildRequires:  cryptsetup-devel
+# Require (previous version) of our macros package.
+# We use the %%systemd_{post,preun,…} macros for various services.
+BuildRequires:  systemd-rpm-macros
+%endif
+
+# Use dlopen-notes to generate Requires/Recommends from embedded metadata.
+# Currently, package-notes are not available on Centos Stream 9 or 10.
+BuildRequires:  package-notes >= 0.20
+
+BuildRequires:  dbus-devel
+BuildRequires:  util-linux
+# /usr/bin/getfacl is needed by test-acl-util
+BuildRequires:  acl
+BuildRequires:  libacl-devel
+BuildRequires:  gobject-introspection-devel
+BuildRequires:  libblkid-devel
+%if %{with xz}
+BuildRequires:  xz-devel
+BuildRequires:  xz
+%endif
+%if %{with lz4}
+BuildRequires:  lz4-devel
+BuildRequires:  lz4
+%endif
+%if %{with bzip2}
+BuildRequires:  bzip2-devel
+%endif
+%if %{with zstd}
+BuildRequires:  libzstd-devel
+%endif
+BuildRequires:  libidn2-devel
+BuildRequires:  libcurl-devel
+BuildRequires:  kmod-devel
+BuildRequires:  elfutils-devel
+BuildRequires:  openssl-devel
+%if %{with gnutls}
+BuildRequires:  gnutls-devel
+%endif
+BuildRequires:  qrencode-devel
+BuildRequires:  libmicrohttpd-devel
+BuildRequires:  libxkbcommon-devel
+BuildRequires:  iptables-devel
+BuildRequires:  pkgconfig(bash-completion)
+BuildRequires:  pkgconfig(libarchive)
+BuildRequires:  pkgconfig(libfido2)
+BuildRequires:  pkgconfig(tss2-esys)
+BuildRequires:  pkgconfig(tss2-rc)
+BuildRequires:  pkgconfig(tss2-mu)
+BuildRequires:  pkgconfig(libbpf)
+BuildRequires:  systemtap-sdt-devel
+%if %{with docs}
+BuildRequires:  libxslt
+BuildRequires:  docbook-style-xsl
+%endif
+BuildRequires:  pkgconfig
+BuildRequires:  gperf
+BuildRequires:  gawk
+BuildRequires:  hostname
+BuildRequires:  python3
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(jinja2)
+BuildRequires:  python3dist(lxml)
+BuildRequires:  python3dist(pefile)
+BuildRequires:  python3dist(pillow)
+BuildRequires:  python3dist(pytest)
+%if 0%{?want_bootloader}
+BuildRequires:  python3dist(pyelftools)
+%endif
+# gzip and lzma are provided by the stdlib
+BuildRequires:  firewalld-filesystem
+BuildRequires:  libseccomp-devel
+BuildRequires:  meson >= 0.43
+BuildRequires:  gettext
+# We use RUNNING_ON_VALGRIND in tests, so the headers need to be available
+%ifarch %{valgrind_arches}
+BuildRequires:  valgrind-devel
+%endif
+
+%ifnarch %ix86
+# bpftool is not built for i368
+BuildRequires:  bpftool
+BuildRequires:  kernel-devel
+%global have_bpf 1
+%endif
+
+%ifarch x86_64 aarch64
+%global have_xen 1
+# That package is only built for those two architectures
+BuildRequires:  xen-devel
+%endif
+
+%if %{with obs}
+BuildRequires:  pesign-obs-integration
+%endif
+
+Requires(post): coreutils
+Requires(post): grep
+# systemd-machine-id-setup requires libssl
+Requires(post): openssl-libs
+Recommends:     dbus >= 1.9.18
+Recommends:     systemd-pam%{_isa} = %{version}-%{release}
+Requires(meta): (systemd-rpm-macros = %{version}-%{release} if rpm-build)
+Requires:       systemd-libs%{_isa} = %{version}-%{release}
+Recommends:     systemd-networkd = %{version}-%{release}
+Recommends:     systemd-resolved = %{version}-%{release}
+Requires:       systemd-shared%{_isa} = %{version}-%{release}
+Requires:       /usr/bin/systemd-sysusers
+
+# The standalone version doesn't Provide the _isa suffix,
+# so this biases towards the common version.
+Recommends:     systemd-sysusers%{_isa} = %{version}-%{release}
+
+
+Recommends:     diffutils
+Requires:       (util-linux-core or util-linux)
+Requires:       (libbpf >= 2:1.4.7 if libbpf)
+Provides:       /bin/systemctl
+Provides:       /sbin/shutdown
+Provides:       syslog
+Provides:       systemd-units = %{version}-%{release}
+Obsoletes:      system-setup-keyboard < 0.9
+Provides:       system-setup-keyboard = 0.9
+Obsoletes:      systemd-sysv < 206
+Provides:       systemd-sysv = 206
+Conflicts:      initscripts < 9.56.1
+Conflicts:      oreon-release < 23-0.12
+BuildRequires:  setup >= 2.15.0-3
+BuildRequires:  python3
+Conflicts:      setup < 2.15.0-3
+Conflicts:      selinux-policy-any < 41.3
+
+# Make sure that dracut supports systemd-executor and the renames done for v255,
+# and dlopen libraries and read-only fs in initrd.
+Conflicts:      dracut < 060-2
+
+%if %{with report_standalone}
+Conflicts:      systemd-standalone-report
+Provides:       systemd-report = %{version}-%{release}
+%endif
+Conflicts:      systemd-standalone-tmpfiles
+Provides:       systemd-tmpfiles = %{version}-%{release}
+Conflicts:      systemd-standalone-shutdown
+Provides:       systemd-shutdown = %{version}-%{release}
+
+%if %{with sbin_compat} || "%{_sbindir}" == "%{_bindir}"
+# Compat symlinks for Requires in other packages.
+# We rely on filesystem to create the symlinks for us.
+Requires:       filesystem(unmerged-sbin-symlinks)
+Provides:       /usr/sbin/halt
+Provides:       /usr/sbin/init
+Provides:       /usr/sbin/poweroff
+Provides:       /usr/sbin/reboot
+Provides:       /usr/sbin/shutdown
+%endif
+
+
+%define dlopen_notes_features %{expand:
+  # Various systemd services have syscall filters so make libseccomp a hard dependency.
+  systemd:seccomp:required
+
+  # zstd is used for compression in the journal
+  systemd:zstd:required
+
+  # Libkmod is used to load modules. Assume that if we need udevd, we certainly
+  # want to load modules, so make this into a hard dependency here.
+  systemd-udev:kmod:required
+
+  # We want to always use idn with resolved.
+  systemd-resolved:idn:required
+
+  # libcurl is required by systemd-imdsd and systemd-report.
+  # Downgrade the dep for now.
+  systemd:curl:recommended
+  systemd-udev:curl:recommended
+
+  # libssl + libcrypto are required by systemd-resolved/resolvectl.
+  # Downgrade the dep in the main package.
+  systemd:libssl:recommended
+  systemd:libcrypto:recommended
+
+  
+}
 
 %description
-systemd is the system and service manager.
+systemd is a system and service manager that runs as PID 1 and starts the rest
+of the system. It provides aggressive parallelization capabilities, uses socket
+and D-Bus activation for starting services, offers on-demand starting of
+daemons, keeps track of processes using Linux control groups, maintains mount
+and automount points, and implements an elaborate transactional dependency-based
+service control logic. systemd supports SysV and LSB init scripts and works as a
+replacement for sysvinit. Other parts of this package are a logging daemon,
+utilities to control basic system configuration like the hostname, date, locale,
+maintain a list of logged-in users, system accounts, runtime directories and
+settings, and a logging daemons.
+%if 0%{?stable}
+This package was built from the %(c=%version; echo "v${c%.*}-stable") branch of systemd.
+%endif
 
 %package libs
-Summary: Libraries for systemd
+Summary:        systemd libraries
+License:        LGPL-2.1-or-later AND MIT
+Provides:       nss-myhostname = 0.4
+Provides:       nss-myhostname%{_isa} = 0.4
+Conflicts:      systemd-shared < %{version}-%{release}
 
 %description libs
-Libraries for systemd.
+Libraries for systemd and udev.
+
+%package shared
+Summary:        Internal systemd shared library
+License:        LGPL-2.1-or-later AND MIT
+# in 257.3-6 /usr/lib64/systemd/libsystemd-shared-257.2-14.fc42.so
+# was moved from package systemd to systemd-shared.
+# Add a conflit to allow downgrades across this change.
+Conflicts:      systemd < 257.3-6
+Conflicts:      systemd-libs < %{version}-%{release}
+
+%description shared
+Internal libraries used by various systemd binaries.
 
 %package pam
-Summary: systemd PAM modules
-Requires: systemd%{?_isa} = %{version}-%{release}
+Summary:        systemd PAM module
+Requires:       systemd = %{version}-%{release}
 
 %description pam
-systemd PAM modules.
+Systemd PAM module registers the session with systemd-logind.
 
 %package rpm-macros
-Summary: Macros for systemd units
-BuildArch: noarch
+Summary:        Macros that define paths and scriptlets related to systemd
+BuildArch:      noarch
 
 %description rpm-macros
-Macros for systemd units.
+Just the definitions of rpm macros.
 
-%package udev
-Summary: udev and related system services
-Requires: systemd%{?_isa} = %{version}-%{release}
+See
+https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/#_systemd
+for information how to use those macros.
 
-%description udev
-udev and related system services.
+%package sysusers
+Summary:        systemd-sysusers program
+Requires:       systemd-shared%{_isa} = %{version}-%{release}
+Conflicts:      systemd-standalone-sysusers
+# in 257.3-6 /usr/bin/systemd-sysusers was moved from package systemd
+# to systemd-sysusers. Add a conflit to allow downgrades across this change.
+Conflicts:      systemd < 257.3-6
 
-%package container
-Summary: Tools for containers and VMs
-Requires: systemd%{?_isa} = %{version}-%{release}
-
-%description container
-Tools for containers and VMs.
-
-%package networkd
-Summary: System daemon that manages network configuration
-Requires: systemd%{?_isa} = %{version}-%{release}
-
-%description networkd
-System daemon that manages network configuration.
-
-%package resolved
-Summary: Network name resolution manager
-Requires: systemd%{?_isa} = %{version}-%{release}
-
-%description resolved
-Network name resolution manager.
-
-%package journal-remote
-Summary: Tools to send journal events over the network
-Requires: systemd%{?_isa} = %{version}-%{release}
-
-%description journal-remote
-Tools to send journal events over the network.
+%description sysusers
+This package contains the systemd-sysusers program.
 
 %package devel
-Summary: Development headers for systemd
-Requires: systemd-libs%{?_isa} = %{version}-%{release}
+Summary:        Development headers for systemd
+License:        LGPL-2.1-or-later AND MIT
+Requires:       systemd-libs%{_isa} = %{version}-%{release}
+Requires(meta): (systemd-rpm-macros = %{version}-%{release} if rpm-build)
+Provides:       libudev-devel = %{version}
+Provides:       libudev-devel%{_isa} = %{version}
 
 %description devel
-systemd is the system and service manager.
+Development headers and auxiliary files for developing applications linking
+to libudev or libsystemd.
+
+%package udev
+Summary: Rule-based device node and kernel event manager
+License:        LGPL-2.1-or-later
+
+Requires:       systemd%{_isa} = %{version}-%{release}
+Requires(post):   systemd%{_isa} = %{version}-%{release}
+Requires(preun):  systemd%{_isa} = %{version}-%{release}
+Requires(postun): systemd%{_isa} = %{version}-%{release}
+Requires(post): grep
+Requires:       kmod >= 18-4
+
+
+Provides:       udev = %{version}
+Provides:       udev%{_isa} = %{version}
+Requires:       (grubby > 8.40-72 if grubby)
+Requires:       (sdubby > 1.0-3 if sdubby)
+# A backport of systemd-timesyncd is shipped as a separate package in EPEL so
+# let's make sure we properly handle that.
+Conflicts:      systemd-networkd < %{version}-%{release}
+
+
+Suggests:       systemd-bootchart
+
+# v261 handles missing setfont/loadkeys gracefully
+Recommends:     kbd
+
+Provides:       u2f-hidraw-policy = 1.0.2-40
+Obsoletes:      u2f-hidraw-policy < 1.0.2-40
+
+Conflicts:      systemd-standalone-repart
+Provides:       systemd-repart = %{version}-%{release}
+
+# Newer versions of those are required to support X11 keycode remapping
+Conflicts:      xorg-x11-drv-evdev < 2.11.0
+Conflicts:      xorg-x11-drv-libinput < 1.5.0
+
+%if %{with sbin_compat} || "%{_sbindir}" == "%{_bindir}"
+# Compat symlinks for Requires in other packages.
+# We rely on filesystem to create the symlinks for us.
+Requires:       filesystem(unmerged-sbin-symlinks)
+Provides:       /usr/sbin/udevadm
+%endif
+
+%description udev
+This package contains systemd-udev and the rules and hardware database needed to
+manage device nodes. This package is necessary on physical machines and in
+virtual machines, but not in containers.
+
+This package also provides systemd-timesyncd, a network time protocol daemon.
+
+It also contains tools to manage encrypted home areas and secrets bound to the
+machine, and to create or grow partitions and make file systems automatically.
+
+%package imds
+Summary: Client for IMDS cloud metadata services
+Requires:       systemd%{_isa} = %{version}-%{release}
+
+%description imds
+%{summary}. When this package
+is installed, systemd-imds-generator will automatically enable systemd-imds
+on supported clouds.
+
+This code should be considered experimental for now.
+
+%package ukify
+Summary:        Tool to build Unified Kernel Images
+Requires:       systemd = %{noarch_requires_version}
+
+Requires:       (systemd-boot if %{shrink:(
+        filesystem(x86-32) or
+        filesystem(x86-64) or
+        filesystem(aarch64) or
+        filesystem(riscv64) or
+        filesystem(loongarch64)
+)})
+Requires:       python3dist(pefile)
+Requires:       python3dist(zstandard)
+Requires:       python3dist(cryptography)
+Recommends:     python3dist(pillow)
+
+# for tests
+%ifarch riscv64
+# 2.42 received support for riscv64 + efi targets
+%global binutils_version_req >= 2.42
+%endif
+BuildRequires:  binutils %{?binutils_version_req}
+BuildRequires:  oreon-rpm-macros
+
+BuildArch:      noarch
+
+%description ukify
+This package provides ukify, a script that combines a kernel image, an initrd,
+with a command line, and possibly PCR measurements and other metadata, into a
+Unified Kernel Image (UKI).
+
+%if 0%{?want_bootloader}
+%if %{without obs}
+%package boot-unsigned
+Summary: UEFI boot manager (unsigned version)
+
+Provides: systemd-boot-unsigned-%{efi_arch} = %version-%release
+Provides: systemd-boot = %version-%release
+Provides: systemd-boot%{_isa} = %version-%release
+# A provides with just the version, no release or dist, used to build systemd-boot
+Provides: version(systemd-boot-unsigned) = %version
+Provides: version(systemd-boot-unsigned)%{_isa} = %version
+
+%description boot-unsigned
+systemd-boot (short: sd-boot) is a simple UEFI boot manager. It provides a
+graphical menu to select the entry to boot and an editor for the kernel command
+line. systemd-boot supports systems with UEFI firmware only.
+
+This package contains the unsigned version. Install systemd-boot instead to get
+the version that works with Secure Boot.
+%else
+%package boot
+Summary: UEFI boot manager (signed version)
+
+Provides: systemd-boot-signed-%{efi_arch} = %version-%release
+Provides: systemd-boot = %version-%release
+Provides: systemd-boot%{_isa} = %version-%release
+# A provides with just the version, no release or dist, used to build systemd-boot
+Provides: version(systemd-boot-signed) = %version
+Provides: version(systemd-boot-signed)%{_isa} = %version
+
+%description boot
+systemd-boot (short: sd-boot) is a simple UEFI boot manager. It provides a
+graphical menu to select the entry to boot and an editor for the kernel command
+line. systemd-boot supports systems with UEFI firmware only.
+
+This package contains the signed version.
+%endif
+%endif
+
+%package import-keys
+Summary:        GPG keys for verifying systemd image imports
+BuildArch:      noarch
+License:        LGPL-2.1-or-later
+# self-obsoletes after package split
+Obsoletes:      systemd-container < 262~rc3-2
+
+%description import-keys
+GPG keyring used by systemd-importd to verify signatures of downloaded
+container and virtual machine images.
+
+%package container
+# Name is the same as in Debian
+Summary: Tools for containers and VMs
+Requires:       systemd%{_isa} = %{version}-%{release}
+Requires(post):   systemd%{_isa} = %{version}-%{release}
+Requires(preun):  systemd%{_isa} = %{version}-%{release}
+Requires(postun): systemd%{_isa} = %{version}-%{release}
+Requires:       gnupg2
+Recommends:     systemd-import-keys = %{noarch_requires_version}
+# For systemd-vmspawn which uses qemu:
+Recommends:     qemu-kvm-core
+Recommends:     qemu-device-display-virtio-gpu
+Recommends:     qemu-device-display-virtio-vga
+# self-obsoletes after package split
+Obsoletes:      systemd-container < 262~rc3-2
+
+# Bias the system towards libcurl-minimal if nothing pulls in full libcurl (#1997040)
+Suggests:       libcurl-minimal
+License:        LGPL-2.1-or-later
+
+%description container
+Systemd tools to spawn and manage containers and virtual machines.
+
+This package contains systemd-nspawn, systemd-vmspawn, machinectl,
+systemd-machined, and systemd-importd.
+
+%package journal-remote
+# Name is the same as in Debian
+Summary:        Tools to send journal events over the network
+Requires:       systemd%{_isa} = %{version}-%{release}
+License:        LGPL-2.1-or-later
+Requires:       firewalld-filesystem
+Provides:       systemd-journal-gateway = %{version}-%{release}
+Provides:       systemd-journal-gateway%{_isa} = %{version}-%{release}
+# Bias the system towards libcurl-minimal if nothing pulls in full libcurl (#1997040)
+Suggests:       libcurl-minimal
+
+%description journal-remote
+Programs to forward journal entries over the network, using encrypted HTTP, and
+to write journal files from serialized journal contents.
+
+This package contains systemd-journal-gatewayd, systemd-journal-remote, and
+systemd-journal-upload.
+
+%package networkd
+Summary:        System daemon that manages network configurations
+Requires:       systemd%{_isa} = %{version}-%{release}
+Recommends:     systemd-udev = %{version}-%{release}
+Conflicts:      systemd-udev < %{version}-%{release}
+License:        LGPL-2.1-or-later
+
+%description networkd
+systemd-networkd is a system service that manages networks. It detects and
+configures network devices as they appear, as well as creating virtual network
+devices.
+
+%package networkd-defaults
+Summary:        Configure network interfaces with networkd by default
+Requires:       systemd-networkd = %{noarch_requires_version}
+License:        MIT-0
+BuildArch:      noarch
+
+%description networkd-defaults
+This package contains a set of config files for systemd-networkd that cause it
+to configure network interfaces by default. Note that systemd-networkd needs to
+enabled for this to have any effect.
+
+%package resolved
+Summary:        Network Name Resolution manager
+Requires:       systemd%{_isa} = %{version}-%{release}
+Requires(posttrans): grep
+
+%description resolved
+systemd-resolved is a system service that provides network name resolution to
+local applications. It implements a caching and validating DNS/DNSSEC stub
+resolver, as well as an LLMNR and MulticastDNS resolver and responder.
+
+%package oomd-defaults
+Summary:        Configuration files for systemd-oomd
+Requires:       systemd-udev = %{noarch_requires_version}
+License:        LGPL-2.1-or-later
+BuildArch:      noarch
+
+%description oomd-defaults
+A set of drop-in files for systemd units to enable action from systemd-oomd,
+a userspace out-of-memory (OOM) killer.
+
+%package tests
+Summary:       Internal unit tests for systemd
+Requires:      systemd%{_isa} = %{version}-%{release}
+# This dependency is provided transitively. Also add it explicitly to
+# appease rpminspect, https://github.com/rpminspect/rpminspect/issues/1231:
+Requires:      systemd-libs%{_isa} = %{version}-%{release}
+Requires:      python3dist(psutil)
+
+License:       LGPL-2.1-or-later
+
+%description tests
+Systemd unit tests used to test the internal implementation after a build.
+Different binaries test different parts of the codebase.
+
+%package standalone-repart
+Summary:       Standalone systemd-repart binary for use on systems without systemd
+Provides:      systemd-repart = %{version}-%{release}
+Conflicts:     systemd-udev
+Suggests:      coreutils-single
+RemovePathPostfixes: .standalone
+
+%description standalone-repart
+Standalone systemd-repart binary with no dependencies on the systemd-shared
+library or other libraries from systemd-libs. This package conflicts with the
+systemd-udev package and is meant for use on systems without systemd-udev.
+
+%if %{with report_standalone}
+%package standalone-report
+Summary:       Standalone systemd-report binaries for use on systems without systemd
+Provides:      systemd-report = %{version}-%{release}
+Conflicts:     systemd
+RemovePathPostfixes: .standalone
+
+%description standalone-report
+Standalone systemd-report, systemd-report-basic, systemd-report-sign-plain, …
+binaries with no dependencies on the systemd-shared library or other libraries
+from systemd-libs. This package conflicts with the main systemd package and
+is meant for use on systems without systemd or with older version of it.
+%endif
+
+%package standalone-tmpfiles
+Summary:       Standalone systemd-tmpfiles binary for use on systems without systemd
+Provides:      systemd-tmpfiles = %{version}-%{release}
+Conflicts:     systemd
+Suggests:      coreutils-single
+RemovePathPostfixes: .standalone
+
+%description standalone-tmpfiles
+Standalone systemd-tmpfiles binary with no dependencies on the systemd-shared
+library or other libraries from systemd-libs. This package conflicts with the
+main systemd package and is meant for use on systems without systemd.
+
+%package standalone-sysusers
+Summary:       Standalone systemd-sysusers binary for use on systems without systemd
+Provides:      systemd-sysusers = %{version}-%{release}
+Suggests:      coreutils-single
+RemovePathPostfixes: .standalone
+
+%description standalone-sysusers
+Standalone systemd-sysusers binary with no dependencies on the systemd-shared
+library or other libraries from systemd-libs. This package conflicts with the
+main systemd package and is meant for use on systems without systemd.
+
+%package standalone-shutdown
+Summary:       Standalone systemd-shutdown binary for use in exitrds
+Provides:      systemd-shutdown = %{version}-%{release}
+Conflicts:     systemd
+Suggests:      coreutils-single
+RemovePathPostfixes: .standalone
+
+%description standalone-shutdown
+Standalone systemd-shutdown binary with no dependencies on the systemd-shared
+library or other libraries from systemd-libs. This package conflicts with the
+main systemd package and is meant for use in exitrds.
+
+%define status %{shrink:
+       '**'
+       bzip2=%{?with_bzip2}%{!?with_bzip2:0}
+       gnutls=%{?with_gnutls}%{!?with_gnutls:0}
+       lz4=%{?with_lz4}%{!?with_lz4:0}
+       xz=%{?with_xz}%{!?with_xz:0}
+       zlib=%{?with_zlib}%{!?with_zlib:0}
+       zstd=%{?with_zstd}%{!?with_zstd:0}
+       bootstrap=%{?with_bootstrap}%{!?with_bootstrap:0}
+       tests=%{?with_tests}%{!?with_tests:0}
+       lto=%{?with_lto}%{!?with_lto:0}
+       docs=%{?with_docs}%{!?with_docs:0}
+       upstream=%{?with_upstream}%{!?with_upstream:0}
+       obs=%{?with_obs}%{!?with_obs:0}
+       report_standalone=%{?with_report_standalone}%{!?with_report_standalone:0}
+       oreon=45
+       rhel=
+       _arch=%{_arch}
+       '**'}
 
 %prep
 %oreon_sha256
-%autosetup -n systemd-%{version} -p1
-sed -i 's/EDEADLOCK|EWOULDBLOCK|ENOTSUP/EDEADLOCK|EWOULDBLOCK|ENOTSUP|EFSBADCRC|EFSCORRUPTED/' src/basic/errno-to-name.awk
-sed -i "s#command : \[ bpftool, 'btf', 'dump', 'file', '/sys/kernel/btf/vmlinux', 'format', 'c' \],#command : [ 'sh', '-c', '\"\$1\" btf dump file /sys/kernel/btf/vmlinux format c | sed \"/bpf_stream_vprintk/d\"', 'gen-vmlinux', bpftool ],#" meson.build
+
+# Print varius with's and without's to make it easier to figure out what is going on
+echo %{status}
+
+%if %{with obs}
+# Recipe files in the OBS build are in a distro-specific dir, as they conflict (e.g. with SUSE ones)
+mv %{_sourcedir}/%{name}.oreon/* %{_sourcedir}
+%endif
+
+# Automatically figure out the name of the top-level directory.
+# TODO: Use %%autosetup -C once we can depend on rpm >= 4.20.
+%if %{undefined _build_in_place}
+%autosetup -n %(tar -tf %{SOURCE0} 2>/dev/null | head -n1) -p1
+%endif
+
+# Disable user lockdown until rpm implements it natively.
+# https://github.com/rpm-software-management/rpm/issues/3450
+sed -r -i 's/^u!/u/' sysusers.d/*.conf*
+
+# Disable the preset for systemd-coredumd to work with old SELinux policy
+sed -r -i '/enable systemd-coredumpd.service/d' presets/90-systemd.preset
 
 %build
-%global sd_cyc %[(%{with bootstrap} || 0%{?bootstrap}) ? "disabled" : "enabled"]
-%oreon_meson \
-  -Dmode=release \
-  -Dlog-message-verification=disabled \
-  -Dtests=false \
-  -Dfuzz-tests=false \
-  -Dinstall-tests=false \
-  -Dtranslations=true \
-  -Defi=true \
-  -Dtpm=false \
-  -Dstatic-libsystemd=false \
-  -Dstatic-libudev=false \
-  -Dbpf-framework=disabled \
-  -Dapparmor=disabled \
-  -Daudit=enabled \
-  -Dlibcryptsetup=%{sd_cyc} \
-  -Dlibcryptsetup-plugins=%{sd_cyc} \
-  -Dmicrohttpd=enabled \
-  -Dlibcurl=enabled \
-  -Dlibidn2=enabled \
-  -Dqrencode=disabled \
-  -Dgcrypt=enabled \
-  -Dgnutls=enabled \
-  -Dp11kit=enabled \
-  -Dlibfido2=disabled \
-  -Dtpm2=disabled \
-  -Delfutils=enabled \
-  -Dxkbcommon=disabled \
-  -Dbootloader=disabled \
-  -Dukify=disabled \
-  -Dhomed=%{sd_cyc} \
-  -Dremote=enabled \
-  -Dimportd=enabled \
-  -Dvmspawn=enabled \
-  -Drepart=enabled \
-  -Dsysupdate=enabled \
-  -Dpolkit=disabled \
-  -Dseccomp=enabled \
-  -Dfdisk=enabled \
-  -Dxenctrl=disabled \
-  -Dpwquality=%{sd_cyc} \
-  -Dpasswdqc=disabled \
-  -Dpam=%{sd_cyc} \
-  -Dsysupdated=enabled \
-  -Ddns-over-tls=openssl \
-  -Dnss-mymachines=enabled \
-  -Dnss-resolve=enabled \
-  -Dresolve=true \
-  -Dselinux=enabled \
-  -Dacl=enabled \
-  -Dopenssl=enabled \
-  -Dzlib=enabled \
-  -Dbzip2=enabled \
-  -Dxz=enabled \
-  -Dlz4=enabled \
-  -Dzstd=enabled \
-  -Dlibarchive=enabled \
-  -Ddbus=%{sd_cyc} \
-  -Dglib=%{sd_cyc} \
-  -Dpcre2=enabled \
-  -Dblkid=enabled \
-  -Dkmod=enabled
-%oreon_meson_build
+echo %{status}
+
+%global ntpvendor %(source /etc/os-release; echo ${ID})
+%{!?ntpvendor: echo 'NTP vendor zone is not set!'; exit 1}
+
+VMLINUX_H_PATH=''
+
+%if 0%{?have_bpf}
+
+%global find_vmlinux_h %{expand:
+import functools, glob, subprocess
+def cmp(a, b):
+  c = subprocess.call(["rpmdev-vercmp", a, b], stdout=subprocess.DEVNULL)
+  return {0:0, 11:+1, 12:-1}[c]
+choices = list(glob.glob("/usr/src/kernels/*/vmlinux.h"))
+assert choices
+print(max(choices, key=functools.cmp_to_key(cmp)))
+}
+
+# The build fails on ppc64le with
+# "GCC error "Must specify a BPF target arch via __TARGET_ARCH_xxx".
+# TODO: Remove this when libbpf checks for __powerpc64__ macro.
+%ifnarch ppc64le
+VMLINUX_H_PATH=$(%python3 -c '%find_vmlinux_h')
+%endif
+%endif
+
+CONFIGURE_OPTS=(
+        -Dmode=release
+        -Dslow-tests=true
+        -Dntp-servers='0.%{ntpvendor}.pool.ntp.org 1.%{ntpvendor}.pool.ntp.org 2.%{ntpvendor}.pool.ntp.org 3.%{ntpvendor}.pool.ntp.org'
+        -Ddns-servers=
+        -Dservice-watchdog=
+        -Ddev-kvm-mode=0666
+        -Dkmod=enabled
+        -Dxkbcommon=enabled
+        -Dblkid=enabled
+        -Dfdisk=enabled
+        -Dseccomp=enabled
+        -Dima=true
+        -Dselinux=enabled
+        -Dbpf-framework=%[0%{?have_bpf}?"enabled":"disabled"]
+        -Dvmlinux-h=%[0%{?have_bpf}?"auto":"disabled"]
+        -Dvmlinux-h-path="$VMLINUX_H_PATH"
+        -Dapparmor=disabled
+        -Dpolkit=enabled
+        -Dxz=%[%{with xz}?"enabled":"disabled"]
+        -Dzlib=%[%{with zlib}?"enabled":"disabled"]
+        -Dbzip2=%[%{with bzip2}?"enabled":"disabled"]
+        -Dlz4=%[%{with lz4}?"enabled":"disabled"]
+        -Dzstd=%[%{with zstd}?"enabled":"disabled"]
+        -Dpam=enabled
+        -Dacl=enabled
+        -Dsmack=true
+        -Dopenssl=enabled
+        -Dp11kit=enabled
+        -Dgcrypt=disabled
+        -Daudit=enabled
+        -Delfutils=enabled
+        -Dlibcryptsetup=%[%{with bootstrap}?"disabled":"enabled"]
+        -Drepart=enabled
+        -Dpwquality=enabled
+        -Dqrencode=%[0?"disabled":"enabled"]
+        -Dgnutls=%[%{with gnutls}?"enabled":"disabled"]
+        -Dmicrohttpd=enabled
+        -Dvmspawn=enabled
+        -Dlibidn2=enabled
+        -Dlibcurl=enabled
+        -Dlibfido2=enabled
+        -Dxenctrl=%[0%{?have_xen}?"enabled":"disabled"]
+        -Defi=true
+        -Dsysupdate=enabled
+        -Dsysupdated=enabled
+        -Dtpm=true
+        -Dtpm2=enabled
+        -Dhwdb=true
+        -Dsysusers=true
+        -Dstandalone-binaries=true
+        -Ddefault-kill-user-processes=false
+        -Dfirst-boot-full-preset=true
+        -Ddefault-network=true
+        -Dtests=unsafe
+        -Dinstall-tests=true
+        -Dnobody-user=nobody
+        -Dnobody-group=nobody
+        -Dcompat-mutable-uid-boundaries=true
+        -Dsplit-bin=true
+        -Db_ndebug=false
+        -Dman=%[%{with docs}?"enabled":"disabled"]
+        -Dversion-tag=%{version}%[%{without upstream}?"-%{release}":""]
+        -Dshared-lib-tag=%{version_no_tilde}%[%{without upstream}?"-%{release}":""]
+        -Dlink-executor-shared=false
+        -Dfallback-hostname="localhost"
+        -Ddefault-dnssec=no
+        -Ddefault-dns-over-tls=no
+        -Ddefault-mdns=no
+        -Ddefault-llmnr=resolve
+        -Dstatus-unit-format-default=combined
+        -Ddefault-timeout-sec=45
+        -Ddefault-user-timeout-sec=45
+        -Dconfigfiledir=/usr/lib
+        -Doomd=true
+
+        -Dadm-gid=4
+        -Dtty-gid=5
+        -Ddisk-gid=6
+        -Dlp-gid=7
+        -Dkmem-gid=9
+        -Dwheel-gid=10
+        -Dcdrom-gid=11
+        -Ddialout-gid=18
+        -Dutmp-gid=22
+        -Dtape-gid=33
+        -Dkvm-gid=36
+        -Dvideo-gid=39
+        -Daudio-gid=63
+        -Dusers-gid=100
+        -Dinput-gid=104
+        -Drender-gid=105
+        -Dsgx-gid=106
+        -Dsystemd-journal-gid=190
+        -Dsystemd-network-uid=192
+        -Dsystemd-resolve-uid=193
+        # -Dsystemd-timesync-uid=, not set yet
+
+        # Make sure we use the original paths to maintain compatibility
+        # with unmerged systems
+        -Dquotaon-path=/usr/sbin/quotaon
+        -Dquotacheck-path=/usr/sbin/quotacheck
+        -Dkmod-path=/usr/bin/kmod
+        -Dkexec-path=/usr/sbin/kexec
+        -Dsulogin-path=/usr/sbin/sulogin
+        -Dmount-path=/usr/bin/mount
+        -Dumount-path=/usr/bin/umount
+        -Dloadkeys-path=/usr/bin/loadkeys
+        -Dsetfont-path=/usr/bin/setfont
+        -Dnologin-path=/usr/sbin/nologin
+
+        # For now, let's build the bootloader in the same places where we
+        # built with gnu-efi. Later on, we might want to extend coverage, but
+        # considering that that support is untested, let's not do this now.
+        -Dbootloader=%[%{?want_bootloader}?"enabled":"disabled"]
+        -Dukify=enabled
+%if 0%{?want_bootloader} && %{with obs}
+        -Dsbat-distro-url=https://github.com/systemd/systemd
+        -Dsbat-distro=upstream
+        -Dsbat-distro-summary='Upstream build from git'
+        -Defi-stub-extra-sections=500
+        -Defi-addon-extra-sections=100
+%endif
+)
+
+%if %{without lto}
+%global _lto_cflags %nil
+%endif
+
+{ %meson "${CONFIGURE_OPTS[@]}" %{?meson_extra_configure_options} ; }
+
+%meson_build
+
+# If dynamic spec generation is available, directly pick up the triggers
+# from the build directory for upstream builds.
+%if %{with upstream} && (0%{?oreon} >= 41 || 0%{?rhel} >= 11)
+# Include the triggers
+cp %{_vpath_builddir}/src/rpm/triggers.systemd.sh %{specpartsdir}/triggers.specpart
+%else
+new_triggers=%{_vpath_builddir}/src/rpm/triggers.systemd.sh
+if ! diff -u %{SOURCE1} ${new_triggers}; then
+   echo -e "\n\n\nWARNING: triggers.systemd in Source1 is different!"
+   echo -e "      cp $PWD/${new_triggers} %{SOURCE1}\n\n\n"
+   sleep 5
+fi
+%endif
+
+sed -r 's|/system/|/user/|g' %{SOURCE16} >10-timeout-abort.conf.user
 
 %install
-%oreon_meson_install
-rm -f %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  [ -n "$r" ] || continue
-  keep=
-  oldifs=$IFS
-  IFS=:
-  for p in $r; do
-    case "$p" in
-      /usr/lib64/systemd|/usr/lib/systemd) keep="${keep:+$keep:}$p" ;;
-    esac
-  done
-  IFS=$oldifs
-  [ "$keep" = "$r" ] && continue
-  chmod u+w "$f"
-  if [ -n "$keep" ]; then
-    patchelf --set-rpath "$keep" "$f"
-  else
-    patchelf --remove-rpath "$f"
+%meson_install
+
+# udev links
+%if !%{with sbin_compat} && "%{_sbindir}" != "%{_bindir}"
+mkdir -p %{buildroot}/%{_sbindir}
+ln -sf ../bin/udevadm %{buildroot}%{_sbindir}/udevadm
+%endif
+
+# Compatiblity and documentation files
+touch %{buildroot}/etc/crypttab
+chmod 600 %{buildroot}/etc/crypttab
+
+# Config files that were moved under /usr.
+# We need to %ghost them so that they are not removed on upgrades.
+touch %{buildroot}/etc/systemd/coredump.conf \
+      %{buildroot}/etc/systemd/homed.conf \
+      %{buildroot}/etc/systemd/journald.conf \
+      %{buildroot}/etc/systemd/journal-remote.conf \
+      %{buildroot}/etc/systemd/journal-upload.conf \
+      %{buildroot}/etc/systemd/logind.conf \
+      %{buildroot}/etc/systemd/networkd.conf \
+      %{buildroot}/etc/systemd/oomd.conf \
+      %{buildroot}/etc/systemd/pstore.conf \
+      %{buildroot}/etc/systemd/resolved.conf \
+      %{buildroot}/etc/systemd/sleep.conf \
+      %{buildroot}/etc/systemd/system.conf \
+      %{buildroot}/etc/systemd/timesyncd.conf \
+      %{buildroot}/etc/systemd/user.conf \
+      %{buildroot}/etc/udev/udev.conf \
+      %{buildroot}/etc/udev/iocost.conf
+
+# /etc/initab
+install -Dm0644 -t %{buildroot}/etc/ %{SOURCE6}
+
+# /etc/sysctl.conf compat
+install -Dm0644 %{SOURCE7} %{buildroot}/etc/sysctl.conf
+ln -s ../sysctl.conf %{buildroot}/etc/sysctl.d/99-sysctl.conf
+
+# Make sure these directories are properly owned
+mkdir -p %{buildroot}%{system_unit_dir}/basic.target.wants
+mkdir -p %{buildroot}%{system_unit_dir}/default.target.wants
+mkdir -p %{buildroot}%{system_unit_dir}/dbus.target.wants
+mkdir -p %{buildroot}%{system_unit_dir}/syslog.target.wants
+mkdir -p %{buildroot}/run
+mkdir -p %{buildroot}%{_localstatedir}/log
+touch %{buildroot}%{_localstatedir}/log/lastlog
+chmod 0664 %{buildroot}%{_localstatedir}/log/lastlog
+touch %{buildroot}/run/utmp
+touch %{buildroot}%{_localstatedir}/log/{w,b}tmp
+
+# Make sure the user generators dir exists too
+mkdir -p %{buildroot}%{pkgdir}/system-generators
+mkdir -p %{buildroot}%{pkgdir}/user-generators
+
+# Create new-style configuration files so that we can ghost-own them
+touch %{buildroot}%{_sysconfdir}/hostname
+touch %{buildroot}%{_sysconfdir}/vconsole.conf
+touch %{buildroot}%{_sysconfdir}/locale.conf
+touch %{buildroot}%{_sysconfdir}/machine-id
+touch %{buildroot}%{_sysconfdir}/machine-info
+touch %{buildroot}%{_sysconfdir}/localtime
+mkdir -p %{buildroot}%{_sysconfdir}/X11/xorg.conf.d
+touch %{buildroot}%{_sysconfdir}/X11/xorg.conf.d/00-keyboard.conf
+install -d -m 0700 %{buildroot}%{_sysconfdir}/userdb
+
+# Make sure the shutdown/sleep drop-in dirs exist
+mkdir -p %{buildroot}%{pkgdir}/system-shutdown/
+mkdir -p %{buildroot}%{pkgdir}/system-sleep/
+
+# Make sure directories in /var exist
+mkdir -p %{buildroot}%{_localstatedir}/lib/systemd/coredump
+mkdir -p %{buildroot}%{_localstatedir}/lib/systemd/catalog
+mkdir -p %{buildroot}%{_localstatedir}/lib/systemd/backlight
+mkdir -p %{buildroot}%{_localstatedir}/lib/systemd/rfkill
+mkdir -p %{buildroot}%{_localstatedir}/lib/systemd/linger
+mkdir -p %{buildroot}%{_localstatedir}/lib/private
+mkdir -p %{buildroot}%{_localstatedir}/log/private
+mkdir -p %{buildroot}%{_localstatedir}/cache/private
+mkdir -p %{buildroot}%{_localstatedir}/lib/private/systemd/journal-upload
+mkdir -p %{buildroot}%{_localstatedir}/lib/systemd/timesync
+ln -s ../private/systemd/journal-upload %{buildroot}%{_localstatedir}/lib/systemd/journal-upload
+mkdir -p %{buildroot}%{_localstatedir}/log/journal
+touch %{buildroot}%{_localstatedir}/lib/systemd/catalog/database
+touch %{buildroot}%{_sysconfdir}/udev/hwdb.bin
+touch %{buildroot}%{_localstatedir}/lib/systemd/random-seed
+touch %{buildroot}%{_localstatedir}/lib/systemd/timesync/clock
+touch %{buildroot}%{_localstatedir}/lib/private/systemd/journal-upload/state
+
+# Install yum protection config. Old location in /etc.
+mkdir -p %{buildroot}/etc/dnf/protected.d/
+cat >%{buildroot}/etc/dnf/protected.d/systemd.conf <<EOF
+systemd
+systemd-udev
+EOF
+# Install dnf5 protection config. New location under /usr.
+mkdir -p %{buildroot}/usr/share/dnf5/libdnf.conf.d/
+cat >%{buildroot}/usr/share/dnf5/libdnf.conf.d/protect-systemd.conf <<EOF
+[main]
+protected_packages = systemd, systemd-udev
+EOF
+
+install -Dm0644 -t %{buildroot}/usr/lib/firewalld/services/ %{SOURCE8} %{SOURCE9}
+
+# Install kernel hardening file. Disabled by default.
+install -Dm0644 -t %{buildroot}%{_pkgdocdir}/ %{SOURCE19}
+
+install -Dm0644 -t %{buildroot}%{system_unit_dir}/systemd-udev-trigger.service.d/ %{SOURCE11}
+
+install -Dm0644 %{SOURCE13} %{buildroot}%{_prefix}/lib/systemd/.abignore
+
+# systemd-oomd default configuration
+install -Dm0644 -t %{buildroot}%{_prefix}/lib/systemd/oomd.conf.d/ %{SOURCE14}
+install -Dm0644 -t %{buildroot}%{system_unit_dir}/system.slice.d/ %{SOURCE15}
+install -Dm0644 -t %{buildroot}%{user_unit_dir}/slice.d/ %{SOURCE15}
+install -Dm0644 -t %{buildroot}%{system_unit_dir}/service.d/ %{SOURCE16}
+install -Dm0644 10-timeout-abort.conf.user %{buildroot}%{user_unit_dir}/service.d/10-timeout-abort.conf
+
+install -Dm0644 -t %{buildroot}%{_prefix}/lib/sysctl.d/ %{SOURCE17}
+
+# Test results are that bfq seems to behave better and more consistently on
+# typical hardware. The kernel does not have a configuration option to set the
+# default scheduler, and it currently needs to be set by userspace.
+install -Dm0644 -t %{buildroot}%{_prefix}/lib/udev/rules.d/ %{SOURCE18}
+
+sed -i 's|#!/usr/bin/env python3|#!%{__python3}|' %{buildroot}/usr/lib/systemd/tests/run-unit-tests.py
+
+install -m 0644 -D %{SOURCE21} %{buildroot}%{_rpmconfigdir}/macros.d/macros.sysusers
+
+install -Dm0644 -t %{buildroot}%{_prefix}/lib/systemd/network/ %{SOURCE25}
+
+ln -s --relative %{buildroot}%{_bindir}/kernel-install %{buildroot}%{_sbindir}/installkernel
+
+%if %{with sbin_compat} || "%{_sbindir}" == "%{_bindir}"
+# Systemd has the split-sbin option which is also used to select the directory
+# for alias symlinks. We need to keep split-sbin=true for now, to support
+# unmerged systems. Move the symlinks here instead.
+mv -v %{buildroot}/usr/sbin/* %{buildroot}%{_bindir}/
+%endif
+
+%if %{without upstream}
+# This requires https://pagure.io/setup/pull-request/50
+# We skip this on upstream builds so that new users and groups
+# can be added without breaking the build.
+IGNORED=empower \
+  %{python3} %{SOURCE4} /usr/lib/sysusers.d/setup.conf %{buildroot}/usr/lib/sysusers.d/basic.conf
+%endif
+sed -n -r -i '1,7p; /can .do.|empower/p' %{buildroot}/usr/lib/sysusers.d/basic.conf
+
+# Disable sshd_config.d/20-systemd-userdb.conf for now.
+# This option may override an existing AuthorizedKeysCommand setting
+# (or be ineffective, depending on the order of configuration).
+# See https://github.com/systemd/systemd/issues/33648.
+rm %{buildroot}/etc/ssh/sshd_config.d/20-systemd-userdb.conf
+mv %{buildroot}/usr/lib/tmpfiles.d/20-systemd-userdb.conf{,.example}
+
+install -m 0644 -t %{buildroot}%{_prefix}/lib/pam.d/ %{SOURCE26}
+
+%find_lang %{name}
+
+# Split files in build root into rpms
+python3 %{SOURCE2} %buildroot %{!?want_bootloader:--no-bootloader}
+
+# Stage sd-boot binaries for signing
+%if %{with obs} && 0%{?want_bootloader}
+BRP_PESIGN_FILES=/usr/lib/systemd/boot/efi/systemd-boot%{efi_arch}.efi BRP_PESIGN_PACKAGES=systemd-boot /usr/lib/rpm/brp-suse.d/brp-99-pesign
+%endif
+
+%check
+%if %{with tests}
+meson test -C %{_vpath_builddir} -t 6 --print-errorlogs
+%endif
+
+%if %{with lto}
+# Make sure that LTO is effective at removing unused code. When compiled
+# without LTO, we end up with all of libbasic_static.a in libsystemd.so.
+# For example, all the configuration stuff is not needed for libsystemd.so.
+# Make sure it is gone.
+(! strings %{buildroot}%{_libdir}/libsystemd.so | grep Config)
+%endif
+
+#############################################################################################
+
+%if %{without upstream} || (0%{?oreon} < 41 && 0%{?rhel} < 11)
+%include %{SOURCE1}
+%endif
+
+# This macro is newly added upstream so we can't rely on it being always being available
+# in the systemd-rpm-macros yet so we define it ourselves.
+%global systemd_posttrans_with_restart() \
+%{expand:%%{?__systemd_someargs_%#:%%__systemd_someargs_%# systemd_posttrans_with_restart}} \
+if [ $1 -ge 2 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then \
+    # Package upgrade, not install \
+    /usr/lib/systemd/systemd-update-helper mark-restart-system-units %* || : \
+fi \
+%{nil}
+
+%post
+systemd-machine-id-setup &>/dev/null || :
+
+# This is for upgrades from previous versions before getty@.service needed to be enabled
+[ $1 -gt 1 ] && systemctl is-enabled getty@tty1.service &>/dev/null && \
+    touch %{_localstatedir}/lib/rpm-state/systemd-getty-was-active || :
+
+[ $1 -eq 1 ] || exit 0
+
+# create /var/log/journal only on initial installation,
+# and only if it's writable (it won't be in rpm-ostree).
+[ -w %{_localstatedir} ] && mkdir -p %{_localstatedir}/log/journal
+
+[ -w %{_localstatedir} ] && journalctl --update-catalog || :
+systemd-sysusers || :
+systemd-tmpfiles --create &>/dev/null || :
+
+# We reset the enablement of all services upon initial installation
+# This will fix up enablement of any preset services that got installed
+# before systemd due to rpm ordering problems:
+# We also do this for user units, see
+systemctl preset-all &>/dev/null || :
+systemctl --global preset-all &>/dev/null || :
+
+%posttrans
+if [ $1 -ge 2 ]; then
+  [ -w %{_localstatedir} ] && journalctl --update-catalog || :
+
+  systemctl daemon-reexec || :
+
+  systemd-tmpfiles --create &>/dev/null || :
+
+  rm -f %{_localstatedir}/lib/rpm-state/systemd-getty-was-active || :
+fi
+
+%systemd_posttrans_with_restart systemd-timedated.service systemd-hostnamed.service systemd-journald.service systemd-localed.service systemd-userdbd.service
+
+# FIXME: systemd-logind.service is excluded (https://github.com/systemd/systemd/pull/17558)
+
+# This is the expanded form of %%systemd_user_daemon_reexec. We
+# can't use the macro because we define it ourselves.
+if [ $1 -ge 2 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then
+    # Package upgrade, not uninstall
+    /usr/lib/systemd/systemd-update-helper user-reexec || :
+fi
+
+%triggerun -- systemd < 256
+# This is for upgrades from previous versions before systemd restart was moved to %%postun
+systemctl daemon-reexec || :
+
+%triggerpostun -- systemd < 260~rc1
+if [ -f %{_localstatedir}/lib/rpm-state/systemd-getty-was-active ]; then
+    systemctl --no-reload enable getty@.service || :
+fi
+
+%global udev_services %{shrink:
+                        cryptsetup-pre.target
+                        cryptsetup.target
+                        getty@.service
+                        hibernate.target
+                        hybrid-sleep.target
+                        initrd-cleanup.service
+                        initrd-fs.target
+                        initrd-parse-etc.service
+                        initrd-root-device.target
+                        initrd-root-fs.target
+                        initrd-switch-root.service
+                        initrd-switch-root.target
+                        initrd-udevadm-cleanup-db.service
+                        initrd-usr-fs.target
+                        initrd.target
+                        integritysetup-pre.target
+                        integritysetup.target
+                        kmod-static-nodes.service
+                        proc-sys-fs-binfmt_misc.automount
+                        proc-sys-fs-binfmt_misc.mount
+                        quotaon-root.service
+                        quotaon@.service
+                        remote-cryptsetup.target
+                        remote-veritysetup.target
+                        sleep.target
+                        suspend-then-hibernate.target
+                        suspend.target
+                        system-systemd\\\\x2dcryptsetup.slice
+                        system-systemd\\\\x2dveritysetup.slice
+                        systemd-backlight@.service
+                        systemd-binfmt.service
+                        systemd-bless-boot.service
+                        systemd-bsod.service
+                        systemd-coredump.socket
+                        systemd-coredump@.service
+                        systemd-fsck-root.service
+                        systemd-fsck@.service
+                        systemd-growfs-root.service
+                        systemd-growfs@.service
+                        systemd-hibernate-clear.service
+                        systemd-hibernate-resume.service
+                        systemd-hibernate.service
+                        systemd-homed-activate.service
+                        systemd-homed-firstboot.service
+                        systemd-homed.service
+                        systemd-hwdb-update.service
+                        systemd-hybrid-sleep.service
+                        systemd-modules-load.service
+                        systemd-network-generator.service
+                        systemd-oomd.service
+                        systemd-oomd.socket
+                        systemd-pcrextend.socket
+                        systemd-pcrextend@.service
+                        systemd-pcrfs-root.service
+                        systemd-pcrfs@.service
+                        systemd-pcrlock-file-system.service
+                        systemd-pcrlock-firmware-code.service
+                        systemd-pcrlock-firmware-config.service
+                        systemd-pcrlock-machine-id.service
+                        systemd-pcrlock-make-policy.service
+                        systemd-pcrlock-secureboot-authority.service
+                        systemd-pcrlock-secureboot-policy.service
+                        systemd-pcrlock.socket
+                        systemd-pcrlock@.service
+                        systemd-pcrmachine.service
+                        systemd-pcrosseparator.service
+                        systemd-pcrphase-initrd.service
+                        systemd-pcrphase-sysinit.service
+                        systemd-pcrphase.service
+                        systemd-portabled.service
+                        systemd-pstore.service
+                        systemd-quotacheck-root.service
+                        systemd-quotacheck@.service
+                        systemd-random-seed.service
+                        systemd-remount-fs.service
+                        systemd-repart.service
+                        systemd-rfkill.service
+                        systemd-rfkill.socket
+                        systemd-suspend-then-hibernate.service
+                        systemd-suspend.service
+                        systemd-sysctl.service
+                        systemd-timesyncd.service
+                        systemd-tmpfiles-clean.service
+                        systemd-tmpfiles-setup-dev-early.service
+                        systemd-tmpfiles-setup-dev.service
+                        systemd-udev-load-credentials.service
+                        systemd-udev-settle.service
+                        systemd-udev-trigger.service
+                        systemd-udevd-control.socket
+                        systemd-udevd-kernel.socket
+                        systemd-udevd.service
+                        systemd-vconsole-setup.service
+                        systemd-volatile-root.service
+                        veritysetup-pre.target
+                        veritysetup.target
+                        %{?want_bootloader:
+                          systemd-boot-random-seed.service
+                          systemd-boot-update.service
+                          systemd-bootctl.socket
+                          systemd-bootctl@.service
+                         }
+                       }
+
+%post udev
+systemd-hwdb update &>/dev/null
+
+%systemd_post %udev_services
+
+# Try to save the random seed, but don't complain if /dev/urandom is unavailable
+/usr/lib/systemd/systemd-random-seed save 2>&1 | \
+    grep -v 'Failed to open /dev/urandom' || :
+
+%preun udev
+%systemd_preun %udev_services
+
+%posttrans udev
+# Restart some services.
+# Others are either oneshot services, or sockets, and restarting them causes issues (#1378974)
+%systemd_posttrans_with_restart systemd-udevd.service systemd-timesyncd.service systemd-homed.service systemd-oomd.service systemd-portabled.service
+
+%global journal_remote_units_restart systemd-journal-gatewayd.service systemd-journal-remote.service systemd-journal-upload.service
+%global journal_remote_units_norestart systemd-journal-gatewayd.socket systemd-journal-remote.socket
+%post journal-remote
+%systemd_post %journal_remote_units_restart %journal_remote_units_norestart
+%firewalld_reload
+
+%preun journal-remote
+%systemd_preun %journal_remote_units_restart %journal_remote_units_norestart
+if [ $1 -eq 1 ] ; then
+    if [ -f %{_localstatedir}/lib/systemd/journal-upload/state -a ! -L %{_localstatedir}/lib/systemd/journal-upload ] ; then
+        mkdir -p %{_localstatedir}/lib/private/systemd/journal-upload
+        mv %{_localstatedir}/lib/systemd/journal-upload/state %{_localstatedir}/lib/private/systemd/journal-upload/.
+        rmdir %{_localstatedir}/lib/systemd/journal-upload || :
+    fi
+fi
+
+%posttrans journal-remote
+%systemd_posttrans_with_restart %journal_remote_units_restart
+%firewalld_reload
+
+%global networkd_services %{shrink:
+                            systemd-networkd.service
+                            systemd-networkd.socket
+                            systemd-networkd-varlink.socket
+                            systemd-networkd-wait-online.service
+                            systemd-network-generator.service
+                            systemd-networkd-persistent-storage.service
+                           }
+
+%post networkd
+%systemd_post %networkd_services
+
+%preun networkd
+%systemd_preun %networkd_services
+
+%posttrans networkd
+%systemd_posttrans_with_restart systemd-networkd.service
+
+%post resolved
+[ $1 -eq 1 ] || exit 0
+# Initial installation
+
+touch %{_localstatedir}/lib/rpm-state/systemd-resolved.initial-installation
+
+if ls /usr/lib/systemd/libsystemd-shared-24[0-8].so &>/dev/null; then
+    echo "Skipping presets for systemd-resolved.service, seems we are upgrading from old systemd."
+    exit 0
+fi
+
+%systemd_post systemd-resolved.service
+
+%preun resolved
+%systemd_preun systemd-resolved.service
+if [ $1 -eq 0 ] ; then
+        if [ -L /etc/resolv.conf ] && \
+            realpath /etc/resolv.conf | grep ^/run/systemd/resolve/; then
+                rm -f /etc/resolv.conf # no longer useful
+                # if network manager is enabled, move to it instead
+                [ -f /run/NetworkManager/resolv.conf ] && \
+                systemctl -q is-enabled NetworkManager.service &>/dev/null && \
+                    ln -fsv ../run/NetworkManager/resolv.conf /etc/resolv.conf
+        fi
+fi
+
+%posttrans resolved
+%systemd_posttrans_with_restart systemd-resolved.service
+[ -e %{_localstatedir}/lib/rpm-state/systemd-resolved.initial-installation ] || exit 0
+rm %{_localstatedir}/lib/rpm-state/systemd-resolved.initial-installation
+# Initial installation
+
+# Create /etc/resolv.conf symlink.
+#
+# We would also create it using tmpfiles, but let's do this here too
+# before NetworkManager gets a chance. (systemd-tmpfiles invocation
+# above does not do this, because the line is marked with ! and
+# tmpfiles is invoked without --boot in the scriptlet.)
+#
+# *Create* the symlink if nothing is present yet.
+#
+# *Override* the symlink if systemd is running. Don't do it if systemd
+# is not running, because that will immediately break DNS resolution,
+# since systemd-resolved is also not running
+#
+# Also don't create the symlink to the stub when the stub is disabled (#1891847 again).
+if systemctl -q is-enabled systemd-resolved.service &>/dev/null &&
+   ! systemd-analyze cat-config systemd/resolved.conf 2>/dev/null |
+        grep -iqE '^DNSStubListener\s*=\s*(no?|false|0|off)\s*$'; then
+
+  if ! test -e /etc/resolv.conf && ! test -L /etc/resolv.conf; then
+    ln -sv ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf || :
+  elif test -d /run/systemd/system/ &&
+     ! mountpoint /etc/resolv.conf &>/dev/null; then
+    ln -fsv ../run/systemd/resolve/stub-resolv.conf /etc/resolv.conf || :
   fi
-done
-%find_lang systemd
+fi
 
-%files -f systemd.lang
-%license LICENSE.GPL2 LICENSE.LGPL2.1
-%dir %{_prefix}/lib/systemd
-%dir %{_prefix}/lib/systemd/system
-%dir %{_prefix}/lib/systemd/user
-%dir %{_prefix}/lib/systemd/system-generators
-%dir %{_prefix}/lib/systemd/user-generators
-%dir %{_prefix}/lib/systemd/network
-%dir %{_libdir}/systemd
-%dir %{_sysconfdir}/systemd
-%dir %{_datadir}/systemd
-%dir %{_datadir}/doc/systemd
-%config(noreplace) %{_sysconfdir}/X11/xinit/xinitrc.d/50-systemd-user.sh
-%config(noreplace) %{_sysconfdir}/profile.d/70-systemd-shell-extra.sh
-%config(noreplace) %{_sysconfdir}/profile.d/80-systemd-osc-context.sh
-%config(noreplace) %{_sysconfdir}/ssh/ssh_config.d/20-systemd-ssh-proxy.conf
-%config(noreplace) %{_sysconfdir}/ssh/sshd_config.d/20-systemd-userdb.conf
-%config(noreplace) %{_sysconfdir}/systemd/journald.conf
-%config(noreplace) %{_sysconfdir}/systemd/logind.conf
-%config(noreplace) %{_sysconfdir}/systemd/system.conf
-%config(noreplace) %{_sysconfdir}/systemd/user.conf
-%config(noreplace) %{_sysconfdir}/xdg/systemd/user
-%{_bindir}/busctl
-%{_bindir}/halt
-%{_bindir}/hostnamectl
-%{_bindir}/init
-%{_bindir}/journalctl
-%{_bindir}/localectl
-%{_bindir}/loginctl
-%{_bindir}/mount.mstack
-%{_bindir}/mount.storage
-%{_bindir}/oomctl
-%{_bindir}/poweroff
-%{_bindir}/reboot
-%{_bindir}/resolvectl
-%{_bindir}/run0
-%{_bindir}/shutdown
-%{_bindir}/storagectl
-%{_bindir}/systemctl
-%{_bindir}/systemd-analyze
-%{_bindir}/systemd-ask-password
-%{_bindir}/systemd-cat
-%{_bindir}/systemd-cgls
-%{_bindir}/systemd-cgtop
-%{_bindir}/systemd-confext
-%{_bindir}/systemd-creds
-%{_bindir}/systemd-delta
-%{_bindir}/systemd-detect-virt
-%{_bindir}/systemd-escape
-%{_bindir}/systemd-firstboot
-%{_bindir}/systemd-id128
-%{_bindir}/systemd-inhibit
-%{_bindir}/systemd-machine-id-setup
-%{_bindir}/systemd-mount
-%{_bindir}/systemd-mstack
-%{_bindir}/systemd-mute-console
-%{_bindir}/systemd-notify
-%{_bindir}/systemd-path
-%{_bindir}/systemd-pty-forward
-%{_bindir}/systemd-run
-%{_bindir}/systemd-socket-activate
-%{_bindir}/systemd-stdio-bridge
-%{_bindir}/systemd-sysext
-%{_bindir}/systemd-sysusers
-%{_bindir}/systemd-tmpfiles
-%{_bindir}/systemd-tty-ask-password-agent
-%{_bindir}/systemd-umount
-%{_bindir}/systemd-vpick
-%{_bindir}/timedatectl
-%{_bindir}/userdbctl
-%{_bindir}/varlinkctl
-%{_prefix}/lib/environment.d/99-environment.conf
-%{_prefix}/lib/systemd/catalog/
-%{_prefix}/lib/systemd/import-pubring.pgp
-%{_prefix}/lib/systemd/network/80-6rd-tunnel.link
-%{_prefix}/lib/systemd/network/80-container-vb.link
-%{_prefix}/lib/systemd/network/80-container-ve.link
-%{_prefix}/lib/systemd/network/80-container-vz.link
-%{_prefix}/lib/systemd/network/80-namespace-ns-tun.link
-%{_prefix}/lib/systemd/network/80-namespace-ns.link
-%{_prefix}/lib/systemd/network/80-vm-vt.link
-%{_prefix}/lib/systemd/profile.d/
-%{_prefix}/lib/systemd/resolv.conf
-%{_prefix}/lib/systemd/ssh_config.d/
-%{_prefix}/lib/systemd/sshd_config.d/
-%{_prefix}/lib/systemd/system-generators/systemd-clonesetup-generator
-%{_prefix}/lib/systemd/system-generators/systemd-debug-generator
-%{_prefix}/lib/systemd/system-generators/systemd-factory-reset-generator
-%{_prefix}/lib/systemd/system-generators/systemd-fstab-generator
-%{_prefix}/lib/systemd/system-generators/systemd-getty-generator
-%{_prefix}/lib/systemd/system-generators/systemd-run-generator
-%{_prefix}/lib/systemd/system-generators/systemd-ssh-generator
-%{_prefix}/lib/systemd/system-generators/systemd-system-update-generator
-%{_prefix}/lib/systemd/system-preset/
-%{_prefix}/lib/systemd/system/basic.target
-%{_prefix}/lib/systemd/system/blockdev@.target
-%{_prefix}/lib/systemd/system/bluetooth.target
-%{_prefix}/lib/systemd/system/boot-complete.target
-%{_prefix}/lib/systemd/system/breakpoint-pre-basic.service
-%{_prefix}/lib/systemd/system/breakpoint-pre-mount.service
-%{_prefix}/lib/systemd/system/breakpoint-pre-switch-root.service
-%{_prefix}/lib/systemd/system/capsule.slice
-%{_prefix}/lib/systemd/system/capsule@.service
-%{_prefix}/lib/systemd/system/clonesetup.target
-%{_prefix}/lib/systemd/system/console-getty.service
-%{_prefix}/lib/systemd/system/container-getty@.service
-%{_prefix}/lib/systemd/system/ctrl-alt-del.target
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.hostname1.service
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.locale1.service
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.login1.service
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.timedate1.service
-%{_prefix}/lib/systemd/system/debug-shell.service
-%{_prefix}/lib/systemd/system/default.target
-%{_prefix}/lib/systemd/system/dev-hugepages.mount
-%{_prefix}/lib/systemd/system/dev-mqueue.mount
-%{_prefix}/lib/systemd/system/emergency.service
-%{_prefix}/lib/systemd/system/emergency.target
-%{_prefix}/lib/systemd/system/exit.target
-%{_prefix}/lib/systemd/system/factory-reset-now.target
-%{_prefix}/lib/systemd/system/factory-reset.target
-%{_prefix}/lib/systemd/system/factory-reset.target.wants/
-%{_prefix}/lib/systemd/system/final.target
-%{_prefix}/lib/systemd/system/first-boot-complete.target
-%{_prefix}/lib/systemd/system/getty-pre.target
-%{_prefix}/lib/systemd/system/getty.target
-%{_prefix}/lib/systemd/system/getty@.service
-%{_prefix}/lib/systemd/system/graphical.target
-%{_prefix}/lib/systemd/system/halt.target
-%{_prefix}/lib/systemd/system/imports-pre.target
-%{_prefix}/lib/systemd/system/imports.target
-%{_prefix}/lib/systemd/system/kexec.target
-%{_prefix}/lib/systemd/system/ldconfig.service
-%{_prefix}/lib/systemd/system/local-fs-pre.target
-%{_prefix}/lib/systemd/system/local-fs.target
-%{_prefix}/lib/systemd/system/local-fs.target.wants/
-%{_prefix}/lib/systemd/system/modprobe@.service
-%{_prefix}/lib/systemd/system/multi-user.target
-%{_prefix}/lib/systemd/system/multi-user.target.wants/
-%{_prefix}/lib/systemd/system/network-online.target
-%{_prefix}/lib/systemd/system/network-pre.target
-%{_prefix}/lib/systemd/system/network.target
-%{_prefix}/lib/systemd/system/nss-lookup.target
-%{_prefix}/lib/systemd/system/nss-user-lookup.target
-%{_prefix}/lib/systemd/system/paths.target
-%{_prefix}/lib/systemd/system/poweroff.target
-%{_prefix}/lib/systemd/system/printer.target
-%{_prefix}/lib/systemd/system/reboot.target
-%{_prefix}/lib/systemd/system/remote-fs-pre.target
-%{_prefix}/lib/systemd/system/remote-fs.target
-%{_prefix}/lib/systemd/system/rescue.service
-%{_prefix}/lib/systemd/system/rescue.target
-%{_prefix}/lib/systemd/system/rpcbind.target
-%{_prefix}/lib/systemd/system/runlevel0.target
-%{_prefix}/lib/systemd/system/runlevel1.target
-%{_prefix}/lib/systemd/system/runlevel2.target
-%{_prefix}/lib/systemd/system/runlevel3.target
-%{_prefix}/lib/systemd/system/runlevel4.target
-%{_prefix}/lib/systemd/system/runlevel5.target
-%{_prefix}/lib/systemd/system/runlevel6.target
-%{_prefix}/lib/systemd/system/serial-getty@.service
-%{_prefix}/lib/systemd/system/shutdown.target
-%{_prefix}/lib/systemd/system/sigpwr.target
-%{_prefix}/lib/systemd/system/slices.target
-%{_prefix}/lib/systemd/system/smartcard.target
-%{_prefix}/lib/systemd/system/sockets.target
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-ask-password.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-creds.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-factory-reset.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-hostnamed.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-journalctl.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-journald-dev-log.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-journald.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-logind-varlink.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-mute-console.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-storage-block.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-storage-fs.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-sysext.socket
-%{_prefix}/lib/systemd/system/soft-reboot.target
-%{_prefix}/lib/systemd/system/sound.target
-%{_prefix}/lib/systemd/system/ssh-access.target
-%{_prefix}/lib/systemd/system/storage-target-mode.target
-%{_prefix}/lib/systemd/system/swap.target
-%{_prefix}/lib/systemd/system/sys-fs-fuse-connections.mount
-%{_prefix}/lib/systemd/system/sys-kernel-config.mount
-%{_prefix}/lib/systemd/system/sys-kernel-debug.mount
-%{_prefix}/lib/systemd/system/sys-kernel-tracing.mount
-%{_prefix}/lib/systemd/system/sysinit.target
-%{_prefix}/lib/systemd/system/sysinit.target.wants/clonesetup.target
-%{_prefix}/lib/systemd/system/sysinit.target.wants/dev-hugepages.mount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/dev-mqueue.mount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/imports.target
-%{_prefix}/lib/systemd/system/sysinit.target.wants/ldconfig.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/sys-fs-fuse-connections.mount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/sys-kernel-config.mount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/sys-kernel-debug.mount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/sys-kernel-tracing.mount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-ask-password-console.path
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-firstboot.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-journal-catalog-update.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-journal-flush.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-journald.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-machine-id-commit.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-sysusers.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-update-done.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-update-utmp.service
-%{_prefix}/lib/systemd/system/syslog.socket
-%{_prefix}/lib/systemd/system/system-install.target
-%{_prefix}/lib/systemd/system/system-systemd\x2dmute\x2dconsole.slice
-%{_prefix}/lib/systemd/system/system-update-cleanup.service
-%{_prefix}/lib/systemd/system/system-update-pre.target
-%{_prefix}/lib/systemd/system/system-update.target
-%{_prefix}/lib/systemd/system/systemd-ask-password-console.path
-%{_prefix}/lib/systemd/system/systemd-ask-password-console.service
-%{_prefix}/lib/systemd/system/systemd-ask-password-wall.path
-%{_prefix}/lib/systemd/system/systemd-ask-password-wall.service
-%{_prefix}/lib/systemd/system/systemd-ask-password.socket
-%{_prefix}/lib/systemd/system/systemd-ask-password@.service
-%{_prefix}/lib/systemd/system/systemd-battery-check.service
-%{_prefix}/lib/systemd/system/systemd-boot-check-no-failures.service
-%{_prefix}/lib/systemd/system/systemd-confext-initrd.service
-%{_prefix}/lib/systemd/system/systemd-confext-sysroot.service
-%{_prefix}/lib/systemd/system/systemd-confext.service
-%{_prefix}/lib/systemd/system/systemd-creds.socket
-%{_prefix}/lib/systemd/system/systemd-creds@.service
-%{_prefix}/lib/systemd/system/systemd-exit.service
-%{_prefix}/lib/systemd/system/systemd-factory-reset-complete.service
-%{_prefix}/lib/systemd/system/systemd-factory-reset-reboot.service
-%{_prefix}/lib/systemd/system/systemd-factory-reset-request.service
-%{_prefix}/lib/systemd/system/systemd-factory-reset.socket
-%{_prefix}/lib/systemd/system/systemd-factory-reset@.service
-%{_prefix}/lib/systemd/system/systemd-firstboot.service
-%{_prefix}/lib/systemd/system/systemd-halt.service
-%{_prefix}/lib/systemd/system/systemd-hostnamed.service
-%{_prefix}/lib/systemd/system/systemd-hostnamed.socket
-%{_prefix}/lib/systemd/system/systemd-journal-catalog-update.service
-%{_prefix}/lib/systemd/system/systemd-journal-flush.service
-%{_prefix}/lib/systemd/system/systemd-journalctl-metrics.socket
-%{_prefix}/lib/systemd/system/systemd-journalctl-metrics@.service
-%{_prefix}/lib/systemd/system/systemd-journalctl.socket
-%{_prefix}/lib/systemd/system/systemd-journalctl@.service
-%{_prefix}/lib/systemd/system/systemd-journald-audit.socket
-%{_prefix}/lib/systemd/system/systemd-journald-dev-log.socket
-%{_prefix}/lib/systemd/system/systemd-journald-sync@.service
-%{_prefix}/lib/systemd/system/systemd-journald-varlink@.socket
-%{_prefix}/lib/systemd/system/systemd-journald.service
-%{_prefix}/lib/systemd/system/systemd-journald.socket
-%{_prefix}/lib/systemd/system/systemd-journald@.service
-%{_prefix}/lib/systemd/system/systemd-journald@.socket
-%{_prefix}/lib/systemd/system/systemd-kexec.service
-%{_prefix}/lib/systemd/system/systemd-localed.service
-%{_prefix}/lib/systemd/system/systemd-logind-varlink.socket
-%{_prefix}/lib/systemd/system/systemd-logind.service
-%{_prefix}/lib/systemd/system/systemd-machine-id-commit.service
-%{_prefix}/lib/systemd/system/systemd-machine-tag@.service
-%{_prefix}/lib/systemd/system/systemd-mute-console.socket
-%{_prefix}/lib/systemd/system/systemd-mute-console@.service
-%{_prefix}/lib/systemd/system/systemd-poweroff.service
-%{_prefix}/lib/systemd/system/systemd-reboot.service
-%{_prefix}/lib/systemd/system/systemd-report-basic.socket
-%{_prefix}/lib/systemd/system/systemd-report-basic@.service
-%{_prefix}/lib/systemd/system/systemd-report-cgroup.socket
-%{_prefix}/lib/systemd/system/systemd-report-cgroup@.service
-%{_prefix}/lib/systemd/system/systemd-report-files.socket
-%{_prefix}/lib/systemd/system/systemd-report-files@.service
-%{_prefix}/lib/systemd/system/systemd-report-sign-plain.socket
-%{_prefix}/lib/systemd/system/systemd-report-sign-plain@.service
-%{_prefix}/lib/systemd/system/systemd-report-sign-tsm.socket
-%{_prefix}/lib/systemd/system/systemd-report-sign-tsm@.service
-%{_prefix}/lib/systemd/system/systemd-report.socket
-%{_prefix}/lib/systemd/system/systemd-report@.service
-%{_prefix}/lib/systemd/system/systemd-soft-reboot.service
-%{_prefix}/lib/systemd/system/systemd-storage-block.socket
-%{_prefix}/lib/systemd/system/systemd-storage-block@.service
-%{_prefix}/lib/systemd/system/systemd-storage-fs.socket
-%{_prefix}/lib/systemd/system/systemd-storage-fs@.service
-%{_prefix}/lib/systemd/system/systemd-storagetm.service
-%{_prefix}/lib/systemd/system/systemd-sysext-initrd.service
-%{_prefix}/lib/systemd/system/systemd-sysext-sysroot.service
-%{_prefix}/lib/systemd/system/systemd-sysext.service
-%{_prefix}/lib/systemd/system/systemd-sysext.socket
-%{_prefix}/lib/systemd/system/systemd-sysext@.service
-%{_prefix}/lib/systemd/system/systemd-sysusers.service
-%{_prefix}/lib/systemd/system/systemd-time-wait-sync.service
-%{_prefix}/lib/systemd/system/systemd-timedated.service
-%{_prefix}/lib/systemd/system/systemd-tmpfiles-clean.service
-%{_prefix}/lib/systemd/system/systemd-tmpfiles-clean.timer
-%{_prefix}/lib/systemd/system/systemd-tmpfiles-setup.service
-%{_prefix}/lib/systemd/system/systemd-update-done.service
-%{_prefix}/lib/systemd/system/systemd-update-utmp.service
-%{_prefix}/lib/systemd/system/systemd-user-sessions.service
-%{_prefix}/lib/systemd/system/systemd-userdb-load-credentials.service
-%{_prefix}/lib/systemd/system/systemd-userdbd.service
-%{_prefix}/lib/systemd/system/systemd-userdbd.socket
-%{_prefix}/lib/systemd/system/systemd-validatefs@.service
-%{_prefix}/lib/systemd/system/time-set.target
-%{_prefix}/lib/systemd/system/time-sync.target
-%{_prefix}/lib/systemd/system/timers.target
-%{_prefix}/lib/systemd/system/timers.target.wants/
-%{_prefix}/lib/systemd/system/tmp.mount
-%{_prefix}/lib/systemd/system/umount.target
-%{_prefix}/lib/systemd/system/usb-gadget.target
-%{_prefix}/lib/systemd/system/user-.slice.d/
-%{_prefix}/lib/systemd/system/user-runtime-dir@.service
-%{_prefix}/lib/systemd/system/user.slice
-%{_prefix}/lib/systemd/system/user@.service
-%{_prefix}/lib/systemd/system/user@.service.d/
-%{_prefix}/lib/systemd/system/user@0.service.d/
-%{_prefix}/lib/systemd/systemd
-%{_prefix}/lib/systemd/systemd-battery-check
-%{_prefix}/lib/systemd/systemd-boot-check-no-failures
-%{_prefix}/lib/systemd/systemd-clonesetup
-%{_prefix}/lib/systemd/systemd-executor
-%{_prefix}/lib/systemd/systemd-factory-reset
-%{_prefix}/lib/systemd/systemd-hostnamed
-%{_prefix}/lib/systemd/systemd-journald
-%{_prefix}/lib/systemd/systemd-keyutil
-%{_prefix}/lib/systemd/systemd-localed
-%{_prefix}/lib/systemd/systemd-logind
-%{_prefix}/lib/systemd/systemd-reply-password
-%{_prefix}/lib/systemd/systemd-report
-%{_prefix}/lib/systemd/systemd-report-basic
-%{_prefix}/lib/systemd/systemd-report-cgroup
-%{_prefix}/lib/systemd/systemd-report-files
-%{_prefix}/lib/systemd/systemd-report-sign-plain
-%{_prefix}/lib/systemd/systemd-report-sign-tsm
-%{_prefix}/lib/systemd/systemd-sbsign
-%{_prefix}/lib/systemd/systemd-shutdown
-%{_prefix}/lib/systemd/systemd-socket-proxyd
-%{_prefix}/lib/systemd/systemd-ssh-issue
-%{_prefix}/lib/systemd/systemd-ssh-proxy
-%{_prefix}/lib/systemd/systemd-storage-block
-%{_prefix}/lib/systemd/systemd-storage-fs
-%{_prefix}/lib/systemd/systemd-storagetm
-%{_prefix}/lib/systemd/systemd-sulogin-shell
-%{_prefix}/lib/systemd/systemd-sysroot-fstab-check
-%{_prefix}/lib/systemd/systemd-time-wait-sync
-%{_prefix}/lib/systemd/systemd-timedated
-%{_prefix}/lib/systemd/systemd-update-done
-%{_prefix}/lib/systemd/systemd-update-helper
-%{_prefix}/lib/systemd/systemd-update-utmp
-%{_prefix}/lib/systemd/systemd-user-runtime-dir
-%{_prefix}/lib/systemd/systemd-user-sessions
-%{_prefix}/lib/systemd/systemd-userdbd
-%{_prefix}/lib/systemd/systemd-userwork
-%{_prefix}/lib/systemd/systemd-validatefs
-%{_prefix}/lib/systemd/systemd-xdg-autostart-condition
-%{_prefix}/lib/systemd/user-environment-generators/
-%{_prefix}/lib/systemd/user-generators/systemd-xdg-autostart-generator
-%{_prefix}/lib/systemd/user-preset/
-%{_prefix}/lib/systemd/user/app.slice
-%{_prefix}/lib/systemd/user/background.slice
-%{_prefix}/lib/systemd/user/basic.target
-%{_prefix}/lib/systemd/user/bluetooth.target
-%{_prefix}/lib/systemd/user/capsule@.target
-%{_prefix}/lib/systemd/user/default.target
-%{_prefix}/lib/systemd/user/exit.target
-%{_prefix}/lib/systemd/user/graphical-session-pre.target
-%{_prefix}/lib/systemd/user/graphical-session.target
-%{_prefix}/lib/systemd/user/paths.target
-%{_prefix}/lib/systemd/user/printer.target
-%{_prefix}/lib/systemd/user/session.slice
-%{_prefix}/lib/systemd/user/shutdown.target
-%{_prefix}/lib/systemd/user/smartcard.target
-%{_prefix}/lib/systemd/user/sockets.target
-%{_prefix}/lib/systemd/user/sockets.target.wants/systemd-ask-password.socket
-%{_prefix}/lib/systemd/user/sockets.target.wants/systemd-journalctl.socket
-%{_prefix}/lib/systemd/user/sockets.target.wants/systemd-storage-fs.socket
-%{_prefix}/lib/systemd/user/sound.target
-%{_prefix}/lib/systemd/user/systemd-ask-password.socket
-%{_prefix}/lib/systemd/user/systemd-ask-password@.service
-%{_prefix}/lib/systemd/user/systemd-exit.service
-%{_prefix}/lib/systemd/user/systemd-journalctl.socket
-%{_prefix}/lib/systemd/user/systemd-journalctl@.service
-%{_prefix}/lib/systemd/user/systemd-storage-fs.socket
-%{_prefix}/lib/systemd/user/systemd-storage-fs@.service
-%{_prefix}/lib/systemd/user/systemd-tmpfiles-clean.service
-%{_prefix}/lib/systemd/user/systemd-tmpfiles-clean.timer
-%{_prefix}/lib/systemd/user/systemd-tmpfiles-setup.service
-%{_prefix}/lib/systemd/user/timers.target
-%{_prefix}/lib/systemd/user/xdg-desktop-autostart.target
-%{_prefix}/lib/sysusers.d/README
-%{_prefix}/lib/sysusers.d/basic.conf
-%{_prefix}/lib/sysusers.d/systemd-journal.conf
-%{_prefix}/lib/sysusers.d/systemd-oom.conf
-%{_prefix}/lib/tmpfiles.d/20-systemd-osc-context.conf
-%{_prefix}/lib/tmpfiles.d/20-systemd-shell-extra.conf
-%{_prefix}/lib/tmpfiles.d/20-systemd-ssh-generator.conf
-%{_prefix}/lib/tmpfiles.d/20-systemd-stub.conf
-%{_prefix}/lib/tmpfiles.d/20-systemd-userdb.conf
-%{_prefix}/lib/tmpfiles.d/20-systemd-varlink.conf
-%{_prefix}/lib/tmpfiles.d/README
-%{_prefix}/lib/tmpfiles.d/credstore.conf
-%{_prefix}/lib/tmpfiles.d/etc.conf
-%{_prefix}/lib/tmpfiles.d/home.conf
-%{_prefix}/lib/tmpfiles.d/journal-nocow.conf
-%{_prefix}/lib/tmpfiles.d/legacy.conf
-%{_prefix}/lib/tmpfiles.d/provision.conf
-%{_prefix}/lib/tmpfiles.d/root.conf
-%{_prefix}/lib/tmpfiles.d/static-nodes-permissions.conf
-%{_prefix}/lib/tmpfiles.d/systemd-nologin.conf
-%{_prefix}/lib/tmpfiles.d/systemd-tmp.conf
-%{_prefix}/lib/tmpfiles.d/systemd.conf
-%{_prefix}/lib/tmpfiles.d/tmp.conf
-%{_prefix}/lib/tmpfiles.d/var.conf
-%{_prefix}/lib/tmpfiles.d/x11.conf
-%{_libdir}/libnss_myhostname.so.2
-%{_libdir}/libnss_resolve.so.2
-%{_libdir}/libnss_systemd.so.2
-%{_libdir}/systemd/libsystemd-core-262.so
-%{_datadir}/bash-completion/completions/busctl
-%{_datadir}/bash-completion/completions/hostnamectl
-%{_datadir}/bash-completion/completions/journalctl
-%{_datadir}/bash-completion/completions/localectl
-%{_datadir}/bash-completion/completions/loginctl
-%{_datadir}/bash-completion/completions/oomctl
-%{_datadir}/bash-completion/completions/resolvectl
-%{_datadir}/bash-completion/completions/run0
-%{_datadir}/bash-completion/completions/storagectl
-%{_datadir}/bash-completion/completions/systemctl
-%{_datadir}/bash-completion/completions/systemd-analyze
-%{_datadir}/bash-completion/completions/systemd-cat
-%{_datadir}/bash-completion/completions/systemd-cgls
-%{_datadir}/bash-completion/completions/systemd-cgtop
-%{_datadir}/bash-completion/completions/systemd-confext
-%{_datadir}/bash-completion/completions/systemd-creds
-%{_datadir}/bash-completion/completions/systemd-delta
-%{_datadir}/bash-completion/completions/systemd-detect-virt
-%{_datadir}/bash-completion/completions/systemd-id128
-%{_datadir}/bash-completion/completions/systemd-path
-%{_datadir}/bash-completion/completions/systemd-run
-%{_datadir}/bash-completion/completions/systemd-sysext
-%{_datadir}/bash-completion/completions/systemd-vpick
-%{_datadir}/bash-completion/completions/timedatectl
-%{_datadir}/bash-completion/completions/userdbctl
-%{_datadir}/bash-completion/completions/varlinkctl
-%{_datadir}/dbus-1/interfaces/org.freedesktop.LogControl1.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.hostname1.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.locale1.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.login1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.login1.Seat.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.login1.Session.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.login1.User.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.oom1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Automount.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Device.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Job.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Mount.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Path.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Scope.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Service.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Slice.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Socket.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Swap.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Target.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Timer.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.systemd1.Unit.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.timedate1.xml
-%{_datadir}/dbus-1/services/org.freedesktop.systemd1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.hostname1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.locale1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.login1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.oom1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.systemd1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.timedate1.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.hostname1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.locale1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.login1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.oom1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.systemd1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.timedate1.conf
-%{_datadir}/doc/systemd/ENVIRONMENT.md
-%{_datadir}/doc/systemd/LICENSE.GPL2
-%{_datadir}/doc/systemd/LICENSE.LGPL2.1
-%{_datadir}/doc/systemd/LICENSES/
-%{_datadir}/doc/systemd/NEWS
-%{_datadir}/doc/systemd/README
-%{_datadir}/doc/systemd/README.logs
-%{_datadir}/doc/systemd/TRANSIENT-SETTINGS.md
-%{_datadir}/doc/systemd/UIDS-GIDS.md
-%{_datadir}/factory/etc/issue
-%{_datadir}/factory/etc/locale.conf
-%{_datadir}/factory/etc/nsswitch.conf
-%{_datadir}/mime/packages/io.systemd.xml
-%{_datadir}/pkgconfig/systemd.pc
-%{_datadir}/pkgconfig/udev.pc
-%{_datadir}/polkit-1/actions/io.systemd.ask-password.policy
-%{_datadir}/polkit-1/actions/io.systemd.credentials.policy
-%{_datadir}/polkit-1/actions/io.systemd.mount-file-system.policy
-%{_datadir}/polkit-1/actions/io.systemd.namespace-resource.policy
-%{_datadir}/polkit-1/actions/io.systemd.storage.policy
-%{_datadir}/polkit-1/actions/io.systemd.sysext.policy
-%{_datadir}/polkit-1/actions/io.systemd.sysinstall.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.hostname1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.locale1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.login1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.systemd1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.timedate1.policy
-%{_datadir}/polkit-1/rules.d/10-systemd-logind-root-ignore-inhibitors.rules.example
-%{_datadir}/systemd/kbd-model-map
-%{_datadir}/systemd/language-fallback-map
-%{_datadir}/user-tmpfiles.d/20-systemd-varlink.conf
-%{_datadir}/zsh/site-functions/_busctl
-%{_datadir}/zsh/site-functions/_hostnamectl
-%{_datadir}/zsh/site-functions/_journalctl
-%{_datadir}/zsh/site-functions/_localectl
-%{_datadir}/zsh/site-functions/_loginctl
-%{_datadir}/zsh/site-functions/_oomctl
-%{_datadir}/zsh/site-functions/_resolvectl
-%{_datadir}/zsh/site-functions/_run0
-%{_datadir}/zsh/site-functions/_sd_bus_address
-%{_datadir}/zsh/site-functions/_sd_hosts_or_user_at_host
-%{_datadir}/zsh/site-functions/_sd_machines
-%{_datadir}/zsh/site-functions/_sd_outputmodes
-%{_datadir}/zsh/site-functions/_sd_unit_files
-%{_datadir}/zsh/site-functions/_storagectl
-%{_datadir}/zsh/site-functions/_systemctl
-%{_datadir}/zsh/site-functions/_systemd
-%{_datadir}/zsh/site-functions/_systemd-analyze
-%{_datadir}/zsh/site-functions/_systemd-delta
-%{_datadir}/zsh/site-functions/_systemd-id128
-%{_datadir}/zsh/site-functions/_systemd-inhibit
-%{_datadir}/zsh/site-functions/_systemd-path
-%{_datadir}/zsh/site-functions/_systemd-run
-%{_datadir}/zsh/site-functions/_systemd-tmpfiles
-%{_datadir}/zsh/site-functions/_timedatectl
-%{_datadir}/zsh/site-functions/_userdbctl
-%{_datadir}/zsh/site-functions/_varlinkctl
-%if %{without bootstrap} && !0%{?bootstrap}
-%{_bindir}/systemd-home-fallback-shell
-%{_prefix}/lib/pam.d/systemd-run0
-%{_prefix}/lib/pam.d/systemd-user
-%{_prefix}/lib/systemd/systemd-homework
-%{_datadir}/factory/etc/pam.d/
-%endif
-%{_libdir}/systemd/libsystemd-shared-262.so
+%global _docdir_fmt %{name}
 
-%files libs
+%files -f %{name}.lang -f .file-list-main
+%exclude %{_pkgdocdir}/LICENSE*
+# Only the licenses texts for the licenses in License line are included.
+%license LICENSE.GPL2
 %license LICENSE.LGPL2.1
-%{_libdir}/libsystemd.so.0
-%{_libdir}/libsystemd.so.0.45.0
-%{_libdir}/libudev.so.1
-%{_libdir}/libudev.so.1.7.15
+%license LICENSES/MIT.txt
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/basic.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/bluetooth.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/default.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/getty.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/graphical.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/local-fs.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/machines.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/multi-user.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/network-online.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/printer.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/remote-fs.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/sockets.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/sysinit.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/system-update.target.wants
+%ghost %dir %attr(0755,-,-) /etc/systemd/system/timers.target.wants
+%ghost %dir %attr(0700,-,-) /var/lib/portables
+%ghost %dir %attr(0755,-,-) /var/lib/rpm-state/systemd
 
-%if %{without bootstrap} && !0%{?bootstrap}
-%files pam
+%files libs -f .file-list-libs
+%license LICENSE.LGPL2.1
 
-%{_libdir}/security/pam_systemd.so
-%{_libdir}/security/pam_systemd_home.so
-%{_libdir}/security/pam_systemd_loadkey.so
+%files shared -f .file-list-shared
+%license LICENSE.LGPL2.1
+%license LICENSES/MIT.txt
+
+%files pam -f .file-list-pam
+
+%files rpm-macros -f .file-list-rpm-macros
+
+%files sysusers -f .file-list-sysusers
+
+%files resolved -f .file-list-resolve
+
+%files devel -f .file-list-devel
+
+%files imds -f .file-list-imds
+
+%files udev -f .file-list-udev
+
+%files ukify -f .file-list-ukify
+%if 0%{?want_bootloader}
+%if %{without obs}
+%files boot-unsigned -f .file-list-boot
+%else
+%files boot -f .file-list-boot
+%endif
 %endif
 
-%files rpm-macros
-%{_prefix}/lib/rpm/macros.d/macros.systemd
+%files import-keys -f .file-list-import-keys
 
-%files udev
-%dir %{_prefix}/lib/udev
-%dir %{_sysconfdir}/udev
-%config(noreplace) %{_sysconfdir}/systemd/coredump.conf
-%config(noreplace) %{_sysconfdir}/systemd/oomd.conf
-%config(noreplace) %{_sysconfdir}/systemd/pstore.conf
-%config(noreplace) %{_sysconfdir}/systemd/sleep.conf
-%config(noreplace) %{_sysconfdir}/systemd/timesyncd.conf
-%config(noreplace) %{_sysconfdir}/udev/iocost.conf
-%config(noreplace) %{_sysconfdir}/udev/udev.conf
-%{_bindir}/bootctl
-%{_bindir}/coredumpctl
-%{_bindir}/kernel-install
-%{_bindir}/systemd-ac-power
-%{_bindir}/systemd-hwdb
-%{_bindir}/systemd-repart
-%{_bindir}/systemd-sysinstall
-%{_bindir}/udevadm
-%{_bindir}/updatectl
-%{_prefix}/lib/kernel/install.conf
-%{_prefix}/lib/kernel/install.d/50-depmod.install
-%{_prefix}/lib/kernel/install.d/90-loaderentry.install
-%{_prefix}/lib/kernel/install.d/90-uki-copy.install
-%{_prefix}/lib/modprobe.d/README
-%{_prefix}/lib/modprobe.d/systemd.conf
-%{_prefix}/lib/sysctl.d/50-coredump.conf
-%{_prefix}/lib/sysctl.d/50-default.conf
-%{_prefix}/lib/sysctl.d/50-pid-max.conf
-%{_prefix}/lib/sysctl.d/README
-%{_prefix}/lib/systemd/initrd-preset/
-%{_prefix}/lib/systemd/network/99-default.link
-%{_prefix}/lib/systemd/ntp-units.d/
-%{_prefix}/lib/systemd/repart/
-%{_prefix}/lib/systemd/system-generators/systemd-gpt-auto-generator
-%{_prefix}/lib/systemd/system-generators/systemd-hibernate-resume-generator
-%{_prefix}/lib/systemd/system-generators/systemd-imds-generator
-%{_prefix}/lib/systemd/system/breakpoint-pre-udev.service
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.sysupdate1.service
-%{_prefix}/lib/systemd/system/hibernate.target
-%{_prefix}/lib/systemd/system/hybrid-sleep.target
-%{_prefix}/lib/systemd/system/initrd-cleanup.service
-%{_prefix}/lib/systemd/system/initrd-fs.target
-%{_prefix}/lib/systemd/system/initrd-parse-etc.service
-%{_prefix}/lib/systemd/system/initrd-root-device.target
-%{_prefix}/lib/systemd/system/initrd-root-device.target.wants/
-%{_prefix}/lib/systemd/system/initrd-root-fs.target
-%{_prefix}/lib/systemd/system/initrd-root-fs.target.wants/
-%{_prefix}/lib/systemd/system/initrd-switch-root.service
-%{_prefix}/lib/systemd/system/initrd-switch-root.target
-%{_prefix}/lib/systemd/system/initrd-udevadm-cleanup-db.service
-%{_prefix}/lib/systemd/system/initrd-usr-fs.target
-%{_prefix}/lib/systemd/system/initrd.target
-%{_prefix}/lib/systemd/system/initrd.target.wants/
-%{_prefix}/lib/systemd/system/kmod-static-nodes.service
-%{_prefix}/lib/systemd/system/proc-sys-fs-binfmt_misc.automount
-%{_prefix}/lib/systemd/system/proc-sys-fs-binfmt_misc.mount
-%{_prefix}/lib/systemd/system/quotaon-root.service
-%{_prefix}/lib/systemd/system/quotaon@.service
-%{_prefix}/lib/systemd/system/sleep.target
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-coredump.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-repart.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-sysinstall.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-sysupdate.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-udevd-kernel.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-udevd-varlink.socket
-%{_prefix}/lib/systemd/system/suspend-then-hibernate.target
-%{_prefix}/lib/systemd/system/suspend.target
-%{_prefix}/lib/systemd/system/sysinit.target.wants/kmod-static-nodes.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/proc-sys-fs-binfmt_misc.automount
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-binfmt.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-hibernate-clear.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-hwdb-update.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-modules-load.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-random-seed.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-repart.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-sysctl.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev-early.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-udev-trigger.service
-%{_prefix}/lib/systemd/system/sysinit.target.wants/systemd-udevd.service
-%{_prefix}/lib/systemd/system/system-install.target.wants/
-%{_prefix}/lib/systemd/system/system-update-pre.target.wants/
-%{_prefix}/lib/systemd/system/systemd-backlight@.service
-%{_prefix}/lib/systemd/system/systemd-binfmt.service
-%{_prefix}/lib/systemd/system/systemd-coredump-register.service
-%{_prefix}/lib/systemd/system/systemd-coredump.socket
-%{_prefix}/lib/systemd/system/systemd-coredump@.service
-%{_prefix}/lib/systemd/system/systemd-coredumpd.service
-%{_prefix}/lib/systemd/system/systemd-fsck-root.service
-%{_prefix}/lib/systemd/system/systemd-fsck@.service
-%{_prefix}/lib/systemd/system/systemd-growfs-root.service
-%{_prefix}/lib/systemd/system/systemd-growfs@.service
-%{_prefix}/lib/systemd/system/systemd-hibernate-clear.service
-%{_prefix}/lib/systemd/system/systemd-hibernate-resume.service
-%{_prefix}/lib/systemd/system/systemd-hibernate.service
-%{_prefix}/lib/systemd/system/systemd-hwdb-update.service
-%{_prefix}/lib/systemd/system/systemd-hybrid-sleep.service
-%{_prefix}/lib/systemd/system/systemd-imds-early-network.service
-%{_prefix}/lib/systemd/system/systemd-imds-import.service
-%{_prefix}/lib/systemd/system/systemd-imds-metrics.socket
-%{_prefix}/lib/systemd/system/systemd-imds-metrics@.service
-%{_prefix}/lib/systemd/system/systemd-imdsd.socket
-%{_prefix}/lib/systemd/system/systemd-imdsd@.service
-%{_prefix}/lib/systemd/system/systemd-loop@.service
-%{_prefix}/lib/systemd/system/systemd-modules-load.service
-%{_prefix}/lib/systemd/system/systemd-oomd.service
-%{_prefix}/lib/systemd/system/systemd-oomd.socket
-%{_prefix}/lib/systemd/system/systemd-pstore.service
-%{_prefix}/lib/systemd/system/systemd-quotacheck-root.service
-%{_prefix}/lib/systemd/system/systemd-quotacheck@.service
-%{_prefix}/lib/systemd/system/systemd-random-seed.service
-%{_prefix}/lib/systemd/system/systemd-remount-fs.service
-%{_prefix}/lib/systemd/system/systemd-repart.service
-%{_prefix}/lib/systemd/system/systemd-repart.socket
-%{_prefix}/lib/systemd/system/systemd-repart@.service
-%{_prefix}/lib/systemd/system/systemd-rfkill.service
-%{_prefix}/lib/systemd/system/systemd-rfkill.socket
-%{_prefix}/lib/systemd/system/systemd-suspend-then-hibernate.service
-%{_prefix}/lib/systemd/system/systemd-suspend.service
-%{_prefix}/lib/systemd/system/systemd-sysctl.service
-%{_prefix}/lib/systemd/system/systemd-sysinstall.service
-%{_prefix}/lib/systemd/system/systemd-sysinstall.socket
-%{_prefix}/lib/systemd/system/systemd-sysinstall@.service
-%{_prefix}/lib/systemd/system/systemd-sysupdate-auto-enable.service
-%{_prefix}/lib/systemd/system/systemd-sysupdate-notify-sysext.socket
-%{_prefix}/lib/systemd/system/systemd-sysupdate-notify-sysext@.service
-%{_prefix}/lib/systemd/system/systemd-sysupdate-reboot.service
-%{_prefix}/lib/systemd/system/systemd-sysupdate-reboot.timer
-%{_prefix}/lib/systemd/system/systemd-sysupdate-update.service
-%{_prefix}/lib/systemd/system/systemd-sysupdate-update.timer
-%{_prefix}/lib/systemd/system/systemd-sysupdate.service
-%{_prefix}/lib/systemd/system/systemd-sysupdate.socket
-%{_prefix}/lib/systemd/system/systemd-sysupdate.timer
-%{_prefix}/lib/systemd/system/systemd-sysupdate@.service
-%{_prefix}/lib/systemd/system/systemd-sysupdated.service
-%{_prefix}/lib/systemd/system/systemd-timesyncd.service
-%{_prefix}/lib/systemd/system/systemd-tmpfiles-setup-dev-early.service
-%{_prefix}/lib/systemd/system/systemd-tmpfiles-setup-dev.service
-%{_prefix}/lib/systemd/system/systemd-udev-load-credentials.service
-%{_prefix}/lib/systemd/system/systemd-udev-settle.service
-%{_prefix}/lib/systemd/system/systemd-udev-trigger.service
-%{_prefix}/lib/systemd/system/systemd-udevd-control.socket
-%{_prefix}/lib/systemd/system/systemd-udevd-kernel.socket
-%{_prefix}/lib/systemd/system/systemd-udevd-varlink.socket
-%{_prefix}/lib/systemd/system/systemd-udevd.service
-%{_prefix}/lib/systemd/system/systemd-vconsole-setup.service
-%{_prefix}/lib/systemd/system/systemd-volatile-root.service
-%{_prefix}/lib/systemd/system/tpm2.target
-%{_prefix}/lib/systemd/systemd-backlight
-%{_prefix}/lib/systemd/systemd-binfmt
-%{_prefix}/lib/systemd/systemd-coredump
-%{_prefix}/lib/systemd/systemd-fsck
-%{_prefix}/lib/systemd/systemd-growfs
-%{_prefix}/lib/systemd/systemd-hibernate-resume
-%{_prefix}/lib/systemd/systemd-imds
-%{_prefix}/lib/systemd/systemd-imdsd
-%{_prefix}/lib/systemd/systemd-makefs
-%{_prefix}/lib/systemd/systemd-modules-load
-%{_prefix}/lib/systemd/systemd-oomd
-%{_prefix}/lib/systemd/systemd-pstore
-%{_prefix}/lib/systemd/systemd-quotacheck
-%{_prefix}/lib/systemd/systemd-random-seed
-%{_prefix}/lib/systemd/systemd-remount-fs
-%{_prefix}/lib/systemd/systemd-rfkill
-%{_prefix}/lib/systemd/systemd-sleep
-%{_prefix}/lib/systemd/systemd-sysctl
-%{_prefix}/lib/systemd/systemd-sysupdate
-%{_prefix}/lib/systemd/systemd-sysupdated
-%{_prefix}/lib/systemd/systemd-timesyncd
-%{_prefix}/lib/systemd/systemd-udevd
-%{_prefix}/lib/systemd/systemd-vconsole-setup
-%{_prefix}/lib/systemd/systemd-volatile-root
-%{_prefix}/lib/sysusers.d/systemd-coredump.conf
-%{_prefix}/lib/sysusers.d/systemd-imds.conf
-%{_prefix}/lib/sysusers.d/systemd-timesync.conf
-%{_prefix}/lib/tmpfiles.d/systemd-pstore.conf
-%{_prefix}/lib/udev/ata_id
-%{_prefix}/lib/udev/cdrom_id
-%{_prefix}/lib/udev/dmi_memory_id
-%{_prefix}/lib/udev/fido_id
-%{_prefix}/lib/udev/hwdb.d/
-%{_prefix}/lib/udev/iocost
-%{_prefix}/lib/udev/mtd_probe
-%{_prefix}/lib/udev/rules.d/
-%{_prefix}/lib/udev/scsi_id
-%{_prefix}/lib/udev/v4l_id
-%{_datadir}/bash-completion/completions/bootctl
-%{_datadir}/bash-completion/completions/coredumpctl
-%{_datadir}/bash-completion/completions/kernel-install
-%{_datadir}/bash-completion/completions/systemd-hwdb
-%{_datadir}/bash-completion/completions/systemd-sysinstall
-%{_datadir}/bash-completion/completions/systemd-sysupdate
-%{_datadir}/bash-completion/completions/udevadm
-%{_datadir}/bash-completion/completions/updatectl
-%{_datadir}/dbus-1/interfaces/org.freedesktop.sysupdate1.Job.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.sysupdate1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.sysupdate1.Target.xml
-%{_datadir}/dbus-1/system-services/org.freedesktop.sysupdate1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.timesync1.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.sysupdate1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.timesync1.conf
-%{_datadir}/factory/etc/vconsole.conf
-%{_datadir}/polkit-1/actions/io.systemd.imds.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.sysupdate1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.timesync1.policy
-%{_datadir}/zsh/site-functions/_bootctl
-%{_datadir}/zsh/site-functions/_coredumpctl
-%{_datadir}/zsh/site-functions/_kernel-install
-%{_datadir}/zsh/site-functions/_systemd-hwdb
-%{_datadir}/zsh/site-functions/_systemd-sysinstall
-%{_datadir}/zsh/site-functions/_systemd-sysupdate
-%{_datadir}/zsh/site-functions/_udevadm
-%{_datadir}/zsh/site-functions/_updatectl
-%if %{without bootstrap} && !0%{?bootstrap}
-%config(noreplace) %{_sysconfdir}/systemd/homed.conf
-%{_bindir}/homectl
-%{_bindir}/systemd-cryptenroll
-%{_bindir}/systemd-cryptsetup
-%{_prefix}/lib/systemd/system-generators/systemd-cryptsetup-generator
-%{_prefix}/lib/systemd/system-generators/systemd-integritysetup-generator
-%{_prefix}/lib/systemd/system-generators/systemd-veritysetup-generator
-%{_prefix}/lib/systemd/system/cryptsetup-pre.target
-%{_prefix}/lib/systemd/system/cryptsetup.target
-%{_prefix}/lib/systemd/system/integritysetup-pre.target
-%{_prefix}/lib/systemd/system/integritysetup.target
-%{_prefix}/lib/systemd/system/remote-cryptsetup.target
-%{_prefix}/lib/systemd/system/remote-integritysetup.target
-%{_prefix}/lib/systemd/system/remote-veritysetup.target
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-cryptenroll.socket
-%{_prefix}/lib/systemd/system/sysinit.target.wants/cryptsetup.target
-%{_prefix}/lib/systemd/system/sysinit.target.wants/integritysetup.target
-%{_prefix}/lib/systemd/system/sysinit.target.wants/veritysetup.target
-%{_prefix}/lib/systemd/system/system-systemd\x2dcryptsetup.slice
-%{_prefix}/lib/systemd/system/system-systemd\x2dveritysetup.slice
-%{_prefix}/lib/systemd/system/systemd-cryptenroll-firstboot.service
-%{_prefix}/lib/systemd/system/systemd-cryptenroll.socket
-%{_prefix}/lib/systemd/system/systemd-cryptenroll@.service
-%{_prefix}/lib/systemd/system/systemd-homed-activate.service
-%{_prefix}/lib/systemd/system/systemd-homed-firstboot.service
-%{_prefix}/lib/systemd/system/systemd-homed.service
-%{_prefix}/lib/systemd/system/veritysetup-pre.target
-%{_prefix}/lib/systemd/system/veritysetup.target
-%{_prefix}/lib/systemd/systemd-cryptsetup
-%{_prefix}/lib/systemd/systemd-homed
-%{_prefix}/lib/systemd/systemd-integritysetup
-%{_prefix}/lib/systemd/systemd-veritysetup
-%{_libdir}/cryptsetup/libcryptsetup-token-systemd-pkcs11.so
-%{_datadir}/bash-completion/completions/homectl
-%{_datadir}/bash-completion/completions/systemd-cryptenroll
-%{_datadir}/dbus-1/interfaces/org.freedesktop.home1.Home.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.home1.Manager.xml
-%{_datadir}/dbus-1/system-services/org.freedesktop.home1.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.home1.conf
-%{_datadir}/polkit-1/actions/io.systemd.cryptenroll.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.home1.policy
-%{_datadir}/zsh/site-functions/_systemd-cryptenroll
+%files container -f .file-list-container
+%ghost %dir %attr(0700,-,-) /var/lib/machines
+
+%files journal-remote -f .file-list-remote
+
+%files networkd -f .file-list-networkd
+
+%files networkd-defaults -f .file-list-networkd-defaults
+
+%files oomd-defaults -f .file-list-oomd-defaults
+
+%files tests -f .file-list-tests
+
+%files standalone-repart -f .file-list-standalone-repart
+
+%if %{with report_standalone}
+%files standalone-report -f .file-list-standalone-report
 %endif
 
-%files container
-%{_bindir}/importctl
-%{_bindir}/machinectl
-%{_bindir}/mount.ddi
-%{_bindir}/portablectl
-%{_bindir}/systemd-dissect
-%{_bindir}/systemd-nspawn
-%{_bindir}/systemd-vmspawn
-%{_prefix}/lib/systemd/oci-registry/
-%{_prefix}/lib/systemd/portable/
-%{_prefix}/lib/systemd/system-generators/systemd-import-generator
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.import1.service
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.machine1.service
-%{_prefix}/lib/systemd/system/dbus-org.freedesktop.portable1.service
-%{_prefix}/lib/systemd/system/machine.slice
-%{_prefix}/lib/systemd/system/machines.target
-%{_prefix}/lib/systemd/system/machines.target.wants/
-%{_prefix}/lib/systemd/system/remote-fs.target.wants/
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-importd.socket
-%{_prefix}/lib/systemd/system/sockets.target.wants/systemd-machined.socket
-%{_prefix}/lib/systemd/system/systemd-importd.service
-%{_prefix}/lib/systemd/system/systemd-importd.socket
-%{_prefix}/lib/systemd/system/systemd-machined.service
-%{_prefix}/lib/systemd/system/systemd-machined.socket
-%{_prefix}/lib/systemd/system/systemd-mountfsd.service
-%{_prefix}/lib/systemd/system/systemd-mountfsd.socket
-%{_prefix}/lib/systemd/system/systemd-nspawn@.service
-%{_prefix}/lib/systemd/system/systemd-nsresourced.service
-%{_prefix}/lib/systemd/system/systemd-nsresourced.socket
-%{_prefix}/lib/systemd/system/systemd-portabled.service
-%{_prefix}/lib/systemd/system/systemd-vmspawn@.service
-%{_prefix}/lib/systemd/system/var-lib-machines.mount
-%{_prefix}/lib/systemd/systemd-export
-%{_prefix}/lib/systemd/systemd-import
-%{_prefix}/lib/systemd/systemd-import-fs
-%{_prefix}/lib/systemd/systemd-importd
-%{_prefix}/lib/systemd/systemd-machined
-%{_prefix}/lib/systemd/systemd-mountfsd
-%{_prefix}/lib/systemd/systemd-mountwork
-%{_prefix}/lib/systemd/systemd-nsresourced
-%{_prefix}/lib/systemd/systemd-nsresourcework
-%{_prefix}/lib/systemd/systemd-portabled
-%{_prefix}/lib/systemd/systemd-pull
-%{_prefix}/lib/systemd/user/dbus-org.freedesktop.import1.service
-%{_prefix}/lib/systemd/user/dbus-org.freedesktop.machine1.service
-%{_prefix}/lib/systemd/user/dbus-org.freedesktop.portable1.service
-%{_prefix}/lib/systemd/user/machine.slice
-%{_prefix}/lib/systemd/user/machines.target
-%{_prefix}/lib/systemd/user/portable/
-%{_prefix}/lib/systemd/user/sockets.target.wants/systemd-importd.socket
-%{_prefix}/lib/systemd/user/sockets.target.wants/systemd-machined.socket
-%{_prefix}/lib/systemd/user/systemd-importd.service
-%{_prefix}/lib/systemd/user/systemd-importd.socket
-%{_prefix}/lib/systemd/user/systemd-machined.service
-%{_prefix}/lib/systemd/user/systemd-machined.socket
-%{_prefix}/lib/systemd/user/systemd-nspawn@.service
-%{_prefix}/lib/systemd/user/systemd-portabled.service
-%{_prefix}/lib/systemd/user/systemd-vmspawn@.service
-%{_prefix}/lib/tmpfiles.d/portables.conf
-%{_prefix}/lib/tmpfiles.d/systemd-nspawn.conf
-%{_libdir}/libnss_mymachines.so.2
-%{_datadir}/bash-completion/completions/importctl
-%{_datadir}/bash-completion/completions/machinectl
-%{_datadir}/bash-completion/completions/portablectl
-%{_datadir}/bash-completion/completions/systemd-dissect
-%{_datadir}/bash-completion/completions/systemd-nspawn
-%{_datadir}/bash-completion/completions/systemd-vmspawn
-%{_datadir}/dbus-1/interfaces/org.freedesktop.import1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.import1.Transfer.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.machine1.Image.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.machine1.Machine.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.machine1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.portable1.Image.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.portable1.Manager.xml
-%{_datadir}/dbus-1/services/org.freedesktop.import1.service
-%{_datadir}/dbus-1/services/org.freedesktop.machine1.service
-%{_datadir}/dbus-1/services/org.freedesktop.portable1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.import1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.machine1.service
-%{_datadir}/dbus-1/system-services/org.freedesktop.portable1.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.import1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.machine1.conf
-%{_datadir}/dbus-1/system.d/org.freedesktop.portable1.conf
-%{_datadir}/polkit-1/actions/org.freedesktop.import1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.machine1.policy
-%{_datadir}/polkit-1/actions/org.freedesktop.portable1.policy
-%{_datadir}/zsh/site-functions/_machinectl
-%{_datadir}/zsh/site-functions/_systemd-nspawn
+%files standalone-tmpfiles -f .file-list-standalone-tmpfiles
 
-%files networkd
-%config(noreplace) %{_sysconfdir}/systemd/networkd.conf
-%{_bindir}/networkctl
-%{_prefix}/lib/systemd/network/80-6rd-tunnel.network
-%{_prefix}/lib/systemd/network/80-auto-link-local.network.example
-%{_prefix}/lib/systemd/network/80-container-host0-tun.network
-%{_prefix}/lib/systemd/network/80-container-host0.network
-%{_prefix}/lib/systemd/network/80-container-vb.network
-%{_prefix}/lib/systemd/network/80-container-ve.network
-%{_prefix}/lib/systemd/network/80-container-vz.network
-%{_prefix}/lib/systemd/network/80-namespace-ns-tun.network
-%{_prefix}/lib/systemd/network/80-namespace-ns.network
-%{_prefix}/lib/systemd/network/80-vm-vt.network
-%{_prefix}/lib/systemd/network/80-wifi-adhoc.network
-%{_prefix}/lib/systemd/network/80-wifi-ap.network.example
-%{_prefix}/lib/systemd/network/80-wifi-station.network.example
-%{_prefix}/lib/systemd/network/89-ethernet.network.example
-%{_prefix}/lib/systemd/system/systemd-network-generator.service
-%{_prefix}/lib/systemd/system/systemd-networkd-persistent-storage.service
-%{_prefix}/lib/systemd/system/systemd-networkd-resolve-hook.socket
-%{_prefix}/lib/systemd/system/systemd-networkd-varlink-metrics.socket
-%{_prefix}/lib/systemd/system/systemd-networkd-varlink.socket
-%{_prefix}/lib/systemd/system/systemd-networkd-wait-online.service
-%{_prefix}/lib/systemd/system/systemd-networkd-wait-online@.service
-%{_prefix}/lib/systemd/system/systemd-networkd.service
-%{_prefix}/lib/systemd/system/systemd-networkd.socket
-%{_prefix}/lib/systemd/systemd-network-generator
-%{_prefix}/lib/systemd/systemd-networkd
-%{_prefix}/lib/systemd/systemd-networkd-wait-online
-%{_prefix}/lib/sysusers.d/systemd-network.conf
-%{_prefix}/lib/tmpfiles.d/systemd-network.conf
-%{_datadir}/bash-completion/completions/networkctl
-%{_datadir}/dbus-1/interfaces/org.freedesktop.network1.DHCPServer.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.network1.DHCPv4Client.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.network1.DHCPv6Client.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.network1.Link.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.network1.Manager.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.network1.Network.xml
-%{_datadir}/dbus-1/system-services/org.freedesktop.network1.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.network1.conf
-%{_datadir}/polkit-1/actions/org.freedesktop.network1.policy
-%{_datadir}/zsh/site-functions/_networkctl
+%files standalone-sysusers -f .file-list-standalone-sysusers
 
-%files resolved
-%config(noreplace) %{_sysconfdir}/systemd/resolved.conf
-%{_bindir}/resolvconf
-%{_bindir}/systemd-resolve
-%{_prefix}/lib/systemd/system/systemd-resolved-monitor.socket
-%{_prefix}/lib/systemd/system/systemd-resolved-varlink.socket
-%{_prefix}/lib/systemd/system/systemd-resolved.service
-%{_prefix}/lib/systemd/systemd-resolved
-%{_prefix}/lib/sysusers.d/systemd-resolve.conf
-%{_prefix}/lib/tmpfiles.d/systemd-resolve.conf
-%{_datadir}/bash-completion/completions/systemd-resolve
-%{_datadir}/dbus-1/interfaces/org.freedesktop.resolve1.DnsDelegate.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.resolve1.DnssdService.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.resolve1.Link.xml
-%{_datadir}/dbus-1/interfaces/org.freedesktop.resolve1.Manager.xml
-%{_datadir}/dbus-1/system-services/org.freedesktop.resolve1.service
-%{_datadir}/dbus-1/system.d/org.freedesktop.resolve1.conf
-%{_datadir}/polkit-1/actions/org.freedesktop.resolve1.policy
+%files standalone-shutdown -f .file-list-standalone-shutdown
 
-%files journal-remote
-%config(noreplace) %{_sysconfdir}/systemd/journal-remote.conf
-%config(noreplace) %{_sysconfdir}/systemd/journal-upload.conf
-%{_prefix}/lib/systemd/system/systemd-journal-gatewayd.service
-%{_prefix}/lib/systemd/system/systemd-journal-gatewayd.socket
-%{_prefix}/lib/systemd/system/systemd-journal-remote.service
-%{_prefix}/lib/systemd/system/systemd-journal-remote.socket
-%{_prefix}/lib/systemd/system/systemd-journal-upload.service
-%{_prefix}/lib/systemd/systemd-journal-gatewayd
-%{_prefix}/lib/systemd/systemd-journal-remote
-%{_prefix}/lib/systemd/systemd-journal-upload
-%{_prefix}/lib/sysusers.d/systemd-remote.conf
-%{_datadir}/systemd/gatewayd/
+%clean
+rm -rf \
+    $RPM_BUILD_ROOT \
+    10-timeout-abort.conf.user \
+    .file-list-* \
+    %{name}.lang \
+    debugfiles.list \
+    debuglinks.list \
+    debugsourcefiles.list \
+    debugsources.list \
+    elfbins.list
 
-%files devel
-%{_includedir}/libudev.h
-%{_includedir}/systemd/_sd-common.h
-%{_includedir}/systemd/sd-bus-protocol.h
-%{_includedir}/systemd/sd-bus-vtable.h
-%{_includedir}/systemd/sd-bus.h
-%{_includedir}/systemd/sd-daemon.h
-%{_includedir}/systemd/sd-device.h
-%{_includedir}/systemd/sd-dlopen.h
-%{_includedir}/systemd/sd-event.h
-%{_includedir}/systemd/sd-gpt.h
-%{_includedir}/systemd/sd-hwdb.h
-%{_includedir}/systemd/sd-id128.h
-%{_includedir}/systemd/sd-journal.h
-%{_includedir}/systemd/sd-json.h
-%{_includedir}/systemd/sd-login.h
-%{_includedir}/systemd/sd-messages.h
-%{_includedir}/systemd/sd-path.h
-%{_includedir}/systemd/sd-varlink-idl.h
-%{_includedir}/systemd/sd-varlink.h
-%{_libdir}/libsystemd.so
-%{_libdir}/libudev.so
-%{_libdir}/pkgconfig/libsystemd.pc
-%{_libdir}/pkgconfig/libudev.pc
-
-%changelog
-* Tue Oct 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 259.10-1
-- 259.10

@@ -1,0 +1,357 @@
+.\" SPDX-License-Identifier: GPL-2.0-or-later
+.\" Copyright (C) 2026 Michal Schorm <mschorm@redhat.com>
+.TH ODBCINST\-GENERATE 1 "July 2026" "unixODBC" "User Commands"
+.SH NAME
+odbcinst\-generate \- regenerate /etc/odbcinst.ini from drop\-in snippets
+.SH SYNOPSIS
+.B odbcinst\-generate
+.SH DESCRIPTION
+.B odbcinst\-generate
+assembles
+.I /etc/odbcinst.ini
+from drop\-in snippet files shipped by ODBC driver packages and
+administrator overrides.
+It is normally invoked automatically by RPM file triggers when driver
+packages are installed or removed.
+Administrators may also run it manually after editing drop\-in files.
+.PP
+The generated file is replaced atomically (write to a temporary file,
+then rename).
+The command is idempotent and safe to run at any time.
+.SH DROP\-IN DIRECTORIES
+.TP
+.I /usr/lib/odbc/odbcinst.d/
+Vendor defaults.
+ODBC driver packages ship static
+.B .ini
+snippet files here.
+These files are never modified by the administrator.
+.TP
+.I /etc/odbc/odbcinst.d/
+Administrator overrides and additions.
+Files placed here take precedence over vendor defaults.
+.SH FILE NAMING
+Snippet files are named
+.IR NN \- name .ini ,
+where
+.I NN
+is a two\-digit numeric prefix that controls merge order.
+.PP
+Recommended ranges:
+.RS
+.TP
+.B 10\(en29
+Distro vendor (Fedora\-shipped driver packages).
+.TP
+.B 30\(en49
+Third\-party / out\-of\-tree (COPR packages, vendor RPMs such as
+SeerODBC, Oracle Instant Client, etc.).
+.TP
+.B 50\(en99
+Administrator overrides and additions.
+.RE
+.PP
+The numeric prefix controls tie\-breaking within a single directory
+(see
+.BR "OVERRIDE SEMANTICS" ).
+It does not affect output order; output sections are sorted
+alphabetically by the stripped name.
+.SH OVERRIDE SEMANTICS
+Files from both directories are merged using
+.B stripped\-name matching:
+the numeric prefix is removed from each filename
+.RI ( 10\-mariadb.ini
+becomes
+.IR mariadb.ini ),
+and files that share the same stripped name compete.
+Only one file per stripped name survives; the rest are discarded.
+.PP
+Tie\-breaking follows two rules, applied in order:
+.IP 1. 4
+.B Directory wins.
+A file in the administrator directory
+.RI ( /etc/odbc/odbcinst.d/ )
+always takes precedence over a file with the same stripped name in the
+vendor directory
+.RI ( /usr/lib/odbc/odbcinst.d/ ),
+regardless of numeric prefix.
+.IP 2. 4
+.B Higher prefix wins.
+Within the same directory, the file with the higher numeric prefix wins.
+For example,
+.I 30\-mariadb.ini
+overrides
+.I 10\-mariadb.ini
+when both reside in the vendor directory.
+.PP
+After tie\-breaking, the surviving snippets are sorted alphabetically by
+their stripped name and concatenated to produce the output file.
+.SH DISABLING A DRIVER
+To disable a vendor\-shipped driver, create a symlink to
+.I /dev/null
+in the administrator directory:
+.PP
+.RS
+.nf
+ln \-sf /dev/null /etc/odbc/odbcinst.d/10\-freetds.ini
+odbcinst\-generate
+.fi
+.RE
+.PP
+Symlinks pointing to
+.I /dev/null
+are detected and skipped during regeneration.
+.SH PATH RESOLUTION
+Snippet files should use bare library names for the
+.B Driver
+(and
+.BR Setup )
+keys:
+.PP
+.RS
+.nf
+Driver = libmaodbc.so
+.fi
+.RE
+.PP
+During generation,
+.B odbcinst\-generate
+resolves each bare name to an absolute, architecture\-correct path
+by probing the filesystem per\-driver.
+For each bare
+.B .so
+name, it checks both
+.I /usr/lib64/odbc/
+and
+.IR /usr/lib/odbc/ .
+.PP
+.SS Multilib resolution
+On a multilib system where both the 64\-bit and 32\-bit packages of
+a driver are installed (e.g.\&
+.I mariadb\-connector\-odbc.x86_64
+and
+.IR mariadb\-connector\-odbc.i686 ),
+the generator emits two keys:
+.PP
+.RS
+.nf
+Driver   = /usr/lib/odbc/libmaodbc.so
+Driver64 = /usr/lib64/odbc/libmaodbc.so
+.fi
+.RE
+.PP
+unixODBC selects the matching key based on the calling application\(aqs
+word size: a 64\-bit application reads
+.BR Driver64 ,
+a 32\-bit application (e.g.\& Wine) reads
+.BR Driver .
+The same logic applies to
+.BR Setup / Setup64 .
+.PP
+When only one architecture is present, only
+.B Driver
+is emitted with that architecture\(aqs path.
+If the bare name is not found in either directory, it is left unchanged
+so that unixODBC can still locate it via its compiled\-in driver search
+path.
+.PP
+.SS Edge cases
+.IP \(bu 3
+A 32\-bit\-only driver on a 64\-bit host is correctly resolved to
+.I /usr/lib/odbc/
+instead of
+.IR /usr/lib64/odbc/ .
+.IP \(bu 3
+A third\-party driver whose shared library lives outside
+.I /usr/lib*/odbc/
+(e.g.\& in
+.IR /usr/lib64/ )
+is not rewritten to a non\-existent path.
+.IP \(bu 3
+iODBC does not recognize the
+.B Driver64
+key, but ignores unknown keys harmlessly.
+On iODBC\-only hosts, the
+.B Driver
+key provides the correct path.
+.PP
+Absolute paths ensure the generated
+.I odbcinst.ini
+works with all ODBC driver managers (both unixODBC and iODBC) without
+hard\-coding architecture directories.
+Using bare names in snippets keeps them noarch\-portable: the same
+.I .ini
+file works on x86_64, aarch64, ppc64le, etc., because the generator
+handles path differences at generation time.
+.SH FILE CONFLICTS
+Each snippet filename must be unique within its directory.
+If two RPM packages ship the same file (e.g.\& both install
+.IR 30\-oracle.ini ),
+RPM will raise a file conflict and refuse to install both.
+.PP
+Third\-party packagers should choose unique names that include the
+driver\(aqs identity, for example:
+.PP
+.RS
+.nf
+30\-seerodbc.ini
+31\-oracle\-instantclient.ini
+32\-snowflake.ini
+.fi
+.RE
+.SH OUTPUT FILE
+.TP
+.I /etc/odbcinst.ini
+The generated ODBC driver configuration file.
+This file is marked as
+.B %ghost
+in the RPM package and should not be edited directly.
+Changes will be overwritten on the next regeneration.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B >0
+An error occurred (e.g.\& unable to write the output file).
+.SH EXAMPLES
+.SS Adding an administrator driver
+Create a snippet with a bare library name and regenerate:
+.PP
+.RS
+.nf
+cat > /etc/odbc/odbcinst.d/60\-mydriver.ini << 'EOF'
+[MyDriver]
+Driver = libmydriver.so
+EOF
+odbcinst\-generate
+.fi
+.RE
+.PP
+If
+.I libmydriver.so
+exists only in
+.IR /usr/lib64/odbc/ ,
+the generated
+.I /etc/odbcinst.ini
+will contain the resolved absolute path:
+.PP
+.RS
+.nf
+[MyDriver]
+Driver = /usr/lib64/odbc/libmydriver.so
+.fi
+.RE
+.PP
+If both 64\-bit and 32\-bit versions are installed, the output
+contains both keys:
+.PP
+.RS
+.nf
+[MyDriver]
+Driver   = /usr/lib/odbc/libmydriver.so
+Driver64 = /usr/lib64/odbc/libmydriver.so
+.fi
+.RE
+.PP
+If the library is not found in
+.I /usr/lib*/odbc/
+(e.g.\& it is installed in
+.IR /usr/lib64/ ),
+the bare name is kept as\-is.
+.PP
+.SS Vendor snippet (distro\-shipped)
+A Fedora driver package installs a snippet in the vendor directory:
+.PP
+.RS
+.nf
+# Shipped as /usr/lib/odbc/odbcinst.d/10\-mariadb.ini
+[MariaDB]
+Driver = libmaodbc.so
+.fi
+.RE
+.PP
+.SS Overriding a vendor snippet
+An administrator can override the MariaDB driver configuration
+without modifying the vendor file:
+.PP
+.RS
+.nf
+cat > /etc/odbc/odbcinst.d/50\-mariadb.ini << 'EOF'
+[MariaDB]
+Driver = libmaodbc.so
+Threading = 2
+EOF
+odbcinst\-generate
+.fi
+.RE
+.PP
+The administrator file wins because the admin directory always takes
+precedence over the vendor directory for the same stripped name.
+.SH NOTES
+.SS Comparison with other Fedora drop\-in systems
+Several Fedora packages use a similar dual\-directory drop\-in pattern:
+.BR sysctl.d (5),
+.BR tmpfiles.d (5),
+.BR modprobe.d (5),
+and
+.BR systemd.unit (5).
+Those systems use
+.B exact filename matching
+for overrides:
+.I /etc/sysctl.d/10\-foo.conf
+masks
+.I /usr/lib/sysctl.d/10\-foo.conf
+(same filename), but
+.I /etc/sysctl.d/60\-foo.conf
+and
+.I /usr/lib/sysctl.d/10\-foo.conf
+coexist as two separate files, with conflicting keys resolved
+individually by lexicographic sort order.
+.PP
+That model works for key\-value configurations where individual
+settings can be overridden independently.
+ODBC driver registration is structurally different: each snippet
+declares a complete
+.BI [ DriverName ]
+INI section, and merging individual keys from two
+.B [MariaDB]
+sections across files would be ambiguous and error\-prone.
+The entire section is the atomic unit.
+.PP
+.B odbcinst\-generate
+therefore uses
+.B stripped\-name matching
+instead: files that share the same name after removing the numeric
+prefix compete, and only one survives (see
+.BR "OVERRIDE SEMANTICS" ).
+The administrator directory always wins for the same stripped name,
+regardless of numeric prefix.
+This is a deliberate deviation from the
+.BR sysctl.d / tmpfiles.d
+model, chosen because INI section overrides must be whole\-section
+replacements.
+.SS Numeric range convention
+.BR sysctl.d (5)
+documents ranges 10\(en40 for vendor packages and 60\(en90 for
+local administration.
+This system adds a third\-party band (30\(en49) because out\-of\-tree
+ODBC drivers (COPR packages, vendor RPMs, third\-party connectors)
+are a common use case that does not fit the distro vendor or
+administrator categories.
+See
+.B FILE NAMING
+for the full range table.
+.SH AUTHORS
+Michal Schorm <mschorm@redhat.com>
+.SH COPYRIGHT
+Copyright \(co 2026 Michal Schorm.
+.br
+Licensed under the GNU General Public License, version 2 or later.
+.SH SEE ALSO
+.BR odbcinst (1),
+.BR odbcinst.ini (5),
+.BR odbc.ini (5),
+.BR unixODBC (7),
+.BR sysctl.d (5),
+.BR tmpfiles.d (5)

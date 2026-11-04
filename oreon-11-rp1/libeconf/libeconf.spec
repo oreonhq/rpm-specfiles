@@ -1,50 +1,91 @@
-%global source0_hash 7c311d55237f1fc6ac437caca194d170c9cae314235d60a9fbf11e980114e25e
+%global source0_hash 0605f8d8a2f4668cb16e279ebcad8002cc83f44610633157e9c4b8fc183a479b
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# Force out of source build
+%undefine __cmake_in_source_build
 
-Name: libeconf
-Version: 0.8.4
-Release: 1%{?dist}
-Summary: Library for merging configuration files
-License: MIT
-URL: https://github.com/openSUSE/libeconf
-Source0: https://github.com/openSUSE/libeconf/archive/refs/tags/v%{version}.tar.gz
-Patch0: 0001-cmake-no-install-html.patch
-Patch1: 0002-disable-test.patch
+%global somajor 0
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: cmake
+Name:           libeconf
+Version:        0.7.9
+Release:        1%{?dist}
+Summary:        Enhanced config file parser library
+
+License:        MIT
+URL:            https://github.com/openSUSE/libeconf
+Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v%{version}/libeconf-%{version}.tar.gz
+
+### Patches ###
+# This should be a temporary workaround. I don't have enough time to check what's happening, but since we aren't shipping the html documentation it's fine to stop installing it
+Patch0101:        0001-cmake-no-install-html.patch
+# Intermittent failure of a test in aarch64, thus temporarily disabling the failing test suite
+Patch0102:        0002-disable-test.patch
+
+
+BuildRequires:  cmake >= 3.12
+BuildRequires:  gcc
+BuildRequires:  make
+BuildRequires:  oreon-rpm-macros
 
 %description
-libeconf reads and merges drop-in configuration files.
+libeconf is a highly flexible and configurable library to parse and manage
+key=value configuration files. It reads configuration file snippets from
+different directories and builds the final configuration file from it.
 
-%package devel
-Summary: Development files for libeconf
-Requires: libeconf%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(libeconf)
 
-%description devel
-Headers and the libeconf link library.
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+
+%package        utils
+Summary:        Utilities for manipulating config files
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    utils
+The %{name}-utils package contains utilities for manipulating
+configuration files from applications that use %{name}.
+
 
 %prep
 %oreon_sha256
-%autosetup -n libeconf-%{version} -p1
+
+%autosetup -p1
+
 
 %build
-%oreon_cmake
-%oreon_cmake_build
+%cmake
+%cmake_build
+
 
 %install
-%oreon_cmake_install
-rm -f %{buildroot}%{_libdir}/*.a
-%oreon_filelist_devel
+%cmake_install
 
-%files -f %{_builddir}/%{name}.files
+
+%check
+%cmake_build --target check
+
+
+%files
 %license LICENSE
+%doc NEWS README.md TODO.md
+%{_libdir}/%{name}.so.%{somajor}{,.*}
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%doc example/
+%{_includedir}/*
+%{_libdir}/%{name}.so
+%{_libdir}/cmake/%{name}/
+%{_libdir}/pkgconfig/%{name}.pc
+%{_mandir}/man3/*.3.*
+
+%files utils
+%{_bindir}/econftool
+%{_mandir}/man8/econftool.8*
+

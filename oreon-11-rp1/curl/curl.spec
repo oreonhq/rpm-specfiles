@@ -1,113 +1,482 @@
-%global source0_hash 8dadd7d2536a314f982ad05a651b713f426bf7d02cc2c76cffb9796f2218e6c5
+%global source0_hash aa1b66a70eace83dc624508745646c08ae561de512ab403adffb93ac87fc72e6
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# OpenSSL ENGINE support
+# Change the bcond to 0 to turn off ENGINE support by default
+%bcond openssl_engine_support %[!(1 > 44 || 0 > 10)]
 
+# HTTP/3 support
+# This is using ngtcp2 with OpenSSL 3.5 QUIC support instead of curl's
+# experimental native OpenSSL 3.5 support.
+%bcond http3 %[1 >= 43]
+
+Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
-Version: 8.23.0
-Release: 5%{?dist}
-Summary: HTTP client and library
+Version:        8.21.0
+Release:        1%{?dist}
 License: curl
-URL: https://curl.se/
-Source0: https://curl.se/download/curl-%{version}.tar.xz
+Source0:        https://curl.se/download/curl-%{version}.tar.xz
+Source1:        curl-8.21.0.tar.xz.asc
+# The curl download page ( https://curl.se/download.html ) links
+# to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
+# which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc
+Source2: mykey.asc
 
-BuildRequires: oreon-rpm-macros
+Patch0001:        0001-prevent-multilib-conflicts-on-the-curl-config-script.patch
+Patch0002:        0002-lib-add-multi_wakeup_internal.patch
+Patch0003:        0003-http2-make-server-push-transfers-inherit-share-from-.patch
+Patch0004:        0004-connections-use-admin-handles-only-for-maintenance.patch
+Patch0005:        0005-tests-remove-test1701.patch
+Patch0006:        0006-cookie-improve-TAB-handling.patch
+Patch0007:        0007-openssl-avoid-conn-reuse-if-provider-is-used.patch
+Patch0008:        0008-openldap-handle-Curl_sasl_continue-returns-better.patch
+Patch0009:        0009-openssl-no-server-cert-is-only-okay-if-also-not-pinn.patch
+Patch0010:        0010-ci-setup-packit.patch
+Patch0011:        0011-multi-adjust-the-cleanup-order-in-multi_done.patch
+
+Provides: curl-full = %{version}-%{release}
+# do not fail when trying to install curl-minimal after drop
+Provides: curl-minimal = %{version}-%{release}
+Provides: webclient
+URL: https://curl.se/
+
+# instead of bundled wcurl utility, recommend wcurl package
+Recommends: wcurl
+
+# The reason for maintaining two separate packages for curl is no longer valid.
+# The curl-minimal is currently almost identical to curl-full, so let's drop curl-minimal.
+Obsoletes: curl-minimal < 8.6.0-4
+
+BuildRequires: automake
+BuildRequires: brotli-devel
+BuildRequires: coreutils
 BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: pkgconf
-BuildRequires: openssl-devel
+BuildRequires: krb5-devel
+BuildRequires: libidn2-devel
 BuildRequires: libnghttp2-devel
-BuildRequires: zlib-devel
-BuildRequires: python3
+%if %{with http3}
+BuildRequires: libnghttp3-devel
+%endif
+BuildRequires: libpsl-devel
+BuildRequires: libssh-devel
+BuildRequires: libtool
 BuildRequires: libzstd-devel
-BuildRequires: pkgconfig(libpsl)
-BuildRequires: pkgconfig(libssh)
-BuildRequires: pkgconfig(libbrotlidec)
-BuildRequires: pkgconfig(libnghttp3)
-BuildRequires: pkgconfig(libngtcp2)
-BuildRequires: pkgconfig(libngtcp2_crypto_ossl)
-BuildRequires: pkgconfig(libidn2)
-BuildRequires: patchelf
-Requires: libcurl%{?_isa} = %{version}-%{release}
+BuildRequires: make
+%if %{with http3}
+BuildRequires: ngtcp2-crypto-ossl-devel
+%endif
+BuildRequires: openldap-devel
+BuildRequires: openssh-clients
+BuildRequires: openssh-server
+BuildRequires: openssl
+BuildRequires: openssl-devel
+%if %{with openssl_engine_support} && 0%{?oreon} >= 41
+BuildRequires:  openssl-devel-engine
+%endif
+BuildRequires: perl-interpreter
+BuildRequires: pkgconfig
+BuildRequires: python-unversioned-command
+BuildRequires: python3-devel
+BuildRequires: sed
+BuildRequires: zlib-devel
+
+# For gpg verification of source tarball
+BuildRequires: gnupg2
+
+# needed for generation of shell completions
+BuildRequires: perl(Getopt::Long)
+BuildRequires: perl(Pod::Usage)
+BuildRequires: perl(strict)
+BuildRequires: perl(warnings)
+
+# needed for test1560 to succeed
+BuildRequires: glibc-langpack-en
+
+# gnutls-serv is used by the upstream test-suite
+BuildRequires: gnutls-utils
+
+# hostname(1) is used by the test-suite but it is missing in armv7hl buildroot
+BuildRequires: hostname
+
+# nghttpx (an HTTP/2 proxy) is used by the upstream test-suite
+BuildRequires: nghttp2
+
+# perl modules used in the test suite
+BuildRequires: perl(B)
+BuildRequires: perl(base)
+BuildRequires: perl(constant)
+BuildRequires: perl(Cwd)
+BuildRequires: perl(Digest::MD5)
+BuildRequires: perl(Digest::SHA)
+BuildRequires: perl(Exporter)
+BuildRequires: perl(File::Basename)
+BuildRequires: perl(File::Copy)
+BuildRequires: perl(File::Spec)
+BuildRequires: perl(I18N::Langinfo)
+BuildRequires: perl(IPC::Open2)
+BuildRequires: perl(List::Util)
+BuildRequires: perl(Memoize)
+BuildRequires: perl(MIME::Base64)
+BuildRequires: perl(POSIX)
+BuildRequires: perl(Storable)
+BuildRequires: perl(Time::HiRes)
+BuildRequires: perl(Time::Local)
+BuildRequires: perl(vars)
+
+# needed for upstream test 1451
+BuildRequires: python3-impacket
+
+# The test-suite runs automatically through valgrind if valgrind is available
+# on the system.  By not installing valgrind into mock's chroot, we disable
+# this feature for production builds on architectures where valgrind is known
+# to be less reliable, in order to avoid unnecessary build failures (see RHBZ
+# #810992, #816175, and #886891).  Nevertheless developers are free to install
+# valgrind manually to improve test coverage on any architecture.
+%ifarch x86_64
+BuildRequires: valgrind
+%endif
+
+# stunnel is used by upstream tests but it does not seem to work reliably
+# on aarch64/s390x and occasionally breaks some tests (mainly 1561 and 1562)
+%ifnarch aarch64 s390x
+BuildRequires: stunnel
+BuildRequires:  oreon-rpm-macros
+%endif
+
+# using an older version of libcurl could result in CURLE_UNKNOWN_OPTION
+Requires: libcurl%{?_isa} >= %{version}-%{release}
+
+# Define OPENSSL_NO_ENGINE to avoid inclusion of <openssl/engine.h>
+%if %{without openssl_engine_support}
+%global _preprocessor_defines %{?_preprocessor_defines} -DOPENSSL_NO_ENGINE
+%endif
+
+# require at least the version of libnghttp2 that we were built against,
+# to ensure that we have the necessary symbols available (#2144277)
+%global libnghttp2_version %(pkg-config --modversion libnghttp2 2>/dev/null || echo 0)
+
+# require at least the version of libnghttp3 that we were built against,
+# to ensure that we have the necessary symbols available
+%global libnghttp3_version %(pkg-config --modversion libnghttp3 2>/dev/null || echo 0)
+
+# require at least the version of libpsl that we were built against,
+# to ensure that we have the necessary symbols available (#1631804)
+%global libpsl_version %(pkg-config --modversion libpsl 2>/dev/null || echo 0)
+
+# require at least the version of libssh that we were built against,
+# to ensure that we have the necessary symbols available (#525002, #642796)
+%global libssh_version %(pkg-config --modversion libssh 2>/dev/null || echo 0)
+
+# require at least the version of ngtcp2 that we were built against,
+# to ensure that we have the necessary symbols available
+%global ngtcp2_version %(pkg-config --modversion libngtcp2 2>/dev/null || echo 0)
+
+# require at least the version of openssl-libs that we were built against,
+# to ensure that we have the necessary symbols available (#1462184, #1462211)
+# (we need to translate 4.0.0-beta1 -> 4.0.0~beta1 though)
+%global openssl_version %({ pkg-config --modversion openssl 2>/dev/null || echo 0;} | sed 's|-|~|')
+
+# require at least the version of libzstd that we were built against,
+# to ensure that we have the necessary symbols available
+%global libzstd_version %(pkg-config --modversion libzstd 2>/dev/null || echo 0)
 
 %description
-curl is a command line tool for transferring data with URL syntax.
+curl is a command line tool for transferring data with URL syntax, supporting
+FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, LDAP, LDAPS, FILE, IMAP,
+SMTP, POP3 and RTSP.  curl supports SSL certificates, HTTP POST, HTTP PUT, FTP
+uploading, HTTP form based upload, proxies, cookies, user+password
+authentication (Basic, Digest, NTLM, Negotiate, kerberos...), file transfer
+resume, proxy tunneling and a busload of other useful tricks.
 
 %package -n libcurl
-Summary: Library for transferring data with URL syntax
-Requires: ca-certificates
+Summary: A library for getting files from web servers
+Requires: libnghttp2%{?_isa} >= %{libnghttp2_version}
+%if %{with http3}
+Requires: libnghttp3%{?_isa} >= %{libnghttp3_version}
+%endif
+Requires: libpsl%{?_isa} >= %{libpsl_version}
+Requires: libssh%{?_isa} >= %{libssh_version}
+%if %{with http3}
+Requires: ngtcp2%{?_isa} >= %{ngtcp2_version}
+%endif
+Requires: openssl-libs%{?_isa} >= 1:%{openssl_version}
+Provides: libcurl-full = %{version}-%{release}
+Provides: libcurl-full%{?_isa} = %{version}-%{release}
+Requires: libzstd%{?_isa} >= %{libzstd_version}
 
 %description -n libcurl
-libcurl is a client-side URL transfer library.
+libcurl is a free and easy-to-use client-side URL transfer library, supporting
+FTP, FTPS, HTTP, HTTPS, SCP, SFTP, TFTP, TELNET, DICT, LDAP, LDAPS, FILE, IMAP,
+SMTP, POP3 and RTSP. libcurl supports SSL certificates, HTTP POST, HTTP PUT,
+FTP uploading, HTTP form based upload, proxies, cookies, user+password
+authentication (Basic, Digest, NTLM, Negotiate, Kerberos4), file transfer
+resume, http proxy tunneling and more.
 
 %package -n libcurl-devel
-Summary: Development files for libcurl
+Summary: Files needed for building applications with libcurl
 Requires: libcurl%{?_isa} = %{version}-%{release}
-Requires: pkgconf
-Obsoletes: curl-devel < 8.23.0-5
+
+Provides: curl-devel = %{version}-%{release}
+Provides: curl-devel%{?_isa} = %{version}-%{release}
+Obsoletes: curl-devel < %{version}-%{release}
 
 %description -n libcurl-devel
-Headers, pkg-config file, and documentation for developing with libcurl.
+The libcurl-devel package includes header files and libraries necessary for
+developing programs which use the libcurl library. It contains the API
+documentation of the library, too.
+
+%package -n libcurl-minimal
+Summary: Conservatively configured build of libcurl for minimal installations
+Requires: libnghttp2%{?_isa} >= %{libnghttp2_version}
+Requires: openssl-libs%{?_isa} >= 1:%{openssl_version}
+Provides: libcurl = %{version}-%{release}
+Provides: libcurl%{?_isa} = %{version}-%{release}
+Conflicts: libcurl%{?_isa}
+RemovePathPostfixes: .minimal
+# needed for RemovePathPostfixes to work with shared libraries
+%undefine __brp_ldconfig
+
+%description -n libcurl-minimal
+This is a replacement of the 'libcurl' package for minimal installations.  It
+comes with a limited set of features compared to the 'libcurl' package.  On the
+other hand, the package is smaller and requires fewer run-time dependencies to
+be installed.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+%autosetup -n %{name}-%{version_no_tilde} -p1
+
+# disable test 1801
+# <https://github.com/bagder/curl/commit/21e82bd6#commitcomment-12226582>
+printf "1801\n" >>tests/data/DISABLED
+
+printf "1085\n" >>tests/data/DISABLED
+
+# test 303: raise timeout from 8s to 20s so it doesn't expire during TLS
+# handshake under valgrind
+%ifarch x86_64
+sed -e 's|-m 8|-m 20|' -i tests/data/test303
+%endif
+
+%ifarch s390x
+# SFTP/SCP tests fail due to libssh port-setting bug on big-endian
+# ("Could not set remote port")
+printf "582\n600\n601\n602\n603\n604\n605\n606\n607\n608\n" >>tests/data/DISABLED
+printf "609\n610\n611\n612\n613\n614\n615\n616\n617\n618\n" >>tests/data/DISABLED
+printf "619\n620\n621\n622\n623\n624\n625\n626\n627\n628\n" >>tests/data/DISABLED
+printf "629\n630\n631\n633\n634\n635\n636\n637\n638\n639\n" >>tests/data/DISABLED
+printf "640\n641\n642\n656\n664\n665\n" >>tests/data/DISABLED
+printf "1446\n1459\n1583\n1725\n2004\n2007\n" >>tests/data/DISABLED
+printf "3021\n3022\n" >>tests/data/DISABLED
+%endif
+
+# test3026: avoid pthread_create() failure due to resource exhaustion on i386
+%ifarch %{ix86}
+sed -e 's|NUM_THREADS 1000$|NUM_THREADS 256|' \
+    -i tests/libtest/lib3026.c
+%endif
+
+# adapt test 323 for updated OpenSSL
+sed -e 's|^35$|35,52|' -i tests/data/test323
+
+# use localhost6 instead of ip6-localhost in the curl test-suite
+(
+    # avoid glob expansion in the trace output of `bash -x`
+    { set +x; } 2>/dev/null
+    cmd="sed -e 's|ip6-localhost|localhost6|' -i tests/data/test[0-9]*"
+    printf "+ %s\n" "$cmd" >&2
+    eval "$cmd"
+)
+
+# avoid unnecessary arch-dependent line in the processed file
+sed -e '/# Used in @libdir@/d' \
+    -i curl-config.in
 
 %build
-%oreon_configure \
-  --disable-static \
-  --with-openssl \
-  --with-ca-bundle=%{_sysconfdir}/pki/tls/certs/ca-bundle.crt \
-  --with-ca-fallback \
-  --with-nghttp2 \
-  --with-zlib \
-  --with-zstd \
-  --disable-ldap \
-  --disable-ldaps \
-  --disable-manual \
-  --with-libpsl \
-  --without-libssh2 \
-  --with-libssh \
-  --with-brotli \
-  --with-libidn2 \
-  --with-ngtcp2 \
-  --with-nghttp3
-%oreon_make
+# regenerate the configure script and Makefile.in files
+autoreconf -fiv
+
+mkdir build-{full,minimal}
+export common_configure_opts="          \
+    --cache-file=../config.cache        \
+    --disable-manual                    \
+    --disable-static                    \
+    --enable-hsts                       \
+    --enable-ipv6                       \
+    --enable-symbol-hiding              \
+    --enable-threaded-resolver          \
+    --with-gssapi                       \
+    --with-libidn2                      \
+    --with-nghttp2                      \
+    --with-ssl --with-ca-bundle=%{_sysconfdir}/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
+    --with-zsh-functions-dir"
+
+%global _configure ../configure
+
+# configure minimal build
+(
+    cd build-minimal
+    %configure $common_configure_opts   \
+        --disable-dict                  \
+        --disable-gopher                \
+        --disable-imap                  \
+        --disable-ldap                  \
+        --disable-ldaps                 \
+        --disable-mqtt                  \
+        --disable-ntlm                  \
+        --disable-pop3                  \
+        --disable-rtsp                  \
+        --disable-smb                   \
+        --disable-smtp                  \
+        --disable-telnet                \
+        --disable-tftp                  \
+        --disable-tls-srp               \
+        --disable-websockets            \
+        --without-brotli                \
+        --without-libpsl                \
+        --without-libssh                \
+        --without-nghttp3               \
+        --without-ngtcp2                \
+        --without-zstd
+)
+
+# configure full build
+(
+    cd build-full
+    %configure $common_configure_opts   \
+        --enable-dict                   \
+        --enable-gopher                 \
+        --enable-imap                   \
+        --enable-ldap                   \
+        --enable-ldaps                  \
+        --enable-mqtt                   \
+        --enable-ntlm                   \
+        --enable-pop3                   \
+        --enable-rtsp                   \
+        --enable-smb                    \
+        --enable-smtp                   \
+        --enable-telnet                 \
+        --enable-tftp                   \
+        --enable-tls-srp                \
+        --enable-websockets             \
+        --with-brotli                   \
+        --with-libpsl                   \
+        --with-libssh                   \
+        --with-zstd                     \
+%if %{with http3}
+        --with-nghttp3                  \
+        --with-ngtcp2                   \
+%endif
+)
+
+# avoid using rpath
+sed -e 's/^runpath_var=.*/runpath_var=/' \
+    -e 's/^hardcode_libdir_flag_spec=".*"$/hardcode_libdir_flag_spec=""/' \
+    -i build-{full,minimal}/libtool
+
+%make_build V=1 -C build-minimal
+%make_build V=1 -C build-full
+
+%check
+# compile upstream test-cases
+%make_build V=1 -C build-minimal/tests
+%make_build V=1 -C build-full/tests
+
+# relax crypto policy for the test-suite to make it pass again (#1610888)
+export OPENSSL_SYSTEM_CIPHERS_OVERRIDE=XXX
+export OPENSSL_CONF=
+
+# prevent valgrind from being extremely slow (#1662656)
+unset DEBUGINFOD_URLS
+
+# run the upstream test-suite for both curl-minimal and curl-full
+for size in minimal full; do (
+    cd build-${size}
+
+    # we have to override LD_LIBRARY_PATH because we eliminated rpath
+    export LD_LIBRARY_PATH="${PWD}/lib/.libs"
+
+    # tests that must run in serial to avoid intermittent failures under parallel execution
+    serial_tests="766 1399 2402 2404 2500 2502 3300 3301"
+    serial_excludes=$(for t in $serial_tests; do printf ' !%s' "$t"; done)
+    # run the bulk of tests in parallel, excluding serial ones
+    # cap at 64 jobs to avoid overwhelming system resources on high-CPU machines
+    test_jobs=$(( %{_smp_build_ncpus} * 7 ))
+    [ $test_jobs -gt 64 ] && test_jobs=64
+    TFLAGS="-v -j${test_jobs}${serial_excludes}" make test-nonflaky
+    # run serial tests one at a time
+    TFLAGS="-v ${serial_tests}" make test-nonflaky
+)
+done
+
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
+# install and rename the library that will be packaged as libcurl-minimal
+%make_install -C build-minimal/lib
+rm -f ${RPM_BUILD_ROOT}%{_libdir}/libcurl.{la,so}
+for i in ${RPM_BUILD_ROOT}%{_libdir}/*; do
+    mv -v $i $i.minimal
 done
-find %{buildroot} -name '*.la' -delete
+
+# install libcurl.m4
+install -d $RPM_BUILD_ROOT%{_datadir}/aclocal
+install -m 644 docs/libcurl/libcurl.m4 $RPM_BUILD_ROOT%{_datadir}/aclocal
+
+# install the executable and library that will be packaged as curl and libcurl
+cd build-full
+%make_install
+
+# do not install /usr/share/fish/completions/curl.fish which is also installed
+# by fish-3.0.2-1.module_f31+3716+57207597 and would trigger a conflict
+rm -rf ${RPM_BUILD_ROOT}%{_datadir}/fish
+
+rm -f ${RPM_BUILD_ROOT}%{_libdir}/libcurl.la
+
+# do not install bundled wcurl utility
+# it is provided by the wcurl package
+rm -f ${RPM_BUILD_ROOT}%{_bindir}/wcurl
+rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 
 %ldconfig_scriptlets -n libcurl
 
+%ldconfig_scriptlets -n libcurl-minimal
+
 %files
-%license COPYING
+%doc CHANGES.md
+%doc README
+%doc docs/BUGS.md
+%doc docs/DISTROS.md
+%doc docs/FAQ.md
+%doc docs/FEATURES.md
+%doc docs/KNOWN_BUGS.md
+%doc docs/TODO.md
+%doc docs/TheArtOfHttpScripting.md
 %{_bindir}/curl
-%{_bindir}/wcurl
 %{_mandir}/man1/curl.1*
-%{_mandir}/man1/wcurl.1*
+%{_datadir}/zsh
 
 %files -n libcurl
 %license COPYING
 %{_libdir}/libcurl.so.4
-%{_libdir}/libcurl.so.4.*
+%{_libdir}/libcurl.so.4.[0-9].[0-9]
 
 %files -n libcurl-devel
-%{_bindir}/curl-config
-%{_includedir}/curl/
-%{_libdir}/libcurl.so
-%{_libdir}/pkgconfig/libcurl.pc
-%{_datadir}/aclocal/libcurl.m4
+%doc docs/examples/*.c docs/examples/Makefile.example docs/INTERNALS.md
+%doc docs/CONTRIBUTE.md docs/libcurl/ABI.md
+%{_bindir}/curl-config*
+%{_includedir}/curl
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/*.pc
 %{_mandir}/man1/curl-config.1*
 %{_mandir}/man3/*
+%{_datadir}/aclocal/libcurl.m4
+
+%files -n libcurl-minimal
+%license COPYING
+%{_libdir}/libcurl.so.4.minimal
+%{_libdir}/libcurl.so.4.[0-9].[0-9].minimal
+

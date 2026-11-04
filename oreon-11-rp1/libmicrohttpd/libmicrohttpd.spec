@@ -1,56 +1,114 @@
-%global source0_hash df324fcd0834175dab07483133902d9774a605bfa298025f69883288fd20a8c7
+%global source0_hash 04bfe8ef75db7d629a33de767599765cecadc56274a39822d5d081030d577685
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+Name:           libmicrohttpd
+Version:        1.0.10
+Release:        1%{?dist}
+Epoch:          1
+Summary:        Lightweight library for embedding a webserver in applications
 
-Name: libmicrohttpd
-Version: 1.0.2
-Release: 1%{?dist}
-Summary: Embedded HTTP server library
-License: LGPL-2.1-or-later
-URL: https://www.gnu.org/software/libmicrohttpd/
-Source0: https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-%{version}.tar.gz
+# * COPYING says that some main sources are only under LGPL-2.1-or-later
+#   and the rest is dual licensed under LGPL-2.1-or-later OR GPL-2.0-or-later WITH eCos-exception-2.0.
+# * Some docs are under GFDL-1.3-no-invariants-or-later.
+# * Tests and some parts of the build system are under other licenses but they are NOT shipped.
+License:        LGPL-2.1-or-later AND (LGPL-2.1-or-later OR GPL-2.0-or-later WITH eCos-exception-2.0) AND GFDL-1.3-no-invariants-or-later
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: patchelf
-BuildRequires: gnutls-devel
+URL:            http://www.gnu.org/software/libmicrohttpd/
+Source0:        https://mirrors.kernel.org/gnu/libmicrohttpd/libmicrohttpd-%{version}.tar.gz
+
+BuildRequires:  libtool
+BuildRequires:  texinfo
+BuildRequires:  gnutls-devel
+BuildRequires:  doxygen graphviz
+BuildRequires:  make
+BuildRequires:  oreon-rpm-macros
+Requires(post): info
+Requires(preun): info
 
 %description
-Embedded HTTP server library
+GNU libmicrohttpd is a small C library that is supposed to make it
+easy to run an HTTP server as part of another application.
+Key features that distinguish libmicrohttpd from other projects are:
+
+* C library: fast and small
+* API is simple, expressive and fully reentrant
+* Implementation is http 1.1 compliant
+* HTTP server can listen on multiple ports
+* Support for IPv6
+* Support for incremental processing of POST data
+* Creates binary of only 25k (for now)
+* Three different threading models
 
 %package devel
-Summary: Embedded HTTP server library
-Requires: libmicrohttpd%{?_isa} = %{version}-%{release}
+Summary:        Development files for libmicrohttpd
+Requires:       %{name} = %{epoch}:%{version}-%{release}
 
 %description devel
-Embedded HTTP server library
+Development files for libmicrohttpd
+
+%package doc
+Summary:        Documentation for libmicrohttpd
+Requires:       %{name} = %{epoch}:%{version}-%{release}
+BuildArch:      noarch
+
+%description doc
+Doxygen documentation for libmicrohttpd and some example source code
 
 %prep
 %oreon_sha256
-%autosetup -n libmicrohttpd-1.0.2 -p1
+
+%autosetup -p1
 
 %build
-%oreon_configure --disable-static --with-gnutls --disable-examples
-%oreon_make
+%configure --disable-static --with-gnutls --enable-https=yes
+%make_build
+make -C doc/doxygen full
+
+%check
+%make_build check
 
 %install
-%oreon_make_install
+%make_install
+
 rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+rm -f %{buildroot}%{_infodir}/dir
+rm -f %{buildroot}%{_bindir}/demo
 
-%files -f %{_builddir}/%{name}.files
+# Install some examples in /usr/share/doc/libmicrohttpd-doc/examples
+mkdir examples
+install -m 644 src/examples/*.c examples
+install -m 644 doc/examples/*.c examples
+
+cp -R doc/doxygen/html html
+
+%post doc
+/sbin/install-info %{_infodir}/libmicrohttpd.info.gz %{_infodir}/dir || :
+/sbin/install-info %{_infodir}/libmicrohttpd-tutorial.info.gz %{_infodir}/dir || :
+
+%preun doc
+if [ $1 = 0 ] ; then
+/sbin/install-info --delete %{_infodir}/libmicrohttpd.info.gz %{_infodir}/dir || :
+/sbin/install-info --delete %{_infodir}/libmicrohttpd-tutorial.info.gz %{_infodir}/dir || :
+fi
+
+%files
+%doc README NEWS
 %license COPYING
+%{_libdir}/libmicrohttpd.so.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_includedir}/microhttpd.h
+%{_libdir}/libmicrohttpd.so
+%{_libdir}/pkgconfig/libmicrohttpd.pc
+
+%files doc
+%{_mandir}/man3/libmicrohttpd.3.gz
+%{_infodir}/libmicrohttpd.info.*
+%{_infodir}/libmicrohttpd-tutorial.info.*
+%{_infodir}/libmicrohttpd_performance_data.png.gz
+%doc AUTHORS README ChangeLog
+%doc examples
+%doc html
+

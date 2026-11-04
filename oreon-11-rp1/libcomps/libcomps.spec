@@ -1,86 +1,125 @@
 %global source0_hash c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-%global py3_sitearch %{_libdir}/python%(python3 -c 'import sys;print("%d.%d"%sys.version_info[:2])' 2>/dev/null)/site-packages
+%define __cmake_in_source_build 1
 
-Name: libcomps
-Version: 0.1.24
-Release: 6%{?dist}
-Summary: Comps XML library
-License: GPL-2.0-or-later
-URL: https://github.com/rpm-software-management/libcomps
-Source0: https://github.com/rpm-software-management/libcomps/archive/refs/tags/%{version}.tar.gz
+Name:           libcomps
+Version:        0.1.24
+Release:        1%{?dist}
+Summary:        Comps XML file manipulation library
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: gcc-c++
-BuildRequires: glibc-devel
-BuildRequires: cmake
-BuildRequires: ninja-build
-BuildRequires: pkgconf
-BuildRequires: expat-devel
-BuildRequires: libxml2-devel
-BuildRequires: zlib-devel
-BuildRequires: python3-devel
-BuildRequires: python3-setuptools
-BuildRequires: patchelf
+License:        GPL-2.0-or-later
+URL:            https://github.com/rpm-software-management/libcomps
+Source0:        https://github.com/rpm-software-management/libcomps/archive/%{version}/libcomps-%{version}.tar.gz
+
+BuildRequires:  gcc-c++
+BuildRequires:  cmake >= 3.10
+BuildRequires:  gcc
+BuildRequires:  libxml2-devel
+BuildRequires:  check-devel
+BuildRequires:  expat-devel
+BuildRequires:  zlib-devel
 
 %description
-libcomps reads and writes comps XML.
+Libcomps is library for structure-like manipulation with content of
+comps XML files. Supports read/write XML file, structure(s) modification.
 
 %package devel
-Summary: Comps XML library
-Requires: libcomps%{?_isa} = %{version}-%{release}
+Summary:        Development files for libcomps library
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-libcomps reads and writes comps XML.
+Development files for libcomps library.
 
-%package -n python3-libcomps
-Summary: Python 3 bindings for libcomps
-Requires: libcomps%{?_isa} = %{version}-%{release}
+%package doc
+Summary:        Documentation files for libcomps library
+Requires:       %{name} = %{version}-%{release}
+BuildArch:      noarch
+BuildRequires:  doxygen
 
-%description -n python3-libcomps
-Python 3 bindings for the libcomps library.
+%description doc
+Documentation files for libcomps library.
+
+%package -n python-%{name}-doc
+Summary:        Documentation files for python bindings libcomps library
+Requires:       %{name} = %{version}-%{release}
+BuildArch:      noarch
+BuildRequires:  python3-sphinx
+
+
+%description -n python-%{name}-doc
+Documentation files for python bindings libcomps library.
+
+%package -n python3-%{name}
+Summary:        Python 3 bindings for libcomps library
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  make
+BuildRequires:  oreon-rpm-macros
+%{?python_provide:%python_provide python3-%{name}}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Obsoletes:      platform-python-%{name} < %{version}-%{release}
+
+%description -n python3-%{name}
+Python3 bindings for libcomps library.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%autosetup -p1 -n %{name}-%{version}
+
+mkdir build-py3
+mkdir build-doc
 
 %build
-cd libcomps
-%oreon_cmake \
-  -DCMAKE_SKIP_RPATH=ON \
-  -DENABLE_TESTS=OFF \
-  -DENABLE_DOCS=OFF \
-  -DBUILD_LIBCOMPS_SHARED=ON
-%oreon_cmake_build
+pushd build-py3
+  %cmake ../libcomps/
+  %cmake_build
+popd
+
+pushd build-doc
+  %cmake ../libcomps/
+  %cmake_build -t docs
+  %cmake_build -t pydocs
+popd
 
 %install
-cd libcomps
-%oreon_cmake_install
-rm -f %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
+pushd build-py3
+  %cmake_install
+popd
 
+%check
+pushd build-py3
+  %cmake_build -t test
+  %cmake_build -t pytest
+popd
+
+%if %{undefined ldconfig_scriptlets}
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+%else
 %ldconfig_scriptlets
+%endif
 
 %files
 %license COPYING
-%{_libdir}/libcomps.so.0
+%doc README.md
+%{_libdir}/%{name}.so.*
 
 %files devel
-%{_includedir}/libcomps/
-%{_libdir}/libcomps.so
-%{_libdir}/pkgconfig/libcomps.pc
+%{_libdir}/%{name}.so
+%{_libdir}/pkgconfig/%{name}.pc
+%{_includedir}/%{name}/
 
-%files -n python3-libcomps
-%{py3_sitearch}/libcomps/
-%{py3_sitearch}/libcomps-%{version}-py*.egg-info/
+%files doc
+%doc build-doc/docs/libcomps-doc/html
+
+%files -n python-%{name}-doc
+%doc build-doc/src/python/docs/html
+
+%files -n python3-%{name}
+%{python3_sitearch}/%{name}/
+%{python3_sitearch}/%{name}-%{version}-py%{python3_version}.egg-info
+

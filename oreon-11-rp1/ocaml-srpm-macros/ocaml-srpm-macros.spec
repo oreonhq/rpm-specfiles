@@ -1,28 +1,49 @@
-%global source0_hash bdf8d36a4d932e974095890774ef15b1831d91c4e16afac3914399bf38824e0d
-%global debug_package %{nil}
 
-Name: ocaml-srpm-macros
-Version: 11
-Release: 2%{?dist}
-Summary: OCaml architecture macros
-License: GPL-2.0-or-later
-URL: https://ocaml.org/
-BuildArch: noarch
-Source0: macros.ocaml-srpm
+%global oreon_bootstrap %{nil}
+%bcond bootstrap 0
+%oreon_bootstrap
+# OCaml has a bytecode backend that works on anything with a C
+# compiler, and a native code backend available on a subset of
+# architectures.  A further subset of architectures support native
+# dynamic linking.
+#
+# This package contains a file needed to define some RPM macros
+# which are required before any SRPM is built.
+#
 
-BuildRequires: oreon-rpm-macros
+Name:           ocaml-srpm-macros
+Version:        11
+Release:        1%{?dist}
+
+Summary:        OCaml architecture macros
+License:        GPL-2.0-or-later
+
+BuildArch:      noarch
+
+Source0:        macros.ocaml-srpm
+
+# NB. This package MUST NOT Require anything (except for dependencies
+# that RPM itself generates).
 
 %description
-Architecture macros RPM needs before an OCaml SRPM is built. This package does not require the OCaml compiler.
+This package contains macros needed by RPM in order to build
+SRPMS.  It does not pull in any other OCaml dependencies.
+
 
 %prep
 %oreon_sha256
 
+
+
 %build
 
+
 %install
-mkdir -p %{buildroot}%{_rpmmacrodir}
-install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.ocaml-srpm
+mkdir -p $RPM_BUILD_ROOT%{rpmmacrodir}
+install -p -m 0644 %{SOURCE0} $RPM_BUILD_ROOT%{rpmmacrodir}/macros.ocaml-srpm
+
 
 %files
-%{_rpmmacrodir}/macros.ocaml-srpm
+%{rpmmacrodir}/macros.ocaml-srpm
+
+

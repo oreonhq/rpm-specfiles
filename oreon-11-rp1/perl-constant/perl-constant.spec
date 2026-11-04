@@ -14,7 +14,7 @@ Release:        1%{?dist}
 Summary:        Perl pragma to declare constants
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/constant
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/constant-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/constant-1.27.tar.gz
 # Update to 1.33
 Patch0:        constant-1.33-update.patch
 BuildArch:      noarch
@@ -33,10 +33,12 @@ BuildRequires:  perl(warnings::register)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(utf8)
 BuildRequires:  perl(warnings)
+%if %{with perl_constant_enables_optional_test} && !%{defined perl_bootstrap}
 # Optional tests:
 BuildRequires:  perl(Test::Pod) >= 1.14
 BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 BuildRequires:  oreon-rpm-macros
+%endif
 Requires:       perl(Carp)
 
 %description

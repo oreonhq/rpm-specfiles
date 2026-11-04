@@ -1,65 +1,132 @@
-%global source0_hash 7ebcb3c29a92f3ceafe79a7a48a5c45677e9e004bbeec5742ac0bbb00560b7a2
+%global source0_hash 37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global modname dateutil
 
-Name: python-dateutil
-Version: 3.0.0
-Release: 1%{?dist}
-Summary: Date utilities for Python
-License: Apache-2.0 OR BSD-3-Clause
-URL: https://github.com/dateutil/dateutil
-Source0: https://files.pythonhosted.org/packages/0e/df/f15f80383f152452d8985b36d95cb8751f901a3e0ff4cd27f7e118f168e2/python_dateutil-%{version}.tar.gz
+Name:           python-%{modname}
+Version:        2.9.0.post0
+Release:        1%{?dist}
+Epoch:          1
+Summary:        Powerful extensions to the standard datetime module
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: oreon-rpm-macros-python
-BuildRequires: python3-devel
-BuildRequires: python3-build
-BuildRequires: python3-installer
-BuildRequires: python3-setuptools
-BuildRequires: python3-setuptools_scm
-BuildRequires: python3-wheel
+# According to the LICENSE file:
+# - Apache-2.0 applies to all contributions after 2017-12-01, as well as
+#   all contributions that have been re-licensed.
+# - BSD-3-Clause applies to all code, even that also covered by Apache-2.0
+License:        (Apache-2.0 AND BSD-3-Clause) OR BSD-3-Clause
 
-Provides: python3-dateutil = %{version}-%{release}
-Requires: python3
+URL:            https://github.com/dateutil/dateutil
+Source0:        https://files.pythonhosted.org/packages/source/p/python-dateutil/python-dateutil-%{version}.tar.gz
 
-%description
-python-dateutil is a date utility library.
+Provides:  deprecated()
+
+# Drop redundant BuildRequires for python3-wheel
+Patch:        fix-pytest-9.1-parametrize.patch
+
+# Allow setuptools-scm dependency greater than v8.0
+Patch:        fix-pytest-9.1-parametrize.patch
+
+# Fix dateutil module import in sphinx config file
+Patch:        fix-pytest-9.1-parametrize.patch
+
+# Remove ctypes mock from sphinx config file
+# seems to be incompatible with Python 3.15
+# https://github.com/dateutil/dateutil/issues/1472
+Patch:        fix-pytest-9.1-parametrize.patch
+
+# Fix test compatibility with pytest >= 9.1 (non-Collection parametrize)
+# https://github.com/dateutil/dateutil/pull/1523
+Patch:        fix-pytest-9.1-parametrize.patch
+
+# when bootstrapping dateutil-freezegun, we cannot run tests
+%bcond tests 1
+
+BuildArch:      noarch
+BuildRequires:  python3-devel
+
+# For docs
+BuildRequires:  make
+BuildRequires:  python3dist(sphinx)
+BuildRequires:  python3dist(sphinx-rtd-theme)
+
+# For tests
+%if %{with tests}
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(freezegun)
+BuildRequires:  python3dist(hypothesis)
+BuildRequires:  python3dist(six)
+BuildRequires:  oreon-rpm-macros
+%endif
+
+%global _description \
+The dateutil module provides powerful extensions to the standard datetime\
+module available in Python.
+
+# generated BuildRequires, refresh with: orbscli plan bake
+BuildRequires: (python3dist(tomli) if python3-devel < 3.11)
+BuildRequires: pyproject-rpm-macros
+BuildRequires: python3dist(packaging)
+BuildRequires: python3dist(pip) >= 19
+BuildRequires: python3dist(setuptools)
+BuildRequires: python3dist(setuptools-scm) < 8~~
+BuildRequires: python3dist(six) >= 1.5
+BuildRequires: python3dist(wheel)
+
+%description %_description
+
+
+%package -n python3-%{modname}
+Summary:        %summary
+Requires:       tzdata
+
+Provides:  deprecated()
+
+%description -n python3-%{modname}  %_description
+
+
+%package doc
+Summary: API documentation for python-dateutil
+%description doc
+This package contains %{summary}.
+
 
 %prep
 %oreon_sha256
-%autosetup -n python_dateutil-%{version} -p1
-sed -i 's/setuptools_scm<8.0/setuptools_scm>=8/' pyproject.toml
+
+%autosetup -p1 -n %{name}-%{version}
+
+iconv --from=ISO-8859-1 --to=UTF-8 NEWS > NEWS.new
+mv NEWS.new NEWS
+
 
 %build
-export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-%oreon_py_build
+%pyproject_wheel
+make -C docs html
+
 
 %install
-%oreon_py_install
-%oreon_py_save_files dateutil
-python3 - %{oreon_py_files} << 'PY'
-import os
-import sys
-from pathlib import Path
-p = Path(sys.argv[1])
-lines = p.read_text().splitlines()
-seen = set(lines)
-extra = []
-for line in lines:
-    path = line.strip().strip('"')
-    if not path.endswith(".py"):
-        continue
-    if "/lib/python3." not in path and "/lib64/python3." not in path:
-        continue
-    glob = os.path.dirname(path) + "/__pycache__/*"
-    if glob not in seen:
-        seen.add(glob)
-        extra.append(glob)
-text = "\n".join(lines + extra)
-p.write_text(text + ("\n" if text else ""))
-PY
+%pyproject_install
+%pyproject_save_files %{modname} -l
 
-%files -f %{oreon_py_files}
+
+%check
+%pyproject_check_import -e dateutil.tz.win -e dateutil.tzwin
+
+%if %{with tests}
+# test_tzlocal_local_time_trim_colon fails in Copr only :/
+%pytest -W ignore::pytest.PytestUnknownMarkWarning \
+  %{?copr_projectname:-k "not test_tzlocal_local_time_trim_colon"}
+%endif
+
+
+%files -n python3-%{modname} -f %{pyproject_files}
+%doc NEWS README.rst
+
+
+%files doc
 %license LICENSE
+%doc docs/_build/html
+
+

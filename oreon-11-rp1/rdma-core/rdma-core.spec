@@ -38,8 +38,12 @@ BuildRequires: valgrind-devel
 BuildRequires: systemd
 BuildRequires: systemd-devel
 %define with_pyverbs %{?_with_pyverbs: 1} %{?!_with_pyverbs: %{?!_without_pyverbs: 1} %{?_without_pyverbs: 0}}
+%if %{with_pyverbs}
 BuildRequires: python3-devel
 BuildRequires: python3-Cython
+%else
+BuildRequires: python3
+%endif
 
 BuildRequires: python3-docutils
 
@@ -62,7 +66,6 @@ BuildRequires: ninja-build
 
 # pandoc was introduced in FC25, Centos8
 BuildRequires: pandoc
-BuildRequires:  oreon-rpm-macros
 
 # self obsoletes to remove i686 multilib package when updating to F34
 Obsoletes: rdma-core < %{version}-%{release}
@@ -98,6 +101,14 @@ Provides: infiniband-diags-devel = %{version}-%{release}
 Obsoletes: infiniband-diags-devel < %{version}-%{release}
 Provides: libibmad-devel = %{version}-%{release}
 Obsoletes: libibmad-devel < %{version}-%{release}
+%if %{with_static}
+# Since our pkg-config files include private references to these packages they
+# need to have their .pc files installed too, even for dynamic linking, or
+# pkg-config breaks.
+BuildRequires: pkgconfig(libnl-3.0)
+BuildRequires: pkgconfig(libnl-route-3.0)
+BuildRequires:  oreon-rpm-macros
+%endif
 
 %description devel
 RDMA core development libraries and headers.
@@ -251,6 +262,7 @@ Requires: libibverbs%{?_isa} = %{version}-%{release}
 In conjunction with the kernel ib_srp driver, srp_daemon allows you to
 discover and use SCSI devices via the SCSI RDMA Protocol over InfiniBand.
 
+%if %{with_pyverbs}
 %package -n python3-pyverbs
 Summary: Python3 API over IB verbs
 Requires: %{name}-common = %{version}-%{release}
@@ -261,6 +273,7 @@ Requires: libibverbs%{?_isa} = %{version}-%{release}
 %description -n python3-pyverbs
 Pyverbs is a Cython-based Python API over libibverbs, providing an
 easy, object-oriented access to IB verbs.
+%endif
 
 %prep
 %oreon_sha256
@@ -272,6 +285,10 @@ easy, object-oriented access to IB verbs.
 %build
 
 # New RPM defines _rundir, usually as /run
+%if 0%{?_rundir:1}
+%else
+%define _rundir /var/run
+%endif
 
 %{!?EXTRA_CMAKE_FLAGS: %define EXTRA_CMAKE_FLAGS %{nil}}
 
@@ -295,10 +312,19 @@ easy, object-oriented access to IB verbs.
          -DCMAKE_INSTALL_UDEV_RULESDIR:PATH=%{_udevrulesdir} \
          -DCMAKE_INSTALL_PERLDIR:PATH=%{perl_vendorlib} \
          -DENABLE_IBDIAGS_COMPAT:BOOL=True \
+%if %{with_static}
+         -DENABLE_STATIC=1 \
+%endif
          %{EXTRA_CMAKE_FLAGS} \
+%if %{defined __python3}
          -DPYTHON_EXECUTABLE:PATH=%{__python3} \
          -DCMAKE_INSTALL_PYTHON_ARCH_LIB:PATH=%{python3_sitearch} \
+%endif
+%if %{with_pyverbs}
          -DNO_PYVERBS=0
+%else
+	 -DNO_PYVERBS=1
+%endif
 %make_jobs
 
 %install
@@ -425,6 +451,9 @@ fi
 %dir %{_includedir}/rdma
 %{_includedir}/infiniband/*
 %{_includedir}/rdma/*
+%if %{with_static}
+%{_libdir}/lib*.a
+%endif
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*.pc
 %{_mandir}/man3/efadv*
@@ -653,8 +682,10 @@ fi
 %{_mandir}/man8/srp_daemon.8*
 %doc %{_pkgdocdir}/ibsrpdm.md
 
+%if %{with_pyverbs}
 %files -n python3-pyverbs
 %{python3_sitearch}/pyverbs
 %dir %{_pkgdocdir}/tests
 %{_pkgdocdir}/tests/*.py
+%endif
 

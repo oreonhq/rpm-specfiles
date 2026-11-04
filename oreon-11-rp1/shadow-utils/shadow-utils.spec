@@ -1,30 +1,78 @@
-%global source0_hash 623be9429f64fa2165bfc5957c6a642ec309c5cf23c0d53855c99f7591922297
+%global source0_hash 239781632846db3b01901028147fb4b57e6f2d5330ca63ce104b21d9b3e6031f
+%global source5_hash edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: Utilities for managing accounts and shadow password files
 Name: shadow-utils
-Version: 4.20.3
-Release: 3%{?dist}
-Summary: Account and shadow password tools
+Version:        4.20.0
+Release:        1%{?dist}
+Epoch: 2
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: https://github.com/shadow-maint/shadow
-Source0: https://github.com/shadow-maint/shadow/releases/download/%{version}/shadow-%{version}.tar.xz
-Source1: shadow-%{version}.tar.xz.asc
-Source2: shadow-key.gpg
-Source3: shadow-utils.useradd
-Source4: shadow-utils.login.defs
-Source5: shadow-bsd.txt
-Source6: gpl-2.0.txt
+Source0:        https://github.com/shadow-maint/shadow/releases/download/%{version}/shadow-%{version}.tar.xz
+Source1:        shadow-4.20.0.tar.xz.asc
+Source2: shadow-utils.useradd
+Source3: shadow-utils.login.defs
+Source4: shadow-bsd.txt
+Source5:        https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
+Source6: shadow-utils.HOME_MODE.xml
 Source7: passwd.pamd
-Patch0: shadow-4.20.3-fcaps-rpm.patch
-Patch1: shadow-4.20.3-install-man.patch
 
-Provides: shadow = %{version}-%{release}
-Provides: passwd = %{version}-%{release}
+### Globals ###
+%global includesubiddir %{_includedir}/shadow
+# Fail linking if there are undefined symbols.
+%global _ld_strict_symbol_defs 1
+
+### Patches ###
+# https://github.com/shadow-maint/shadow/pull/1772
+# Force C locale before regcomp() and regexec()
+# Fixes bogus invalid hash results in Turkish
+Patch:        0001-Force-C-locale-before-regcomp-regexec.patch
+
+### Dependencies ###
+Requires: audit-libs >= 1.6.5
+Requires: libselinux >= 1.25.2-1
+Requires: pam-libs
+Requires: setup
+
+### Build Dependencies ###
+BuildRequires: audit-libs-devel >= 1.6.5
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: bison
+BuildRequires: docbook-dtds
+BuildRequires: docbook-style-xsl
+BuildRequires: flex
+BuildRequires: gcc
+BuildRequires: gettext-devel
+BuildRequires: git
+BuildRequires: itstool
+BuildRequires: libacl-devel
+BuildRequires: libattr-devel
+BuildRequires: libcmocka-devel
+BuildRequires: libeconf-devel
+BuildRequires: libselinux-devel >= 1.25.2-1
+BuildRequires: libsemanage-devel
+BuildRequires: libtool
+BuildRequires: libxcrypt-devel
+BuildRequires: libxslt
+BuildRequires: make
+BuildRequires: pam
+BuildRequires: pam-devel
+BuildRequires:  oreon-rpm-macros
+
+### Provides ###
+Provides: shadow = %{epoch}:%{version}-%{release}
+Provides: passwd = 0.80-18
+Obsoletes: passwd <= 0.80-19
+
 %if "%{_sbindir}" == "%{_bindir}"
+# Compat symlinks for Requires in other packages.
+# We rely on filesystem to create the symlinks for us.
 Requires: filesystem(unmerged-sbin-symlinks)
+Provides: /usr/sbin/adduser
 Provides: /usr/sbin/useradd
 Provides: /usr/sbin/userdel
 Provides: /usr/sbin/usermod
@@ -32,153 +80,200 @@ Provides: /usr/sbin/groupadd
 Provides: /usr/sbin/groupdel
 Provides: /usr/sbin/groupmod
 %endif
-Requires: pam%{?_isa} >= 1.7.1
-Requires: audit%{?_isa} >= 4.2.1
-Requires: libselinux%{?_isa} >= 3.11
-Requires: setup
-
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: gettext
-BuildRequires: pkgconf
-BuildRequires: pam-devel
-BuildRequires: audit-libs-devel >= 4.2.1
-BuildRequires: libselinux-devel >= 3.11
-BuildRequires: libsemanage-devel
-BuildRequires: libxcrypt-devel >= 4.5.2
-BuildRequires: libacl-devel >= 2.3.2
-BuildRequires: libattr-devel
-BuildRequires: libeconf-devel
-BuildRequires: systemd-devel
-BuildRequires: kernel-headers
 
 %description
-shadow-utils manages user accounts, groups, and shadow passwords.
+The shadow-utils package includes the necessary programs for
+converting UNIX password files to the shadow password format, plus
+programs for managing user and group accounts. The pwconv command
+converts passwords to the shadow password format. The pwunconv command
+unconverts shadow passwords and generates a passwd file (a standard
+UNIX password file). The pwck command checks the integrity of password
+and shadow files. The useradd, userdel, and usermod commands are used
+for managing user accounts. The groupadd, groupdel, and groupmod
+commands are used for managing group accounts.
 
+
+### Subpackages ###
 %package subid
-Summary: Library for subordinate uid and gid ranges
+Summary: A library to manage subordinate uid and gid ranges
 
 %description subid
-libsubid and getsubids manage subordinate id ranges.
+Utility library that provides a way to manage subid ranges.
+
 
 %package subid-devel
-Summary: Development files for libsubid
-Requires: shadow-utils-subid%{?_isa} = %{version}-%{release}
+Summary: Development package for shadow-utils-subid
+Requires: shadow-utils-subid = %{epoch}:%{version}-%{release}
 
 %description subid-devel
-Headers and the libsubid link library.
+Development files for shadow-utils-subid.
 
 %prep
 %oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n shadow-%{version} -p1
-cp -a %{SOURCE5} %{SOURCE6} .
+echo '%{source5_hash}  %{SOURCE5}' | sha256sum -c -
+
+%autosetup -p 1 -S git -n shadow-4.20.0
+
+iconv -f ISO88591 -t utf-8  doc/HOWTO > doc/HOWTO.utf8
+cp -f doc/HOWTO.utf8 doc/HOWTO
+
+cp -a %{SOURCE4} %{SOURCE5} .
+cp -a %{SOURCE6} man/login.defs.d/HOME_MODE.xml
 
 %build
-%oreon_configure \
-  --disable-static \
-  --enable-shadowgrp \
-  --enable-subordinate-ids \
-  --with-audit \
-  --with-libpam \
-  --with-selinux \
-  --with-acl \
-  --with-btrfs \
-  --with-bcrypt \
-  --with-yescrypt \
-  --with-fcaps \
-  --with-group-name-max-length=32 \
-  --without-su \
-  --without-libbsd
-%oreon_make
+autoreconf
+%configure \
+        --disable-account-tools-setuid \
+        --enable-logind=no \
+        --enable-man \
+        --enable-shadowgrp \
+        --enable-shared \
+        --with-audit \
+        --with-bcrypt \
+        --with-group-name-max-length=32 \
+        --with-libpam \
+        --with-selinux \
+        --with-sha-crypt \
+        --with-yescrypt \
+        --without-libbsd \
+        --without-libcrack \
+        --without-nscd \
+        --without-sssd
+%make_build
+
+%check
+make check
 
 %install
-%oreon_make_install
-install -d -m 755 %{buildroot}%{_sysconfdir}/default
-install -p -m 0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/login.defs
-install -p -m 0600 %{SOURCE3} %{buildroot}%{_sysconfdir}/default/useradd
-install -d -m 755 %{buildroot}%{_sysconfdir}/pam.d
-install -m 644 %{SOURCE7} %{buildroot}%{_sysconfdir}/pam.d/passwd
-ln -sf useradd %{buildroot}%{_sbindir}/adduser
-ln -sf useradd.8 %{buildroot}%{_mandir}/man8/adduser.8
+%make_install gnulocaledir=$RPM_BUILD_ROOT%{_datadir}/locale MKINSTALLDIRS=`pwd`/mkinstalldirs
+install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/default
+install -p -c -m 0644 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/login.defs
+install -p -c -m 0600 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/default/useradd
+install -d -m 755 $RPM_BUILD_ROOT%{_pam_confdir}
+install -m 644 %{SOURCE7} $RPM_BUILD_ROOT%{_pam_confdir}/chpasswd
+install -m 644 %{SOURCE7} $RPM_BUILD_ROOT%{_pam_confdir}/newusers
+install -m 644 %{SOURCE7} $RPM_BUILD_ROOT%{_pam_confdir}/passwd
+
+
+ln -s useradd $RPM_BUILD_ROOT%{_sbindir}/adduser
+ln -s useradd.8 $RPM_BUILD_ROOT%{_mandir}/man8/adduser.8
+for subdir in $RPM_BUILD_ROOT%{_mandir}/{??,??_??,??_??.*}/man* ; do
+        test -d $subdir && test -e $subdir/useradd.8 && echo ".so man8/useradd.8" > $subdir/adduser.8
+done
 
 %if "%{_sbindir}" == "%{_bindir}"
-if [ -d %{buildroot}/usr/sbin ]; then
-  find %{buildroot}/usr/sbin -mindepth 1 -maxdepth 1 -exec mv -t %{buildroot}%{_bindir}/ {} +
-fi
+# The installation script doesn't actually use the configured paths :(
+mv -v $RPM_BUILD_ROOT/usr/sbin/* $RPM_BUILD_ROOT%{_bindir}/
 %endif
 
-for t in chfn chsh login nologin; do
-  rm -f %{buildroot}%{_bindir}/$t %{buildroot}%{_sbindir}/$t
-  find %{buildroot}%{_mandir} -type f -name "$t.*" -delete
-  find %{buildroot}%{_mandir} -type l -name "$t.*" -delete
-  rm -f %{buildroot}%{_sysconfdir}/pam.d/$t
+# Remove binaries we don't use.
+rm $RPM_BUILD_ROOT%{_bindir}/chfn
+rm $RPM_BUILD_ROOT%{_bindir}/chsh
+rm $RPM_BUILD_ROOT%{_bindir}/login
+rm $RPM_BUILD_ROOT%{_bindir}/su
+rm $RPM_BUILD_ROOT%{_bindir}/faillog
+rm $RPM_BUILD_ROOT%{_sbindir}/nologin
+rm $RPM_BUILD_ROOT%{_mandir}/man1/chfn.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man1/chfn.*
+rm $RPM_BUILD_ROOT%{_mandir}/man1/chsh.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man1/chsh.*
+rm $RPM_BUILD_ROOT%{_mandir}/man1/login.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man1/login.*
+rm $RPM_BUILD_ROOT%{_mandir}/man1/su.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man1/su.*
+rm $RPM_BUILD_ROOT%{_mandir}/man5/passwd.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man5/passwd.*
+rm $RPM_BUILD_ROOT%{_mandir}/man8/nologin.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man8/nologin.*
+rm $RPM_BUILD_ROOT%{_mandir}/man3/getspnam.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man3/getspnam.*
+rm $RPM_BUILD_ROOT%{_mandir}/man5/faillog.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man5/faillog.*
+rm $RPM_BUILD_ROOT%{_mandir}/man8/faillog.*
+rm $RPM_BUILD_ROOT%{_mandir}/*/man8/faillog.*
+
+# Remove PAM service files we don't use.
+rm $RPM_BUILD_ROOT%{_pam_confdir}/chfn
+rm $RPM_BUILD_ROOT%{_pam_confdir}/chsh
+rm $RPM_BUILD_ROOT%{_pam_confdir}/login
+rm $RPM_BUILD_ROOT%{_pam_confdir}/su
+
+find $RPM_BUILD_ROOT%{_mandir} -depth -type d -empty -delete
+%find_lang shadow
+for dir in $(ls -1d $RPM_BUILD_ROOT%{_mandir}/{??,??_??}) ; do
+    dir=$(echo $dir | sed -e "s|^$RPM_BUILD_ROOT||")
+    lang=$(basename $dir)
+#   echo "%%lang($lang) $dir" >> shadow.lang
+#   echo "%%lang($lang) $dir/man*" >> shadow.lang
+    echo "%%lang($lang) $dir/man*/*" >> shadow.lang
 done
-rm -f %{buildroot}%{_sysconfdir}/pam.d/su %{buildroot}%{_sysconfdir}/pam.d/groupmems
-find %{buildroot} -name '*.la' -delete
-find %{buildroot}%{_mandir} -depth -type d -empty -delete
 
-main=%{_builddir}/shadow-utils.files
-sub=%{_builddir}/shadow-utils-subid.files
-dev=%{_builddir}/shadow-utils-subid-devel.files
-: > "$main"
-: > "$sub"
-: > "$dev"
-find %{buildroot} \( -type f -o -type l \) | sort | while read -r path; do
-  rel=${path#%{buildroot}}
-  case "$rel" in
-    %{_sysconfdir}/login.defs|%{_sysconfdir}/default/useradd|%{_sysconfdir}/pam.d/passwd)
-      continue
-      ;;
-  esac
-  case "$rel" in
-    %{_mandir}/*)
-      dir=$(dirname "$rel")
-      base=$(basename "$rel")
-      base=${base%.gz}
-      line="$dir/${base}*"
-      ;;
-    *)
-      line="$rel"
-      ;;
-  esac
-  case "$rel" in
-    %{_includedir}/shadow/*|%{_libdir}/libsubid.so)
-      echo "$line" >> "$dev"
-      ;;
-    %{_libdir}/libsubid.so.*|%{_bindir}/getsubids|%{_bindir}/newuidmap|%{_bindir}/newgidmap|%{_mandir}/*/getsubids.1*|%{_mandir}/*/newuidmap.1*|%{_mandir}/*/newgidmap.1*)
-      echo "$line" >> "$sub"
-      ;;
-    *)
-      echo "$line" >> "$main"
-      ;;
-  esac
-done
-sort -u -o "$main" "$main"
-sort -u -o "$sub" "$sub"
-sort -u -o "$dev" "$dev"
-sed -i \
-  -e 's|^%{_bindir}/chage$|%attr(4755,root,root) %{_bindir}/chage|' \
-  -e 's|^%{_bindir}/gpasswd$|%attr(4755,root,root) %{_bindir}/gpasswd|' \
-  -e 's|^%{_bindir}/newgrp$|%attr(4755,root,root) %{_bindir}/newgrp|' \
-  -e 's|^%{_bindir}/passwd$|%attr(4755,root,root) %{_bindir}/passwd|' \
-  "$main"
-sed -i \
-  -e 's|^%{_bindir}/newuidmap$|%attr(0755,root,root) %caps(cap_setuid=ep) %{_bindir}/newuidmap|' \
-  -e 's|^%{_bindir}/newgidmap$|%attr(0755,root,root) %caps(cap_setgid=ep) %{_bindir}/newgidmap|' \
-  "$sub"
+# Move header files to its own folder
+echo $(ls)
+mkdir -p $RPM_BUILD_ROOT/%{includesubiddir}
+install -m 644 libsubid/subid.h $RPM_BUILD_ROOT/%{includesubiddir}/
 
-%files -f %{_builddir}/shadow-utils.files
-%license COPYING shadow-bsd.txt gpl-2.0.txt
-%dir %{_sysconfdir}/default
-%config(noreplace) %{_sysconfdir}/login.defs
-%config(noreplace) %attr(0600,root,root) %{_sysconfdir}/default/useradd
-%config(noreplace) %{_sysconfdir}/pam.d/passwd
+# Remove .la and .a files created by libsubid
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libsubid.la
+rm -f $RPM_BUILD_ROOT/%{_libdir}/libsubid.a
 
-%files subid -f %{_builddir}/shadow-utils-subid.files
-%license COPYING
+%files -f shadow.lang
+%doc NEWS doc/HOWTO README
+%license gpl-2.0.txt shadow-bsd.txt
+%attr(0644,root,root)   %config(noreplace) %{_sysconfdir}/login.defs
+%attr(0644,root,root)   %config(noreplace) %{_sysconfdir}/default/useradd
+%config(noreplace) %{_pam_confdir}/chpasswd
+%config(noreplace) %{_pam_confdir}/newusers
+%config(noreplace) %{_pam_confdir}/passwd
+%{_bindir}/sg
+%attr(4755,root,root) %{_bindir}/chage
+%attr(4755,root,root) %{_bindir}/gpasswd
+%attr(4755,root,root) %{_bindir}/newgrp
+%attr(0755,root,root) %caps(cap_setgid=ep) %{_bindir}/newgidmap
+%attr(0755,root,root) %caps(cap_setuid=ep) %{_bindir}/newuidmap
+%attr(4755,root,root) %{_bindir}/passwd
+%{_sbindir}/adduser
+%attr(0755,root,root)   %{_sbindir}/user*
+%attr(0755,root,root)   %{_sbindir}/group*
+%{_sbindir}/grpck
+%{_sbindir}/pwck
+%{_sbindir}/*conv
+%{_sbindir}/chpasswd
+%{_sbindir}/chgpasswd
+%{_sbindir}/newusers
+%{_sbindir}/vipw
+%{_sbindir}/vigr
+%{_mandir}/man1/chage.1*
+%{_mandir}/man1/gpasswd.1*
+%{_mandir}/man1/sg.1*
+%{_mandir}/man1/newgrp.1*
+%{_mandir}/man1/newgidmap.1*
+%{_mandir}/man1/newuidmap.1*
+%{_mandir}/man1/passwd.*
+%{_mandir}/man3/shadow.3*
+%{_mandir}/man5/shadow.5*
+%{_mandir}/man5/login.defs.5*
+%{_mandir}/man5/gshadow.5*
+%{_mandir}/man5/subuid.5*
+%{_mandir}/man5/subgid.5*
+%{_mandir}/man8/adduser.8*
+%{_mandir}/man8/group*.8*
+%{_mandir}/man8/user*.8*
+%{_mandir}/man8/pwck.8*
+%{_mandir}/man8/grpck.8*
+%{_mandir}/man8/chpasswd.8*
+%{_mandir}/man8/chgpasswd.8*
+%{_mandir}/man8/newusers.8*
+%{_mandir}/man8/*conv.8*
+%{_mandir}/man8/vipw.8*
+%{_mandir}/man8/vigr.8*
 
-%files subid-devel -f %{_builddir}/shadow-utils-subid-devel.files
+%files subid
+%{_libdir}/libsubid.so.*
+%{_bindir}/getsubids
+%{_mandir}/man1/getsubids.1*
+
+%files subid-devel
+%{includesubiddir}/subid.h
+%{_libdir}/libsubid.so
+

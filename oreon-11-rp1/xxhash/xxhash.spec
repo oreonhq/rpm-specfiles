@@ -1,80 +1,123 @@
-%global source0_hash aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
+%global source0_hash 5738270935e7c3d38a79b3adf7c9692566ce7895a25f67de43ad52ab504acd32
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+Name:		xxhash
+Version:        0.8.4
+Release:        1%{?dist}
+Summary:	Extremely fast hash algorithm
 
-Name: xxhash
-Version: 0.8.3
-Release: 2%{?dist}
-Summary: Extremely fast hash algorithm
-License: BSD-2-Clause AND GPL-2.0-or-later
-URL: https://www.xxhash.com/
-Source0: https://github.com/Cyan4973/xxHash/archive/refs/tags/v%{version}.tar.gz
+#		The source for the library (xxhash.c and xxhash.h) is BSD-2-Clause
+#		The source for the command line tool (xxhsum.c) is GPL-2.0-or-later
+License:	BSD-2-Clause AND GPL-2.0-or-later
+URL:		https://www.xxhash.com/
+Source0:        https://github.com/Cyan4973/xxHash/archive/v%{version}/xxhash-%{version}.tar.gz
 
-Requires: xxhash-libs%{?_isa} = %{version}-%{release}
-
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: make
+BuildRequires:	make
+BuildRequires:	gcc
+BuildRequires:	doxygen
+BuildRequires:  oreon-rpm-macros
 
 %description
-xxHash is a fast non-cryptographic hash. This package ships xxhsum.
+xxHash is an Extremely fast Hash algorithm, running at RAM speed
+limits. It successfully completes the SMHasher test suite which
+evaluates collision, dispersion and randomness qualities of hash
+functions. Code is highly portable, and hashes are identical on all
+platforms (little / big endian).
 
 %package libs
-Summary: xxHash library
+Summary:	Extremely fast hash algorithm - library
+License:	BSD-2-Clause
 
 %description libs
-Shared xxHash library.
+xxHash is an Extremely fast Hash algorithm, running at RAM speed
+limits. It successfully completes the SMHasher test suite which
+evaluates collision, dispersion and randomness qualities of hash
+functions. Code is highly portable, and hashes are identical on all
+platforms (little / big endian).
 
 %package devel
-Summary: Development files for xxHash
-Requires: xxhash-libs%{?_isa} = %{version}-%{release}
+Summary:	Extremely fast hash algorithm - development files
+License:	BSD-2-Clause
+Requires:	%{name}-libs%{?_isa} = %{version}-%{release}
+# By setting XXH_INLINE_ALL, xxhash may be used as a header-only library.
+# Dependent packages that use xxhash this way must BR this virtual Provide:
+Provides:	%{name}-static = %{version}-%{release}
 
 %description devel
-Headers and development library for xxHash.
+Development files for the xxhash library
+
+%package doc
+Summary:	Extremely fast hash algorithm - documentation files
+License:	BSD-2-Clause
+BuildArch:	noarch
+
+%description doc
+Documentation files for the xxhash library
 
 %prep
 %oreon_sha256
-%autosetup -n xxHash-%{version} -p1
+
+%setup -q -n xxHash-%{version}
 
 %build
-%ifarch x86_64
+# Enable runtime detection of sse2/avx2/avx512 on intel architectures
+%ifarch %{ix86} x86_64
 %global dispatch 1
+# Some distribution variants build with -march=x86-64-v3.
+# See xxh_x86dispatch.c.
+%global moreflags_dispatch -DXXH_X86DISPATCH_ALLOW_AVX
 %else
 %global dispatch 0
+%global moreflags_dispatch %{nil}
 %endif
-%oreon_make MOREFLAGS="%{_oreon_cflags} %{_oreon_ldflags}" DISPATCH=%{dispatch} LIBXXH_DISPATCH=%{dispatch}
+
+%make_build \
+    MOREFLAGS="%{__global_cflags} %{?__global_ldflags} %{moreflags_dispatch}" \
+    DISPATCH=%{dispatch} \
+    LIBXXH_DISPATCH=%{dispatch}
+doxygen
 
 %install
-%oreon_make_install PREFIX=%{_prefix} LIBDIR=%{_libdir} DISPATCH=%{dispatch} LIBXXH_DISPATCH=%{dispatch}
-rm -f %{buildroot}%{_libdir}/libxxhash.a
+%make_install \
+    PREFIX=%{_prefix} \
+    LIBDIR=%{_libdir} \
+    MOREFLAGS="%{__global_cflags} %{?__global_ldflags} %{moreflags_dispatch}" \
+    DISPATCH=%{dispatch} \
+    LIBXXH_DISPATCH=%{dispatch}
+rm %{buildroot}/%{_libdir}/libxxhash.a
 
-%ldconfig_scriptlets libs
+%check
+make check \
+    MOREFLAGS="%{__global_cflags} %{?__global_ldflags} %{moreflags_dispatch}" \
+    DISPATCH=%{dispatch} \
+    LIBXXH_DISPATCH=%{dispatch}
+make test-xxhsum-c \
+    MOREFLAGS="%{__global_cflags} %{?__global_ldflags} %{moreflags_dispatch}" \
+    DISPATCH=%{dispatch} \
+    LIBXXH_DISPATCH=%{dispatch}
 
 %files
+%{_bindir}/xxh*sum
+%{_mandir}/man1/xxh*sum.1*
 %license cli/COPYING
-%{_bindir}/xxhsum
-%{_bindir}/xxh32sum
-%{_bindir}/xxh64sum
-%{_bindir}/xxh128sum
-%{_bindir}/xxh3sum
-%{_mandir}/man1/xxhsum.1*
-%{_mandir}/man1/xxh32sum.1*
-%{_mandir}/man1/xxh64sum.1*
-%{_mandir}/man1/xxh128sum.1*
-%{_mandir}/man1/xxh3sum.1*
+%doc cli/README.md
 
 %files libs
+%{_libdir}/libxxhash.so.*
 %license LICENSE
-%{_libdir}/libxxhash.so.0
-%{_libdir}/libxxhash.so.0.*
+%doc README.md
 
 %files devel
 %{_includedir}/xxhash.h
 %{_includedir}/xxh3.h
-%if %{dispatch}
+%if %{?dispatch}
 %{_includedir}/xxh_x86dispatch.h
 %endif
 %{_libdir}/libxxhash.so
 %{_libdir}/pkgconfig/libxxhash.pc
+
+%files doc
+%doc doxygen/html
+

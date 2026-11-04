@@ -1,46 +1,162 @@
-%global source0_hash e3e2c2e3abf37898138db5b6c1d1dc35c9160c5978be7947d2c741705251d445
+%global source0_hash 168aa363278351b89af56684448f525a5bce5079d0b6842bd910fdd3f1646887
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global api_version 1.18
 
-Name: automake
-Version: 1.19
-Release: 1%{?dist}
-Summary: Generate GNU-standard Makefile.in files
-License: GPL-2.0-or-later
-URL: https://www.gnu.org/software/automake/
-Source0: https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.xz
-Source1: automake-%{version}.tar.xz.sig
-Source2: automake-key.asc
-BuildArch: noarch
+# redhat-rpm-config sets CFLAGS, CXXFLAGS and LDFLAGS, but not
+# OBJCFLAGS. This means that Obj-C tests will be compiled without hardening
+# flags, and then fail when linked with the hardened linker flags.
+# We therefore need to disable build flags to be able to test automake itself.
+# Since the automake executables are all interpreted languages, they aren't
+# compiled and so the build flags only affect the tests anyway.
+%undefine _auto_set_build_flags
 
-Requires: autoconf
-Requires: perl
+# do not mangle shebang in files which are part of bootstraped project
+%global __brp_mangle_shebangs_exclude_from /usr/share/automake-%{api_version}
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: autoconf
-BuildRequires: perl
-BuildRequires: make
-BuildRequires: gnupg2
+# run "make check" by default
+%bcond_without check
+# Run optional test
+%bcond_without automake_enables_optional_test
+
+Summary:    A GNU tool for automatically creating Makefiles
+Name:       automake
+# Any bump here requires libtool rebuild, rhbz#1813010
+Version:        1.18.1
+Release:        1%{?dist}
+
+# To help future rebase, the following licenses were seen in the following files/folders:
+# usr/bin/* - GPL-2.0-or-later
+# usr/share/aclocal-1.16/* - FSFULLR
+# usr/share/automake-1.16:
+#   Automake/Getopt.pm - GPL-3.0-or-later
+#   Automake/* - GPL-2.0-or-later
+#   am/* - GPL-2.0-or-later
+#   INSTALL - FSFAP
+#   config.{guess,sub} - GPL-3.0-or-later WITH Autoconf-exception-generic-3.0
+#   texinfo.tex - GPL-3.0-or-later WITH Texinfo-exception
+#   * - GPL-2.0-or-later WITH Autoconf-exception-generic
+# usr/share/doc/automake:
+#   {NEWS,README} - GPL-2.0-or-later
+#   amhello-1.0.tar:
+#     src/Makefile.in - FSFULLRWD
+#     src/* - FSFUL
+#     {Makefile.in,aclocal.m4} - FSFULLRWD
+#     {Makefile.am,configure,configure.ac} - FSFUL
+#     {compile,depcomp,missing} - GPL-2.0-or-later WITH Autoconf-exception-generic
+# usr/share/info:
+#  * - GFDL-1.3-or-later
+# usr/share/man/man1/*: generated from usr/bin/{aclocal,automake} using help2man
+License:    GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception AND GFDL-1.3-or-later AND FSFAP AND FSFUL AND FSFULLR AND FSFULLRWD AND X11 AND LicenseRef-Oreon-Public-Domain
+
+Source0:        ftp://ftp.gnu.org/gnu/automake/automake-%{version}.tar.xz
+
+# ~> downstream
+# which lead to .package_note-automake-1.16.5-3.fc36.x86_64.ld
+# being inserted in build logs, breaking the original grep instruction
+Patch:        fort2.patch
+
+URL:        http://www.gnu.org/software/automake/
+Requires:   autoconf >= 2.65
+
+# requirements not detected automatically (#919810)
+Requires:   perl(Thread::Queue)
+Requires:   perl(threads)
+
+BuildRequires:  autoconf >= 2.65
+BuildRequires:  coreutils
+BuildRequires:  findutils
+BuildRequires:  help2man
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  perl(Thread::Queue)
+BuildRequires:  perl(threads)
+
+BuildArch:  noarch
+
+# for better tests coverage:
+%if %{with check}
+%if %{with automake_enables_optional_test}
+BuildRequires: automake
+BuildRequires: bison
+BuildRequires: cscope
+BuildRequires: dejagnu
+BuildRequires: emacs
+BuildRequires: expect
+BuildRequires: flex
+BuildRequires: gcc-gfortran
+BuildRequires: gettext-devel
+BuildRequires: libtool
+BuildRequires: sharutils
+BuildREquires: texlive-dvips
+BuildRequires: texinfo-tex
+BuildRequires: vala
+BuildRequires: gcc-objc
+BuildRequires: gcc-objc++
+BuildRequires: imake
+BuildRequires: lzip
+BuildRequires: ncompress
+BuildRequires:  oreon-rpm-macros
+%endif
+%endif
+
+# remove bogus Automake perl dependencies and provides
+%global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Automake::
+%global __provides_exclude %{?__provides_exclude:%__provides_exclude|}^perl\\(Automake::
 
 %description
-Automake builds Makefile.in templates from Makefile.am descriptions,
-for use with Autoconf generated configure scripts.
+Automake is a tool for automatically generating `Makefile.in'
+files compliant with the GNU Coding Standards.
+
+You should install Automake if you are developing software and would
+like to use its ability to automatically generate GNU standard
+Makefiles.
+
 
 %prep
 %oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n automake-%{version} -p1
+
+%autosetup -p1
+%if %{with check} && %{with automake_enables_optional_test}
+autoreconf -iv
+%endif
+
 
 %build
-%oreon_configure
-%oreon_make
+# redhat-rpm-config package, which provides this configure macro, will overwrite
+# the config.sub and config.guess files intentionally. The automake maintainer
+# needs to check that those files are provided up to date.
+%configure
+%make_build
+cp m4/acdir/README README.aclocal
+cp contrib/multilib/README README.multilib
+
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_infodir}/dir
-%oreon_filelist
+%make_install
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+
+%check
+# %%global TESTS_FLAGS t/preproc-errmsg t/preproc-basics
+%if %{with check}
+make -k %{?_smp_mflags} check %{?TESTS_FLAGS: TESTS="%{TESTS_FLAGS}"} \
+    || ( cat ./test-suite.log && false )
+%endif
+
+
+%files
+%license COPYING*
+%doc AUTHORS README THANKS NEWS README.aclocal README.multilib
+%doc %{_pkgdocdir}/amhello-1.0.tar.gz
+%exclude %{_infodir}/dir
+%exclude %{_datadir}/aclocal
+%{_bindir}/*
+%{_infodir}/*.info*
+%{_datadir}/automake-%{api_version}
+%{_datadir}/aclocal-%{api_version}
+%{_mandir}/man1/*
+
+

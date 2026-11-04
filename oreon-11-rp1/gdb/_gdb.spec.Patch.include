@@ -1,0 +1,21 @@
+# Check distro name is included in the version output.
+Patch001: gdb-test-show-version.patch
+
+# Update gdb-add-index.sh such that, when the GDB environment
+# variable is not set, the script is smarter than just looking for
+# 'gdb' in the $PATH.
+#
+# The actual search order is now: /usr/bin/gdb.minimal, gdb (in the
+# $PATH), then /usr/libexec/gdb.
+#
+# For the rationale of looking for gdb.minimal see:
+#
+#   https://fedoraproject.org/wiki/Changes/Minimal_GDB_in_buildroot
+#
+#=fedora
+Patch002: gdb-add-index.patch
+
+# Not a backport.  Add a new script which hooks into GDB and suggests
+# RPMs to install when GDB finds an objfile with no debug info.
+Patch003: gdb-rpm-suggestion-script.patch
+

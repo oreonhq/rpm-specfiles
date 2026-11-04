@@ -5,6 +5,12 @@
 %oreon_bootstrap
 %ifarch x86_64
 %global archs %{ix86} x86_64
+%else
+%ifarch %{ix86}
+%global archs %{ix86}
+%else
+%global archs %{_target_cpu}
+%endif
 %endif
 
 %define abs2rel() perl -MFile::Spec -e 'print File::Spec->abs2rel(@ARGV)' %1 %2
@@ -21,7 +27,7 @@ Summary:        C/C++ compiler cache
 # url.cpp/hpp is MIT
 License:        GPL-3.0-or-later AND Apache-2.0 AND BSL-1.0 AND MIT
 URL:            http://ccache.dev/
-Source0:        https://github.com/ccache/ccache/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ccache/ccache/releases/download/v%{version}/ccache-%{version}.tar.gz
 Source1:        %{name}.sh.in
 Source2:        %{name}.csh.in
 

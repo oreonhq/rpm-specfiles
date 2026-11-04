@@ -9,16 +9,18 @@ Version:        3.7
 Release:        1%{?dist}
 Epoch:          1
 License:        GPL-2.0-or-later
-Source0:        https://download.savannah.gnu.org/releases/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.savannah.gnu.org/releases/dmidecode/dmidecode-%{version}.tar.xz
 URL:            https://www.nongnu.org/dmidecode/
 BuildRequires:  gcc make
 BuildRequires:  pkgconfig(bash-completion)
 BuildRequires:  oreon-rpm-macros
 ExclusiveArch:  %{ix86} x86_64 ia64 aarch64 riscv64
 
+%if "%{_sbindir}" == "%{_bindir}"
 # We rely on filesystem to create the compat symlinks for us
 Requires: filesystem(unmerged-sbin-symlinks)
 Provides: /usr/sbin/dmidecode
+%endif
 
 %description
 dmidecode reports information about x86 & ia64 hardware as described in the

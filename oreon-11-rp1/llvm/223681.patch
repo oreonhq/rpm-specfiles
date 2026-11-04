@@ -1,0 +1,27 @@
+From 940f3acbcda4ede472095a2330d1d5febbb6c119 Mon Sep 17 00:00:00 2001
+From: Tulio Magno Quites Machado Filho <tuliom@redhat.com>
+Date: Tue, 15 Sep 2026 09:37:49 -0300
+Subject: [PATCH] [OpenMP][OMPT] Fixes current_address printing on RV64GC
+
+A previous commit increased the number of arguments passed to printf
+in print_possible_return_addresses(addr) but forgot to change the format
+in order to include the new argument.
+
+Fixes: 4e19543b1a85 (FIX some OMPT tests that fail on RISC-V (#156914), 2026-07-24)
+---
+ openmp/runtime/test/ompt/callback.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/openmp/runtime/test/ompt/callback.h b/openmp/runtime/test/ompt/callback.h
+index 689e5455ea604..ab6c56291da23 100644
+--- a/openmp/runtime/test/ompt/callback.h
++++ b/openmp/runtime/test/ompt/callback.h
+@@ -295,7 +295,7 @@ static void print_ids(int level) {
+ // appear (adding 4 more bytes) when the C.NOP is referenced elsewhere (ie.
+ // another branch).
+ #define print_possible_return_addresses(addr)                                  \
+-  printf("%" PRIu64 ": current_address=%p or %p\n",                            \
++  printf("%" PRIu64 ": current_address=%p or %p or %p\n",                      \
+          ompt_get_thread_data()->value, ((char *)addr) - 4,                    \
+          ((char *)addr) - 6, ((char *)addr) - 10)
+ #else

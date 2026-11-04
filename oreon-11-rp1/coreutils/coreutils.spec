@@ -1,38 +1,297 @@
-%global source0_hash a480198559733e9b3da999e90543ac6f888a2caa544d8d664c5a1f17e528e210
+%global source0_hash 394024eda0a5955217ceda9cd1201e65dc8fa3aa29c2951135a49521d57c3cc3
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+Summary: A set of basic GNU tools commonly used in shell scripts
+Name:    coreutils
+Version:        9.11
+Release:        1%{?dist}
+# some used parts of gnulib are under various variants of LGPL
+License: GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
+Url:     https://www.gnu.org/software/coreutils/
+Source0:        https://ftp.gnu.org/gnu/coreutils/coreutils-%{version}.tar.xz
+Source1:        coreutils-9.11.tar.xz.sig
+# From https://savannah.gnu.org/project/release-gpgkeys.php?group=coreutils&download=1
+# which is linked as project keyring on https://savannah.gnu.org/projects/coreutils
+Source2: coreutils-keyring.gpg
 
-Name: coreutils
-Version: 9.12
-Release: 1%{?dist}
-Summary: GNU core utilities
-License: GPL-3.0-or-later
-URL: https://www.gnu.org/software/coreutils/
-Source0: https://ftp.gnu.org/gnu/coreutils/coreutils-9.12.tar.xz
+# Note that supported_utils must NOT include *.single, see below
+Source50:   supported_utils
+Source105:  coreutils-colorls.sh
+Source106:  coreutils-colorls.csh
 
-BuildRequires: oreon-rpm-macros
+# do not make coreutils-single depend on /usr/bin/coreutils
+%global __requires_exclude ^%{_bindir}/coreutils$
+
+# disable the test-lock gnulib test prone to deadlock
+Patch100:        coreutils-8.26-test-lock.patch
+
+# require_selinux_(): use selinuxenabled(8) if available
+Patch101:        coreutils-8.26-selinuxenable.patch
+
+# downstream changes to default DIR_COLORS
+Patch102:        coreutils-8.32-DIR_COLORS.patch
+
+# use python3 in tests
+Patch103:        coreutils-python3.patch
+
+# df --direct
+Patch104:        coreutils-df-direct.patch
+
+# unexpand: fix heap overflows
+# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=b60a159fdc5bfcf9988d3a4cb6f53abe8ad5d35d
+# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=4ade9cf77f6c7b39e3fdc5ce97a778f8e294694c
+Patch200:        coreutils-9.11-unexpand-heap-overflows.patch
+
+# CVE-2026-56391 - uniq: fix read overrun with -w
+# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=d64e35a8a4c0e4608321433e0d84d917e4e36371
+Patch201:        coreutils-9.11-CVE-2026-56391.patch
+
+# tee: fix infinite loop when write returns EAGAIN and short write errors
+# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=0d6fcb99d691d920961938e61c43478566ef626e
+Patch202:        coreutils-9.11-tee-infinite-loop.patch
+
+# (sb) lin18nux/lsb compliance - multibyte functionality patch
+Patch800:        coreutils-i18n.patch
+
+Conflicts: filesystem < 3
+
+# To avoid clobbering installs
+Conflicts: coreutils-single
+
+BuildRequires: attr
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: gcc
-BuildRequires: glibc-devel
+BuildRequires: gettext-devel
+BuildRequires: gmp-devel
+BuildRequires: hostname
+BuildRequires: libacl-devel
+BuildRequires: libattr-devel
+BuildRequires: libcap-devel
+BuildRequires: libselinux-devel
+BuildRequires: libselinux-utils
 BuildRequires: make
+BuildRequires: openssl-devel
+BuildRequires: strace
+BuildRequires: systemd-devel
+BuildRequires: texinfo
+
+# For gpg verification of source tarball
+BuildRequires: gnupg2
+
+# test-only dependencies
+BuildRequires: acl
+BuildRequires: gdb
+BuildRequires: perl-interpreter
+BuildRequires: perl(FileHandle)
+BuildRequires: perl(POSIX)
+BuildRequires: python3
+BuildRequires: tzdata
+%ifarch %valgrind_arches
+BuildRequires: valgrind
+%endif
+
+BuildRequires: perl(Expect)
+BuildRequires: python3-inotify
+
+# needed by i18n test-cases
+BuildRequires: glibc-all-langpacks
+BuildRequires:  oreon-rpm-macros
+
+Requires: %{name}-common = %{version}-%{release}
+
+Provides: coreutils-full = %{version}-%{release}
+Provides: bundled(gnulib)
+Obsoletes: %{name} < 8.24-100
 
 %description
-These are the GNU core utilities. This package is the union of the GNU fileutils, sh-utils, and textutils packages.
+These are the GNU core utilities.  This package is the combination of
+the old GNU fileutils, sh-utils, and textutils packages.
 
-Most of these programs have significant advantages over their Unix counterparts, such as greater speed, additional options, and fewer arbitrary limits.
+%package single
+Summary:  coreutils multicall binary
+Suggests: coreutils-common
+Provides: coreutils = %{version}-%{release}
+Provides: coreutils%{?_isa} = %{version}-%{release}
+Provides: bundled(gnulib)
+# To avoid clobbering installs
+Conflicts: coreutils < 8.24-100
+# Note RPM doesn't support separate buildroots for %files
+# http://rpm.org/ticket/874 so use RemovePathPostfixes
+# (new in rpm 4.13) to support separate file sets.
+RemovePathPostfixes: .single
+%description single
+These are the GNU core utilities,
+packaged as a single multicall binary.
+
+
+%package common
+# yum obsoleting rules explained at:
+Obsoletes: %{name} < 8.24-100
+
+# Gnulib translations are maintained seprately since coreutils 9.6 (#2393892)
+Requires: gnulib-l10n
+
+# info doc refers to "Specifying the Time Zone" from glibc-doc (#959597)
+Suggests: glibc-doc
+
+Summary:  coreutils common optional components
+%description common
+Optional though recommended components,
+including documentation and translations.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+%autosetup -N
+
+# will be regenerated in the build directories
+rm -f src/fs.h
+
+# will be further modified by coreutils-8.32-DIR_COLORS.patch
+sed src/dircolors.hin \
+        -e 's| 00;36$| 01;36|' \
+        > DIR_COLORS
+sed src/dircolors.hin \
+        -e 's| 01;31$| 00;31|' \
+        -e 's| 01;35$| 00;35|' \
+        > DIR_COLORS.lightbgcolor
+
+# git add DIR_COLORS{,.lightbgcolor}
+# git commit -m "clone DIR_COLORS before patching"
+
+# apply all patches
+%autopatch -p1
+
+(echo ">>> Fixing permissions on tests") 2>/dev/null
+find tests -name '*.sh' -perm 0644 -print -exec chmod 0755 '{}' '+'
+(echo "<<< done") 2>/dev/null
+
+# FIXME: Force a newer gettext version to workaround `autoreconf -i` errors
+# with coreutils 9.6 and bundled gettext 0.19.2 from gettext-common-devel.
+sed -i "s/0.19.2/$(rpm -q --queryformat '%%{VERSION}\n' gettext-devel)/" bootstrap.conf configure.ac
+
+
+autoreconf -fiv
 
 %build
-%oreon_configure --without-openssl --without-selinux --without-gmp
-%oreon_make
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -fpic"
+
+# Upstream suggests to build with -Dlint for static analyzers:
+# https://lists.gnu.org/archive/html/coreutils/2018-06/msg00110.html
+# ... and even for production binary RPMs:
+# https://lists.gnu.org/archive/html/bug-gnulib/2020-05/msg00130.html
+# There is currently no measurable performance drop or other known downside.
+CFLAGS="$CFLAGS -Dlint"
+
+# make mknod work again in chroot without /proc being mounted (#1811038)
+export ac_cv_func_lchmod="no"
+
+# needed for out-of-tree build
+%global _configure ../configure
+
+%{expand:%%global optflags %{optflags} -D_GNU_SOURCE=1}
+for type in separate single; do
+  mkdir -p $type && \
+  (cd $type || exit $?
+  if test $type = 'single'; then
+    config_single='--enable-single-binary'
+    config_single="$config_single --without-openssl"  # smaller/slower sha*sum
+    config_single="$config_single --without-libgmp"   #  "  basenc,expr,factor
+  else
+    config_single='--with-openssl'  # faster sha*sum
+  fi
+  %configure $config_single \
+             --cache-file=../config.cache \
+             --enable-install-program=arch \
+             --enable-no-install-program=kill,uptime \
+             --enable-systemd \
+             --enable-manual-url \
+             --with-tty-group \
+             DEFAULT_POSIX2_VERSION=200112 alternative=199209 || :
+  %make_build all V=1
+
+  # make sure that parse-datetime.{c,y} ends up in debuginfo (#1555079)
+  ln -fv ../lib/parse-datetime.{c,y} .
+  )
+done
+
+# Get the list of supported utilities
+cp %SOURCE50 .
+
+%check
+for type in separate single; do
+  test $type = 'single' && subdirs='SUBDIRS=.' # Only check gnulib once
+  (cd $type && make check %{?_smp_mflags} $subdirs)
+done
 
 %install
-%oreon_make_install
-%oreon_filelist
+for type in separate single; do
+  install=install
+  if test $type = 'single'; then
+    subdir=%{_libexecdir}/%{name}; install=install-exec
+  fi
+  (cd $type && make DESTDIR=$RPM_BUILD_ROOT/$subdir $install)
 
-%files -f %{_builddir}/%{name}.files
+%if "%{_sbindir}" != "%{_bindir}"
+  # chroot was in /usr/sbin :
+  mkdir -p $RPM_BUILD_ROOT/$subdir/%_sbindir
+  mv $RPM_BUILD_ROOT/$subdir/{%_bindir,%_sbindir}/chroot
+%endif
+
+  # Move multicall variants to *.single.
+  # RemovePathPostfixes will strip that later.
+  if test $type = 'single'; then
+    for dir in %{_bindir} \
+%if "%{_sbindir}" != "%{_bindir}"
+%{_sbindir} \
+%endif
+%{_libexecdir}/%{name}; do
+      for bin in $RPM_BUILD_ROOT/%{_libexecdir}/%{name}/$dir/*; do
+        basebin=$(basename $bin)
+        mv $bin $RPM_BUILD_ROOT/$dir/$basebin.single
+      done
+    done
+  fi
+done
+
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/profile.d
+install -p -c -m644 DIR_COLORS{,.lightbgcolor} $RPM_BUILD_ROOT%{_sysconfdir}
+install -p -c -m644 %SOURCE105 $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/colorls.sh
+install -p -c -m644 %SOURCE106 $RPM_BUILD_ROOT%{_sysconfdir}/profile.d/colorls.csh
+
+%find_lang %name
+# Add the %%lang(xyz) ownership for the LC_TIME dirs as well...
+grep LC_TIME %name.lang | cut -d'/' -f1-6 | sed -e 's/) /) %%dir /g' >>%name.lang
+
+# (sb) Deal with Installed (but unpackaged) file(s) found
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+
+%files -f supported_utils
+%dir %{_libexecdir}/coreutils
+%{_libexecdir}/coreutils/*.so
+
+# The *.single files are picked up here so they must not be in supported_utils
+%files single
+%{_bindir}/*.single
+%if "%{_sbindir}" != "%{_bindir}"
+%{_sbindir}/chroot.single
+%endif
+%dir %{_libexecdir}/coreutils
+%{_libexecdir}/coreutils/*.so.single
+# duplicate the license because coreutils-common does not need to be installed
+%{!?_licensedir:%global license %%doc}
 %license COPYING
+
+%files common -f %{name}.lang
+%config(noreplace) %{_sysconfdir}/DIR_COLORS*
+%config(noreplace) %{_sysconfdir}/profile.d/*
+%{_infodir}/coreutils*
+%{_mandir}/man*/*
+# The following go to /usr/share/doc/coreutils-common
+%doc ABOUT-NLS NEWS README THANKS TODO
+%license COPYING
+

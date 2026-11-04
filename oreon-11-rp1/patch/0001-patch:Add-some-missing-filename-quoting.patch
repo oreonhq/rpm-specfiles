@@ -1,0 +1,21 @@
+commit aea66268c956bb001ece14c98fd5542f368a6177
+Author: Andreas Gruenbacher <andreas.gruenbacher@gmail.com>
+Date:   Sat Apr 5 17:25:45 2025 +0200
+
+    Add some missing filename quoting
+    
+    * src/patch.c (main): Quote outname.
+
+diff --git a/src/patch.c b/src/patch.c
+index e4d0524..6c5d926 100644
+--- a/src/patch.c
++++ b/src/patch.c
+@@ -616,7 +616,7 @@ main (int argc, char **argv)
+ 		      struct stat outstat;
+ 
+ 		      if (stat_file (outname, &outstat) != 0)
+-			say ("Cannot stat file %s, skipping backup\n", outname);
++			say ("Cannot stat file %s, skipping backup\n", quotearg (outname));
+ 		      else
+ 			output_file (&(struct outfile) { .name = outname },
+ 				     &outstat, nullptr, nullptr,

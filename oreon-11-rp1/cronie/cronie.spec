@@ -14,7 +14,7 @@ Version:        1.7.2
 Release:        1%{?dist}
 License:   GPL-2.0-or-later AND BSD-3-Clause AND BSD-2-Clause AND ISC AND LGPL-2.1-or-later
 URL:       https://github.com/cronie-crond/cronie
-Source0:   https://github.com/cronie-crond/cronie/releases/download/cronie-%{version}/cronie-%{version}.tar.gz
+Source0:        https://github.com/cronie-crond/cronie/releases/download/cronie-%{version}/cronie-%{version}.tar.gz
 Source1:   cronie-tmpfiles.conf
 Source2:   cronie-anacron-tmpfiles.conf
 
@@ -32,11 +32,17 @@ Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
 
 Requires:  dailyjobs
 
+%if %{with selinux}
 Requires:      libselinux >= 2.0.64
 Buildrequires: libselinux-devel >= 2.0.64
+%endif
+%if %{with pam}
 Requires:      pam >= 1.0.1
 Buildrequires: pam-devel >= 1.0.1
+%endif
+%if %{with audit}
 Buildrequires: audit-libs-devel >= 1.4.1
+%endif
 
 BuildRequires:    gcc
 BuildRequires:    systemd
@@ -106,6 +112,9 @@ extra features.
 %make_install DESTMAN=$RPM_BUILD_ROOT%{_mandir}
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/
 mkdir -pm755 $RPM_BUILD_ROOT%{_sysconfdir}/cron.d/
+%if ! %{with pam}
+    rm -f $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/crond
+%endif
 install -m 644 crond.sysconfig $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/crond
 touch $RPM_BUILD_ROOT%{_sysconfdir}/cron.deny
 install -m 644 contrib/anacrontab $RPM_BUILD_ROOT%{_sysconfdir}/anacrontab
@@ -181,7 +190,9 @@ exit 0
 %{_mandir}/man1/crontab.*
 %{_mandir}/man1/cronnext.*
 %dir %{_sysconfdir}/cron.d
+%if %{with pam}
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/pam.d/crond
+%endif
 %config(noreplace) %{_sysconfdir}/sysconfig/crond
 %config(noreplace,missingok) %{_sysconfdir}/cron.deny
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/0hourly

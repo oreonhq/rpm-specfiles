@@ -1,0 +1,54 @@
+commit 4c302306a8208817f017113edbee89c8aeb24b01
+Author: Andreas Gruenbacher <andreas.gruenbacher@gmail.com>
+Date:   Sat Apr 5 17:13:55 2025 +0200
+
+    Reject empty filenames
+    
+    * src/safe.c (safe_xstat): Reject empty pathnames.
+    * tests/bad-filenames: Add a new test.
+    * src/patch.c (main): Don't check if the input file is writable when
+    we're not going to modify it.
+
+diff --git a/src/patch.c b/src/patch.c
+index 6c5d926..91cb646 100644
+--- a/src/patch.c
++++ b/src/patch.c
+@@ -323,7 +323,8 @@ main (int argc, char **argv)
+ 	    }
+ 	}
+ 
+-      if (read_only_behavior != RO_IGNORE
++      if (! skip_rest_of_patch
++	  && read_only_behavior != RO_IGNORE
+ 	  && ! inerrno && ! S_ISLNK (instat.st_mode)
+ 	  && safe_access (inname, W_OK) != 0)
+ 	{
+diff --git a/src/safe.c b/src/safe.c
+index eda9922..065c13b 100644
+--- a/src/safe.c
++++ b/src/safe.c
+@@ -571,6 +571,8 @@ safe_xstat (char *pathname, struct stat *buf, int flags)
+   int dirfd = traverse_path (&pathname, false);
+   if (dirfd == DIRFD_INVALID)
+     return -1;
++  if (! strcmp (pathname, ""))
++    return EINVAL;
+   return fstatat (dirfd, pathname, buf, flags);
+ }
+ 
+diff --git a/tests/bad-filenames b/tests/bad-filenames
+index b663dad..d9f4930 100644
+--- a/tests/bad-filenames
++++ b/tests/bad-filenames
+@@ -200,3 +200,11 @@ No file to patch.  Skipping patch.
+ 1 out of 1 hunk ignored
+ status: 1
+ EOF
++
++# Empty filenames are not allowed:
++
++check 'emit_patch f | patch -r- "" || echo status: $?' <<EOF
++File '' is not a regular file -- refusing to patch
++1 out of 1 hunk ignored
++status: 1
++EOF

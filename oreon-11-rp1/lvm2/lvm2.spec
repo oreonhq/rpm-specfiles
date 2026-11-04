@@ -42,12 +42,14 @@ Version:        2.03.43
 Release:        1%{?dist}
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
-Source0: https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
+Source0:        https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
 Patch1:        0001-pvscan-preserve-preferred-device-name-when-importing.patch
 
 BuildRequires: make
 BuildRequires: gcc
+%if %{enable_testsuite}
 BuildRequires: gcc-c++
+%endif
 BuildRequires: libselinux-devel >= %{libselinux_version}, libsepol-devel
 BuildRequires: libblkid-devel >= %{util_linux_version}
 BuildRequires: xfsprogs-devel
@@ -55,18 +57,26 @@ BuildRequires: ncurses-devel
 BuildRequires: libedit-devel
 BuildRequires: libaio-devel
 BuildRequires: libnvme-devel
+%if %{enable_lockd_dlm}
 BuildRequires: dlm-devel >= %{dlm_version}
+%endif
 BuildRequires: module-init-tools
 BuildRequires: pkgconfig
 BuildRequires: systemd-devel
 BuildRequires: systemd-units
+%if %{enable_lvmdbusd}
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: python3-dbus
 BuildRequires: python3-pyudev
+%endif
+%if %{enable_thin} || %{enable_cache}
 BuildRequires: device-mapper-persistent-data >= %{persistent_data_version}
+%endif
+%if %{enable_lockd_sanlock}
 BuildRequires: sanlock-devel >= %{sanlock_version}
 BuildRequires:  oreon-rpm-macros
+%endif
 Requires: %{name}-libs = %{?epoch}:%{version}-%{release}
 Requires(post): (system-release >= %{system_release_version} if system-release)
 Requires: bash >= %{bash_version}
@@ -74,13 +84,17 @@ Requires(post): systemd-units >= %{systemd_version}
 Requires(preun): systemd-units >= %{systemd_version}
 Requires(postun): systemd-units >= %{systemd_version}
 Requires: module-init-tools
+%if %{enable_thin} || %{enable_cache}
 Requires: device-mapper-persistent-data >= %{persistent_data_version}
+%endif
 Requires: jq
 
+%if "%{_sbindir}" == "%{_bindir}"
 # Compat symlinks for Requires in other packages.
 # We rely on filesystem to create the symlinks for us.
 Requires:       filesystem(unmerged-sbin-symlinks)
 Provides:       /usr/sbin/lvm
+%endif
 
 %description
 LVM2 includes all of the support for handling read/write operations on
@@ -121,16 +135,36 @@ or more physical volumes and creating one or more logical volumes
   --enable-dmeventd \
   --enable-blkid_wiping \
   --with-udevdir=%{_udevdir} --enable-udev_sync \
+%if %{enable_thin}
   --with-thin=internal \
+%endif
+%if %{enable_cache}
   --with-cache=internal \
+%endif
+%if %{enable_lvmpolld}
   --enable-lvmpolld \
+%endif
+%if %{enable_lockd_dlm}
   --enable-lvmlockd-dlm --enable-lvmlockd-dlmcontrol \
+%endif
+%if %{enable_lockd_sanlock}
   --enable-lvmlockd-sanlock \
+%endif
+%if %{enable_lvmdbusd}
   --enable-dbus-service --enable-notify-dbus \
+%endif
+%if %{enable_dmfilemapd}
   --enable-dmfilemapd \
+%endif
+%if %{enable_writecache}
   --with-writecache=internal \
+%endif
+%if %{enable_vdo}
   --with-vdo=internal --with-vdo-format=%{_bindir}/vdoformat \
+%endif
+%if %{enable_integrity}
   --with-integrity=internal \
+%endif
   --with-default-use-devices-file=1 \
   --disable-silent-rules \
   --enable-app-machineid \
@@ -146,7 +180,9 @@ V=1 make install_systemd_units DESTDIR=$RPM_BUILD_ROOT
 V=1 make install_systemd_generators DESTDIR=$RPM_BUILD_ROOT
 V=1 make install_tmpfiles_configuration DESTDIR=$RPM_BUILD_ROOT
 #install -d ${RPM_BUILD_ROOT}%{_sysconfdir}/lvm/devices
+%if %{enable_testsuite}
 %make_install -C test
+%endif
 
 %post
 %systemd_post blk-availability.service lvm2-monitor.service
@@ -157,22 +193,28 @@ if [ "$1" = "1" ] ; then
 	systemctl start lvm2-monitor.service >/dev/null 2>&1 || :
 fi
 
+%if %{enable_lvmpolld}
 %systemd_post lvm2-lvmpolld.socket
 # lvm2-lvmpolld socket is always enabled and started and ready to serve if lvmpolld is used
 # replace direct systemctl calls with systemd rpm macro once this is provided in the macro:
 # http://cgit.freedesktop.org/systemd/systemd/commit/?id=57ab2eabb8f92fad5239c7d4492e9c6e23ee0678
 systemctl enable lvm2-lvmpolld.socket
 systemctl start lvm2-lvmpolld.socket >/dev/null 2>&1 || :
+%endif
 
 %preun
 %systemd_preun blk-availability.service lvm2-monitor.service
 
+%if %{enable_lvmpolld}
 %systemd_preun lvm2-lvmpolld.service lvm2-lvmpolld.socket
+%endif
 
 %postun
 %systemd_postun lvm2-monitor.service
 
+%if %{enable_lvmpolld}
 %systemd_postun_with_restart lvm2-lvmpolld.service
+%endif
 
 %triggerun -- %{name} < 2.02.86-2
 %{_bindir}/systemd-sysv-convert --save lvm2-monitor >/dev/null 2>&1 || :
@@ -192,7 +234,9 @@ systemctl start lvm2-lvmpolld.socket >/dev/null 2>&1 || :
 %{_sbindir}/lvmdevices
 %{_sbindir}/lvmdump
 %{_sbindir}/lvmpersist
+%if %{enable_lvmpolld}
 %{_sbindir}/lvmpolld
+%endif
 %{_sbindir}/lvm_import_vdo
 
 # Other files
@@ -306,8 +350,10 @@ systemctl start lvm2-lvmpolld.socket >/dev/null 2>&1 || :
 %{_mandir}/man8/vgsplit.8.gz
 %{_udevdir}/11-dm-lvm.rules
 %{_udevdir}/69-dm-lvm.rules
+%if %{enable_lvmpolld}
 %{_mandir}/man8/lvmpolld.8.gz
 %{_mandir}/man8/lvm-lvpoll.8.gz
+%endif
 %dir %{_sysconfdir}/lvm
 %ghost %{_sysconfdir}/lvm/cache/.cache
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/lvm/lvm.conf
@@ -320,7 +366,9 @@ systemctl start lvm2-lvmpolld.socket >/dev/null 2>&1 || :
 %{_sysconfdir}/lvm/profile/cache-mq.profile
 %{_sysconfdir}/lvm/profile/cache-smq.profile
 %{_sysconfdir}/lvm/profile/lvmdbusd.profile
+%if %{enable_vdo}
 %{_sysconfdir}/lvm/profile/vdo-small.profile
+%endif
 %dir %{_sysconfdir}/lvm/backup
 %dir %{_sysconfdir}/lvm/cache
 %dir %{_sysconfdir}/lvm/archive
@@ -331,8 +379,10 @@ systemctl start lvm2-lvmpolld.socket >/dev/null 2>&1 || :
 %{_unitdir}/blk-availability.service
 %{_unitdir}/lvm2-monitor.service
 #%%{_unitdir}/lvm-vgchange@.service # vgchange is now part of udev rule
+%if %{enable_lvmpolld}
 %{_unitdir}/lvm2-lvmpolld.socket
 %{_unitdir}/lvm2-lvmpolld.service
+%endif
 %{_unitdir}/lvm-devices-import.service
 %{_unitdir}/lvm-devices-import.path
 %dir %{_sharedstatedir}/lvm
@@ -379,8 +429,10 @@ This package contains shared lvm2 libraries for applications.
 %{_libdir}/libdevmapper-event-lvm2snapshot.so
 %{_libdir}/libdevmapper-event-lvm2raid.so
 
+%if %{enable_thin}
 %{_libdir}/libdevmapper-event-lvm2thin.so
 %{_libdir}/device-mapper/libdevmapper-event-lvm2thin.so
+%endif
 
 %{_libdir}/libdevmapper-event-lvm2vdo.so
 %{_libdir}/device-mapper/libdevmapper-event-lvm2vdo.so
@@ -388,11 +440,16 @@ This package contains shared lvm2 libraries for applications.
 ##############################################################################
 # LVM locking daemon
 ##############################################################################
+%if %{enable_lockd_dlm} || %{enable_lockd_sanlock}
 %package lockd
 Summary: LVM locking daemon
 Requires: lvm2 = %{?epoch}:%{version}-%{release}
+%if %{enable_lockd_sanlock}
 Requires: sanlock-lib >= %{sanlock_version}
+%endif
+%if %{enable_lockd_dlm}
 Requires: dlm-lib >= %{dlm_version}
+%endif
 Requires(post): systemd-units >= %{systemd_version}
 Requires(preun): systemd-units >= %{systemd_version}
 Requires(postun): systemd-units >= %{systemd_version}
@@ -418,10 +475,12 @@ LVM commands use lvmlockd to coordinate access to shared storage.
 %{_unitdir}/lvmlockd.service
 %{_unitdir}/lvmlocks.service
 
+%endif
 
 ##############################################################################
 # LVM D-Bus daemon
 ##############################################################################
+%if %{enable_lvmdbusd}
 
 %package dbusd
 Summary: LVM2 D-Bus daemon
@@ -457,6 +516,7 @@ Daemon for access to LVM2 functionality through a D-Bus interface.
 %{_unitdir}/lvm2-lvmdbusd.service
 %{python3_sitelib}/lvmdbusd
 
+%endif
 
 ##############################################################################
 # Device-mapper subpackages
@@ -489,8 +549,10 @@ for the kernel device-mapper.
 %{_mandir}/man8/dmstats.8.gz
 %{_mandir}/man8/dmvdostats.8.gz
 %{_mandir}/man8/blkdeactivate.8.gz
+%if %{enable_dmfilemapd}
 %{_sbindir}/dmfilemapd
 %{_mandir}/man8/dmfilemapd.8.gz
+%endif
 %{_udevdir}/10-dm.rules
 %{_udevdir}/13-dm-disk.rules
 %{_udevdir}/95-dm-notify.rules
@@ -593,6 +655,7 @@ the device-mapper event library.
 ##############################################################################
 # Testsuite
 ##############################################################################
+%if %{enable_testsuite}
 %package testsuite
 Summary: LVM2 Testsuite
 # Most of the code is GPLv2, the harness in test/lib/{brick-shelltest.h,runner.cpp} is BSD, and C files in test/api are LGPLv2...
@@ -606,4 +669,5 @@ An extensive functional testsuite for LVM2.
 %{_datadir}/lvm2-testsuite/
 %{_libexecdir}/lvm2-testsuite/
 %{_bindir}/lvm2-testsuite
+%endif
 

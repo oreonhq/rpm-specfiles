@@ -95,8 +95,10 @@ License: Python-2.0.1
 # hence the increased lower bound in the bcond.
 # https://discuss.python.org/t/building-the-jit-with-pre-built-stencils/91838/17
 %bcond jit_build_stencils %[%{with jit} && 1 >= 44]
+%if %{with jit}
 # When built with JIT, it still needs to be enabled on runtime via PYTHON_JIT=1
 %global jit_flag --enable-experimental-jit=yes-off %{!?with_jit_build_stencils:--enable-prebuilt-jit-stencils}
+%endif
 
 # Main interpreter loop optimization
 %bcond computed_gotos 1
@@ -105,9 +107,15 @@ License: Python-2.0.1
 # General global macros
 # =====================
 
+%if %{with main_python}
+%global pkgname python3
+%global exename python3
+%global python3_pkgversion 3
+%else
 %global pkgname python%{pybasever}
 %global exename python%{pybasever}
 %global python3_pkgversion %{pybasever}
+%endif
 
 # If the rpmwheels condition is disabled, we use the bundled wheel packages
 # from Python with the versions below.
@@ -234,8 +242,24 @@ Provides: bundled(python3dist(zipp)) = 3.19.2
 
 # When a main_python build is attempted despite the %%__default_python3_pkgversion value
 # We undefine magic macros so the python3-... package does not provide wrong python3X-...
+%if %{with main_python} && ("%{?__default_python3_pkgversion}" != "%{pybasever}")
+%undefine __pythonname_provides
+%{warn:Doing a main_python build with wrong %%__default_python3_pkgversion (0%{?__default_python3_pkgversion}, but this is %pyshortver)}
+%endif
 
+%if %{with main_python}
+# To keep the upgrade path clean, we Obsolete python3.X from the python3
+# package and python3.X-foo from individual subpackages.
+# Note that using Obsoletes without package version is not standard practice.
+# Here we assert that *any* version of the system's default interpreter is
+# preferable to an "extra" interpreter. For example, python3-3.6.1 will
+# replace python3.6-3.6.2.
+%define unversioned_obsoletes_of_python3_X_if_main() %{expand:\
+Obsoletes: python%{pybasever}%{?1:-%{1}}\
+}
+%else
 %define unversioned_obsoletes_of_python3_X_if_main() %{nil}
+%endif
 
 # =======================
 # Build-time requirements
@@ -272,41 +296,62 @@ BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: /usr/bin/dtrace
 
+%if %{with tests}
 BuildRequires: gcc-c++
 BuildRequires: gdb
 BuildRequires: glibc-all-langpacks
 BuildRequires: tzdata
+%endif
 
+%if %{with jit_build_stencils}
 # We need the upstream-specified clang+llvm version to build the JIT stencils.
 BuildRequires: clang(major) = 21
 BuildRequires: llvm(major) = 21
+%elif %{with jit}
+# We need any clang with __attribute__((preserve_none)) support to build+link the JIT shim.
+# We also use the "primary" clang package here, so we can use the unversioned clang command.
+BuildRequires: clang >= 19
+BuildRequires: llvm >= 19
+%endif
 
 %ifarch %{valgrind_arches}
 BuildRequires: valgrind-devel
 %endif
 
+%if %{with main_python}
+BuildRequires: desktop-file-utils
+BuildRequires: libappstream-glib
+%endif
 
+%if %{with rpmwheels}
 # Python 3.12 removed the deprecated imp module,
 # the first compatible version of pip is 23.1.2.
 BuildRequires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
+%if %{with tests}
 BuildRequires: %{python_wheel_pkg_prefix}-setuptools-wheel >= 71
 BuildRequires: ca-certificates
+%endif
+%endif
 
+%if %{without bootstrap}
 # for make regen-all
 # Note that we're not using the %%{pkgname} macro here on purpose, because when
 # upgrading the main python3 to a new Python version, this would pull in the
 # old version instead.
 BuildRequires: python%{pybasever}
+%endif
 
+%if %{without bootstrap} || %{without main_python}
 # for proper automatic provides
 BuildRequires: python3-rpm-generators
 BuildRequires:  oreon-rpm-macros
+%endif
 
 # =======================
 # Source code and patches
 # =======================
 
-Source0: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
+Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built
@@ -333,6 +378,12 @@ Source30: download-jit-stencils-from-koji.sh
 # Use `fedpkg sources --force` to get the conditionally defined sources from the lookaside cache.
 # Macro %%exists is not present in the rpm version available in EL9,
 # hence to prevent parsing errors, we add additional check for its existence.
+%if (%{with jit} && %{without jit_build_stencils}) || 0%{?exists:%{exists:%{_sourcedir}/Python-%{upstream_version}-x86_64-optimized-jit_stencils.h}}
+Source31: Python-%{upstream_version}-aarch64-debug-jit_stencils.h
+Source32: Python-%{upstream_version}-aarch64-optimized-jit_stencils.h
+Source33: Python-%{upstream_version}-x86_64-debug-jit_stencils.h
+Source34: Python-%{upstream_version}-x86_64-optimized-jit_stencils.h
+%endif
 %global jit_stencils_source %{_sourcedir}/Python-%{upstream_version}-%{_arch}-${ConfName}-jit_stencils.h
 %global jit_stencils_filename jit_stencils-%{_arch}-unknown-linux-gnu.h
 
@@ -397,6 +448,31 @@ Patch486:        00486-gh-148646-add---enable-prebuilt-jit-stencils-configure-fl
 # ==========================================
 
 
+%if %{with main_python}
+# Description for the python3X SRPM only:
+%description
+Python %{pybasever} is an accessible, high-level, dynamically typed, interpreted
+programming language, designed with an emphasis on code readability.
+It includes an extensive standard library, and has a vast ecosystem of
+third-party libraries.
+
+%package -n %{pkgname}
+Summary: Python %{pybasever} interpreter
+
+# In order to support multiple Python interpreters for development purposes,
+# packages with fully versioned naming scheme (e.g. python3.9*) exist for
+# non-default versions of Python 3.
+# For consistency, we provide python3.X from python3 as well.
+Provides: python%{pybasever} = %{version}-%{release}
+Provides: python%{pybasever}%{?_isa} = %{version}-%{release}
+
+%unversioned_obsoletes_of_python3_X_if_main
+
+# We recommend /usr/bin/python so users get it by default
+# Versioned recommends are problematic, and we know that the package requires
+# python3 back with fixed version, so we just use the path here:
+Recommends: %{_bindir}/python
+%endif
 
 # Python interpreter packages used to be named (or provide) name pythonXY (e.g.
 # python39). However, to align it with the executable names and to prepare for
@@ -404,9 +480,15 @@ Patch486:        00486-gh-148646-add---enable-prebuilt-jit-stencils-configure-fl
 # provide the previous names.
 Provides: python%{pyshortver} = %{version}-%{release}
 
+%if %{with main_python} || %{with python_abi_provides_for_alt_pythons}
+# Packages with Python modules in standard locations automatically
+# depend on python(abi). Provide that here.
+Provides: python(abi) = %{pybasever}
+%else
 # We exclude the `python(abi)` Provides
 %global __requires_exclude ^python\\(abi\\) = 3\\..+
 %global __provides_exclude ^python\\(abi\\) = 3\\..+
+%endif
 
 Requires: %{pkgname}-libs%{?_isa} = %{version}-%{release}
 
@@ -436,6 +518,26 @@ Packages containing additional libraries for Python are generally named with
 the "%{pkgname}-" prefix.
 
 
+%if %{with main_python}
+%package -n python-unversioned-command
+Summary: The "python" command that runs Python 3
+BuildArch: noarch
+
+# In theory this could require any python3 version
+Requires: python3 == %{version}-%{release}
+# But since we want to provide versioned python, we require exact version
+Provides: python = %{version}-%{release}
+# This also save us an explicit conflict for older python3 builds
+
+# Also provide the name of the Ubuntu package with the same function,
+# to be nice to people who temporarily forgot which distro they're on.
+# C.f. https://packages.ubuntu.com/hirsute/all/python-is-python3/filelist
+Provides: python-is-python3 = %{version}-%{release}
+
+%description -n python-unversioned-command
+This package contains /usr/bin/python - the "python" command that runs Python 3.
+
+%endif
 
 
 %package -n %{pkgname}-libs
@@ -473,8 +575,16 @@ Summary:        Python runtime libraries
 # d3.js in Lib/profiling/sampling/_vendor is ISC
 # An extract of the `Unicode Character Database` converted to an internal format is Unicode-3.0
 %global libs_license Python-2.0.1 AND MIT AND BSD-3-Clause AND MIT-CMU AND HPND-SMC AND BSD-2-Clause AND dtoa AND Apache-2.0 AND ISC AND Unicode-3.0
+%if %{with rpmwheels}
 Requires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
 License: %{libs_license}
+%else
+Provides: bundled(python3dist(pip)) = %{pip_version}
+%pip_bundled_provides
+Requires: ca-certificates
+# License combined from Python libs + pip
+License: %{libs_license} AND LGPL-2.1-only AND MPL-2.0 AND (Apache-2.0 OR BSD-2-Clause)
+%endif
 
 %unversioned_obsoletes_of_python3_X_if_main libs
 
@@ -513,6 +623,9 @@ Requires: tzdata
 # Since expat 2.7.4, the library has versioned symbols and this is no longer needed,
 # as the generated requirement will be in the form of libexpat.so.1(LIBEXPAT_2.7.2) etc.
 %global expat_version %(LANG=C rpm -q --qf '%%{version}-%%{release}' expat.%{_target_cpu} | sed 's/.*not installed/0/')
+%if v"%{expat_version}" < v"2.7.4"
+Requires: expat%{?_isa} >= %{expat_version}
+%endif
 
 
 %description -n %{pkgname}-libs
@@ -537,12 +650,18 @@ Requires: (pyproject-rpm-macros if rpm-build)
 
 %unversioned_obsoletes_of_python3_X_if_main devel
 
+%if %{with main_python}
+# Python developers are very likely to need pip
+Recommends: %{pkgname}-pip
+%endif
 
 # tox users are likely to need the devel subpackage
 Supplements: tox
 
+%if %{without bootstrap} || %{without main_python}
 # Generators run on the main Python 3 so we cannot require them when bootstrapping it
 Requires: (python3-rpm-generators if rpm-build)
+%endif
 
 Conflicts: %{pkgname} < %{version}-%{release}
 
@@ -559,6 +678,10 @@ Requires: %{pkgname}-tkinter = %{version}-%{release}
 
 %unversioned_obsoletes_of_python3_X_if_main idle
 
+%if %{with main_python}
+Provides: idle3 = %{version}-%{release}
+Provides: idle = %{version}-%{release}
+%endif
 
 Provides: %{pkgname}-tools = %{version}-%{release}
 Provides: %{pkgname}-tools%{?_isa} = %{version}-%{release}
@@ -596,7 +719,14 @@ Summary: The self-test suite for the main python3 package
 Requires: %{pkgname} = %{version}-%{release}
 Requires: %{pkgname}-libs%{?_isa} = %{version}-%{release}
 
+%if %{with rpmwheels}
 Requires: %{python_wheel_pkg_prefix}-setuptools-wheel >= 71
+%else
+Provides: bundled(python3dist(setuptools)) = %{setuptools_version}
+%setuptools_bundled_provides
+# License manually combined from Python + setuptools
+License: Python-2.0.1 AND MIT AND Apache-2.0 AND (Apache-2.0 OR BSD-2-Clause)
+%endif
 
 %unversioned_obsoletes_of_python3_X_if_main test
 
@@ -608,6 +738,7 @@ you should use the unittest module from %{pkgname}-libs, or a library such as
 %{pkgname}-pytest.
 
 
+%if %{with debug_build}
 %package -n %{pkgname}-debug
 Summary: Debug version of the Python runtime
 License: %{libs_license}
@@ -639,8 +770,10 @@ of Python.
 
 The debug runtime additionally supports debug builds of C-API extensions
 (with the "d" ABI flag) for debugging issues in those extensions.
+%endif
 
 
+%if %{with freethreading_build}
 # This deliberately does not use the %%{pkgname}- prefix,
 # we want to call this python3.X-threading even when built as a main Python.
 # This build of Python is not "the main freethreading Python", there's no such thing (yet?)
@@ -672,12 +805,23 @@ which may need to be installed separately.
 
 %package -n python%{pybasever}-freethreading-libs
 Summary: Free Threading Python runtime libraries
+%if %{with rpmwheels}
 Requires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
 License: %{libs_license}
+%else
+Provides: bundled(python3dist(pip)) = %{pip_version}
+%pip_bundled_provides
+Requires: ca-certificates
+# License combined from Python libs + pip
+License: %{libs_license} AND LGPL-2.1-only AND MPL-2.0 AND (Apache-2.0 OR BSD-2-Clause)
+%endif
 
 # See the comments in the definition of main -libs subpackage for detailed explanations
 Provides: bundled(mimalloc) = 2.12
 Requires: tzdata
+%if v"%{expat_version}" < v"2.7.4"
+Requires: expat%{?_isa} >= %{expat_version}
+%endif
 
 # There are files in the standard library that have python shebang.
 # We've filtered the automatic requirement out so libs are installable without
@@ -750,7 +894,14 @@ Summary: The self-test suite for the Free Threading Python package
 Requires: python%{pybasever}-freethreading = %{version}-%{release}
 Requires: python%{pybasever}-freethreading-libs%{?_isa} = %{version}-%{release}
 
+%if %{with rpmwheels}
 Requires: %{python_wheel_pkg_prefix}-setuptools-wheel >= 71
+%else
+Provides: bundled(python3dist(setuptools)) = %{setuptools_version}
+%setuptools_bundled_provides
+# License manually combined from Python + setuptools + wheel
+License: Python-2.0.1 AND MIT AND Apache-2.0 AND (Apache-2.0 OR BSD-2-Clause)
+%endif
 
 %description -n python%{pybasever}-freethreading-test
 The self-test suite for the Free Threading Python interpreter.
@@ -758,7 +909,9 @@ The self-test suite for the Free Threading Python interpreter.
 This is only useful to test Free Threading Python itself. For testing general
 Python code with the Free Threading build, you should use the unittest module
 from python%{pybasever}-freethreading-libs, or a library such as pytest.
+%endif
 
+%if %{with freethreading_build} && %{with debug_build}
 %package -n python%{pybasever}-freethreading-debug
 Summary: Free Threading (PEP 703) version of the Python runtime (debug build)
 License: %{libs_license}
@@ -787,6 +940,7 @@ and with the necessary changes needed to make the interpreter thread-safe.
 This package provides a version of the Python runtime with numerous debugging
 features enabled, aimed at advanced Python users such as developers of Python
 extension modules.
+%endif
 
 
 # ======================================================
@@ -816,18 +970,26 @@ if [ -f %{_rpmconfigdir}/pythonbundles.py ]; then
   %{_rpmconfigdir}/pythonbundles.py <(unzip -l Lib/test/wheeldata/setuptools-*.whl | grep -E '_vendor/.+dist-info/RECORD' | sed -E 's@^.*/([^-]+)-([^-]+)\.dist-info/.*$@\1==\2@') --compare-with '%setuptools_bundled_provides'
 fi
 
+%if %{with rpmwheels}
 rm Lib/ensurepip/_bundled/pip-%{pip_version}-py3-none-any.whl
 rm Lib/test/wheeldata/setuptools-%{setuptools_version}-py3-none-any.whl
+%endif
 
 # Verify that the PYC magic number matches our expectation
 # During alphas, %%{magic_number} may be %%{nil} or undefined and the check is skipped.
 # From beta onwards, it must be defined.
+%if "%{?magic_number}" != ""
 magic=$(grep -oP '^\s*#define PYC_MAGIC_NUMBER \K\d+' Include/internal/pycore_magic_number.h)
 if [ "$magic" != "%{magic_number}" ]; then
     echo "PYC_MAGIC_NUMBER changed: expected %{magic_number}, found $magic"
     echo "Update %%global magic_number in the spec file"
     exit 1
 fi
+%elif v"%{version}" >= v"%{pybasever}.0~b1"
+echo "%%global magic_number is not defined, but version %{version} >= %{pybasever}.0~b1"
+echo "Check Include/internal/pycore_magic_number.h and set %%global magic_number"
+exit 1
+%endif
 
 # check if there were any changes to Doc/license.rst
 # if so, a review of %%libs_license and %%license_file_hash is needed
@@ -875,9 +1037,17 @@ autoheader
 topdir=$(pwd)
 
 # Get proper option names from bconds
+%if %{with computed_gotos}
 %global computed_gotos_flag yes
+%else
+%global computed_gotos_flag no
+%endif
 
+%if %{with optimizations}
 %global optimizations_flag "--enable-optimizations"
+%else
+%global optimizations_flag "--disable-optimizations"
+%endif
 
 # Set common compiler/linker flags
 # We utilize the %%extension_...flags macros here so users building C/C++
@@ -930,6 +1100,15 @@ BuildPython() {
 }
 EOF
 
+%if %{with jit} && %{without jit_build_stencils}
+  if [[ ! "$ConfName" =~ ^freethreading ]]; then
+    # Drop the prebuilt stencils to target location
+    cp -a %{jit_stencils_source} %{jit_stencils_filename}
+    # Use the available clang version to build+link the shim,
+    # instead of enforcing the upstream preferred version.
+    export LLVM_VERSION=$(clang -dumpversion | cut -d. -f1)
+  fi
+%endif
 
 %configure \
   --with-platlibdir=%{_lib} \
@@ -945,7 +1124,9 @@ EOF
   --with-lto \
   --with-ssl-default-suites=openssl \
   --without-static-libpython \
+%if %{with rpmwheels}
   --with-wheel-pkg-dir=%{python_wheel_dir} \
+%endif
 %ifarch %{valgrind_arches}
   --with-valgrind \
 %endif
@@ -961,8 +1142,10 @@ EOF
     GITTAG="echo '%{version}-%{release}.%{_arch}'"
 }
 
+%if %{without bootstrap}
   # Regenerate generated files (needs python3)
   %make_build %{flags_override} regen-all PYTHON_FOR_REGEN="python%{pybasever}"
+%endif
 
   # Invoke the build
   %make_build %{flags_override}
@@ -973,24 +1156,30 @@ EOF
 
 # Call the above to build each configuration.
 
+%if %{with debug_build}
 # The debug build is compiled with the lowest level of optimizations as to not optimize
 # out frames. We also suppress the warnings as the default distro value of the FORTIFY_SOURCE
 # option produces too many warnings when compiling at the O0 optimization level.
 BuildPython debug \
   "--without-ensurepip --with-pydebug %{?jit_flag}" \
   "%{optflags_debug}"
+%endif
 
 BuildPython optimized \
   "--without-ensurepip %{?jit_flag} %{optimizations_flag}" \
   "%{optflags_optimized}"
 
+%if %{with freethreading_build} && %{with debug_build}
 BuildPython freethreading-debug \
   "--without-ensurepip --with-pydebug --disable-gil" \
   "%{optflags_debug}"
+%endif
 
+%if %{with freethreading_build}
 BuildPython freethreading \
   "--without-ensurepip %{optimizations_flag} --disable-gil" \
   "%{optflags_optimized}"
+%endif
 
 # ======================================================
 # Installing the built code:
@@ -1075,22 +1264,28 @@ EOF
 
 # Install the "freethreading" and "debug" builds first; any common files will be overridden with
 # later builds
+%if %{with freethreading_build} && %{with debug_build}
 # Now the freethreading debug build:
 InstallPython freethreading-debug \
   %{py_INSTSONAME_freethreading_debug} \
   "%{optflags_debug}" \
   %{LDVERSION_freethreading_debug}
+%endif
 
+%if %{with debug_build}
 InstallPython debug \
   %{py_INSTSONAME_debug} \
   "%{optflags_debug}" \
   %{LDVERSION_debug}
+%endif
 
+%if %{with freethreading_build}
 # Now the freethreading optimized build:
 InstallPython freethreading \
   %{py_INSTSONAME_freethreading} \
   "%{optflags_optimized}" \
   %{LDVERSION_freethreading}
+%endif
 
 # Now the optimized build:
 InstallPython optimized \
@@ -1100,15 +1295,34 @@ InstallPython optimized \
 
 # Install directories for additional packages
 install -d -m 0755 %{buildroot}%{pylibdir}/site-packages/__pycache__
+%if %{with freethreading_build}
 install -d -m 0755 %{buildroot}%{pylibdir_freethreading}/site-packages/__pycache__
+%endif
+%if "%{_lib}" == "lib64"
 # The 64-bit version needs to create "site-packages" in /usr/lib/ (for
 # pure-Python modules) as well as in /usr/lib64/ (for packages with extension
 # modules).
 # Note that rpmlint will complain about hardcoded library path;
 # this is intentional.
 install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}/site-packages/__pycache__
+%if %{with freethreading_build}
 install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freethreading}/site-packages/__pycache__
+%endif
+%endif
 
+%if %{with main_python}
+# add idle3 to menu
+install -D -m 0644 Lib/idlelib/Icons/idle_16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/idle3.png
+install -D -m 0644 Lib/idlelib/Icons/idle_32.png %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/idle3.png
+install -D -m 0644 Lib/idlelib/Icons/idle_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/idle3.png
+install -D -m 0644 Lib/idlelib/Icons/idle_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/idle3.png
+desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE10}
+
+# Install and validate appdata file
+mkdir -p %{buildroot}%{_metainfodir}
+cp -a %{SOURCE11} %{buildroot}%{_metainfodir}
+appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/idle3.appdata.xml
+%endif
 
 # Make sure sysconfig looks at the right pyconfig-32.h/pyconfig-64.h file instead of pyconfig.h
 sed -i -e "s/'pyconfig.h'/'%{_pyconfig_h}'/" \
@@ -1152,9 +1366,12 @@ find . -name "*~" -exec rm -f {} \;
 # Python CMD line options:
 # -s - don't add user site directory to sys.path
 # -B - don't write .pyc files on import
+# The clamp_source_mtime module is only guaranteed to exist on Fedoras that enabled this option:
+%if 0%{?clamp_mtime_to_source_date_epoch}
 LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
 PYTHONPATH="%{_rpmconfigdir}/oreon" \
 %{buildroot}%{_bindir}/python%{pybasever} -s -B -m clamp_source_mtime %{buildroot}%{pylibdir} %{?with_freethreading_build:%{buildroot}%{pylibdir_freethreading}} %{buildroot}%{_datadir}/gdb/auto-load
+%endif
 # compileall CMD line options:
 # -f - force rebuild even if timestamps are up to date
 # -o - optimization levels to run compilation with
@@ -1179,7 +1396,13 @@ find %{buildroot} -perm 555 -exec chmod 755 {} \;
 
 # Create "/usr/bin/python3-debug", a symlink to the python3 debug binary, to
 # avoid the user having to know the precise version and ABI flags.
+%if %{with debug_build} && %{with main_python}
+ln -s \
+  %{_bindir}/python%{LDVERSION_debug} \
+  %{buildroot}%{_bindir}/python3-debug
+%endif
 
+%if %{without main_python}
 # Remove stuff that would conflict with python3 package
 rm %{buildroot}%{_bindir}/python3
 rm %{buildroot}%{_bindir}/pydoc3
@@ -1191,6 +1414,20 @@ rm %{buildroot}%{_libdir}/libpython3.so
 rm %{buildroot}%{_mandir}/man1/python3.1
 rm %{buildroot}%{_libdir}/pkgconfig/python3.pc
 rm %{buildroot}%{_libdir}/pkgconfig/python3-embed.pc
+%else
+# Link the unversioned stuff
+ln -s ./python3 %{buildroot}%{_bindir}/python
+ln -s ./pydoc3 %{buildroot}%{_bindir}/pydoc
+ln -s ./pygettext3.py %{buildroot}%{_bindir}/pygettext.py
+ln -s ./msgfmt3.py %{buildroot}%{_bindir}/msgfmt.py
+ln -s ./idle3 %{buildroot}%{_bindir}/idle
+ln -s ./python3-config %{buildroot}%{_bindir}/python-config
+ln -s ./python3.1 %{buildroot}%{_mandir}/man1/python.1
+ln -s ./python3.pc %{buildroot}%{_libdir}/pkgconfig/python.pc
+%if %{with debug_build}
+ln -s ./python3-debug %{buildroot}%{_bindir}/python-debug
+%endif
+%endif
 
 # Remove large, autogenerated sources and keep only the non-optimized pycache
 for file in %{buildroot}%{pylibdir}/pydoc_data/topics.py $(grep --include='*.py' -lr %{buildroot}%{pylibdir}/encodings -e 'Python Character Mapping Codec .* from .* with gencodec.py'); do
@@ -1200,6 +1437,10 @@ for file in %{buildroot}%{pylibdir}/pydoc_data/topics.py $(grep --include='*.py'
     rm ${directory}/{__pycache__/${module}.cpython-%{pyshortver}.opt-?.pyc,${module}.py}
 done
 
+%if %{without rpmwheels}
+# Inject SBOM into the installed wheels (if the macro is available)
+%{?python_wheel_inject_sbom:%python_wheel_inject_sbom %{buildroot}%{pylibdir}/ensurepip/_bundled/*.whl}
+%endif
 
 # ======================================================
 # Checks for packaging issues
@@ -1246,6 +1487,7 @@ assert '(main' not in v, v
 assert '$GITHASH' not in v, v"
 
 # Assert the pre-generated JIT stencils are up to date
+%if %{with jit_build_stencils}
 for ConfName in %{?with_debug_build:debug} optimized; do
   if [ -s %{jit_stencils_source} ]; then
     # The -I option ignores the checksum line (calculated from files incl. pyconfig.h which may change with new autoconf)
@@ -1254,6 +1496,7 @@ for ConfName in %{?with_debug_build:debug} optimized; do
     echo "%{jit_stencils_source} is empty, not checking if it is up to date"
   fi
 done
+%endif
 
 # ======================================================
 # Running the upstream test suite
@@ -1285,6 +1528,8 @@ CheckPython() {
     -wW --slowest %{_smp_mflags} \
     %ifarch riscv64
     --timeout=8100 \
+%else
+    --timeout=2700 \
 %endif
     -i test_check_probes \
     %ifarch %{ix86}
@@ -1296,25 +1541,43 @@ CheckPython() {
 
 }
 
+%if %{with tests}
 
 # Check each of the configurations:
+%if %{with debug_build}
 CheckPython debug
+%endif
 CheckPython optimized
+%if %{with freethreading_build} && %{with debug_build}
 CheckPython freethreading-debug
+%endif
+%if %{with freethreading_build}
 CheckPython freethreading
+%endif
 
+%endif
 
 
 %files -n %{pkgname}
 %doc README.rst
 
+%if %{with main_python}
+%{_bindir}/pydoc*
+%{_bindir}/python3
+%else
 %{_bindir}/pydoc%{pybasever}
+%endif
 
 %{_bindir}/python%{pybasever}
 %{_bindir}/python%{LDVERSION_optimized}
 %{_mandir}/*/*3*
 
 
+%if %{with main_python}
+%files -n python-unversioned-command
+%{_bindir}/python
+%{_mandir}/*/python.1*
+%endif
 
 %files -n %{pkgname}-libs
 %doc README.rst
@@ -1402,8 +1665,10 @@ CheckPython freethreading
 %exclude %{pylibdir}/__pycache__/turtle*%{bytecode_suffixes}
 
 # This will be in the debug package
+%if %{with debug_build}
 %exclude %{pylibdir}/_sysconfigdata_%{ABIFLAGS_debug}_linux_%{platform_triplet}.py
 %exclude %{pylibdir}/__pycache__/_sysconfigdata_%{ABIFLAGS_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
+%endif
 
 # Extension modules
 # This is macronized for reuse in the -debug package
@@ -1477,9 +1742,11 @@ CheckPython freethreading
 %dir %{pylibdir}/site-packages/__pycache__/
 %{pylibdir}/site-packages/README.txt
 
+%if "%{_lib}" == "lib64"
 %attr(0755,root,root) %dir %{_prefix}/lib/python%{pybasever}/
 %attr(0755,root,root) %dir %{_prefix}/lib/python%{pybasever}/site-packages/
 %attr(0755,root,root) %dir %{_prefix}/lib/python%{pybasever}/site-packages/__pycache__/
+%endif
 
 # "Makefile" and the config-32/64.h file are needed by
 # sysconfig.get_config_vars(), so we include them in the core
@@ -1494,6 +1761,9 @@ CheckPython freethreading
 
 # Finally, libpython
 %{_libdir}/%{py_INSTSONAME_optimized}
+%if %{with main_python}
+%{_libdir}/libpython3.so
+%endif
 
 
 %files -n %{pkgname}-devel
@@ -1505,6 +1775,17 @@ CheckPython freethreading
 %{_includedir}/python%{LDVERSION_optimized}/cpython/
 %doc Misc/README.valgrind Misc/valgrind-python.supp
 
+%if %{with main_python}
+%{_bindir}/python3-config
+%{_bindir}/python-config
+%{_libdir}/pkgconfig/python3.pc
+%{_libdir}/pkgconfig/python.pc
+%{_libdir}/pkgconfig/python3-embed.pc
+%{_bindir}/pygettext3.py
+%{_bindir}/pygettext.py
+%{_bindir}/msgfmt3.py
+%{_bindir}/msgfmt.py
+%endif
 
 %{_bindir}/pygettext%{pybasever}.py
 %{_bindir}/msgfmt%{pybasever}.py
@@ -1520,10 +1801,19 @@ CheckPython freethreading
 
 
 %files -n %{pkgname}-idle
+%if %{with main_python}
+%{_bindir}/idle*
+%else
 %{_bindir}/idle%{pybasever}
+%endif
 
 %{pylibdir}/idlelib
 
+%if %{with main_python}
+%{_metainfodir}/idle3.appdata.xml
+%{_datadir}/applications/idle3.desktop
+%{_datadir}/icons/hicolor/*/apps/idle3.*
+%endif
 
 %files -n %{pkgname}-tkinter
 %{pylibdir}/tkinter
@@ -1570,7 +1860,12 @@ CheckPython freethreading
 
 # Hence the manifest is the combination of analogous files in the manifests of
 # all of the other subpackages
+%if %{with debug_build}
 %files -n %{pkgname}-debug
+%if %{with main_python}
+%{_bindir}/python3-debug
+%{_bindir}/python-debug
+%endif
 
 # Analog of the core subpackage's files:
 %{_bindir}/python%{LDVERSION_debug}
@@ -1597,7 +1892,9 @@ CheckPython freethreading
 %{pylibdir}/__pycache__/_sysconfigdata_%{ABIFLAGS_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
 %{pylibdir}/_sysconfig_vars_%{ABIFLAGS_debug}_linux_%{platform_triplet}.json
 
+%endif
 
+%if %{with freethreading_build}
 %files -n python%{pybasever}-freethreading
 %{_bindir}/python%{LDVERSION_freethreading}
 %doc README.rst
@@ -1624,8 +1921,10 @@ CheckPython freethreading
 %exclude %{pylibdir_freethreading}/__pycache__/turtle*%{bytecode_suffixes}
 
 # This will be in the -freethreading-debug package
+%if %{with debug_build}
 %exclude %{pylibdir_freethreading}/_sysconfigdata_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}.py
 %exclude %{pylibdir_freethreading}/__pycache__/_sysconfigdata_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
+%endif
 
 # Extension modules
 %extension_modules %{dynload_dir_freethreading} %{SOABI_freethreading}
@@ -1633,9 +1932,11 @@ CheckPython freethreading
 %dir %{pylibdir_freethreading}/site-packages/
 %dir %{pylibdir_freethreading}/site-packages/__pycache__/
 
+%if "%{_lib}" == "lib64"
 %attr(0755,root,root) %dir %{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freethreading}/
 %attr(0755,root,root) %dir %{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freethreading}/site-packages/
 %attr(0755,root,root) %dir %{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freethreading}/site-packages/__pycache__/
+%endif
 
 # "Makefile" and the config-32/64.h file are needed by
 # sysconfig.get_config_vars(), so we include them in the core
@@ -1692,7 +1993,9 @@ CheckPython freethreading
 # Extension modules
 %extension_modules_test %{dynload_dir_freethreading} %{SOABI_freethreading}
 
+%endif
 
+%if %{with freethreading_build} && %{with debug_build}
 %files -n python%{pybasever}-freethreading-debug
 # Analog of the core subpackage's files:
 %{_bindir}/python%{LDVERSION_freethreading_debug}
@@ -1719,6 +2022,7 @@ CheckPython freethreading
 %{pylibdir_freethreading}/__pycache__/_sysconfigdata_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
 %{pylibdir_freethreading}/_sysconfig_vars_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}.json
 
+%endif
 
 # ======================================================
 # Finally, the changelog:

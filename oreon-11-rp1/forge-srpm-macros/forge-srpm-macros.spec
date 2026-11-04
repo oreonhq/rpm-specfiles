@@ -1,39 +1,79 @@
-%global source0_hash 0efb8775869956fd4ee1845a5f99e60bb0d18a47c09d85f992db36f438b906a0
-%global debug_package %{nil}
+%global source0_hash 7b0d7aee291273ae02b661d14330e4e803ab6b673cd4aec39c0a00a5de2b793d
 
-Name: forge-srpm-macros
-Version: 0.4.0
-Release: 2%{?dist}
-Summary: Macros for packaging code hosted on forges
-License: GPL-1.0-or-later
-URL: https://git.sr.ht/~gotmax23/forge-srpm-macros
-BuildArch: noarch
-Source0: macros.forge
-Source1: forge.lua
-Source2: _forge_util.lua
-Source3: GPL-1.0-or-later.txt
-Requires: oreon-rpm-config
+%global oreon_bootstrap %{nil}
+%bcond bootstrap 0
+%oreon_bootstrap
+# SPDX-License-Identifier: MIT
+# Copyright (C) 2023 Maxwell G <maxwell@gtmx.me>
 
-BuildRequires: oreon-rpm-macros
+%bcond tests 1
+
+Name:           forge-srpm-macros
+Version:        0.4.0
+Release:        1%{?dist}
+Summary:        Macros to simplify packaging of forge-hosted projects
+
+License:        GPL-1.0-or-later
+URL:            https://git.sr.ht/~gotmax23/forge-srpm-macros
+Source0:        https://git.sr.ht/~gotmax23/forge-srpm-macros/archive/v%{version}.tar.gz#/forge-srpm-macros-%{version}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires:  make
+%if %{with tests}
+BuildRequires:  python3-pytest
+BuildRequires:  python3-pyyaml
+# For %%pytest definition
+BuildRequires:  python3-rpm-macros
+BuildRequires:  oreon-rpm-macros
+%endif
+
+# We require macros and lua defined in redhat-rpm-config
+# We constrain this to the version released after the code was split out that
+# doesn't contain the same files.
+Requires:       redhat-rpm-config >= 266-1
+
 
 %description
-Macros that turn a forge tag into a source URL and an unpacked directory name.
+%{summary}.
+
 
 %prep
 %oreon_sha256
-cp %{SOURCE3} .
+
+%autosetup -n %{name}-v%{version}
+
 
 %build
+%if %{defined el9}
+%make_build epel9-build
+%endif
+
 
 %install
-mkdir -p %{buildroot}%{_rpmmacrodir}
-mkdir -p %{buildroot}%{_rpmluadir}/oreon/srpm
-install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.forge
-install -m 644 %{SOURCE1} %{buildroot}%{_rpmluadir}/oreon/srpm/forge.lua
-install -m 644 %{SOURCE2} %{buildroot}%{_rpmluadir}/oreon/srpm/_forge_util.lua
+%make_build \
+    DESTDIR=%{buildroot} \
+    RPMMACRODIR=%{_rpmmacrodir} RPMLUADIR=%{_rpmluadir} %{?el9:epel9-}install
+
+
+%check
+%if %{with tests}
+export MACRO_DIR=%{buildroot}%{_rpmmacrodir}
+export MACRO_LUA_DIR="%{buildroot}%{_rpmluadir}"
+%pytest
+%endif
+
 
 %files
-%license GPL-1.0-or-later.txt
-%{_rpmmacrodir}/macros.forge
+%license LICENSES/GPL-1.0-or-later.txt
+%doc README.md NEWS.md
+%if %{undefined el9}
 %{_rpmluadir}/oreon/srpm/forge.lua
+%{_rpmmacrodir}/macros.forge
+%else
+%{_rpmluadir}/oreon/srpm/forge_epel.lua
+%{_rpmmacrodir}/macros.zzz-forge_epel
+%endif
 %{_rpmluadir}/oreon/srpm/_forge_util.lua
+
+

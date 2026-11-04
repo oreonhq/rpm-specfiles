@@ -24,7 +24,7 @@ BuildRequires: rdma-core-devel
 BuildRequires:  oreon-rpm-macros
 %endif
 
-Source0:  https://www.tcpdump.org/release/%{name}-%{version}.tar.xz
+Source0:        https://www.tcpdump.org/release/libpcap-%{version}.tar.xz
 Source1:        libpcap-1.10.7.tar.xz.sig
 
 Patch0001:        0001-man-tcpdump-and-tcpslice-have-manpages-in-man8.patch
@@ -73,6 +73,8 @@ sed -i -e 's|-fpic|-fPIC|g' configure
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
 %ifarch %{arm}
 %configure
+%else
+%configure --enable-rdma
 %endif
 %make_build
 

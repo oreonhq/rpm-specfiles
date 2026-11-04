@@ -111,6 +111,10 @@ BuildRequires:  oreon-rpm-macros
 # Install binutils-devel to enable symbol demangling.
 %define buildrequires_stacktrace BuildRequires: elfutils-devel binutils-devel
 %define buildrequires_selinux BuildRequires: libselinux-devel
+%if 0%{?suse_version} >= 1100
+%define buildrequires_stacktrace BuildRequires: libdw-devel binutils-devel
+%define buildrequires_selinux BuildRequires: libselinux-devel
+%endif
 %{?buildrequires_stacktrace}
 %{?buildrequires_selinux}
 

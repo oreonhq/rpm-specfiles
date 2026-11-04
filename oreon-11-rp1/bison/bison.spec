@@ -1,41 +1,141 @@
 %global source0_hash 9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: GNU general-purpose parser generator
 Name: bison
-Version: 3.8.2
-Release: 1%{?dist}
-Summary: GNU Bison, a general-purpose parser generator
-License: GPL-3.0-or-later
-URL: https://www.gnu.org/software/bison/
-Source0: https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.xz
+Version:        3.8.2
+Release:        1%{?dist}
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: m4
-BuildRequires: gcc
-BuildRequires: glibc-devel
+# An SPDX license string check done against bison-3.8.2 found strings
+# corresponding to the following licenses across the bison source tree:
+License: GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Bison-exception-2.2 AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later AND FSFULLR AND GFDL-1.3-or-later AND X11
+
+Source0:        https://ftp.gnu.org/gnu/bison/bison-%{version}.tar.xz
+Source1:        bison-3.8.2.tar.xz.sig
+# genereted from https://ftp.gnu.org/gnu/gnu-keyring.gpg via:
+# curl https://ftp.gnu.org/gnu/gnu-keyring.gpg | gpg2 --import
+# gpg2 --export --export-options export-minimal 7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E > gpgkey-7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E.gpg
+Source2: gpgkey-7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E.gpg
+
+# from Gentoo sys-devel/bison
+Patch0:        bison-3.8.2-gcc15-glibcxx-assertions.patch
+
+# Upstream fix for GCC 16 change:
+# index-parse.c:1114:9: error: variable ‘yynerrs’ set but not used [-Werror=unused-but-set-variable=]
+Patch1: https://github.com/akimd/bison/commit/a166d5450e3f47587b98f6005f9f5627dbe21a5b.patch
+
+# testsuite dependency
+BuildRequires: gcc-c++
+BuildRequires: autoconf
+BuildRequires: flex
+BuildRequires: gnupg2
+
+URL: https://www.gnu.org/software/%{name}/
+BuildRequires: m4 >= 1.4
 BuildRequires: make
+BuildRequires:  oreon-rpm-macros
+#java-1.7.0-openjdk-devel
+Requires: m4 >= 1.4
+
+# bison contains a copy of gnulib.  As a copylib, gnulib was granted
+# an exception that allows bundling it with other software.  For
+# details, see:
+Provides: bundled(gnulib)
 
 %description
-GNU Bison is a general-purpose parser generator that converts an annotated context-free grammar into a deterministic LR or generalized LR (GLR) parser employing LALR(1) parser tables. Bison can also generate IELR(1) or canonical LR(1) parser tables. Once you are proficient with Bison, you can use it to develop a wide range of language parsers, from those used in simple desk calculators to complex programming languages.
+Bison is a general purpose parser generator that converts a grammar
+description for an LALR(1) context-free grammar into a C program to
+parse that grammar. Bison can be used to develop a wide range of
+language parsers, from ones used in simple desk calculators to complex
+programming languages. Bison is upwardly compatible with Yacc, so any
+correctly written Yacc grammar should work with Bison without any
+changes. If you know Yacc, you shouldn't have any trouble using
+Bison. You do need to be very proficient in C programming to be able
+to use Bison. Bison is only needed on systems that are used for
+development.
 
-Bison is upward compatible with Yacc: all properly-written Yacc grammars work with Bison with no change. Anyone familiar with Yacc should be able to use Bison with little trouble. You need to be fluent in C, C++, D or Java programming in order to use Bison.
+If your system will be used for C development, you should install
+Bison.
 
-Bison and the parsers it generates are portable, they do not require any specific compilers.
+%package devel
+Summary: -ly library for development using Bison-generated parsers
+Provides: bison-static = %{version}-%{release}
+
+%description devel
+The bison-devel package contains the -ly library sometimes used by
+programs using Bison-generated parsers.  If you are developing programs
+using Bison, you might want to link with this library.  This library
+is not required by all Bison-generated parsers, but may be employed by
+simple programs to supply minimal support for the generated parsers.
+
+# -ly is kept static.  It only contains two symbols: main and yyerror,
+# and both of these are extremely simple (couple lines of C total).
+# It doesn't really pay off to introduce a shared library for that.
+#
+# Therefore -devel subpackage could have been created as -static, but
+# the split was done in Jan 2005, which predates current guidelines.
+# Besides there is logic to that: the library is devel in the sense
+# that the generated parser could be distributed together with other
+# sources, and only bison-devel would be necessary to wrap the build.
+
+%package runtime
+Summary: Runtime support files used by Bison-generated parsers
+
+%description runtime
+The bison-runtime package contains files used at runtime by parsers
+that Bison generates.  Packages whose binaries contain parsers
+generated by Bison should depend on bison-runtime to ensure that
+these files are available.  See the Internationalization in the
+Bison manual section for more information.
 
 %prep
 %oreon_sha256
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -p1
 
 %build
-%oreon_configure
-%oreon_make
+%configure
+%make_build
+
+%check
+make check
+#make maintainer-check
 
 %install
-%oreon_make_install
-%oreon_filelist
+%make_install
 
-%files -f %{_builddir}/%{name}.files
+# Remove unpackaged files.
+rm -f %{buildroot}%{_bindir}/yacc
+rm -f %{buildroot}%{_infodir}/dir
+rm -f %{buildroot}%{_mandir}/man1/yacc*
+rm -rf %{buildroot}%{_docdir}/%{name}/examples/*
+rm -f %{buildroot}%{_docdir}/%{name}/COPYING
+rm -f %{buildroot}%{_docdir}/%{name}/TODO
+
+%find_lang %{name}
+%find_lang %{name}-runtime
+%find_lang %{name}-gnulib
+
+gzip -9nf ${RPM_BUILD_ROOT}%{_infodir}/bison.info*
+
+# The distribution contains also source files.  These are used by m4
+# when the target parser file is generated.
+%files -f %{name}.lang -f %{name}-gnulib.lang
 %license COPYING
+%doc AUTHORS ChangeLog NEWS README THANKS
+%{_mandir}/*/bison*
+%{_datadir}/bison
+%{_infodir}/bison.info*
+%{_bindir}/bison
+%{_datadir}/aclocal/bison*.m4
+
+%files -f %{name}-runtime.lang runtime
+%license COPYING
+
+%files devel
+%license COPYING
+%{_libdir}/liby.a
+

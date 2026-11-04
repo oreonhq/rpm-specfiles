@@ -1,59 +1,83 @@
-%global source0_hash 5c9e470b232a7acd3433491ac5221b4832f0c71318618dc6aa04dd05ffcd8fd9
+%global source0_hash 59048b53be8d3904bf939313debf13956a881b0de79da40f7719a77bcd1e9c53
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+# Uncomment on initial build for soname bump.
+#global bump_soname 1
+%global sover 3
 
-Name: libnsl2
-Version: 2.0.1
-Release: 1%{?dist}
-Summary: Public client interface for NIS and NIS+
-License: LGPL-2.1-or-later
-URL: https://github.com/thkukuk/libnsl
-Source0: https://github.com/thkukuk/libnsl/releases/download/v%{version}/libnsl-%{version}.tar.xz
+%if 0%{?bump_soname}
+%global relsuffix ~sonamebump
+%global old_sover %(echo $((%{sover}-1)))
+%endif
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+Name:       libnsl2
+Version:        2.0.1
+Release:        1%{?dist}
+Summary:    Public client interface library for NIS(YP) and NIS+
+
+License:    BSD-3-Clause AND LGPL-2.1-or-later
+URL:        https://github.com/thkukuk/libnsl
+
+Source0:        https://github.com/thkukuk/libnsl/archive/v%{version}.tar.gz
+
+BuildRequires: autoconf, automake, gettext-devel, libtool, libtirpc-devel
 BuildRequires: make
-BuildRequires: libtirpc-devel
-BuildRequires: pkgconf
-BuildRequires: patchelf
+BuildRequires: gcc
+%if 0%{?bump_soname}
+BuildRequires: libnsl2 < %{version}
+BuildRequires:  oreon-rpm-macros
+%endif
 
 %description
-libnsl provides the NIS and NIS+ client interface that used to ship
-with glibc.
+This package contains the libnsl library. This library contains
+the public client interface for NIS(YP) and NIS+.
+This code was formerly part of glibc, but is now standalone to
+be able to link against TI-RPC for IPv6 support.
 
 %package devel
-Summary: Development files for libnsl2
-Requires: libnsl2%{?_isa} = %{version}-%{release}
+Summary: Development files for libnsl
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Conflicts: glibc-devel < 2.26.9000-40
 
 %description devel
-Headers, libraries and pkg-config files for building against libnsl2.
+Development files for libnsl2
+
 
 %prep
 %oreon_sha256
-%autosetup -n libnsl-%{version} -p1
+
+%setup -q -n libnsl-%{version}
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+autoreconf -fiv
+
+%configure \
+    --libdir=%{_libdir} \
+    --includedir=%{_includedir}
+
+%make_build
+
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+%make_install
 
-%files -f %{_builddir}/%{name}.files
+rm %{buildroot}%{_libdir}/libnsl.{a,la}
+
+%if 0%{?bump_soname}
+cp -p %{_libdir}/libnsl.so.%{old_sover}* %{buildroot}%{_libdir}
+%endif
+
+%files
 %license COPYING
+%{_libdir}/libnsl.so.%{sover}*
+%if 0%{?bump_soname}
+%{_libdir}/libnsl.so.%{old_sover}*
+%endif
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_libdir}/libnsl.so
+%{_includedir}/*
+%{_libdir}/pkgconfig/libnsl.pc
+

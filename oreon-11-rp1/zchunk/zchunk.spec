@@ -1,59 +1,93 @@
 %global source0_hash 2ab8ef54475aa2b2c0120fc6ae6d0788e0c3d4d4b671985edc6a19c8096a02cc
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
-Name: zchunk
-Version: 1.5.5
-Release: 1%{?dist}
-Summary: Compressed file format library
-License: BSD-2-Clause
-URL: https://github.com/zchunk/zchunk
-Source0: https://github.com/zchunk/zchunk/archive/refs/tags/%{version}.tar.gz
-
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: meson
-BuildRequires: ninja-build
-BuildRequires: libzstd-devel
-BuildRequires: libcurl-devel
-BuildRequires: openssl-devel
-BuildRequires: pkgconf
-BuildRequires: patchelf
+Name:           zchunk
+Version:        1.5.5
+Release:        1%{?dist}
+Summary:        Compressed file format that allows easy deltas
+License:        BSD-2-Clause AND MIT
+URL:            https://github.com/zchunk/zchunk
+Source0:        https://github.com/zchunk/zchunk/archive/%{version}/zchunk-%{version}.tar.gz
+BuildRequires:  gcc
+BuildRequires:  pkgconfig(libzstd)
+BuildRequires:  pkgconfig(libcurl)
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  meson
+BuildRequires:  oreon-rpm-macros
+Requires:       %{name}-libs%{_isa} = %{version}-%{release}
+Provides:       bundled(buzhash-urlblock) = 0.1
 
 %description
-zchunk is a compressed file format.
+zchunk is a compressed file format that splits the file into independent
+chunks.  This allows you to only download the differences when downloading a
+new version of the file, and also makes zchunk files efficient over rsync.
+zchunk files are protected with strong checksums to verify that the file you
+downloaded is in fact the file you wanted.
+
+%package libs
+Summary: Zchunk library
+
+%description libs
+zchunk is a compressed file format that splits the file into independent
+chunks.  This allows you to only download the differences when downloading a
+new version of the file, and also makes zchunk files efficient over rsync.
+zchunk files are protected with strong checksums to verify that the file you
+downloaded is in fact the file you wanted.
+
+This package contains the zchunk library, libzck.
 
 %package devel
-Summary: Compressed file format library
-Requires: zchunk%{?_isa} = %{version}-%{release}
+Summary: Headers for building against zchunk
+Requires: %{name}-libs%{_isa} = %{version}-%{release}
 
 %description devel
-zchunk is a compressed file format.
+zchunk is a compressed file format that splits the file into independent
+chunks.  This allows you to only download the differences when downloading a
+new version of the file, and also makes zchunk files efficient over rsync.
+zchunk files are protected with strong checksums to verify that the file you
+downloaded is in fact the file you wanted.
+
+This package contains the headers necessary for building against the zchunk
+library, libzck.
 
 %prep
 %oreon_sha256
-%autosetup -n zchunk-%{version} -p1
+
+%autosetup
+# Remove bundled sha libraries
+rm -rf src/lib/hash/sha*
 
 %build
-%oreon_meson -Dwith-zstd=enabled
-%oreon_meson_build
+%meson -Dwith-openssl=enabled -Dwith-zstd=enabled
+%meson_build
 
 %install
-%oreon_meson_install
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+%meson_install
+mkdir -p %{buildroot}%{_libexecdir}
+install contrib/gen_xml_dictionary %{buildroot}%{_libexecdir}/zck_gen_xml_dictionary
 
-%files -f %{_builddir}/%{name}.files
+%check
+%meson_test
+
+%ldconfig_scriptlets libs
+
+%files
+%doc README.md contrib
+%{_bindir}/zck*
+%{_bindir}/unzck
+%{_libexecdir}/zck_gen_xml_dictionary
+%{_mandir}/man1/*.gz
+
+%files libs
 %license LICENSE
+%doc README.md
+%{_libdir}/libzck.so.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%doc zchunk_format.txt
+%{_libdir}/libzck.so
+%{_libdir}/pkgconfig/zck.pc
+%{_includedir}/zck.h
+

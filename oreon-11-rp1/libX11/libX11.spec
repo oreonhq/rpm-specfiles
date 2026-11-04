@@ -1,109 +1,133 @@
-%global source0_hash bbc78c46217174655c2b32b138ad119f3ac15f50808b4d0b3a2677a4b1afc950
+%global source0_hash 69606f485c2c07c14ef64f75b7bb326d48587af33795d9ab3e607c0b5f94f11c
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global tarball libX11
+#global gitdate 20130524
+#global gitversion a3bdd2b09
 
+Summary: Core X11 protocol client library
 Name: libX11
-Version: 1.8.14
-Release: 3%{?dist}
-Summary: X11 client library
-License: MIT
-URL: https://www.x.org/
-Source0: https://www.x.org/releases/individual/lib/libX11-%{version}.tar.xz
-Source1: libX11-%{version}.tar.xz.sig
-Source2: libX11-key.asc
+Version:        1.8.13
+Release:        1%{?dist}
+License: MIT AND X11
+URL: http://www.x.org
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
-BuildRequires: gcc
-BuildRequires: glibc-devel
+%if 0%{?gitdate}
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/libX11-%{version}.tar.xz
+Source1:    make-git-snapshot.sh
+Source2:    commitid
+%else
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/libX11-%{version}.tar.xz
+%endif
+
+
+Patch2:        dont-forward-keycode-0.patch
+Patch0001:        0001-xkb-Check-the-keysym-range-in-_XkbReadKeyActions-CVE.patch
+
+BuildRequires: libtool
 BuildRequires: make
-BuildRequires: patchelf
-BuildRequires: xorgproto
-BuildRequires: xtrans
-BuildRequires: libXau-devel >= 1.0.12
-BuildRequires: libxcb-devel >= 1.17.0
-BuildRequires: pkgconf
-Requires: libX11-common = %{version}-%{release}
+BuildRequires: xorg-x11-util-macros >= 1.11
+BuildRequires: pkgconfig(xproto) >= 7.0.15
+BuildRequires: xorg-x11-xtrans-devel >= 1.0.3-4
+BuildRequires: libxcb-devel >= 1.2
+BuildRequires: pkgconfig(xau) pkgconfig(xdmcp)
+BuildRequires: perl(Pod::Usage)
+BuildRequires:  oreon-rpm-macros
+
+Requires: %{name}-common >= %{version}-%{release}
 
 %description
-X11 client library
-
-%package devel
-Summary: X11 client library
-Requires: libX11%{?_isa} = %{version}-%{release}
-Requires: libX11-xcb%{?_isa} = %{version}-%{release}
-
-%description devel
-X11 client library
+Core X11 protocol client library.
 
 %package common
 Summary: Common data for libX11
 BuildArch: noarch
-Obsoletes: libX11 < 1.8.14-2
 
 %description common
-Locale data and error database shared by libX11.
+libX11 common data
+
+%package devel
+Summary: Development files for %{name}
+Requires: %{name} = %{version}-%{release}
+Requires: %{name}-xcb = %{version}-%{release}
+
+%description devel
+X.Org X11 libX11 development package
 
 %package xcb
-Summary: XCB interoperability library for libX11
-Requires: libX11%{?_isa} = %{version}-%{release}
+Summary: XCB interop for libX11
+Conflicts: %{name} < %{version}-%{release}
 
 %description xcb
-libX11-xcb lets Xlib and XCB share one display connection.
+libX11/libxcb interoperability library
 
 %prep
 %oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n libX11-%{version} -p1
+
+%autosetup -p1 -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+autoreconf -v --install --force
+%configure --disable-silent-rules --disable-static
+
+make %{?_smp_mflags}
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-mkdir -p %{buildroot}%{_localstatedir}/cache/libX11/compose
-rm -rf %{buildroot}%{_docdir}
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 
-%ldconfig_scriptlets
-%ldconfig_scriptlets xcb
+# create/own compose cache dir
+mkdir -p $RPM_BUILD_ROOT/var/cache/libX11/compose
+
+# We intentionally don't ship *.la files
+find $RPM_BUILD_ROOT -type f -name '*.la' -delete
+
+# FIXME: Don't install Xcms.txt - find out why upstream still ships this.
+find $RPM_BUILD_ROOT -name 'Xcms.txt' -delete
+
+# FIXME package these properly
+rm -rf $RPM_BUILD_ROOT%{_docdir}
+
+%check
+make %{?_smp_mflags} check
+
+%ldconfig_post
+%ldconfig_postun
 
 %files
-%license COPYING
 %{_libdir}/libX11.so.6
-%{_libdir}/libX11.so.6.*
-
-%files common
-%license COPYING
-%{_datadir}/X11/XErrorDB
-%{_datadir}/X11/Xcms.txt
-%{_datadir}/X11/locale/
-%dir %{_localstatedir}/cache/libX11
-%dir %{_localstatedir}/cache/libX11/compose
+%{_libdir}/libX11.so.6.4.0
 
 %files xcb
-%license COPYING
 %{_libdir}/libX11-xcb.so.1
-%{_libdir}/libX11-xcb.so.1.*
+%{_libdir}/libX11-xcb.so.1.0.0
+
+%files common
+%doc AUTHORS COPYING README.md
+%{_datadir}/X11/locale/
+%{_datadir}/X11/XErrorDB
+%dir /var/cache/libX11
+%dir /var/cache/libX11/compose
 
 %files devel
-%{_includedir}/X11/*.h
+%{_includedir}/X11/ImUtil.h
+%{_includedir}/X11/XKBlib.h
+%{_includedir}/X11/Xcms.h
+%{_includedir}/X11/Xlib.h
+%{_includedir}/X11/XlibConf.h
+%{_includedir}/X11/Xlibint.h
+%{_includedir}/X11/Xlib-xcb.h
+%{_includedir}/X11/Xlocale.h
+%{_includedir}/X11/Xregion.h
+%{_includedir}/X11/Xresource.h
+%{_includedir}/X11/Xutil.h
+%{_includedir}/X11/cursorfont.h
 %{_includedir}/X11/extensions/XKBgeom.h
 %{_libdir}/libX11.so
 %{_libdir}/libX11-xcb.so
 %{_libdir}/pkgconfig/x11.pc
 %{_libdir}/pkgconfig/x11-xcb.pc
 %{_mandir}/man3/*.3*
-%{_mandir}/man5/Compose.5*
-%{_mandir}/man5/XCompose.5*
+%{_mandir}/man5/*.5*
+

@@ -1,89 +1,133 @@
 %global source0_hash ce7ebdc9789ae51f3e7d26b5408de7395ddea0950d5d73568ed9565f5fae4d4c
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-%global py3_sitearch %{_libdir}/python%(python3 -c 'import sys;print("%d.%d"%sys.version_info[:2])' 2>/dev/null)/site-packages
+%global libcurl_version 7.52.0
 
-Name: librepo
-Version: 1.22.0
-Release: 2%{?dist}
-Summary: Repodata download library
-License: LGPL-2.1-or-later
-URL: https://github.com/rpm-software-management/librepo
-Source0: https://github.com/rpm-software-management/librepo/archive/refs/tags/%{version}.tar.gz
+%undefine __cmake_in_source_build
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: cmake
-BuildRequires: ninja-build
-BuildRequires: pkgconf
-BuildRequires: glib2-devel
-BuildRequires: openssl-devel
-BuildRequires: libxml2-devel
-BuildRequires: libcurl-devel
-BuildRequires: gpgme-devel
-BuildRequires: libselinux-devel
-BuildRequires: zchunk-devel
-BuildRequires: python3-devel
-BuildRequires: patchelf
+%bcond_without zchunk
+
+%bcond_with use_gpgme
+%bcond_with use_selinux
+
+# Needs to match how gnupg2 is compiled
+%bcond_with run_gnupg_user_socket
+
+%bcond_with sanitizers
+
+%if %{with use_gpgme} && %{with use_selinux}
+%global need_selinux 1
+%else
+%global need_selinux 0
+%endif
+
+%global dnf_conflict 2.8.8
+
+Name:           librepo
+Version:        1.22.0
+Release:        1%{?dist}
+Summary:        Repodata downloading library
+
+License:        LGPL-2.1-or-later
+URL:            https://github.com/rpm-software-management/librepo
+Source0:        https://github.com/rpm-software-management/librepo/archive/%{version}/librepo-%{version}.tar.gz
+
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  check-devel
+BuildRequires:  doxygen
+BuildRequires:  pkgconfig(glib-2.0) >= 2.66
+%if %{with use_gpgme}
+BuildRequires:  gpgme-devel
+%else
+BuildRequires:  pkgconfig(rpm) >= 4.18.0
+%endif
+BuildRequires:  libattr-devel
+BuildRequires:  libcurl-devel >= %{libcurl_version}
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(libcrypto)
+%if %{need_selinux}
+BuildRequires:  pkgconfig(libselinux)
+%endif
+BuildRequires:  pkgconfig(openssl)
+%if %{with zchunk}
+BuildRequires:  pkgconfig(zck) >= 0.9.11
+%endif
+Requires:       libcurl%{?_isa} >= %{libcurl_version}
+
+%if %{with sanitizers}
+BuildRequires:  libasan
+BuildRequires:  liblsan
+BuildRequires:  libubsan
+%endif
 
 %description
-librepo downloads repodata and packages.
+A library providing C and Python (libcURL like) API to downloading repository
+metadata.
 
 %package devel
-Summary: Repodata download library
-Requires: librepo%{?_isa} = %{version}-%{release}
+Summary:        Repodata downloading library
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%if %{with zchunk}
+Requires:       zchunk-devel%{?_isa}
+%endif
 
 %description devel
-librepo downloads repodata and packages.
+Development files for librepo.
 
-%package -n python3-librepo
-Summary: Python 3 bindings for librepo
-Requires: librepo%{?_isa} = %{version}-%{release}
+%package -n python3-%{name}
+Summary:        Python 3 bindings for the librepo library
+%{?python_provide:%python_provide python3-%{name}}
+BuildRequires:  python3-devel
+BuildRequires:  python3-gpg
+BuildRequires:  python3-pyxattr
+BuildRequires:  python3-requests
+BuildRequires:  oreon-rpm-macros
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Obsoletes:      platform-python-%{name} < %{version}-%{release}
+Conflicts:      python3-dnf < %{dnf_conflict}
 
-%description -n python3-librepo
+%description -n python3-%{name}
 Python 3 bindings for the librepo library.
 
 %prep
 %oreon_sha256
+
 %autosetup -p1
 
 %build
-%oreon_cmake \
-  -DCMAKE_SKIP_RPATH=ON \
-  -DENABLE_TESTS=OFF \
-  -DENABLE_DOCS=OFF \
-  -DENABLE_EXAMPLES=OFF \
-  -DWITH_ZCHUNK=ON \
-  -DUSE_GPGME=ON \
-  -DENABLE_SELINUX=ON \
-  -DENABLE_PYTHON=ON
-%oreon_cmake_build
+%cmake \
+    -DWITH_ZCHUNK=%{?with_zchunk:ON}%{!?with_zchunk:OFF} \
+    -DUSE_GPGME=%{?with_use_gpgme:ON}%{!?with_use_gpgme:OFF} \
+    -DUSE_RUN_GNUPG_USER_SOCKET=%{?with_run_gnupg_user_socket:ON}%{!?with_run_gnupg_user_socket:OFF} \
+    -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
+%if %{need_selinux}
+    -DENABLE_SELINUX=ON
+%else
+    -DENABLE_SELINUX=OFF
+%endif
+%cmake_build
+
+%check
+%ctest
 
 %install
-%oreon_cmake_install
-rm -f %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
+%cmake_install
 
 %ldconfig_scriptlets
 
 %files
 %license COPYING
-%{_libdir}/librepo.so.0
+%doc README.md
+%{_libdir}/%{name}.so.*
 
 %files devel
-%{_includedir}/librepo/
-%{_libdir}/librepo.so
-%{_libdir}/pkgconfig/librepo.pc
+%{_libdir}/%{name}.so
+%{_libdir}/pkgconfig/%{name}.pc
+%{_includedir}/%{name}/
 
-%files -n python3-librepo
-%{py3_sitearch}/librepo/
+%files -n python3-%{name}
+%{python3_sitearch}/%{name}/
+

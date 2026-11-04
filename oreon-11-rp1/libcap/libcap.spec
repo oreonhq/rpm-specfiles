@@ -1,81 +1,132 @@
-%global source0_hash 0d621e562fd932ccf67b9660fb018e468a683d7b827541df27813228c996bb11
+%global source0_hash 2a2c705e382c413643a458b837575c0eb0989477ab6fb99c87adbe9a259612ad
+%global source1_hash 6d072d8a37ffa36856bc1cce70f3d21189c65b753cf8575f96d38c195fcd85ca
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
 Name: libcap
-Version: 2.78
-Release: 1%{?dist}
-Summary: POSIX capability library
-License: BSD-3-Clause OR GPL-2.0-only
+Version:        2.78
+Release:        1%{?dist}
+Summary: Library for getting and setting POSIX.1e capabilities
 URL: https://sites.google.com/site/fullycapable/
-Source0: https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-%{version}.tar.xz
+License: BSD-3-Clause OR GPL-2.0-only
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+Source0:        https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-%{version}.tar.gz
+Source1:        https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/libcap-%{version}.tar.sign
+Source2:        29EE848AE2CCF3F4.asc
+
+BuildRequires: pam-devel gcc
 BuildRequires: make
+BuildRequires: glibc-static
+BuildRequires: gnupg2
+
+%ifarch %{golang_arches}
+BuildRequires: golang >= 1.22
+BuildRequires:  oreon-rpm-macros
+%endif
+
+%if "%{_sbindir}" == "%{_bindir}"
+# Compat symlinks for Requires in other packages.
+# We rely on filesystem to create the symlinks for us.
+Requires:       filesystem(unmerged-sbin-symlinks)
+Provides:       /usr/sbin/setcap
+%endif
 
 %description
-libcap is a library for getting and setting POSIX capabilities.
+libcap is a library for getting and setting POSIX.1e (formerly POSIX 6)
+draft 15 capabilities.
+
+%package static
+Summary: Static libraries for libcap development
+Requires: %{name} = %{version}-%{release}
+
+%description static
+The libcap-static package contains static libraries needed to develop programs
+that use libcap and need to be statically linked. 
+
+libcap is a library for getting and setting POSIX.1e (formerly POSIX 6)
+draft 15 capabilities.
 
 %package devel
-Summary: POSIX capability library
-Requires: libcap%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(libcap)
-Provides: pkgconfig(libpsx)
+Summary: Development files for libcap
+Requires: %{name} = %{version}-%{release}
 
 %description devel
-libcap is a library for getting and setting POSIX capabilities.
+Development files (Headers, etc) for libcap.
+
+libcap is a library for getting and setting POSIX.1e (formerly POSIX 6)
+draft 15 capabilities.
+
+Install libcap-devel if you want to develop or compile applications using
+libcap.
+
+%ifarch %{golang_arches}
+%package -n captree
+Summary: Capability inspection utility
+
+%description -n captree
+The captree program was inspired by the utility pstree, but it uses the
+libcap/cap (Go package) API to explore process runtime state and display
+the capability status of processes and threads.
+%endif
 
 %prep
 %oreon_sha256
+echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
+
+gzip -cd %{SOURCE0} | %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data -
 %autosetup -p1
 
+
 %build
-export CFLAGS="%{_oreon_cflags} -fPIC"
-export LDFLAGS="%{_oreon_ldflags}"
-make -C libcap %{?_smp_mflags} prefix=%{_prefix} lib=lib64 PAM_CAP=no RAISE_SETFCAP=no GOLANG=no
-make -C progs %{?_smp_mflags} prefix=%{_prefix} lib=lib64 PAM_CAP=no RAISE_SETFCAP=no GOLANG=no
-make -C doc prefix=%{_prefix} lib=lib64 PAM_CAP=no
+%make_build prefix=%{_prefix} lib=%{_lib} SBINDIR=%{_sbindir} CGO_REQUIRED=1 CGO_CFLAGS="${CFLAGS}" CGO_LDFLAGS="${LDFLAGS}" GO_BUILD_FLAGS="-buildmode=pie -a -v -x -ldflags='-compressdwarf=false -B gobuildid'" all
+
+%check
+make test
 
 %install
-export CFLAGS="%{_oreon_cflags} -fPIC"
-export LDFLAGS="%{_oreon_ldflags}"
-make -C libcap install DESTDIR=%{buildroot} prefix=%{_prefix} lib=lib64 PAM_CAP=no RAISE_SETFCAP=no GOLANG=no
-make -C progs install DESTDIR=%{buildroot} prefix=%{_prefix} lib=lib64 PAM_CAP=no RAISE_SETFCAP=no GOLANG=no
-make -C doc install DESTDIR=%{buildroot} prefix=%{_prefix} lib=lib64 PAM_CAP=no
-rm -f %{buildroot}%{_libdir}/*.a
+%make_install prefix=%{_prefix} lib=%{_lib} SBINDIR=%{_sbindir} CGO_REQUIRED=1 CGO_CFLAGS="${CFLAGS}" CGO_LDFLAGS="${LDFLAGS}" GO_BUILD_FLAGS="-buildmode=pie -ldflags='-compressdwarf=false -B gobuildid'"
+
+mkdir -p %{buildroot}/%{_mandir}/man{2,3,5,8}
+mv -f doc/*.3 %{buildroot}/%{_mandir}/man3/
+
+chmod +x %{buildroot}/%{_libdir}/*.so.*
+
+%ldconfig_scriptlets
 
 %files
 %license License
-%{_prefix}/sbin/capsh
-%{_prefix}/sbin/getcap
-%{_prefix}/sbin/getpcaps
-%{_prefix}/sbin/setcap
-%{_libdir}/libcap.so.2
-%{_libdir}/libcap.so.2.*
-%{_libdir}/libpsx.so.2
-%{_libdir}/libpsx.so.2.*
+%doc doc/capability.md
+%{_libdir}/libcap.so.2{,.*}
+%{_libdir}/libpsx.so.2{,.*}
+%{_sbindir}/{capsh,getcap,getpcaps,setcap}
 %{_mandir}/man1/capsh.1*
 %{_mandir}/man5/capability.conf.5*
 %{_mandir}/man7/cap_text_formats.7*
-%{_mandir}/man8/getcap.8*
-%{_mandir}/man8/getpcaps.8*
-%{_mandir}/man8/setcap.8*
-%{_mandir}/man8/captree.8*
-%{_mandir}/man8/pam_cap.8*
+%{_mandir}/man8/{getcap,getpcaps,setcap,pam_cap}.8*
+%{_libdir}/security/pam_cap.so
+%exclude %{_mandir}/man8/captree.8*
+
+%files static
+%{_libdir}/libcap.a
+%{_libdir}/libpsx.a
 
 %files devel
 %{_includedir}/sys/capability.h
 %{_includedir}/sys/psx_syscall.h
 %{_libdir}/libcap.so
 %{_libdir}/libpsx.so
-%{_libdir}/pkgconfig/libcap.pc
-%{_libdir}/pkgconfig/libpsx.pc
 %{_mandir}/man3/cap*.3*
 %{_mandir}/man3/libcap.3*
 %{_mandir}/man3/libpsx.3*
 %{_mandir}/man3/psx_*.3*
 %{_mandir}/man3/__psx_syscall.3*
+%{_libdir}/pkgconfig/{libcap,libpsx}.pc
+
+%ifarch %{golang_arches}
+%files -n captree
+%license License
+%{_sbindir}/captree
+%{_mandir}/man8/captree.8*
+%endif
+

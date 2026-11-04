@@ -15,7 +15,7 @@ Summary:        An advanced file and recursive website downloader
 # Documentation is GFDL
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND GFDL-1.3-or-later
 URL:            https://gitlab.com/gnuwget/wget2
-Source0:        https://ftp.gnu.org/gnu/wget/%{name}-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/wget/wget2-%{version}.tar.gz
 Source1:        wget2-2.3.0.tar.gz.sig
 # key 08302DB6A2670428
 Source2:        tim.ruehsen-keyring.asc
@@ -103,6 +103,7 @@ Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Development libraries and headers needed for building applications to
 use functionality from GNU Wget2.
 
+%if %{with as_wget}
 %package wget
 Summary:        %{name} shim to provide wget
 Requires:       wget2%{?_isa} = %{version}-%{release}
@@ -117,11 +118,12 @@ Provides:       webclient
 This package provides the shim links for %{name} to be automatically
 used in place of wget. This ensures that %{name} is used as
 the system provider of wget.
+%endif
 
 %prep
 %oreon_sha256
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -S git_am
 
 
@@ -143,9 +145,11 @@ find %{buildroot} -type f -name "*.la" -delete -print
 # Delete useless noinstall binary
 rm -v %{buildroot}%{_bindir}/%{name}_noinstall
 
+%if %{with as_wget}
 ln -sr %{buildroot}%{_bindir}/%{name} %{buildroot}%{_bindir}/wget
 # Link wget(1) to wget2(1)
 echo ".so man1/%{name}.1" > %{buildroot}%{_mandir}/man1/wget.1
+%endif
 
 %check
 %make_build check
@@ -168,8 +172,10 @@ echo ".so man1/%{name}.1" > %{buildroot}%{_mandir}/man1/wget.1
 %{_libdir}/pkgconfig/libwget.pc
 %{_mandir}/man3/libwget*.3*
 
+%if %{with as_wget}
 %files wget
 %{_bindir}/wget
 %{_mandir}/man1/wget.1*
+%endif
 
 

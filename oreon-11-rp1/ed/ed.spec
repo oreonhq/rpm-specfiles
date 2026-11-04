@@ -1,53 +1,69 @@
-%global source0_hash 7eb22c30a99dcdb50a8630ef7ff3e4642491ac4f8cd1aa9f3182264df4f4ad08
+%global source0_hash 3f33b22135219c39c3c695f7b7171c2567d3e2a17c798c0a90607320cbb268f2
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: The GNU line editor
 Name: ed
-Version: 1.22
-Release: 1%{?dist}
-Summary: Line-oriented text editor
-License: GPL-3.0-or-later
-URL: https://www.gnu.org/software/ed/
-Source0: https://ftp.gnu.org/gnu/ed/ed-%{version}.tar.lz
-Source1: ed-%{version}.tar.lz.sig
-Source2: ed-key.asc
+Version:        1.22.6
+Release:        1%{?dist}
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
+# The entire source is GPLv2 except doc/ed.info and doc/ed.texi, which are GFDL
+License: GPL-2.0-only AND GFDL-1.3-no-invariants-or-later
+URL:     https://www.gnu.org/software/ed/
+Source0:        https://ftpmirror.gnu.org/ed/ed-%{version}.tar.lz
+Source1:        ed-1.22.6.tar.lz.sig
+Source2:        antoniodiazdiaz-keyring-2026.asc
+
 BuildRequires: gcc
-BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
 BuildRequires: lzip
-BuildRequires: tar
+# for gpg verification
+BuildRequires: gnupg2
+BuildRequires:  oreon-rpm-macros
 
 %description
-GNU ed is a line-oriented text editor, the standard Unix editor.
+ed is a line-oriented text editor, used to create, display, and modify text
+files (both interactively and via shell scripts). For most purposes, ed has been
+replaced in normal usage by full-screen editors (emacs and vi, for example).
 
 %prep
 %oreon_sha256
+
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n ed-%{version} -p1
+
+%autosetup
 
 %build
-./configure --prefix=%{_prefix} --bindir=%{_bindir} --mandir=%{_mandir} --infodir=%{_infodir} CFLAGS="%{_oreon_cflags}" LDFLAGS="%{_oreon_ldflags}"
-%oreon_make
+%set_build_flags
+# Custom configure script; not Autoconf, so we do not use %%configure macro
+./configure \
+    --prefix=%{_prefix} \
+    --exec-prefix=%{_exec_prefix} \
+    --bindir=%{_bindir} \
+    --datarootdir=%{_datadir} \
+    --infodir=%{_infodir} \
+    --mandir=%{_mandir} \
+    --program-prefix=%{?_program_prefix} \
+    CC="${CC-gcc}" \
+    CPPFLAGS="${CPPFLAGS}" \
+    CFLAGS="${CFLAGS}" \
+    LDFLAGS="${LDFLAGS}"
+%make_build
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f" 2>/dev/null || true)
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist
+%make_install
+rm -vrf %{buildroot}%{_infodir}/dir
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+%check
+%make_build check
+
+%files
+%license COPYING doc/fdl.texi
+%doc ChangeLog NEWS README AUTHORS
+%{_bindir}/ed
+%{_bindir}/red
+%{_mandir}/man1/ed.1*
+%{_mandir}/man1/red.1*
+%{_infodir}/ed.info*
+

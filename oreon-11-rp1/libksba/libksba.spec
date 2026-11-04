@@ -1,65 +1,96 @@
-%global source0_hash c2f84393011827219ae117131dba8e7684c2bed0961eed11b0642c2acba440b5
+%global source0_hash 296b9db9095749f2aa104202d7ab7fd09ad10710e00780a709c9754b1a1d9292
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%bcond_with bootstrap
 
-Name: libksba
-Version: 1.8.1
-Release: 1%{?dist}
-Summary: X.509 and CMS library
-License: (LGPL-3.0-or-later OR GPL-2.0-or-later) AND GPL-3.0-or-later
-URL: https://gnupg.org/software/libksba/
-Source0: https://gnupg.org/ftp/gcrypt/libksba/libksba-%{version}.tar.bz2
-Source1: libksba-%{version}.tar.bz2.sig
-Source2: gnupg-signing-keys.asc
+Summary: CMS and X.509 library
+Name:    libksba
+Version:        1.8.0
+Release:        1%{?dist}
 
-BuildRequires: oreon-rpm-macros
+# The library is licensed under LGPLv3+ or GPLv2+,
+# the rest of the package under GPLv3+
+License: GPL-3.0-or-later AND LGPL-2.1-or-later AND (LGPL-3.0-or-later OR GPL-2.0-or-later)
+URL:     https://www.gnupg.org/
+Source0:        https://www.gnupg.org/ftp/gcrypt/libksba/libksba-%{version}.tar.bz2
+Source1:        libksba-1.8.0.tar.bz2.sig
+Source2:        signature_key.asc
+
+Patch1:        libksba-1.3.0-multilib.patch
+
 BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: libgpg-error-devel
-BuildRequires: patchelf
-%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: gawk
+%if %{without bootstrap}
+# Require gnupg2 to verify sources, unless bootstrapping
 BuildRequires: gnupg2
 %endif
+BuildRequires: libgpg-error-devel >= 1.8
+BuildRequires: make
+BuildRequires:  oreon-rpm-macros
 
 %description
-Libksba handles X.509 certificates and the CMS data used by S/MIME.
+KSBA (pronounced Kasbah) is a library to make X.509 certificates as
+well as the CMS easily accessible by other applications.  Both
+specifications are building blocks of S/MIME and TLS.
 
 %package devel
-Summary: Development files for libksba
-Requires: libksba%{?_isa} = %{version}-%{release}
+Summary: Development headers and libraries for %{name}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: pkgconfig
 
 %description devel
-Headers, libraries and pkg-config files for building against libksba.
+%{summary}.
+
 
 %prep
 %oreon_sha256
-%if %{without bootstrap} && !0%{?bootstrap}
+
+%if %{without bootstrap}
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %endif
-%autosetup -n libksba-%{version} -p1
+%autosetup -p1
+
+# Convert to utf-8
+for file in THANKS; do
+    iconv -f ISO-8859-1 -t UTF-8 -o $file.new $file && \
+    touch -r $file $file.new && \
+    mv $file.new $file
+done
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+%configure \
+  --disable-dependency-tracking \
+  --disable-static
+
+%make_build
+
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+%make_install
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+rm -f $RPM_BUILD_ROOT%{_libdir}/lib*.la
 
-%files devel -f %{_builddir}/%{name}-devel.files
+
+%check
+make check
+
+
+%ldconfig_scriptlets
+
+%files
+%license COPYING COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv3
+%doc AUTHORS ChangeLog NEWS README* THANKS TODO
+%{_libdir}/libksba.so.8*
+
+%files devel
+%{_bindir}/ksba-config
+%{_libdir}/libksba.so
+%{_includedir}/ksba.h
+%{_datadir}/aclocal/ksba.m4
+%{_libdir}/pkgconfig/ksba.pc
+%{_infodir}/ksba.info*
+
+

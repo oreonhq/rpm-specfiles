@@ -1,38 +1,58 @@
-%global source0_hash 98780bbdf16c1bce89ef3a8c0f537ac6e4ea77087b609e7698857614488a2a62
+%global source0_hash 4c5c6136540384e5455b250f768e7ca11b03fdba1a8efc2341ee0f1111e57612
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+Name:     scdoc
+Version:        1.11.3
+Release:        1%{?dist}
+Summary:  Tool for generating roff manual pages
 
-Name: scdoc
-Version: 1.11.5
-Release: 1%{?dist}
-Summary: Tool for generating roff manual pages
-License: MIT
-URL: https://git.sr.ht/~sircmpwn/scdoc
-Source0: https://git.sr.ht/~sircmpwn/scdoc/archive/%{version}.tar.gz#/scdoc-%{version}.tar.gz
+License:  MIT
+URL:      https://git.sr.ht/~sircmpwn/%{name}
+Source0:        https://git.sr.ht/~sircmpwn/scdoc/archive/%{version}.tar.gz#/scdoc-%{version}.tar.gz
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
 BuildRequires: make
+BuildRequires: gcc
+BuildRequires: sed
+BuildRequires:  oreon-rpm-macros
 
 %description
-scdoc is a simple man page generator written for POSIX systems in C99.
+scdoc is a tool designed to make the process of writing man pages more
+friendly. It reads scdoc syntax from stdin and writes roff to stdout, suitable
+for reading with man.
 
 %prep
 %oreon_sha256
-%autosetup -n scdoc-%{version} -p1
+
+%autosetup -p1
+
+# Disable static linking
+sed -i '/-static/d' Makefile
+
+# Use INSTALL provided by the make_install macro
+sed -i 's/\tinstall/\t$(INSTALL)/g' Makefile
 
 %build
-%oreon_make PREFIX=%{_prefix} PCDIR=%{_datadir}/pkgconfig LDFLAGS="%{build_ldflags}" CFLAGS="%{build_cflags}"
+make PREFIX=%{_prefix} %{?_smp_mflags}
 
 %install
-%oreon_make_install PREFIX=%{_prefix} PCDIR=%{_datadir}/pkgconfig
+%if 0%{?el7}
+%make_install PREFIX=%{_prefix} INSTALL="%{__install} -p"
+%else
+%make_install PREFIX=%{_prefix}
+%endif
+
+%check
+make check
 
 %files
 %license COPYING
-%{_bindir}/scdoc
-%{_mandir}/man1/scdoc.1*
-%{_mandir}/man5/scdoc.5*
-%{_datadir}/pkgconfig/scdoc.pc
+%doc README.md
+%{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1*
+%{_mandir}/man5/%{name}.5*
+# Not shipped in a -devel package since scdoc is a development tool not
+# installed in a user runtime.
+%{_datarootdir}/pkgconfig/%{name}.pc
+

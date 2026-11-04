@@ -11,7 +11,7 @@ Release:        1%{?dist}
 Summary:	A library implementing the SSH2 protocol
 License:	BSD-3-Clause
 URL:		https://www.libssh2.org/
-Source0:	https://libssh2.org/download/libssh2-%{version}.tar.gz
+Source0:        https://libssh2.org/download/libssh2-%{version}.tar.gz
 Source1:        libssh2-1.11.1.tar.gz.asc
 # Daniel Stenberg's GPG keys; linked from https://daniel.haxx.se/address.html
 Source2:        mykey.asc
@@ -67,7 +67,7 @@ developing applications that use libssh2.
 %prep
 %oreon_sha256
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %setup -q
 
 # CVE-2026-7598 libssh2: integer overflow via large username or password arguments

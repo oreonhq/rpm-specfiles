@@ -10,7 +10,7 @@ Summary:	PCI bus related utilities
 License:	GPL-2.0-or-later
 URL:		https://mj.ucw.cz/sw/pciutils/
 
-Source0:	https://www.kernel.org/pub/software/utils/pciutils/%{name}-%{version}.tar.xz
+Source0:        https://www.kernel.org/pub/software/utils/pciutils/pciutils-%{version}.tar.xz
 Source1:	multilibconfigh
 Source2:	libpci_symbols.lst
 
@@ -73,6 +73,9 @@ install -d $RPM_BUILD_ROOT{%{_bindir},%{_sbindir},%{_mandir}/man{7,8},%{_libdir}
 
 install -p pcilmr $RPM_BUILD_ROOT%{_bindir}
 install -p lspci setpci update-pciids $RPM_BUILD_ROOT%{_sbindir}
+%if "%{_sbindir}" != "%{_bindir}"
+ln -sr $RPM_BUILD_ROOT%{_sbindir}/lspci $RPM_BUILD_ROOT%{_bindir}/lspci
+%endif
 install -p -m 644 lspci.8 pcilmr.8 setpci.8 update-pciids.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install -p -m 644 pcilib.7 $RPM_BUILD_ROOT%{_mandir}/man7
 install -p lib/libpci.so.* $RPM_BUILD_ROOT%{_libdir}/
@@ -97,6 +100,9 @@ diff -u %{SOURCE2} libpci_symbols_new.lst
 %doc README ChangeLog pciutils.lsm
 %{_bindir}/lspci
 %{_bindir}/pcilmr
+%if "%{_sbindir}" != "%{_bindir}"
+%{_sbindir}/lspci
+%endif
 %{_sbindir}/setpci
 %{_sbindir}/update-pciids
 %{_mandir}/man8/*

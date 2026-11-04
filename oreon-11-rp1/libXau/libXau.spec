@@ -1,57 +1,75 @@
 %global source0_hash 74d0e4dfa3d39ad8939e99bda37f5967aba528211076828464d2777d477fc0fb
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+Summary: Sample Authorization Protocol for X
 Name: libXau
-Version: 1.0.12
-Release: 5%{?dist}
-Summary: X11 authorisation library
-License: MIT
-URL: https://www.x.org/
-Source0: https://www.x.org/releases/individual/lib/libXau-%{version}.tar.xz
+Version:        1.0.12
+Release:        1%{?dist}
+License: MIT-open-group
+URL: http://www.x.org
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+Source0:        https://www.x.org/pub/individual/lib/libXau-%{version}.tar.xz
+
 BuildRequires: make
-BuildRequires: patchelf
-BuildRequires: xorgproto
-BuildRequires: pkgconf
+BuildRequires: xorg-x11-util-macros
+BuildRequires: autoconf automake libtool
+BuildRequires: pkgconfig
+BuildRequires: xorg-x11-proto-devel
 
 %description
-X11 authorisation library
+This is a very simple mechanism for providing individual access to an X Window
+System display. It uses existing core protocol and library hooks for specifying
+authorization data in the connection setup block to restrict use of the display
+to only those clients that show that they know a server-specific key 
+called a "magic cookie".
 
 %package devel
-Summary: X11 authorisation library
-Requires: libXau%{?_isa} = %{version}-%{release}
+Summary: Development files for %{name}
+Requires: %{name} = %{version}-%{release}
+Requires: xorg-x11-proto-devel
+Requires: pkgconfig
+BuildRequires: xorg-x11-proto-devel
+BuildRequires:  oreon-rpm-macros
 
 %description devel
-X11 authorisation library
+X.Org X11 libXau development package
 
 %prep
 %oreon_sha256
-%autosetup -n libXau-1.0.12 -p1
+
+%setup -q
+#patch0 -p1 -b .local
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+autoreconf -v --install --force
+
+%configure --disable-static
+make %{?_smp_mflags}
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+rm -rf $RPM_BUILD_ROOT
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
 
-%files devel -f %{_builddir}/%{name}-devel.files
+# We intentionally don't ship *.la files
+rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
+
+%check
+make check
+
+%ldconfig_post
+%ldconfig_postun
+
+%files
+%doc AUTHORS COPYING README ChangeLog
+%{_libdir}/libXau.so.6
+%{_libdir}/libXau.so.6.0.0
+
+%files devel
+%{_includedir}/X11/Xauth.h
+%{_libdir}/libXau.so
+%{_libdir}/pkgconfig/xau.pc
+%{_mandir}/man3/*.3*
+

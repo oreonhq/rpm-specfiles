@@ -12,7 +12,7 @@ Version:        1.11^20190603git9e74f2d
 Release:        1%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/cronie-crond/crontabs
-Source0: https://github.com/cronie-crond/crontabs/releases/download/crontabs-%{snapshot_date}/%{name}-%(echo %{version}|cut -d\^ -f1)-%{snapshot_date}git.tar.gz
+Source0:        https://github.com/cronie-crond/crontabs/releases/download/crontabs-20190603/crontabs-1.11-20190603git.tar.gz
 BuildArch: noarch
 Requires: sed
 Requires: cronie

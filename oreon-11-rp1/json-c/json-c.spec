@@ -1,80 +1,203 @@
-%global source0_hash 876ab046479166b869afc6896d288183bbc0e5843f141200c677b3e8dfb11724
+%global source0_hash 3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
-Name: json-c
-Version: 0.18
-Release: 1%{?dist}
-Summary: JSON parser library
-License: MIT
-URL: https://github.com/json-c/json-c
-Source0: https://s3.amazonaws.com/json-c_releases/releases/json-c-%{version}.tar.gz
+# We don't want accidental SONAME bumps.
+# When there is a SONAME bump in json-c, we need to request
+# a side-tag for bootstrap purposes:
+#
+# 1. Build a bootstrap build of the systemd package, and wait
+#    for it to be available inside the side-tag.
+# 2. Re-build the following build-chain for bootstrap:
+#    json-c : cryptsetup
+# 3. Untag the systemd bootstrap build from the side-tag, and
+#    disable bootstrapping in the systemd package.  Re-build
+#    the systemd package into Rawhide.
+# 4. Wait for the changes to populate and re-build the following
+#    chain into the side-tag:
+#    satyr : libdnf libreport
+# 5. Merge the side-tag using Bodhi.
+#
+# After that procedure any other cosumers can be re-build
+# in Rawhide as usual.
+%global so_ver 5
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: cmake
-BuildRequires: ninja-build
-BuildRequires: python3
-BuildRequires: patchelf
+# Releases are tagged with a date stamp.
+%global reldate 20240915
+
+%bcond_without mingw
+
+
+Name:           json-c
+Version:        0.18
+Release:        1%{?dist}
+Summary:        JSON implementation in C
+
+License:        MIT
+URL:            https://github.com/%{name}/%{name}
+Source0:        https://github.com/json-c/json-c/archive/json-c-%{version}-20240915.tar.gz
+
+# Add libver to mingw dll
+Patch0:        json-c_mingw-libver.patch
+Patch1:        json-c-0.18-utf8-validation.patch
+
+BuildRequires:  cmake
+BuildRequires:  gcc
+BuildRequires:  ninja-build
+%ifarch %{valgrind_arches}
+BuildRequires:  valgrind
+%endif
 
 %description
-json-c is a JSON parser library.
+JSON-C implements a reference counting object model that allows you
+to easily construct JSON objects in C, output them as JSON formatted
+strings and parse JSON formatted strings back into the C representation
+of JSON objects.  It aims to conform to RFC 7159.
 
-%package devel
-Summary: JSON parser library
-Requires: json-c%{?_isa} = %{version}-%{release}
 
-%description devel
-json-c is a JSON parser library.
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+This package contains libraries and header files for
+developing applications that use %{name}.
+
+
+%package        doc
+Summary:        Reference manual for json-c
+
+#BuildArch:     noarch
+
+BuildRequires:  doxygen
+BuildRequires:  hardlink
+
+%description    doc
+This package contains the reference manual for %{name}.
+
+
+%if %{with mingw}
+%package -n mingw32-%{name}
+Summary:       MinGW Windows %{name} library
+BuildArch:     noarch
+BuildRequires: mingw32-filesystem
+BuildRequires: mingw32-gcc
+
+%description -n mingw32-%{name}
+%{summary}.
+
+
+%package -n mingw64-%{name}
+Summary:       MinGW Windows %{name} library
+BuildArch:     noarch
+BuildRequires: mingw64-filesystem
+BuildRequires: mingw64-gcc
+BuildRequires:  oreon-rpm-macros
+
+%description -n mingw64-%{name}
+%{summary}.
+
+%{?mingw_debug_package}
+%endif
+
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%autosetup -n %{name}-%{name}-%{version}-%{reldate} -p 1
+
+# Remove pre-built html documentation.
+rm -fr doc/html
+
+# Update Doxyfile.
+doxygen -s -u doc/Doxyfile.in
+
 
 %build
-%oreon_cmake \
-  -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-  -DCMAKE_SKIP_RPATH=ON \
-  -DBUILD_STATIC_LIBS=OFF \
-  -DBUILD_TESTING=OFF \
-  -DDISABLE_WERROR=ON
-%oreon_cmake_build
+cmake_opts="-DBUILD_STATIC_LIBS:BOOL=OFF       \
+  -DCMAKE_BUILD_TYPE:STRING=RELEASE  \
+  -DCMAKE_C_FLAGS_RELEASE:STRING=""  \
+  -DDISABLE_BSYMBOLIC:BOOL=OFF       \
+  -DDISABLE_WERROR:BOOL=ON           \
+  -DENABLE_RDRAND:BOOL=ON            \
+  -DENABLE_THREADING:BOOL=ON         \
+  -DBUILD_APPS=OFF                   \
+  -G Ninja"
+%cmake $cmake_opts
+%cmake_build --target all doc
+
+%if %{with mingw}
+%mingw_cmake $cmake_opts
+%mingw_ninja
+%endif
+
 
 %install
-%oreon_cmake_install
-rm -f %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-text = "\n".join(m + move)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
+%cmake_install
 
-%files -f %{_builddir}/%{name}.files
+%if %{with mingw}
+%mingw_ninja_install
+%mingw_debug_install_post
+%endif
+
+# Documentation
+mkdir -p %{buildroot}%{_pkgdocdir}
+cp -a %{__cmake_builddir}/doc/html ChangeLog README README.* \
+  %{buildroot}%{_pkgdocdir}
+hardlink -cfv %{buildroot}%{_pkgdocdir}
+
+
+%check
+export USE_VALGRIND=0
+%ctest
+%ifarch %{valgrind_arches}
+export USE_VALGRIND=1
+%ctest
+%endif
+unset USE_VALGRIND
+
+
+%ldconfig_scriptlets
+
+
+%files
+%license AUTHORS
 %license COPYING
+%{_libdir}/lib%{name}.so.%{so_ver}*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+
+%files devel
+%doc %dir %{_pkgdocdir}
+%doc %{_pkgdocdir}/ChangeLog
+%doc %{_pkgdocdir}/README*
+%{_includedir}/%{name}
+%{_libdir}/cmake/%{name}
+%{_libdir}/lib%{name}.so
+%{_libdir}/pkgconfig/%{name}.pc
+
+
+%files doc
+%license %{_datadir}/licenses/%{name}*
+%doc %{_pkgdocdir}
+
+%if %{with mingw}
+%files -n mingw32-%{name}
+%license COPYING
+%{mingw32_includedir}/%{name}
+%{mingw32_bindir}/lib%{name}-%{so_ver}.dll
+%{mingw32_libdir}/lib%{name}.dll.a
+%{mingw32_libdir}/cmake/%{name}
+%{mingw32_libdir}/pkgconfig/%{name}.pc
+
+%files -n mingw64-%{name}
+%license COPYING
+%{mingw64_includedir}/%{name}
+%{mingw64_bindir}/lib%{name}-%{so_ver}.dll
+%{mingw64_libdir}/lib%{name}.dll.a
+%{mingw64_libdir}/cmake/%{name}
+%{mingw64_libdir}/pkgconfig/%{name}.pc
+%endif
+

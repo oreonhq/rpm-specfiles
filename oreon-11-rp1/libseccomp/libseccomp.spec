@@ -1,56 +1,139 @@
-%global source0_hash 83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc
+%global source0_hash 501f66c667225d53791b97e1d7cf85ab764c297d04881f60f38f451c4b0ee1be
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%bcond python 1
+%bcond test 1
 
-Name: libseccomp
-Version: 2.6.0
-Release: 1%{?dist}
-Summary: seccomp syscall filter library
-License: LGPL-2.1-or-later
-URL: https://github.com/seccomp/libseccomp
-Source0: https://github.com/seccomp/libseccomp/releases/download/v%{version}/libseccomp-%{version}.tar.gz
+%ifarch %{ix86}
+%global _cython_cpu i386
+%elifarch ppc64le
+%global _cython_cpu powerpc64le
+%else
+%global _cython_cpu %{_host_cpu}
+%endif
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: patchelf
-BuildRequires: gperf
+Name:           libseccomp
+Version:        2.6.1
+Release:        1%{?dist}
+Summary:        Enhanced seccomp library
 
-%description
-seccomp syscall filter library
+%global soname_version %%(echo %%{version}} | cut -d. -f1)
+
+License:        LGPL-2.1-only
+URL:            https://github.com/seccomp/libseccomp
+Source0:        https://github.com/seccomp/libseccomp/releases/download/v%{version}/libseccomp-%{version}.tar.gz
+
+BuildRequires:  gcc
+BuildRequires:  gperf
+BuildRequires:  make
+
+%ifnarch riscv64 s390
+# Versions prior to 3.13.0-4 do not work on ARM with newer glibc 2.25.0-6
+BuildRequires:  valgrind >= 1:3.13.0-4
+%endif
+
+%global _description %{expand:
+The libseccomp library provides an easy to use interface to the Linux Kernel's
+syscall filtering mechanism, seccomp.  The libseccomp API allows an application
+to specify which syscalls, and optionally which syscall arguments, the
+application is allowed to execute, all of which are enforced by the Linux
+Kernel.}
+
+%description %{_description}
+
 
 %package devel
-Summary: seccomp syscall filter library
-Requires: libseccomp%{?_isa} = %{version}-%{release}
+Summary:        Development files used to build applications with libseccomp support
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description devel
-seccomp syscall filter library
+%description devel %{_description}
+
+The %{name}-devel package contains the dynamic library and header files for
+developing applications that use %{name}.
+
+
+%package static
+Summary:        Enhanced seccomp static library
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static %{_description}
+
+The %{name}-static package contains the static library for developing 
+applications that statically link against %{name}.
+
+
+%if %{with python}
+%package python
+Summary:        Python bindings for %{name}
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(cython)
+BuildRequires:  python3dist(setuptools)
+BuildRequires:  sed
+BuildRequires:  oreon-rpm-macros
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description python %{_description}
+
+The %{name}-python package contains Python bindings for %{name}.
+
+%files python
+%{python3_sitearch}/seccomp-%{version}-py%{python3_version}.egg-info/
+%{python3_sitearch}/seccomp.cpython-%{python3_version_nodots}-%{_cython_cpu}-linux-gnu.so
+%endif
+
 
 %prep
 %oreon_sha256
-%autosetup -n libseccomp-2.6.0 -p1
+
+%autosetup -p1
+%if %{with python}
+sed -ie 's|$cmd /usr/bin/env python|$cmd %{python3}|g' tests/regression
+%endif
+
+%conf
+%configure %{?with_python:--enable-python}
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+%make_build
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+mkdir -p %{buildroot}/%{_libdir}
+mkdir -p %{buildroot}/%{_includedir}
+mkdir -p %{buildroot}/%{_mandir}
 
-%files -f %{_builddir}/%{name}.files
+%make_install
+
+rm -f %{buildroot}/%{_libdir}/libseccomp.la
+%if %{with python}
+# this file is not necessary, and the files listed are prefixed with
+# %%{buildroot} so we'd have to clean it up or delete it
+rm -f %{buildroot}%{python3_sitearch}/install_files.txt
+%endif
+
+%check
+%if %{with tests}
+%make_build check
+%endif
+
+
+%files
 %license LICENSE
+%doc CREDITS README.md CHANGELOG CONTRIBUTING.md
+%{_libdir}/libseccomp.so.%{soname_version}
+%{_libdir}/libseccomp.so.%{version}
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_includedir}/seccomp.h
+%{_includedir}/seccomp-syscalls.h
+%{_libdir}/libseccomp.so
+%{_libdir}/pkgconfig/libseccomp.pc
+%{_bindir}/scmp_sys_resolver
+%{_mandir}/man1/*
+%{_mandir}/man3/*
+
+%files static
+%{_libdir}/libseccomp.a
+
+

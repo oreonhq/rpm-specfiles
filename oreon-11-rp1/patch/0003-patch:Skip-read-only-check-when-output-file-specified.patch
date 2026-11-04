@@ -1,0 +1,42 @@
+commit d161c9a9dbd24bb7e0356e4e07983345777d85aa
+Author: Daniel Black <daniel@mariadb.org>
+Date:   Thu May 1 14:33:19 2025 +1000
+
+    Skip read-only check when output file specified
+    
+    Only check if input files are read-only when overwriting them; skip
+    that check when the output goes to a different file.
+    
+    * src/patch.c (main): Set read_only_behavior to RO_IGNORE when an output
+    file has been specified.
+    * tests/read-only-files: Add test case.
+
+diff --git a/src/patch.c b/src/patch.c
+index 91cb646..42c093c 100644
+--- a/src/patch.c
++++ b/src/patch.c
+@@ -204,7 +204,10 @@ main (int argc, char **argv)
+ 
+     init_output (&outstate);
+     if (outfile)
+-      outstate.ofp = open_outfile (outfile);
++      {
++        outstate.ofp = open_outfile (outfile);
++        read_only_behavior = RO_IGNORE;
++      }
+ 
+     /* Make sure we clean up in case of disaster.  */
+     init_signals ();
+diff --git a/tests/read-only-files b/tests/read-only-files
+index b66ddb9..9f6bf7c 100644
+--- a/tests/read-only-files
++++ b/tests/read-only-files
+@@ -67,3 +67,8 @@ check 'patch -f -p0 --read-only=ignore < f.diff || echo "Status: $?"' <<EOF
+ patching file f
+ patching file f
+ EOF
++
++check 'patch -o - f /dev/null || echo "Status: $?"' <<EOF
++patching file - (read from f)
++three
++EOF

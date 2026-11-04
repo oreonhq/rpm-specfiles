@@ -44,7 +44,7 @@ possible.
 %prep
 %oreon_sha256
 
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -n iotop-%{version}
 
 %build

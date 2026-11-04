@@ -62,7 +62,7 @@ URL:            https://git-scm.com/
 # Adjust Source URL path for release candidates
 %global rcpath  %(test "%{version}" = "%{real_version}" || echo testing/)
 
-Source0:        https://www.kernel.org/pub/software/scm/git/%{rcpath}%{name}-%{real_version}.tar.xz
+Source0:        https://www.kernel.org/pub/software/scm/git/git-%{version}.tar.xz
 Source1:        https://www.kernel.org/pub/software/scm/git/git-%{version}.tar.sign
 
 # Junio C Hamano's key is used to sign git releases, it can be found in the
@@ -102,14 +102,22 @@ Patch3:        0003-t-lib-git-svn-try-harder-to-find-a-port.patch
 # Prevents t5540 failures on i686, s390x and ppc64le
 Patch4:        git-test-apache-davlockdbtype-config.patch
 
+%if %{with docs}
 # pod2man is needed to build Git.3pm
 BuildRequires:  perl-podlators
+%if %{with asciidoctor}
 BuildRequires:  docbook5-style-xsl
 BuildRequires:  rubygem-asciidoctor
+%else
+BuildRequires:  asciidoc >= 8.4.1
+%endif
 # endif with asciidoctor
 BuildRequires:  xmlto
+%if %{with linkcheck}
 BuildRequires:  linkchecker
+%endif
 # endif with linkcheck
+%endif
 # endif with docs
 BuildRequires:  coreutils
 BuildRequires:  desktop-file-utils
@@ -125,13 +133,21 @@ BuildRequires:  libcurl-devel
 BuildRequires:  make
 BuildRequires:  openssl-devel
 BuildRequires:  pcre2-devel
+%if %{with rust}
 BuildRequires:  cargo
 BuildRequires:  rust
+%endif
 BuildRequires:  perl(Error)
 BuildRequires:  perl(lib)
+%if %{use_perl_generators}
 BuildRequires:  perl-generators
+%endif
 # endif use_perl_generators
+%if %{use_perl_interpreter}
 BuildRequires:  perl-interpreter
+%else
+BuildRequires:  perl
+%endif
 # endif use_perl_interpreter
 BuildRequires:  pkgconfig(bash-completion)
 BuildRequires:  sed
@@ -141,19 +157,24 @@ BuildRequires:  tk
 BuildRequires:  xz
 BuildRequires:  zlib-devel >= 1.2
 
+%if %{with tests}
 # Test suite requirements
 BuildRequires:  acl
 # Needed by t5559-http-fetch-smart-http2.sh
 BuildRequires: mod_http2
 BuildRequires:  bash
+%if %{with cvs}
 BuildRequires:  cvs
 BuildRequires:  cvsps
+%endif
 # endif with cvs
+%if %{use_glibc_langpacks}
 # glibc-all-langpacks and glibc-langpack-is are needed for GETTEXT_LOCALE and
 # GETTEXT_ISO_LOCALE test prereq's, glibc-langpack-en ensures en_US.UTF-8.
 BuildRequires:  glibc-all-langpacks
 BuildRequires:  glibc-langpack-en
 BuildRequires:  glibc-langpack-is
+%endif
 # endif use_glibc_langpacks
 BuildRequires:  gnupg2-smime
 BuildRequires:  highlight
@@ -182,7 +203,14 @@ BuildRequires:  perl(POSIX)
 BuildRequires:  perl(Term::ReadLine)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Time::HiRes)
+%if %{with python3}
 BuildRequires:  python3-devel
+%else
+%if %{with python2}
+BuildRequires:  python2-devel
+%endif
+# endif with python2
+%endif
 # endif with python3
 BuildRequires:  subversion
 BuildRequires:  subversion-perl
@@ -190,18 +218,27 @@ BuildRequires:  tar
 BuildRequires:  time
 BuildRequires:  zip
 BuildRequires:  zstd
+%endif
 # endif with tests
 
 Requires:       git-core = %{version}-%{release}
 Requires:       git-core-doc = %{version}-%{release}
+%if ! %{defined perl_bootstrap}
 Requires:       perl(Term::ReadKey)
+%endif
 # endif ! defined perl_bootstrap
 Requires:       perl-Git = %{version}-%{release}
 
 # Obsolete git-cvs if it's disabled
+%if %{without cvs}
+Obsoletes:      git-cvs < %{?epoch:%{epoch}:}%{version}-%{release}
+%endif
 # endif without cvs
 
 # Obsolete git-p4 if it's disabled
+%if %{without p4}
+Obsoletes:      git-p4 < %{?epoch:%{epoch}:}%{version}-%{release}
+%endif
 # endif without p4
 
 %description
@@ -217,21 +254,29 @@ tools for integrating with other SCMs, install the git-all meta-package.
 Summary:        Meta-package to pull in all git tools
 BuildArch:      noarch
 Requires:       git = %{version}-%{release}
+%if %{with libsecret}
 Requires:       git-credential-libsecret = %{version}-%{release}
+%endif
 # endif with libsecret
+%if %{with cvs}
 Requires:       git-cvs = %{version}-%{release}
+%endif
 # endif with cvs
 Requires:       git-daemon = %{version}-%{release}
 Requires:       git-email = %{version}-%{release}
 Requires:       git-gui = %{version}-%{release}
+%if %{with p4}
 Requires:       git-p4 = %{version}-%{release}
+%endif
 # endif with p4
 Requires:       git-subtree = %{version}-%{release}
 Requires:       git-svn = %{version}-%{release}
 Requires:       git-instaweb = %{version}-%{release}
 Requires:       gitk = %{version}-%{release}
 Requires:       perl-Git = %{version}-%{release}
+%if ! %{defined perl_bootstrap}
 Requires:       perl(Term::ReadKey)
+%endif
 # endif ! defined perl_bootstrap
 %description all
 Git is a fast, scalable, distributed revision control system with an
@@ -262,14 +307,17 @@ Requires:       git-core = %{version}-%{release}
 %description core-doc
 Documentation files for git-core package including man pages.
 
+%if %{with libsecret}
 %package credential-libsecret
 Summary:        Git helper for accessing credentials via libsecret
 BuildRequires:  libsecret-devel
 Requires:       git-core = %{version}-%{release}
 %description credential-libsecret
 %{summary}.
+%endif
 # endif with libsecret
 
+%if %{with cvs}
 %package cvs
 Summary:        Git tools for importing CVS repositories
 BuildArch:      noarch
@@ -279,6 +327,7 @@ Requires:       cvsps
 Requires:       perl(DBD::SQLite)
 %description cvs
 %{summary}.
+%endif
 # endif with cvs
 
 %package daemon
@@ -347,21 +396,33 @@ Requires:       lighttpd
 A simple script to set up gitweb and a web server for browsing the local
 repository.
 
+%if %{with p4}
 %package p4
 Summary:        Git tools for working with Perforce depots
 BuildArch:      noarch
+%if %{with python3}
 BuildRequires:  python3-devel
+%else
+%if %{with python2}
+BuildRequires:  python2-devel
 BuildRequires:  oreon-rpm-macros
+%endif
+# endif with python2
+%endif
 # endif with python3
 Requires:       git = %{version}-%{release}
 %description p4
 %{summary}.
+%endif
 # endif with p4
 
 %package -n perl-Git
 Summary:        Perl interface to Git
 BuildArch:      noarch
 Requires:       git = %{version}-%{release}
+%if %{with perl_modcompat}
+Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+%endif
 %description -n perl-Git
 %{summary}.
 
@@ -369,6 +430,9 @@ Requires:       git = %{version}-%{release}
 Summary:        Perl interface to Git::SVN
 BuildArch:      noarch
 Requires:       git = %{version}-%{release}
+%if %{with perl_modcompat}
+Requires:       perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+%endif
 %description -n perl-Git-SVN
 %{summary}.
 
@@ -386,7 +450,9 @@ Summary:        Git tools for interacting with Subversion repositories
 BuildArch:      noarch
 Requires:       git = %{version}-%{release}
 Requires:       perl(Digest::MD5)
+%if ! %{defined perl_bootstrap}
 Requires:       perl(Term::ReadKey)
+%endif
 # endif ! defined perl_bootstrap
 Requires:       subversion
 %description svn
@@ -409,8 +475,16 @@ sed -i '/^SCRIPT_PERL += git-archimport\.perl$/d' Makefile
 sed -i '/^git-archimport/d' command-list.txt
 rm git-archimport.perl Documentation/git-archimport.adoc
 
+%if %{without cvs}
+# Remove git-cvs* from command list
+sed -i '/^git-cvs/d' command-list.txt
+%endif
 # endif without cvs
 
+%if %{without p4}
+# Remove git-p4 from command list
+sed -i '/^git-p4/d' command-list.txt
+%endif
 # endif without p4
 
 # Use these same options for every invocation of 'make'.
@@ -426,8 +500,21 @@ INSTALL_SYMLINKS = 1
 GITWEB_PROJECTROOT = %{_localstatedir}/lib/git
 GNU_ROFF = 1
 NO_PERL_CPAN_FALLBACKS = 1
+%if %{with python3}
 PYTHON_PATH = %{__python3}
+%else
+%if %{with python2}
+PYTHON_PATH = %{__python2}
+%else
+NO_PYTHON = 1
+%endif
+%endif
+%if %{with asciidoctor}
 USE_ASCIIDOCTOR = 1
+%endif
+%if %{without rust}
+NO_RUST = 1
+%endif
 htmldir = %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 prefix = %{_prefix}
 perllibdir = %{perl_vendorlib}
@@ -443,7 +530,9 @@ EOF
 # packed-refs comes from a comment in contrib/hooks/update-paranoid
 %{?perl_default_filter}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(packed-refs\\)
+%if ! %{defined perl_bootstrap}
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}perl\\(Term::ReadKey\\)
+%endif
 # endif ! defined perl_bootstrap
 
 # Exclude sample hook files from automatic dependency detection
@@ -471,7 +560,9 @@ export SOURCE_DATE_EPOCH=$(date -r version +%%s 2>/dev/null)
 
 %make_build -C contrib/contacts/ all
 
+%if %{with libsecret}
 %make_build -C contrib/credential/libsecret/
+%endif
 # endif with libsecret
 
 %make_build -C contrib/credential/netrc/
@@ -481,8 +572,13 @@ export SOURCE_DATE_EPOCH=$(date -r version +%%s 2>/dev/null)
 %make_build -C contrib/subtree/ all
 
 # Fix shebang in a few places to silence rpmlint complaints
+%if %{with python2}
+sed -i -e '1s@#! */usr/bin/env python$@#!%{__python2}@' \
+    contrib/fast-import/import-zips.py
+%else
 # Remove contrib/fast-import/import-zips.py which requires python2.
 rm -rf contrib/fast-import/import-zips.py
+%endif
 # endif with python2
 
 %install
@@ -490,8 +586,10 @@ rm -rf contrib/fast-import/import-zips.py
 
 %make_install -C contrib/contacts
 
+%if %{with libsecret}
 install -pm 755 contrib/credential/libsecret/git-credential-libsecret \
     %{buildroot}%{gitexecdir}
+%endif
 # endif with libsecret
 install -pm 755 contrib/credential/netrc/git-credential-netrc \
     %{buildroot}%{gitexecdir}
@@ -521,8 +619,18 @@ rm -rf contrib/scalar
 # Clean up contrib/subtree to avoid cruft in the git-core-doc docdir
 rm -rf contrib/subtree/{INSTALL,Makefile,git-subtree*,t}
 
+%if %{without cvs}
+# Remove git-cvs* and gitcvs*
+find %{buildroot} Documentation \( -type f -o -type l \) \
+    \( -name 'git-cvs*' -o -name 'gitcvs*' \) -exec rm -f {} ';'
+%endif
 # endif without cvs
 
+%if %{without p4}
+# Remove git-p4* and mergetools/p4merge
+find %{buildroot} Documentation -type f -name 'git-p4*' -exec rm -f {} ';'
+rm -f %{buildroot}%{gitexecdir}/mergetools/p4merge
+%endif
 # endif without p4
 
 # Remove unneeded git-remote-testsvn so git-svn can be noarch
@@ -536,7 +644,11 @@ exclude_re="email|git-(citool|credential-libsecret|cvs|daemon|gui|instaweb|p4|su
 # Split out Git::SVN files
 grep Git/SVN perl-git-files > perl-git-svn-files
 sed -i "/Git\/SVN/ d" perl-git-files
+%if %{with docs}
 (find %{buildroot}%{_mandir} -type f | grep -vE "$exclude_re|Git" | sed -e s@^%{buildroot}@@ -e 's/$/*/' ) >> bin-man-doc-files
+%else
+rm -rf %{buildroot}%{_mandir}
+%endif
 # endif with docs
 
 mkdir -p %{buildroot}%{_localstatedir}/lib/git
@@ -586,7 +698,9 @@ find contrib -type f -print0 | xargs -r0 chmod -x
 not_core_re="git-(add--interactive|contacts|credential-netrc|filter-branch|instaweb|request-pull|send-mail)|gitweb"
 grep -vE "$not_core_re|%{_mandir}" bin-man-doc-files > bin-files-core
 touch man-doc-files-core
+%if %{with docs}
 grep -vE "$not_core_re" bin-man-doc-files | grep "%{_mandir}" > man-doc-files-core
+%endif
 # endif with docs
 grep -E  "$not_core_re" bin-man-doc-files > bin-man-doc-git-files
 
@@ -601,10 +715,12 @@ rm -rf %{buildroot}%{_pkgdocdir}/contrib/{contacts,credential}/
 cp -p gitweb/INSTALL %{buildroot}%{_pkgdocdir}/INSTALL.gitweb
 cp -p gitweb/README %{buildroot}%{_pkgdocdir}/README.gitweb
 
+%if %{with docs}
 cp -pr Documentation/*.html Documentation/docbook-xsl.css %{buildroot}%{_pkgdocdir}/
 cp -pr Documentation/{howto,technical} %{buildroot}%{_pkgdocdir}/
 find %{buildroot}%{_pkgdocdir}/{howto,technical} -type f \
     |grep -o "%{_pkgdocdir}.*$" >> man-doc-files-core
+%endif
 # endif with docs
 
 {
@@ -619,10 +735,16 @@ find %{buildroot}%{_pkgdocdir}/{howto,technical} -type f \
 ##### #DOC
 
 %check
+%if %{without tests}
+echo "*** Skipping tests"
+exit 0
+%endif
 # endif without tests
 
+%if %{with docs} && %{with linkcheck}
 # Test links in HTML documentation
 find %{buildroot}%{_pkgdocdir} -name "*.html" -print0 | xargs -r0 linkchecker
+%endif
 # endif with docs && with linkcheck
 
 # Tests to skip on all releases and architectures
@@ -645,6 +767,16 @@ GIT_SKIP_TESTS="$GIT_SKIP_TESTS t5541.37 t5551.25"
 # endif aarch64 %%{arm} %%{power64}
 
 
+%if "%{_arch}" == "s390x"
+# Skip tests which fail on s390x
+#
+# The following tests are failing on s390x.
+# https://lore.kernel.org/git/4dc4c8cd-c0cc-4784-8fcf-defa3a051087@mit.edu/
+#
+# t8020.16 'cross merge boundaries in blaming'
+# t8020.19 'last-modified merge undoes changes'
+GIT_SKIP_TESTS="$GIT_SKIP_TESTS t8020.16 t8020.19"
+%endif
 # endif "%{_arch}" == "s390x"
 export GIT_SKIP_TESTS
 
@@ -707,16 +839,20 @@ rmdir --ignore-fail-on-non-empty "$testdir"
 
 %files core-doc -f man-doc-files-core
 
+%if %{with libsecret}
 %files credential-libsecret
 %{gitexecdir}/git-credential-libsecret
+%endif
 # endif with libsecret
 
+%if %{with cvs}
 %files cvs
 %{_pkgdocdir}/*git-cvs*.adoc
 %{_bindir}/git-cvsserver
 %{gitexecdir}/*cvs*
 %{?with_docs:%{_mandir}/man1/*cvs*.1*}
 %{?with_docs:%{_pkgdocdir}/*git-cvs*.html}
+%endif
 # endif with cvs
 
 %files daemon
@@ -770,12 +906,14 @@ rmdir --ignore-fail-on-non-empty "$testdir"
 %{?with_docs:%{_mandir}/man1/git-instaweb.1*}
 %{?with_docs:%{_pkgdocdir}/git-instaweb.html}
 
+%if %{with p4}
 %files p4
 %{gitexecdir}/*p4*
 %{gitexecdir}/mergetools/p4merge
 %{_pkgdocdir}/*p4*.adoc
 %{?with_docs:%{_mandir}/man1/*p4*.1*}
 %{?with_docs:%{_pkgdocdir}/*p4*.html}
+%endif
 # endif with p4
 
 %files -n perl-Git -f perl-git-files

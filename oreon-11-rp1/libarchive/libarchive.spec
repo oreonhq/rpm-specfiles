@@ -1,104 +1,249 @@
-%global source0_hash 19f917d42d530f98815ac824d90c7eaf648e9d9a50e4f309c812457ffa5496b5
+%global source0_hash f5a6539059cf5e597dbeda37bfa4874b1e8dea063c8d93bf85a2b44af90a5bd4
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%bcond_without check
 
-Name: libarchive
-Version: 3.8.1
-Release: 3%{?dist}
-Summary: Archive reading library
-License: BSD-2-Clause
-URL: https://www.libarchive.org/
-Source0: https://github.com/libarchive/libarchive/releases/download/v%{version}/libarchive-%{version}.tar.xz
+Name:           libarchive
+Version:        3.8.9
+Release:        1%{?dist}
+Summary:        A library for handling streaming archive formats
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: cmake
-BuildRequires: ninja-build
-BuildRequires: pkgconf
-BuildRequires: zlib-devel
-BuildRequires: python3
-BuildRequires: bzip2-devel
-BuildRequires: xz-devel
-BuildRequires: libzstd-devel
-BuildRequires: lz4-devel
-BuildRequires: openssl-devel
-BuildRequires: libxml2-devel >= 2.15.1
-BuildRequires: libattr-devel
-BuildRequires: libacl-devel
-BuildRequires: libb2-devel
-BuildRequires: pcre2-devel
-BuildRequires: patchelf
+# Licenses:
+# ./configure: FSFUL
+# ./build/autoconf/lib-ld.m4: FSFULLR
+# ./configure: FSFUL
+# ./unzip/la_queue.h: BSD-3-Clause
+# ./aclocal.m4: (FSFULLR and/or GPL-2) with Libtool-exception exception
+License:        BSD-2-Clause AND FSFULLR AND GPL-2.0-or-later WITH Libtool-exception AND BSD-3-Clause AND FSFUL
+URL:            https://www.libarchive.org/
+Source0:        https://libarchive.org/downloads/libarchive-%{version}.tar.gz
+
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  bison
+BuildRequires:  bzip2-devel
+BuildRequires:  e2fsprogs-devel
+BuildRequires:  gcc
+BuildRequires:  libacl-devel
+BuildRequires:  libattr-devel
+BuildRequires:  libtool
+BuildRequires:  libxml2-devel
+BuildRequires:  libzstd-devel
+BuildRequires:  lz4-devel
+# According to libarchive maintainer, linking against liblzo violates
+# LZO license.
+# See https://github.com/libarchive/libarchive/releases/tag/v3.3.0
+#BuildRequires:  lzo-devel
+BuildRequires:  openssl-devel
+BuildRequires:  xz-devel
+BuildRequires:  zlib-devel
+BuildRequires: make
+BuildRequires:  oreon-rpm-macros
+
+# When configured against OpenSSL 1.1, the RIPEMD-160 support was not detected,
+# so it was not compiled in previously. With OpenSSL 3.0, it's now detected as
+# being available, but it only actually works when the legacy provider is
+# loaded, which breaks the RIPEMD-160 test. This patch disables the RIPEMD-160
+# support explicitly.
+Patch0001:        0001-Drop-rmd160-from-OpenSSL.patch
 
 %description
-libarchive reads and writes archive formats.
+Libarchive is a programming library that can create and read several different
+streaming archive formats, including most popular tar variants, several cpio
+formats, and both BSD and GNU ar variants. It can also write shar archives and
+read ISO9660 CDROM images and ZIP archives.
+
 
 %package devel
-Summary: Archive reading library
-Requires: libarchive%{?_isa} = %{version}-%{release}
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-libarchive reads and writes archive formats.
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+
+%package -n bsdtar
+Summary:        Manipulate tape archives
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n bsdtar
+The bsdtar package contains standalone bsdtar utility split off regular
+libarchive packages.
+
+
+%package -n bsdcpio
+Summary:        Copy files to and from archives
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n bsdcpio
+The bsdcpio package contains standalone bsdcpio utility split off regular
+libarchive packages.
+
+
+%package -n bsdcat
+Summary:        Expand files to standard output
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n bsdcat
+The bsdcat program typically takes a filename as an argument or reads standard
+input when used in a pipe.  In both cases decompressed data it written to
+standard output.
+
+%package -n bsdunzip
+Summary:        Extract files from a ZIP archive
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n bsdunzip
+The bsdunzip package contains standalone bsdunzip utility split off regular
+libarchive packages. It is designed to provide an interface compatible with Info-ZIP's.
+
 
 %prep
 %oreon_sha256
+
 %autosetup -p1
 
+
 %build
-%oreon_cmake \
-  -DCMAKE_SKIP_RPATH=ON \
-  -DENABLE_TEST=OFF \
-  -DENABLE_WERROR=OFF \
-  -DENABLE_LIBB2=ON \
-  -DENABLE_LZO=OFF \
-  -DENABLE_PCREPOSIX=OFF \
-  -DENABLE_PCRE2POSIX=ON \
-  -DENABLE_EXPAT=OFF \
-  -DENABLE_OPENSSL=ON \
-  -DENABLE_LIBXML2=ON \
-  -DENABLE_ZLIB=ON \
-  -DENABLE_BZip2=ON \
-  -DENABLE_LZMA=ON \
-  -DENABLE_ZSTD=ON \
-  -DENABLE_LZ4=ON \
-  -DENABLE_ACL=ON \
-  -DENABLE_XATTR=ON
-%oreon_cmake_build
+autoreconf -ifv
+%configure --disable-static LT_SYS_LIBRARY_PATH=%_libdir
+%make_build
+
 
 %install
-%oreon_cmake_install
-rm -f %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
+%make_install
+find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
+
+# rhbz#1294252
+replace ()
+{
+    filename=$1
+    file=`basename "$filename"`
+    binary=${file%%.*}
+    pattern=${binary##bsd}
+
+    awk "
+        # replace the topic
+        /^.Dt ${pattern^^} 1/ {
+            print \".Dt ${binary^^} 1\";
+            next;
+        }
+        # replace the first occurence of \"$pattern\" by \"$binary\"
+        !stop && /^.Nm $pattern/ {
+            print \".Nm $binary\" ;
+            stop = 1 ;
+            next;
+        }
+        # print remaining lines
+        1;
+    " "$filename" > "$filename.new"
+    mv "$filename".new "$filename"
+}
+
+for manpage in bsdtar.1 bsdcpio.1
+do
+    installed_manpage=`find "$RPM_BUILD_ROOT" -name "$manpage"`
+    replace "$installed_manpage"
 done
-%oreon_filelist_devel
-python3 - %{_builddir}/%{name}.files %{_builddir}/%{name}-devel.files << 'PY'
-import sys
-from pathlib import Path
-main, devel = Path(sys.argv[1]), Path(sys.argv[2])
-m = main.read_text().splitlines()
-d = devel.read_text().splitlines()
-keep, move = [], []
-for line in d:
-    path = line.split()[-1] if line.startswith("%") else line
-    if path.endswith(".so") and path.count("/") > 3:
-        move.append(line)
-    else:
-        keep.append(line)
-text = "\n".join(m + move)
-main.write_text(text + ("\n" if text else ""))
-text = "\n".join(keep)
-devel.write_text(text + ("\n" if text else ""))
-PY
 
-%files -f %{_builddir}/%{name}.files
+
+%check
+%if %{with check}
+logfiles ()
+{
+    find -name '*_test.log' -or -name test-suite.log
+}
+
+tempdirs ()
+{
+    cat `logfiles` \
+        | awk "match(\$0, /[^[:space:]]*`date -I`[^[:space:]]*/) { print substr(\$0, RSTART, RLENGTH); }" \
+        | sort | uniq
+}
+
+cat_logs ()
+{
+    for i in `logfiles`
+    do
+        echo "=== $i ==="
+        cat "$i"
+    done
+}
+
+run_testsuite ()
+{
+    rc=0
+    %make_build check -j1 || {
+        # error happened - try to extract in koji as much info as possible
+        cat_logs
+
+        for i in `tempdirs`; do
+            if test -d "$i" ; then
+                find $i -printf "%p\n    ~> a: %a\n    ~> c: %c\n    ~> t: %t\n    ~> %s B\n"
+                cat $i/*.log
+            fi
+        done
+        return 1
+    }
+    cat_logs
+}
+
+# On a ppc/ppc64 is some race condition causing 'make check' fail on ppc
+# when both 32 and 64 builds are done in parallel on the same machine in
+# koji.  Try to run once again if failed.
+%ifarch ppc
+run_testsuite || run_testsuite
+%else
+run_testsuite
+%endif
+%endif
+
+
+%files
+%{!?_licensedir:%global license %%doc}
 %license COPYING
+%doc NEWS README.md
+%{_libdir}/libarchive.so.13*
+%{_mandir}/*/cpio.*
+%{_mandir}/*/mtree.*
+%{_mandir}/*/tar.*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_includedir}/*.h
+%{_mandir}/*/archive*
+%{_mandir}/*/libarchive*
+%{_libdir}/libarchive.so
+%{_libdir}/pkgconfig/libarchive.pc
+
+%files -n bsdtar
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc NEWS README.md
+%{_bindir}/bsdtar
+%{_mandir}/*/bsdtar*
+
+%files -n bsdcpio
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc NEWS README.md
+%{_bindir}/bsdcpio
+%{_mandir}/*/bsdcpio*
+
+%files -n bsdcat
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc NEWS README.md
+%{_bindir}/bsdcat
+%{_mandir}/*/bsdcat*
+
+%files -n bsdunzip
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%doc NEWS README.md
+%{_bindir}/bsdunzip
+%{_mandir}/*/bsdunzip*
+
+

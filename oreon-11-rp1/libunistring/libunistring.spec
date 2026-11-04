@@ -1,55 +1,63 @@
-%global source0_hash f245786c831d25150f3dfb4317cda1acc5e3f79a5da4ad073ddca58886569527
+%global source0_hash 827c1eb9cb6e7c738b171745dac0888aa58c5924df2e59239318383de0729b98
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
+# This spec file has been automatically updated
+Version:        1.1
+Release:        1%{?dist}
 Name: libunistring
-Version: 1.3
-Release: 1%{?dist}
-Summary: Unicode string library
-License: LGPL-3.0-or-later
+Summary: GNU Unicode string library
+License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://www.gnu.org/software/libunistring/
-Source0: https://ftp.gnu.org/gnu/libunistring/libunistring-%{version}.tar.xz
-
-BuildRequires: oreon-rpm-macros
+Source0:        https://mirrors.kernel.org/gnu/libunistring/libunistring-%{version}.tar.xz
 BuildRequires: gcc
-BuildRequires: glibc-devel
 BuildRequires: make
-BuildRequires: patchelf
+BuildRequires:  oreon-rpm-macros
+Provides: bundled(gnulib)
 
 %description
-Unicode string library
+This portable C library implements Unicode string types in three flavours:
+(UTF-8, UTF-16, UTF-32), together with functions for character processing
+(names, classifications, properties) and functions for string processing
+(iteration, formatted output, width, word breaks, line breaks, normalization,
+case folding and regular expressions).
 
 %package devel
-Summary: Unicode string library
-Requires: libunistring%{?_isa} = %{version}-%{release}
+Summary: GNU Unicode string library - development files
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Unicode string library
+Development files for programs using libunistring.
 
 %prep
 %oreon_sha256
-%autosetup -n libunistring-1.3 -p1
+
+%autosetup
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+%configure --disable-static --disable-rpath
+%make_build
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+%make_install
+rm -f $RPM_BUILD_ROOT%{_infodir}/dir
+rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}.la
+# Move staged docs so not picked up by %%doc in main package
+mv $RPM_BUILD_ROOT%{_datadir}/doc/%{name} __doc
 
-%files -f %{_builddir}/%{name}.files
-%license COPYING.LIB
+%files
+%license COPYING COPYING.LIB
+%doc AUTHORS NEWS README
+%{_libdir}/%{name}.so.5*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%doc HACKING DEPENDENCIES THANKS ChangeLog
+%doc __doc/*
+%{_infodir}/%{name}.info*
+%{_libdir}/%{name}.so
+%{_includedir}/unistring
+%{_includedir}/*.h
+
+%ldconfig_scriptlets
+

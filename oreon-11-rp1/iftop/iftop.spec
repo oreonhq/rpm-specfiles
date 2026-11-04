@@ -10,7 +10,7 @@ Release:        1%{?dist}
 # {ip,sll,tcp}.h are BSD-4-Clause-UC, rest is GPL-2.0-or-later
 License:        GPL-2.0-or-later AND BSD-4-Clause-UC
 URL:            http://www.ex-parrot.com/~pdw/%{name}/
-Source0:        http://www.ex-parrot.com/~pdw/%{name}/download/%{name}-%{version}pre4.tar.gz
+Source0:        http://www.ex-parrot.com/~pdw/iftop/download/iftop-%{version}pre4.tar.gz
 Patch0:        iftop-1.0-ncursesw.patch
 Patch1:        iftop-1.0-git20181003.patch
 Patch2:        iftop-1.0-gcc10.patch

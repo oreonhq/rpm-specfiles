@@ -1,0 +1,34 @@
+From 8a5812e074c527dbfc9fe0821d0cf0b9bb5d3001 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Wed, 5 Aug 2026 10:02:53 +0200
+Subject: [PATCH] http2: make server push transfers inherit share from parent
+
+Reported-by: Stephan Zeisberg
+Closes #22488
+
+(cherry picked from commit 90325ff0444cbdff368bda5d26d6405a0bb6ee43)
+---
+ lib/http2.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/lib/http2.c b/lib/http2.c
+index a820439ef4..a0c147cdc1 100644
+--- a/lib/http2.c
++++ b/lib/http2.c
+@@ -46,6 +46,7 @@
+ #include "bufref.h"
+ #include "curlx/dynbuf.h"
+ #include "headers.h"
++#include "curl_share.h"
+ 
+ #if NGHTTP2_VERSION_NUM < 0x010f00
+ #error "nghttp2 1.15.0 or greater required"
+@@ -704,6 +705,8 @@ static struct Curl_easy *h2_duphandle(struct Curl_cfilter *cf,
+     struct h2_stream_ctx *second_stream;
+     http2_data_setup(cf, second, &second_stream);
+     second->state.priority.weight = data->state.priority.weight;
++    if(data->share)
++      (void)Curl_share_easy_link(second, data->share);
+   }
+   return second;
+ }

@@ -1,0 +1,85 @@
+From ec24d6288d9c12f76df2c089a30c2523100869ee Mon Sep 17 00:00:00 2001
+From: Lukas Javorsky <ljavorsk@redhat.com>
+Date: Wed, 11 Mar 2026 10:57:26 +0100
+Subject: [PATCH] various security fixes
+
+CVE-2009-5044 (#709413)
+CVE-2009-5080 (#720058)
+CVE-2009-5081 (#720057)
+---
+ contrib/eqn2graph/eqn2graph.sh   |  2 ++
+ contrib/grap2graph/grap2graph.sh |  2 ++
+ contrib/pic2graph/pic2graph.sh   |  2 ++
+ gendef.sh                        | 10 +++-------
+ 4 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/contrib/eqn2graph/eqn2graph.sh b/contrib/eqn2graph/eqn2graph.sh
+index 8f6f5c9..4e8a970 100644
+--- a/contrib/eqn2graph/eqn2graph.sh
++++ b/contrib/eqn2graph/eqn2graph.sh
+@@ -102,6 +102,8 @@ then
+     # shell, for instance.
+     tmp="$d/eqn2graph$$-${RANDOM:-$PPID}"
+     (umask 077 && mkdir "$tmp") 2> /dev/null
++
++    tmp=
+ fi
+ 
+ if ! test -d "$tmp"
+diff --git a/contrib/grap2graph/grap2graph.sh b/contrib/grap2graph/grap2graph.sh
+index cda70b1..7c9eb9c 100644
+--- a/contrib/grap2graph/grap2graph.sh
++++ b/contrib/grap2graph/grap2graph.sh
+@@ -105,6 +105,8 @@ then
+     # shell, for instance.
+     tmp="$d/grap2graph$$-${RANDOM:-$PPID}"
+     (umask 077 && mkdir "$tmp") 2> /dev/null
++
++    tmp=
+ fi
+ 
+ if ! test -d "$tmp"
+diff --git a/contrib/pic2graph/pic2graph.sh b/contrib/pic2graph/pic2graph.sh
+index 6edf800..efb3a2e 100644
+--- a/contrib/pic2graph/pic2graph.sh
++++ b/contrib/pic2graph/pic2graph.sh
+@@ -123,6 +123,8 @@ then
+     # shell, for instance.
+     tmp="$d/pic2graph$$-${RANDOM:-$PPID}"
+     (umask 077 && mkdir "$tmp") 2> /dev/null
++
++    tmp=
+ fi
+ 
+ if ! test -d "$tmp"
+diff --git a/gendef.sh b/gendef.sh
+index 256fb39..a5a98cf 100644
+--- a/gendef.sh
++++ b/gendef.sh
+@@ -33,11 +33,9 @@ do
+ #define $def"
+ done
+ 
+-# Use $TMPDIR if defined.  Default to cwd, for non-Unix systems
+-# which don't have /tmp on each drive (we are going to remove
+-# the file before we exit anyway).  Put the PID in the basename,
+-# since the extension can only hold 3 characters on MS-DOS.
+-t=${TMPDIR-.}/gro$$.tmp
++t="`mktemp -t groff-gendef.XXXXXXXXXX`" || exit
++trap 'rm -f -- "$t"' EXIT
++trap 'trap - EXIT; rm -f -- "$t"; exit 1' HUP INT QUIT TERM
+ 
+ sed -e 's/=/ /' >$t <<EOF
+ $defs
+@@ -45,8 +43,6 @@ EOF
+ 
+ test -r $file && cmp -s $t $file || cp $t $file
+ 
+-rm -f $t
+-
+ exit 0
+ 
+ # eof
+-- 
+2.53.0
+

@@ -1,62 +1,67 @@
-%global source0_hash 2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed
+%global source0_hash 6ede051357868ed427ea71d16fc27f4d63cc0d9c8a32788aa11c450ecefcc76f
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global pypi_name distro
 
-Name: python-distro
-Version: 1.9.0
-Release: 1%{?dist}
-Summary: OS distribution information for Python
-License: Apache-2.0
-URL: https://github.com/python-distro/distro
-Source0: https://files.pythonhosted.org/packages/source/d/distro/distro-%{version}.tar.gz
+Name:           python-%{pypi_name}
+Version:        1.9.0
+Release:        1%{?dist}
+Summary:        Linux Distribution - a Linux OS platform information API
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: oreon-rpm-macros-python
-BuildRequires: python3-devel
-BuildRequires: python3-build
-BuildRequires: python3-installer
-BuildRequires: python3-setuptools
-BuildRequires: python3-wheel
+License:        Apache-2.0
+URL:            https://github.com/python-distro/distro
+Source0:        https://github.com/python-distro/distro/archive/v%{version}/distro-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
+BuildRequires:  oreon-rpm-macros
+ 
+%global _description \
+The distro (for: Linux Distribution) package provides information about the\
+Linux distribution it runs on, such as a reliable machine-readable ID, or\
+version information.\
+\
+It is a renewed alternative implementation for Python's original\
+platform.linux_distribution function, but it also provides much more\
+functionality. An alternative implementation became necessary because\
+Python 3.5 deprecated this function, and Python 3.7 is expected to remove it\
+altogether. Its predecessor function platform.dist was already deprecated since\
+Python 2.6 and is also expected to be removed in Python 3.7. Still, there are\
+many cases in which access to that information is needed. See Python issue 1322\
+for more information.
 
-Provides: python3-distro = %{version}-%{release}
-Requires: python3
+%description %{_description}
 
-%description
-distro looks up the OS distribution.
+%package -n     python3-%{pypi_name}
+Summary:        %{summary}
+Suggests:       /usr/bin/lsb_release
+
+%description -n python3-%{pypi_name} %{_description}
 
 %prep
 %oreon_sha256
-%autosetup -n distro-%{version} -p1
+
+%autosetup -n %{pypi_name}-%{version}
+
+# generated BuildRequires, refresh with: orbscli plan bake
+BuildRequires: python3dist(setuptools)
 
 %build
-%oreon_py_build
+%pyproject_wheel
 
 %install
-%oreon_py_install
-%oreon_py_save_files distro
-python3 - %{oreon_py_files} << 'PY'
-import os
-import sys
-from pathlib import Path
-p = Path(sys.argv[1])
-lines = p.read_text().splitlines()
-seen = set(lines)
-extra = []
-for line in lines:
-    path = line.strip().strip('"')
-    if not path.endswith(".py"):
-        continue
-    if "/lib/python3." not in path and "/lib64/python3." not in path:
-        continue
-    glob = os.path.dirname(path) + "/__pycache__/*"
-    if glob not in seen:
-        seen.add(glob)
-        extra.append(glob)
-text = "\n".join(lines + extra)
-p.write_text(text + ("\n" if text else ""))
-PY
+%pyproject_install
 
-%files -f %{oreon_py_files}
+%files -n python3-%{pypi_name}
+%doc CHANGELOG.md CONTRIBUTORS.md README.md
 %license LICENSE
+%{python3_sitelib}/%{pypi_name}/
+%{python3_sitelib}/%{pypi_name}-%{version}.dist-info/
+
+%{_bindir}/distro
+
+%check
+%pytest
+

@@ -16,7 +16,7 @@ Version:        1.9.17
 Release:        1%{?dist}
 License: ISC
 URL: https://www.sudo.ws
-Source0: %{url}/dist/%{name}-%{version}%{?extraver}.tar.gz
+Source0:        https://www.sudo.ws/dist/sudo-%{version}p2.tar.gz
 Source1: sudoers
 Requires: pam
 Recommends: system-default-editor

@@ -1,58 +1,200 @@
-%global source0_hash c9cc77c7c560c543135edc555af609d5619dbef011997e988ce40a3d75d86088
+%global source0_hash ed14656883b23a364b4057c05595d93252da9bc473d30106519519d0da141283
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%bcond_without python3
 
+Summary: Utility for determining file types
 Name: file
-Version: 5.46
-Release: 1%{?dist}
-Summary: File type identification library
-License: BSD-2-Clause-Darwin
-URL: https://www.darwinsys.com/file/
-Source0: https://astron.com/pub/file/file-%{version}.tar.gz
+Version:        5.48
+Release:        1%{?dist}
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: patchelf
+# Main license is BSD-2-Clause-Darwin
+# Shipped exceptions:
+# * some src/*.{c.h} - BSD-2-Clause
+# * src/mygetopt.h - BSD-4-Clause
+# * src/strcasestr.h - BSD-3-Clause
+# * src/strlc{at,py}.c - ISC
+# * src/vasprintf.c - BSD-2-Clause-Darwin AND BSD-3-Clause
+License: BSD-2-Clause-Darwin AND BSD-2-Clause
+
+Source0:        http://ftp.astron.com/pub/file/file-%{version}.tar.gz
+Source1:        file-5.48.tar.gz.asc
+
+# gpg --keyserver hkp://keys.gnupg.net --recv-keys BE04995BA8F90ED0C0C176C471112AB16CB33B3A
+# gpg --output christoskey.asc --armor --export christos@zoulas.com
+Source2: christoskey.asc
+
+# Upstream says it's up to distributions to add a way to support local-magic.
+Patch0:        file-localmagic.patch
+
+# not yet upstream
+Patch1:        file-4.17-rpm-name.patch
+Patch2:        file-5.04-volume_key.patch
+
+# revert upstream commits (rhbz#2167964)
+# 1. https://github.com/file/file/commit/e1233247bbe4d2d66b891224336a23384a93cce1
+# 2. https://github.com/file/file/commit/f7a65dbf1739a8f8671621e41c5648d1f7e9f6ae
+Patch3:        file-5.45-readelf-limit-revert.patch
+
+Patch4:        file-5.46-fix-tests-rpm-magic.patch
+
+# Disable Landlock execute restrictions so external decompressors can run
+# Upstream: https://github.com/file/file/commit/dcf3495219a0ccae60f10c00e6b16696c6fe3977
+Patch5:        file-5.49-landlock-execute.patch
+
+URL: https://www.darwinsys.com/file/
+Requires: file-libs%{?_isa} = %{version}-%{release}
 BuildRequires: zlib-devel
-BuildRequires: bzip2-devel
-BuildRequires: xz-devel
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: make
+BuildRequires: gnupg2
+
+# generated BuildRequires, refresh with: orbscli plan bake
+BuildRequires: pyproject-rpm-macros
+BuildRequires: python3dist(packaging)
+BuildRequires: python3dist(pip) >= 19
+BuildRequires: python3dist(setuptools) >= 40.8
 
 %description
-File type identification library
+The file command is used to identify a particular file according to the
+type of data contained by the file.  File can identify many different
+file types, including ELF binaries, system libraries, RPM packages, and
+different graphics formats.
+
+%package libs
+Summary: Libraries for applications using libmagic
+
+%description libs
+
+Libraries for applications using libmagic.
 
 %package devel
-Summary: File type identification library
-Requires: file%{?_isa} = %{version}-%{release}
+Summary:  Libraries and header files for file development
+Requires: file-libs%{?_isa} = %{version}-%{release}
 
 %description devel
-File type identification library
+The file-devel package contains the header files and libmagic library
+necessary for developing programs using libmagic.
+
+%package static
+Summary: Static library for file development
+Requires: file-devel = %{version}-%{release}
+
+%description static
+The file-static package contains the static version of the libmagic library.
+
+%if %{with python3}
+%package -n python3-file-magic
+Summary: Python 3 bindings for the libmagic API
+BuildRequires: python3-devel
+BuildRequires:  oreon-rpm-macros
+BuildArch: noarch
+Requires: file-libs = %{version}-%{release}
+Conflicts: python3-magic
+
+%description -n python3-file-magic
+This package contains the Python 3 bindings to allow access to the
+libmagic API. The libmagic library is also used by the familiar
+file(1) command.
+%endif
 
 %prep
 %oreon_sha256
-%autosetup -n file-5.46 -p1
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+%autosetup -p1
+
+iconv -f iso-8859-1 -t utf-8 < doc/libmagic.man > doc/libmagic.man_
+touch -r doc/libmagic.man doc/libmagic.man_
+mv doc/libmagic.man_ doc/libmagic.man
 
 %build
-%oreon_configure --disable-static
-%oreon_make
+# Fix config.guess to find aarch64 - #925339
+autoreconf -fi
+
+CFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE" \
+%configure --enable-fsect-man5 --disable-rpath --enable-static
+# remove hardcoded library paths from local libtool
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+export LD_LIBRARY_PATH=$PWD/src/.libs
+%make_build
+%if %{with python3}
+cd python
+%pyproject_wheel
+cd ..
+%endif
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f")
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+mkdir -p ${RPM_BUILD_ROOT}%{_bindir}
+mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man1
+mkdir -p ${RPM_BUILD_ROOT}%{_mandir}/man5
+mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/misc
+mkdir -p ${RPM_BUILD_ROOT}%{_datadir}/file
 
-%files -f %{_builddir}/%{name}.files
+%make_install
+rm -f ${RPM_BUILD_ROOT}%{_libdir}/*.la
+
+# local magic in /etc/magic
+mkdir -p ${RPM_BUILD_ROOT}%{_sysconfdir}
+cp -a ./magic/magic.local ${RPM_BUILD_ROOT}%{_sysconfdir}/magic
+
+cat magic/Magdir/* > ${RPM_BUILD_ROOT}%{_datadir}/misc/magic
+ln -s misc/magic ${RPM_BUILD_ROOT}%{_datadir}/magic
+ln -s ../magic ${RPM_BUILD_ROOT}%{_datadir}/file/magic
+
+%if %{with python3}
+cd python
+%pyproject_install
+%pyproject_save_files magic
+cd ..
+%endif
+%{__install} -d ${RPM_BUILD_ROOT}%{_datadir}/%{name}
+
+%ldconfig_scriptlets libs
+
+%check
+export LD_LIBRARY_PATH=$PWD/src/.libs
+%ifarch s390x
+# efi-signature-list-sha256: New in 5.47 (commit 2a457644). EFI Signature List magic
+# in magic/Magdir/efi uses little-endian types; on big-endian s390x file reports
+# "data" instead of the expected string and the test fails. Remove on s390x until
+# upstream makes the EFI magic endian-safe.
+rm -f tests/efi-signature-list-sha256.testfile tests/efi-signature-list-sha256.result
+%endif
+make -C tests check
+
+%files
 %license COPYING
+%doc ChangeLog
+%{_bindir}/*
+%{_mandir}/man1/*
+%config(noreplace) %{_sysconfdir}/magic
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files libs
+%license COPYING
+%doc ChangeLog
+%{_libdir}/*so.*
+%{_datadir}/magic*
+%{_mandir}/man5/*
+%{_datadir}/file
+%{_datadir}/misc/*
+
+%files devel
+%{_libdir}/*.so
+%{_includedir}/magic.h
+%{_mandir}/man3/*
+%{_libdir}/pkgconfig/libmagic.pc
+
+%files static
+%{_libdir}/libmagic.a
+
+%if %{with python3}
+%files -n python3-file-magic -f %{pyproject_files}
+%doc python/README.md python/example.py
+%endif
+

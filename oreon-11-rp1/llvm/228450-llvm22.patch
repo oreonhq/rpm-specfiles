@@ -1,0 +1,19 @@
+diff --git i/clang/lib/Driver/ToolChains/Gnu.cpp w/clang/lib/Driver/ToolChains/Gnu.cpp
+index 7591d9f7fa41..90fc71c14736 100644
+--- i/clang/lib/Driver/ToolChains/Gnu.cpp
++++ w/clang/lib/Driver/ToolChains/Gnu.cpp
+@@ -2456,10 +2456,12 @@ void Generic_GCC::GCCInstallationDetector::AddDefaultGCCPrefixes(
+ 
+   static const char *const RISCV32LibDirs[] = {"/lib32", "/lib"};
+   static const char *const RISCV32Triples[] = {"riscv32-unknown-linux-gnu",
+-                                               "riscv32-unknown-elf"};
++                                               "riscv32-unknown-elf",
++                                               "riscv32-redhat-linux"};
+   static const char *const RISCV64LibDirs[] = {"/lib64", "/lib"};
+   static const char *const RISCV64Triples[] = {"riscv64-unknown-linux-gnu",
+-                                               "riscv64-unknown-elf"};
++                                               "riscv64-unknown-elf",
++                                               "riscv64-redhat-linux"};
+ 
+   static const char *const SPARCv8LibDirs[] = {"/lib32", "/lib"};
+   static const char *const SPARCv8Triples[] = {"sparc-linux-gnu",

@@ -17,7 +17,8 @@ Summary:        A command-line fuzzy finder written in Go
 
 License:        MIT
 URL:            %{gourl}
-Source0:        %{gosource}
+Source0:        https://github.com/junegunn/fzf/archive/v%{version}/fzf-%{version}.tar.gz
+Source1:        README.Oreon
 
 BuildRequires:  golang(github.com/charlievieth/fastwalk) >= 1.0.9
 BuildRequires:  golang(github.com/gdamore/tcell/v2) >= 2.7.4
@@ -41,11 +42,12 @@ etc.
 %oreon_sha256
 
 %goprep
+cp %{SOURCE1} .
 %autopatch -p1
 
 
 %build
-export LDFLAGS='-X main.version=%{version} -X main.revision=Oreon'
+export LDFLAGS='-X main.version=%{version} -X main.revision=Oreon '
 %gobuild -o %{gobuilddir}/bin/fzf %{goipath}
 
 
@@ -66,13 +68,15 @@ install -Dpm0644 shell/completion.zsh %{buildroot}%{zsh_completions_dir}/_fzf
 install -Dpm0644 -t %{buildroot}%{_datadir}/fzf/shell shell/key-bindings.*
 
 
+%if %{with check}
 %check
 %gocheck
+%endif
 
 
 %files
 %license LICENSE
-%doc README.md README-VIM.md CHANGELOG.md
+%doc README.md README-VIM.md CHANGELOG.md README.Oreon
 %{_bindir}/fzf
 %{_bindir}/fzf-tmux
 %{_mandir}/man1/fzf.1*

@@ -1,0 +1,55 @@
+From 4332bd9e92063767333e53d32af2d035109adf04 Mon Sep 17 00:00:00 2001
+From: Josh Stone <jistone@redhat.com>
+Date: Fri, 16 Oct 2026 17:44:34 -0700
+Subject: [PATCH] Add a fallback for `-static-pie` missing CRT objects
+
+We already have a fallback when the linker doesn't support `-static-pie`
+to use plain `-static` instead. However, it is also possible that the
+linker understands that option, but the C library doesn't have the
+necessary CRT objects. For example, `gcc` has known this option for a
+long time, but `glibc` doesn't support it for `powerpc` targets at all.
+We can detect this case in the link output for `-static` fallback too.
+---
+ compiler/rustc_codegen_ssa/src/back/link.rs | 22 ++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/compiler/rustc_codegen_ssa/src/back/link.rs b/compiler/rustc_codegen_ssa/src/back/link.rs
+index a7540e294ec3..622ac2a905d7 100644
+--- a/compiler/rustc_codegen_ssa/src/back/link.rs
++++ b/compiler/rustc_codegen_ssa/src/back/link.rs
+@@ -1349,17 +1349,25 @@ fn link_natively(
+             continue;
+         }
+ 
+-        // Detect '-static-pie' used with an older version of gcc or clang not supporting it.
+-        // Fallback from '-static-pie' to '-static' in that case.
++        // Detect '-static-pie' used with an older version of gcc or clang not supporting it,
++        // or with glibc that's missing crt objects, e.g. for arches that don't support it.
++        // Fallback from '-static-pie' to '-static' in either case.
++        let mut static_pie_message = None;
+         if matches!(flavor, LinkerFlavor::Gnu(Cc::Yes, _))
+-            && unknown_arg_regex.is_match(&out)
+-            && (out.contains("-static-pie") || out.contains("--no-dynamic-linker"))
+             && cmd.get_args().iter().any(|e| e == "-static-pie")
+         {
++            if unknown_arg_regex.is_match(&out)
++                && (out.contains("-static-pie") || out.contains("--no-dynamic-linker"))
++            {
++                static_pie_message =
++                    Some("Linker does not support -static-pie command line option.");
++            } else if Regex::new(r"cannot (find|open) g?rcrt1\.o:").unwrap().is_match(&out) {
++                static_pie_message = Some("C library is missing static-PIE startup objects.");
++            }
++        }
++        if let Some(message) = static_pie_message {
+             info!("linker output: {:?}", out);
+-            warn!(
+-                "Linker does not support -static-pie command line option. Retrying with -static instead."
+-            );
++            warn!("{message} Retrying with -static instead.");
+             // Mirror `add_(pre,post)_link_objects` to replace CRT objects.
+             let self_contained_crt_objects = self_contained_components.is_crt_objects_enabled();
+             let opts = &sess.target;
+-- 
+2.55.0
+

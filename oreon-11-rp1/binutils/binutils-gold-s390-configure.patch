@@ -1,0 +1,40 @@
+# The gold linker does not build if the target list includes s390x-linux
+# but does not include s390-linux.  ie it needs the 32-bit target to be
+# enabled in order for the 64-bit target to work.  On the other hand the
+# BFD library does not support the 32-bit s390 target.  So this patch
+# "enhances" the gold configure script so that if s390x is listed, the
+# s390 target will automatically be added to the list as well.
+
+diff -upr orig/gold/configure binutils-2.47/gold/configure
+--- orig/gold/configure	2026-07-27 09:38:54.907192013 +0100
++++ binutils-2.47/gold/configure	2026-07-27 10:12:02.759629540 +0100
+@@ -5223,7 +5223,12 @@ if test -n "$enable_targets"; then
+   for targ in `echo $enable_targets | sed -e 's/,/ /g'`; do
+     result=`$ac_config_sub $targ 2>/dev/null`
+     if test -n "$result"; then
+-      canon_targets="$canon_targets $result"
++      canon_targets="$canon_targets $result" ;
++      case "$result" in
++      s390x-*)
++            canon_targets="$canon_targets s390-gnu-linux"
++	    ;;
++      esac
+     else
+       # Permit unrecognized target names, like "all".
+       canon_targets="$canon_targets $targ"
+diff -upr orig/gold/configure.ac binutils-2.47/gold/configure.ac
+--- orig/gold/configure.ac	2026-07-27 09:38:54.907192013 +0100
++++ binutils-2.47/gold/configure.ac	2026-07-27 10:18:18.480766140 +0100
+@@ -133,6 +133,12 @@ if test -n "$enable_targets"; then
+     result=`$ac_config_sub $targ 2>/dev/null`
+     if test -n "$result"; then
+       canon_targets="$canon_targets $result"
++      # Hack: Enable the s390-linux target if s390x-linux is enabled.
++      case "$result" in
++      s390x-*)
++            canon_targets="$canon_targets s390-gnu-linux"
++	    ;;
++      esac
+     else
+       # Permit unrecognized target names, like "all".
+       canon_targets="$canon_targets $targ"

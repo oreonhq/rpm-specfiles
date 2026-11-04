@@ -1,0 +1,5 @@
+# Allow use cases like libffi
+dont_appraise mask=MAY_EXEC func=MMAP_CHECK fsmagic=0x01021994
+
+appraise func=MMAP_CHECK mask=MAY_EXEC appraise_type=imasig
+appraise func=BPRM_CHECK appraise_type=imasig

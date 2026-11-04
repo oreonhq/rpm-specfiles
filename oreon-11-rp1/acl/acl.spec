@@ -1,57 +1,118 @@
-%global source0_hash 97203a72cae99ab89a067fe2210c1cbf052bc492b479eca7d226d9830883b0bd
+%global source0_hash 73c853c3d44e1f693e5a96a986f1bd19d3d0dac2c7d453e796177774bc4e5f6a
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
-
-Name: acl
-Version: 2.3.2
-Release: 2%{?dist}
 Summary: Access control list utilities
+Name: acl
+Version:        2.4.0
+Release:        1%{?dist}
+
+BuildRequires: gawk
+BuildRequires: gcc
+BuildRequires: gettext
+BuildRequires: gnupg2
+BuildRequires: libattr-devel
+BuildRequires: make
+BuildRequires: perl(FileHandle)
+BuildRequires:  oreon-rpm-macros
+
+Requires: libacl%{?_isa} = %{version}-%{release}
+Source0:        https://download-mirror.savannah.gnu.org/releases/acl/acl-%{version}.tar.gz
+Source1:        acl-2.4.0.tar.gz.sig
+# Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
+Source2: agruen-key.gpg
+# Retrieved from https://savannah.nongnu.org/people/viewgpg.php?user_id=42032
+# Source2: vapier-key.gpg
+
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://savannah.nongnu.org/projects/acl
-Source0: https://download.savannah.gnu.org/releases/acl/acl-%{version}.tar.xz
-Requires: libacl%{?_isa} = %{version}-%{release}
-
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: libattr-devel
 
 %description
-acl is a set of tools for manipulating access control lists.
+This package contains the getfacl and setfacl utilities needed for
+manipulating access control lists.
 
 %package -n libacl
-Summary: Dynamic library for acl
+Summary: Dynamic library for access control list support
+License: LGPL-2.1-or-later
+Conflicts: filesystem < 3
 
 %description -n libacl
-Shared libacl library.
+This package contains the libacl.so dynamic library which contains
+the POSIX 1003.1e draft standard 17 functions for manipulating access
+control lists.
 
 %package -n libacl-devel
-Summary: Development files for libacl
-Obsoletes: acl-devel < 2.3.2-2
+Summary: Files needed for building programs with libacl
+License: LGPL-2.1-or-later
 Requires: libacl%{?_isa} = %{version}-%{release}
 
 %description -n libacl-devel
-Headers and development library for libacl.
+This package contains header files and documentation needed to develop
+programs which make use of the access control list programming interface
+defined in POSIX 1003.1e draft standard 17.
 
 %prep
 %oreon_sha256
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -p1
 
 %build
-%oreon_configure --disable-static --disable-nls
-%oreon_make
+%configure
+
+# uncomment to turn on optimizations
+# sed -i 's/-O2/-O0/' libtool include/builddefs
+# unset CFLAGS
+
+%make_build
+
+%check
+# make the test-suite use the just built library (instead of the system one)
+export LD_LIBRARY_PATH="${RPM_BUILD_ROOT}%{_libdir}:${LD_LIBRARY_PATH}"
+
+if ./setfacl -m "u:$(id -u):rwx" .; then
+    if test 0 = "$(id -u)"; then
+        # test/root/permissions.test requires the 'daemon' user to be a member
+        # of the 'bin' group in order not to fail.  Prevent the test from
+        # running if we detect that its requirements are not met (#1085389).
+        if id -nG daemon | { ! grep bin >/dev/null; }; then
+            sed -e 's|test/root/permissions.test||' \
+                -i test/Makemodule.am Makefile.in Makefile
+        fi
+
+        # test/root/setfacl.test fails if 'bin' user cannot access build dir
+        if ! runuser -u bin -- "${PWD}/setfacl" --version; then
+            sed -e 's|test/root/setfacl.test||' \
+                -i test/Makemodule.am Makefile.in Makefile
+        fi
+    fi
+
+    # run the upstream test-suite
+    %make_build check || exit $?
+else
+    echo '*** ACLs are probably not supported by the file system,' \
+         'the test-suite will NOT run ***'
+fi
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -rf %{buildroot}%{_docdir}
+%make_install
 
-%files
-%license doc/COPYING
-%license doc/COPYING.LGPL
+# get rid of libacl.a and libacl.la
+rm -f $RPM_BUILD_ROOT%{_libdir}/libacl.a
+rm -f $RPM_BUILD_ROOT%{_libdir}/libacl.la
+
+chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/libacl.so.*.*.*
+
+# drop already installed documentation, we will use an RPM macro to install it
+rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}*
+
+%find_lang %{name}
+
+%ldconfig_scriptlets -n libacl
+
+%files -f %{name}.lang
+%license doc/COPYING*
 %{_bindir}/chacl
 %{_bindir}/getfacl
 %{_bindir}/setfacl
@@ -60,16 +121,13 @@ rm -rf %{buildroot}%{_docdir}
 %{_mandir}/man1/setfacl.1*
 %{_mandir}/man5/acl.5*
 
-%ldconfig_scriptlets -n libacl
-
-%files -n libacl
-%license doc/COPYING.LGPL
-%{_libdir}/libacl.so.1
-%{_libdir}/libacl.so.1.*
-
 %files -n libacl-devel
+%{_libdir}/libacl.so
+%{_libdir}/pkgconfig/*.pc
 %{_includedir}/acl
 %{_includedir}/sys/acl.h
-%{_libdir}/libacl.so
-%{_libdir}/pkgconfig/libacl.pc
-%{_mandir}/man3/acl_*.3*
+%{_mandir}/man3/acl_*
+
+%files -n libacl
+%{_libdir}/libacl.so.*
+

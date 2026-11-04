@@ -1,67 +1,153 @@
-%global source0_hash 6898ba9dd836d618b71dc7a4bb786a502c173cef5cafbf20fe5e0567ba4ea30c
+%global source0_hash 49560f677d96e3706a904ac2de1116e25f3680937d51e5c92198fcba4a1c1e9f
+%global source2_hash 7c59d0fdea72cdfbaca82f77eb6e6e416fd4c5aacf1c853bc7f911ce4e4dc051
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+Name:           libssh
+Version:        0.12.2
+Release:        1%{?dist}
+Summary:        A library implementing the SSH protocol
+License:        LGPL-2.1-or-later
+URL:            http://www.libssh.org
 
-Name: libssh
-Version: 0.11.5
-Release: 1%{?dist}
-Summary: C library implementing the SSH protocol
-License: LGPL-2.1-or-later
-URL: https://www.libssh.org/
-Source0: https://www.libssh.org/files/0.11/libssh-%{version}.tar.xz
-Source1: libssh-%{version}.tar.xz.asc
-Source2: libssh-key.asc
+Source0:        https://www.libssh.org/files/0.12/libssh-%{version}.tar.xz
+Source1:        libssh-0.12.2.tar.xz.asc
+Source2:        https://www.libssh.org/files/0x03D5DF8CFDD3E8E7_libssh_libssh_org_gpgkey.asc#/libssh.keyring
+Source3:        libssh_client.config
+Source4:        libssh_server.config
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gnupg2
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
-BuildRequires: patchelf
-BuildRequires: cmake
-BuildRequires: ninja-build
-BuildRequires: openssl-devel
-BuildRequires: zlib-devel
-BuildRequires: krb5-devel
+BuildRequires:  cmake
+BuildRequires:  gcc-c++
+BuildRequires:  gnupg2
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
+BuildRequires:  zlib-devel
+BuildRequires:  pkcs11-provider
+BuildRequires:  libfido2-devel
+# for testing
+BuildRequires:  krb5-devel
+BuildRequires:  krb5-server
+BuildRequires:  krb5-workstation
+BuildRequires:  libcmocka-devel
+BuildRequires:  pam_wrapper
+BuildRequires:  socket_wrapper
+BuildRequires:  nss_wrapper
+BuildRequires:  uid_wrapper
+BuildRequires:  priv_wrapper
+BuildRequires:  openssh-clients
+BuildRequires:  openssh-server
+BuildRequires:  openssh-sk-dummy
+BuildRequires:  nmap-ncat
+BuildRequires:  p11-kit-devel
+BuildRequires:  opensc
+BuildRequires:  softhsm
+BuildRequires:  gnutls-utils
+BuildRequires:  hostname
+BuildRequires:  oreon-rpm-macros
+
+Requires:       %{name}-config = %{version}-%{release}
+
+Recommends:     crypto-policies
+
+%ifarch aarch64 ppc64 ppc64le s390x x86_64 riscv64
+Provides: libssh_threads.so.4()(64bit)
+%else
+Provides: libssh_threads.so.4
+%endif
 
 %description
-libssh is a multiplatform C library implementing the SSHv2 protocol on
-client and server side.
+The ssh library was designed to be used by programmers needing a working SSH
+implementation by the mean of a library. The complete control of the client is
+made by the programmer. With libssh, you can remotely execute programs, transfer
+files, use a secure and transparent tunnel for your remote programs. With its
+Secure FTP implementation, you can play with remote files easily, without
+third-party programs others than libcrypto (from openssl).
 
 %package devel
-Summary: Development files for libssh
-Requires: libssh%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(libssh)
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       cmake-filesystem
 
 %description devel
-Headers and libraries for developing against libssh.
+The %{name}-devel package contains libraries and header files for developing
+applications that use %{name}.
+
+%package config
+Summary:        Configuration files for %{name}
+BuildArch:      noarch
+Obsoletes:      %{name} < 0.9.0-3
+
+%description config
+The %{name}-config package provides the default configuration files for %{name}.
 
 %prep
 %oreon_sha256
+echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
+
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
-%autosetup -n libssh-%{version} -p1
+%autosetup -p1
 
 %build
-%oreon_cmake -DUNIT_TESTING=OFF -DCLIENT_TESTING=OFF -DSERVER_TESTING=OFF -DWITH_EXAMPLES=OFF -DWITH_GSSAPI=ON -DWITH_ZLIB=ON -DGLOBAL_CLIENT_CONFIG=%{_sysconfdir}/libssh/libssh_client.config -DGLOBAL_BIND_CONFIG=%{_sysconfdir}/libssh/libssh_server.config
-%oreon_cmake_build
+%cmake \
+    -DUNIT_TESTING=ON \
+    -DCLIENT_TESTING=ON \
+    -DSERVER_TESTING=ON \
+    -DGSSAPI_TESTING=ON \
+    -DWITH_PKCS11_URI=ON \
+    -DWITH_PKCS11_PROVIDER=ON \
+    -DWITH_FIDO2=ON \
+    -DGLOBAL_CLIENT_CONFIG="%{_sysconfdir}/libssh/libssh_client.config" \
+    -DGLOBAL_BIND_CONFIG="%{_sysconfdir}/libssh/libssh_server.config"
+
+%cmake_build
 
 %install
-%oreon_cmake_install
-rm -f %{buildroot}%{_libdir}/*.la
-rm -f %{buildroot}%{_infodir}/dir
-find %{buildroot} -type f | while read -r f; do
-  file -b "$f" | grep -q '^ELF' || continue
-  r=$(patchelf --print-rpath "$f" 2>/dev/null || true)
-  if [ -n "$r" ]; then
-    chmod u+w "$f"
-    patchelf --remove-rpath "$f"
-  fi
-done
-%oreon_filelist_devel
+%cmake_install
+install -d -m755 %{buildroot}%{_sysconfdir}/libssh
+install -m644 %{SOURCE3} %{buildroot}%{_sysconfdir}/libssh/libssh_client.config
+install -m644 %{SOURCE4} %{buildroot}%{_sysconfdir}/libssh/libssh_server.config
 
-%files -f %{_builddir}/%{name}.files
+#
+# Workaround for the removal of libssh_threads.so
+#
+# This will allow libraries which link against libssh_threads.so or packages
+# requiring it to continue working.
+#
+pushd %{buildroot}%{_libdir}
+for i in libssh.so*;
+do
+    _target="${i}"
+    _link_name="${i%libssh*}libssh_threads${i##*libssh}"
+    if [ -L "${i}" ]; then
+        _target="$(readlink ${i})"
+    fi
+    ln -s "${_target}" "${_link_name}"
+done;
+popd
+
+%ldconfig_scriptlets
+
+%check
+# Tests are randomly failing when run in parallel
+%global _smp_build_ncpus 1
+%ctest
+
+%files
+%doc AUTHORS BSD CHANGELOG README
 %license COPYING
+%{_libdir}/libssh.so.4*
+%{_libdir}/libssh_threads.so.4*
 
-%files devel -f %{_builddir}/%{name}-devel.files
+%files devel
+%{_includedir}/libssh/
+%{_libdir}/cmake/libssh/
+%{_libdir}/pkgconfig/libssh.pc
+%{_libdir}/libssh.so
+%{_libdir}/libssh_threads.so
+
+%files config
+%attr(0755,root,root) %dir %{_sysconfdir}/libssh
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/libssh/libssh_client.config
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/libssh/libssh_server.config
+

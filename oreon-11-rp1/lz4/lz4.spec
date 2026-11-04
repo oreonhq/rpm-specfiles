@@ -1,59 +1,91 @@
 %global source0_hash 537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%global _vpath_srcdir build/meson
 
-Name: lz4
-Version: 1.10.0
-Release: 1%{?dist}
-Summary: LZ4 compression
-License: BSD-2-Clause OR GPL-2.0-only
-URL: https://lz4.org/
-Source0: https://github.com/lz4/lz4/releases/download/v%{version}/lz4-%{version}.tar.gz
+Name:           lz4
+Version:        1.10.0
+Release:        1%{?dist}
+Summary:        Extremely fast compression algorithm
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
+License:        GPL-2.0-or-later AND BSD-2-Clause
+URL:            https://lz4.github.io/lz4/
+Source0:        https://github.com/lz4/lz4/archive/v%{version}/lz4-%{version}.tar.gz
+
+Obsoletes:      %{name} < 1.7.5-3
+
 BuildRequires: make
+BuildRequires:  gcc
+BuildRequires:  meson >= 0.43
+BuildRequires:  oreon-rpm-macros
 
 %description
-LZ4 is a lossless compression algorithm, providing compression speed at 400 MB/s per core.
+LZ4 is an extremely fast loss-less compression algorithm, providing compression
+speed at 400 MB/s per core, scalable with multi-core CPU. It also features
+an extremely fast decoder, with speed in multiple GB/s per core, typically
+reaching RAM speed limits on multi-core systems.
 
-%package devel
-Summary: LZ4 compression
-Requires: lz4%{?_isa} = %{version}-%{release}
-Provides: pkgconfig(liblz4)
+%package        libs
+Summary:        Libaries for lz4
+Obsoletes:      %{name} < 1.7.5-3
 
-%description devel
-LZ4 is a lossless compression algorithm, providing compression speed at 400 MB/s per core.
+%description    libs
+This package contains the libaries for lz4.
+
+%package        devel
+Summary:        Development files for lz4
+Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
+
+%description    devel
+This package contains the header(.h) and library(.so) files required to build
+applications using liblz4 library.
+
+%package        static
+Summary:        Static library for lz4
+
+%description    static
+LZ4 is an extremely fast loss-less compression algorithm. This package
+contains static libraries for static linking of applications.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%autosetup
 
 %build
-make -s %{?_smp_mflags} BUILD_STATIC=no PREFIX=%{_prefix} CFLAGS="%{_oreon_cflags} -fPIE"
+%meson \
+  -Dprograms=true \
+  -Ddefault_library=both \
+  %{nil}
+%meson_build
 
 %install
-make -s install BUILD_STATIC=no DESTDIR=%{buildroot} PREFIX=%{_prefix} libdir=%{_libdir}
+%meson_install
 
 %files
-%license LICENSE
+%license programs/COPYING
+%doc NEWS
 %{_bindir}/lz4
 %{_bindir}/lz4c
 %{_bindir}/lz4cat
 %{_bindir}/unlz4
-%{_libdir}/liblz4.so.1
-%{_libdir}/liblz4.so.1.*
 %{_mandir}/man1/lz4.1*
 %{_mandir}/man1/lz4c.1*
 %{_mandir}/man1/lz4cat.1*
 %{_mandir}/man1/unlz4.1*
 
+%files libs
+%doc lib/LICENSE
+%{_libdir}/liblz4.so.*
+
 %files devel
-%{_includedir}/lz4.h
-%{_includedir}/lz4frame.h
-%{_includedir}/lz4hc.h
+%{_includedir}/lz4*.h
 %{_libdir}/liblz4.so
 %{_libdir}/pkgconfig/liblz4.pc
+
+%files static
+%doc lib/LICENSE
+%{_libdir}/liblz4.a
+

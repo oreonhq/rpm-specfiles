@@ -1,0 +1,30 @@
+From df12b5ca0718060f7cf6a173e263d9c6319eafb0 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Tue, 25 Aug 2026 11:14:30 +0200
+Subject: [PATCH] openssl: avoid conn reuse if provider is used
+
+Reported-by: Stanislav Fort
+
+Closes #22665
+
+(cherry picked from commit 7ea37abc6ac0120ba5f6d94be8d196f7cf1506bb)
+---
+ lib/vtls/openssl.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/lib/vtls/openssl.c b/lib/vtls/openssl.c
+index 010bbb9825..4659cbf881 100644
+--- a/lib/vtls/openssl.c
++++ b/lib/vtls/openssl.c
+@@ -3707,6 +3707,11 @@ CURLcode Curl_ossl_ctx_init(struct ossl_ctx *octx,
+           ossl_strerror(ERR_peek_error(), error_buffer, sizeof(error_buffer)));
+     return CURLE_OUT_OF_MEMORY;
+   }
++#ifdef OPENSSL_HAS_PROVIDERS
++  if(data->state.libctx)
++    /* forbid connection reuse with provider/engine use */
++    connclose(data->conn, "provider in use");
++#endif
+ 
+   if(cb_setup) {
+     result = cb_setup(cf, data, cb_user_data);

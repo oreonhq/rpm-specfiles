@@ -1,147 +1,295 @@
 %global source0_hash 355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
+
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
+%bcond compat_libs %[!(0 >= 10) || %{defined eln}]
+%bcond gpm %[!(0 >= 10)]
 
+Summary: Ncurses support utilities
 Name: ncurses
-Version: 6.6
-Release: 5%{?dist}
-Summary: ncurses (new curses)
-License: MIT
-URL: https://invisible-island.net/ncurses/
-Source0: https://ftp.gnu.org/gnu/ncurses/ncurses-%{version}.tar.gz
+Version:        6.6
+Release:        1%{?dist}
+License: MIT-open-group
+URL: https://invisible-island.net/ncurses/ncurses.html
+Source0:        https://invisible-mirror.net/archives/ncurses/ncurses-%{version}.tar.gz
+Source1:        ncurses-6.6.tar.gz.asc
+Source2:        dickey@invisible-island.net-rsa3072.asc
 
-BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
-BuildRequires: glibc-devel
-BuildRequires: make
+Patch8:        ncurses-config.patch
+Patch9:        ncurses-libs.patch
+Patch11:        ncurses-urxvt.patch
+BuildRequires: gcc gcc-c++ gnupg2 make pkgconfig
+BuildRequires:  gnupg2
+BuildRequires:  oreon-rpm-macros
+%{?with_gpm:BuildRequires: gpm-devel}
 
-Requires: ncurses-libs%{?_isa} = %{version}-%{release}
-
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 %description
-The ncurses (new curses) library is a free software emulation of curses in System V Release 4.0 (SVr4), and more. It uses terminfo format, supports pads and color and multiple highlights and forms characters and function-key mapping, and has all the other SVr4-curses enhancements over BSD curses.
+The curses library routines are a terminal-independent method of
+updating character screens with reasonable optimization.  The ncurses
+(new curses) library is a freely distributable replacement for the
+discontinued 4.4 BSD classic curses library.
+
+This package contains support utilities, including a terminfo compiler
+tic, a decompiler infocmp, clear, tput, tset, and a termcap conversion
+tool captoinfo.
+
+%package libs
+Summary: Ncurses libraries
+Requires: %{name}-base = %{version}-%{release}
+
+%description libs
+The curses library routines are a terminal-independent method of
+updating character screens with reasonable optimization.  The ncurses
+(new curses) library is a freely distributable replacement for the
+discontinued 4.4 BSD classic curses library.
+
+This package contains the ncurses libraries.
+
+%if %{with compat_libs}
+%package compat-libs
+Summary: Ncurses compatibility libraries
+Requires: %{name}-base = %{version}-%{release}
+
+%description compat-libs
+The curses library routines are a terminal-independent method of
+updating character screens with reasonable optimization.  The ncurses
+(new curses) library is a freely distributable replacement for the
+discontinued 4.4 BSD classic curses library.
+
+This package contains the ABI version 5 of the ncurses libraries for
+compatibility.
+%endif
+
+%package c++-libs
+Summary: Ncurses C++ bindings
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+
+%description c++-libs
+The curses library routines are a terminal-independent method of
+updating character screens with reasonable optimization.  The ncurses
+(new curses) library is a freely distributable replacement for the
+discontinued 4.4 BSD classic curses library.
+
+This package contains C++ bindings of the ncurses ABI version 6 libraries.
 
 %package base
 Summary: Descriptions of common terminals
 BuildArch: noarch
 
 %description base
-Terminfo database and tab set files used by ncurses.
+This package contains descriptions of common terminals. Other terminal
+descriptions are included in the ncurses-term package.
 
-%package libs
-Summary: ncurses libraries
-Requires: ncurses-base = %{version}-%{release}
+%package term
+Summary: Terminal descriptions
+Requires: %{name}-base = %{version}-%{release}
+BuildArch: noarch
 
-%description libs
-Shared ncursesw, formw, menuw, panelw, and tinfo libraries.
+%description term
+This package contains additional terminal descriptions not found in
+the ncurses-base package.
 
 %package devel
-Summary: Development files for ncurses
-Requires: ncurses-libs%{?_isa} = %{version}-%{release}
+Summary: Development files for the ncurses library
+Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+Requires: %{name}-c++-libs%{?_isa} = %{version}-%{release}
+Requires: pkgconfig
 
 %description devel
-The ncurses (new curses) library is a free software emulation of curses in System V Release 4.0 (SVr4), and more. It uses terminfo format, supports pads and color and multiple highlights and forms characters and function-key mapping, and has all the other SVr4-curses enhancements over BSD curses.
+The header files and libraries for developing applications that use
+the ncurses terminal handling library.
+
+Install the ncurses-devel package if you want to develop applications
+which will use ncurses.
+
+%package static
+Summary: Static libraries for the ncurses library
+Requires: %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static
+The ncurses-static package includes static libraries of the ncurses library.
 
 %prep
 %oreon_sha256
-%autosetup -p1
+
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+
+%setup -q -n %{name}-%{version}
+
+%patch -P8 -p1 -b .config
+%patch -P9 -p1 -b .libs
+%patch -P11 -p1 -b .urxvt
 
 %build
-%oreon_configure --with-shared --without-normal --without-debug --enable-widec --enable-pc-files --with-pkg-config-libdir=%{_libdir}/pkgconfig --without-ada --without-tests
-%oreon_make
+common_options="\
+    --enable-colorfgbg \
+    --enable-hard-tabs \
+    --enable-overwrite \
+    --enable-pc-files \
+    --enable-xmc-glitch \
+    --disable-root-access \
+    --disable-setuid-environ \
+    --disable-stripping \
+    --disable-wattr-macros \
+    --with-cxx-shared \
+    --with-ospeed=unsigned \
+    --with-pkg-config-libdir=%{_libdir}/pkgconfig \
+    --with-shared \
+    --with-terminfo-dirs=%{_sysconfdir}/terminfo:%{_datadir}/terminfo \
+    --with-termlib=tinfo \
+    --with-ticlib=tic \
+    --with-xterm-kbs=DEL \
+%{!?with_gpm:--without-gpm} \
+    --without-ada"
+abi5_options="--with-chtype=long"
+
+for abi in %{?with_compat_libs:5} 6; do
+    for char in narrowc widec; do
+        mkdir $char$abi
+        pushd $char$abi
+        ln -s ../configure .
+
+        [ $abi = 6 -a $char = widec ] && progs=yes || progs=no
+
+        %configure $(
+            echo $common_options --with-abi-version=$abi
+            [ $abi = 5 ] && echo $abi5_options
+            [ $char = widec ] && echo --enable-widec || echo --disable-widec
+            [ $progs = yes ] || echo --without-progs
+        )
+
+        %make_build libs
+        [ $progs = yes ] && %make_build -C progs
+
+        popd
+    done
+done
 
 %install
-%oreon_make_install
-rm -f %{buildroot}%{_libdir}/*.a %{buildroot}%{_libdir}/*.la
+%if %{with compat_libs}
+make -C narrowc5 DESTDIR=$RPM_BUILD_ROOT install.libs
+rm ${RPM_BUILD_ROOT}%{_libdir}/lib{tic,tinfo}.so.5*
+make -C widec5 DESTDIR=$RPM_BUILD_ROOT install.libs
+%endif
+make -C narrowc6 DESTDIR=$RPM_BUILD_ROOT install.libs
+rm ${RPM_BUILD_ROOT}%{_libdir}/lib{tic,tinfo}.so.6*
+make -C widec6 DESTDIR=$RPM_BUILD_ROOT install.{libs,progs,data,includes,man}
 
-rm -rf %{_builddir}/ncurses-tinfo
-mkdir -p %{_builddir}/ncurses-tinfo
-tar -xzf %{SOURCE0} -C %{_builddir}/ncurses-tinfo --strip-components=1
-cd %{_builddir}/ncurses-tinfo
-CFLAGS='%{_oreon_cflags}' LDFLAGS='%{_oreon_ldflags}' \
-  ./configure \
-  --prefix=%{_prefix} \
-  --libdir=%{_libdir} \
-  --with-shared \
-  --without-normal \
-  --without-debug \
-  --without-cxx \
-  --without-ada \
-  --without-manpages \
-  --without-progs \
-  --without-tests \
-  --with-termlib=tinfo \
-  --disable-widec
-make -j1
-mkdir -p %{_builddir}/ncurses-tinfo-root
-make install.libs DESTDIR=%{_builddir}/ncurses-tinfo-root
-cp -a %{_builddir}/ncurses-tinfo-root%{_libdir}/libtinfo.so* %{buildroot}%{_libdir}/
-cd %{_builddir}/ncurses-%{version}
+chmod 755 ${RPM_BUILD_ROOT}%{_libdir}/lib*.so.*.*
+chmod 644 ${RPM_BUILD_ROOT}%{_libdir}/lib*.a
 
-rm -f %{buildroot}%{_libdir}/pkgconfig/ncurses++w.pc
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/terminfo
+
+baseterms=
+
+# prepare -base and -term file lists
+for termname in \
+    alacritty ansi dumb foot\* linux vt100 vt100-nav vt102 vt220 vt52 \
+    Eterm\* aterm bterm cons25 cygwin eterm\* gnome gnome-256color hurd jfbterm \
+    kitty konsole konsole-256color mach\* mlterm mrxvt nsterm putty{,-256color} pcansi \
+    rxvt{,-\*} screen{,5,-\*color,.[^mlp]\*,.linux,.mlterm\*,.putty{,-256color},.mrxvt} \
+    st{,-\*color} sun teraterm teraterm2.3 tmux{,-\*} vte vte-256color vwmterm \
+    wsvt25\* xfce xterm xterm-\*
+do
+    for i in $RPM_BUILD_ROOT%{_datadir}/terminfo/?/$termname; do
+        for t in $(find $RPM_BUILD_ROOT%{_datadir}/terminfo -samefile $i); do
+            baseterms="$baseterms $(basename $t)"
+        done
+    done
+done 2> /dev/null
+for t in $baseterms; do
+    echo "%dir %{_datadir}/terminfo/${t::1}"
+    echo %{_datadir}/terminfo/${t::1}/$t
+done 2> /dev/null | sort -u > terms.base
+find $RPM_BUILD_ROOT%{_datadir}/terminfo \! -type d | \
+    sed "s|^$RPM_BUILD_ROOT||" | while read t
+do
+    echo "%dir $(dirname $t)"
+    echo $t
+done 2> /dev/null | sort -u | comm -2 -3 - terms.base > terms.term
+
+# can't replace directory with symlink (rpm bug), symlink all headers
+mkdir $RPM_BUILD_ROOT%{_includedir}/ncurses{,w}
+for l in $RPM_BUILD_ROOT%{_includedir}/*.h; do
+    ln -s ../$(basename $l) $RPM_BUILD_ROOT%{_includedir}/ncurses
+    ln -s ../$(basename $l) $RPM_BUILD_ROOT%{_includedir}/ncursesw
+done
+
+# don't require -ltinfo when linking with --no-add-needed
+for l in $RPM_BUILD_ROOT%{_libdir}/libncurses{,w}.so; do
+    soname=$(basename $(readlink $l))
+    rm -f $l
+    echo "INPUT($soname -ltinfo)" > $l
+done
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/libcurses{,w}.so
+echo "INPUT(-lncurses)" > $RPM_BUILD_ROOT%{_libdir}/libcurses.so
+echo "INPUT(-lncursesw)" > $RPM_BUILD_ROOT%{_libdir}/libcursesw.so
+
+echo "INPUT(-ltinfo)" > $RPM_BUILD_ROOT%{_libdir}/libtermcap.so
+
+rm -f $RPM_BUILD_ROOT%{_bindir}/ncurses*5-config
+rm -f $RPM_BUILD_ROOT{%{_libdir},/usr/lib}/terminfo
+rm -f $RPM_BUILD_ROOT%{_libdir}/pkgconfig/*_g.pc
+
+xz NEWS
 
 %ldconfig_scriptlets libs
 
-%files
-%license COPYING
-%{_bindir}/captoinfo
-%{_bindir}/clear
-%{_bindir}/infocmp
-%{_bindir}/infotocap
-%{_bindir}/reset
-%{_bindir}/tabs
-%{_bindir}/tic
-%{_bindir}/toe
-%{_bindir}/tput
-%{_bindir}/tset
-%{_mandir}/man1/captoinfo.1m*
-%{_mandir}/man1/clear.1*
-%{_mandir}/man1/infocmp.1m*
-%{_mandir}/man1/infotocap.1m*
-%{_mandir}/man1/reset.1*
-%{_mandir}/man1/tabs.1*
-%{_mandir}/man1/tic.1m*
-%{_mandir}/man1/toe.1m*
-%{_mandir}/man1/tput.1*
-%{_mandir}/man1/tset.1*
-%{_mandir}/man5/scr_dump.5*
-%{_mandir}/man5/term.5*
-%{_mandir}/man5/terminfo.5*
-%{_mandir}/man5/user_caps.5*
-%{_mandir}/man7/term.7*
+%ldconfig_scriptlets c++-libs
 
-%files base
-%license COPYING
-%{_datadir}/terminfo/
-%{_datadir}/tabset/
-%{_prefix}/lib/terminfo
+%if %{with compat_libs}
+%ldconfig_scriptlets compat-libs
+%endif
+
+%files
+%doc ANNOUNCE AUTHORS NEWS.xz README TO-DO
+%{_bindir}/[cirt]*
+%{_mandir}/man1/[cirt]*
+%{_mandir}/man5/*
+%{_mandir}/man7/*
 
 %files libs
+%{_libdir}/lib[fmpt]*.so.6*
+%{_libdir}/libncursesw.so.6*
+%{_libdir}/libncurses.so.6*
+
+%if %{with compat_libs}
+%files compat-libs
+%{_libdir}/lib*.so.5*
+%endif
+
+%files c++-libs
+%{_libdir}/libncurses++*.so.6*
+
+%files base -f terms.base
 %license COPYING
-%{_libdir}/libformw.so.6
-%{_libdir}/libformw.so.6.*
-%{_libdir}/libmenuw.so.6
-%{_libdir}/libmenuw.so.6.*
-%{_libdir}/libncursesw.so.6
-%{_libdir}/libncursesw.so.6.*
-%{_libdir}/libpanelw.so.6
-%{_libdir}/libpanelw.so.6.*
-%{_libdir}/libtinfo.so.6
-%{_libdir}/libtinfo.so.6.*
+%doc README
+%dir %{_sysconfdir}/terminfo
+%{_datadir}/tabset
+%dir %{_datadir}/terminfo
+
+%files term -f terms.term
 
 %files devel
-%{_bindir}/ncursesw6-config
+%doc doc/html/hackguide.html
+%doc doc/html/ncurses-intro.html
+%doc c++/README*
+%doc misc/ncurses.supp
+%{_bindir}/ncurses*-config
+%{_libdir}/lib*.so
+%{_libdir}/pkgconfig/*.pc
+%dir %{_includedir}/ncurses
+%dir %{_includedir}/ncursesw
+%{_includedir}/ncurses/*.h
+%{_includedir}/ncursesw/*.h
 %{_includedir}/*.h
-%{_libdir}/libformw.so
-%{_libdir}/libmenuw.so
-%{_libdir}/libncursesw.so
-%{_libdir}/libpanelw.so
-%{_libdir}/libtinfo.so
-%{_libdir}/pkgconfig/formw.pc
-%{_libdir}/pkgconfig/menuw.pc
-%{_libdir}/pkgconfig/ncursesw.pc
-%{_libdir}/pkgconfig/panelw.pc
-%{_mandir}/man1/ncursesw6-config.1*
-%{_mandir}/man3/*.3*
+%{_mandir}/man1/ncurses*-config*
+%{_mandir}/man3/*
+
+%files static
+%{_libdir}/lib*.a
+

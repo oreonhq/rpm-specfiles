@@ -10,7 +10,7 @@ Summary:        Minimalistic C client library for Redis
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/redis/hiredis
-Source0:        https://github.com/redis/hiredis/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/redis/hiredis/archive/v%{version}/hiredis-%{version}.tar.gz
 # Make test.sh use REDIS_SERVER everywhere
 # https://github.com/redis/hiredis/pull/1276
 Patch0:        hiredis-envvar.patch
