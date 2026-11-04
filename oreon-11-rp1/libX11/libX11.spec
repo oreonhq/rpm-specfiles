@@ -1,6 +1,6 @@
 %global source0_hash 69606f485c2c07c14ef64f75b7bb326d48587af33795d9ab3e607c0b5f94f11c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global tarball libX11

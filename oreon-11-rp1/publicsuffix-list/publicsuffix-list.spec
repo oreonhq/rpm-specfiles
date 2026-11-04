@@ -2,7 +2,7 @@
 %global source1_hash 3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04
 %global source2_hash 8f50ad958916d6a8f79fba2363501475571acce752757f9126fe9d2f17dd920d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond_without  dafsa

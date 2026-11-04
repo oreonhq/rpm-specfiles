@@ -1,6 +1,6 @@
 %global source0_hash 394024eda0a5955217ceda9cd1201e65dc8fa3aa29c2951135a49521d57c3cc3
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A set of basic GNU tools commonly used in shell scripts

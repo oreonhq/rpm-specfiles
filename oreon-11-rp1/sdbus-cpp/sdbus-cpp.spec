@@ -1,6 +1,6 @@
 %global source0_hash 3a289eded586c26d06c1387de72c7bf7c809527a70d51ba6401fe61059b19626
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global libso_major 2

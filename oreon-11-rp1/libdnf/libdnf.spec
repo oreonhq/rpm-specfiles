@@ -1,6 +1,6 @@
 %global source0_hash 95477cc412a5980ebaa3152d5561e35826f550d91cf303d3eb7ad3dad10cb46d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global libsolv_version 0.7.21

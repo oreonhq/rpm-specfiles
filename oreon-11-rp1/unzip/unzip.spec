@@ -1,6 +1,6 @@
 %global source0_hash 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Settings for EL <= 7

@@ -1,6 +1,6 @@
 %global source0_hash db10030528f3365c03755969619dd6789147d34fc588db8107364351085aebad
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: DWARF optimization and duplicate removal tool

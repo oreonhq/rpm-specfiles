@@ -1,6 +1,6 @@
 %global source0_hash 67bea6fbc3a42a535a0230c9e891e5ddfb4d9d39422d46565a2990d1ace15216
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # The testsuite is unsuitable for running on buildsystems

@@ -1,6 +1,6 @@
 %global source0_hash 8839959bfcc7a0f4c609d8e4f53f1c67ae33de23775ec35beb39ff15adf11920
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %define _root_libdir    /%{_lib}

@@ -1,6 +1,6 @@
 %global source0_hash 537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global _vpath_srcdir build/meson

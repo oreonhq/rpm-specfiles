@@ -1,6 +1,6 @@
 %global source0_hash 6ede051357868ed427ea71d16fc27f4d63cc0d9c8a32788aa11c450ecefcc76f
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global pypi_name distro

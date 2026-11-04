@@ -41,6 +41,16 @@
 %oreon_filelist %{_oreon_helper} files %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}.files --
 %oreon_filelist_devel %{_oreon_helper} files %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}.files --devel-out %{_builddir}/%{name}-devel.files --
 
-%oreon_bootstrap %{nil}
+%oreon_bootstrap %{lua:
+local bin = "/usr/libexec/oreon-rpm-macros/oreon-bootstrap"
+local f = io.open(bin, "r")
+if f ~= nil then
+  f:close()
+  local out = rpm.expand("%(" .. bin .. " 2>/dev/null)")
+  if out and string.find(out, "1", 1, true) then
+    rpm.define("with_bootstrap 1")
+  end
+end
+}
 
 %oreon_sha256 %{!?source0_hash:%{error:source0_hash is not set}}echo '%{source0_hash}  %{SOURCE0}' | sha256sum -c -

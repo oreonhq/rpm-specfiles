@@ -1,6 +1,6 @@
 %global source0_hash 6fcf18b75d305d99d04d2e42982ed5b787a081af2842220ed63287a2d6a10988
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A library for password generation and password quality checking

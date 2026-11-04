@@ -1,6 +1,6 @@
 %global source0_hash 38b4ee1924f8bd1ec0f6b2ec147e4c54c6deac132db5f90b4214b43ccd32fdd6
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global libname solv

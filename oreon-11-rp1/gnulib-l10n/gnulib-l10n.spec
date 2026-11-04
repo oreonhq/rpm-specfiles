@@ -1,6 +1,6 @@
 %global source0_hash 155752ba6796aa294cde87c2bf0e771a5891eeeacb131345be0e080a3ec0ceea
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: Localizations for Gnulib

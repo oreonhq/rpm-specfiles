@@ -1,6 +1,6 @@
 %global source0_hash e48fc69401135dc08d2cd4ff58dbdbfce9b7485f76fc9049d97848e313c08dda
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: Collection of performance monitoring tools for Linux

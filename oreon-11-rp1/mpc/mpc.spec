@@ -1,6 +1,6 @@
 %global source0_hash 382959c3bfa2765b5346232438650491b822a16607ff5699178aa1386e3878d4
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:             mpc

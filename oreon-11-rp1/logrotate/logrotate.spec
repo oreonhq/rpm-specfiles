@@ -1,6 +1,6 @@
 %global source0_hash 42b4080ee99c9fb6a7d12d8e787637d057a635194e25971997eebbe8d5e57618
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: Rotates, compresses, removes and mails system log files

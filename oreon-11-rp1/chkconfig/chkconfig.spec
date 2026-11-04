@@ -1,6 +1,6 @@
 %global source0_hash c973a38d46d75ab2b411ab141e4c320a66dc4cc98832c3f2f6c5999531057861
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A system tool for maintaining the /etc/rc*.d hierarchy

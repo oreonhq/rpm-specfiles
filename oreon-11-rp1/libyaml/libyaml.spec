@@ -1,6 +1,6 @@
 %global source0_hash c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global with_mingw 0

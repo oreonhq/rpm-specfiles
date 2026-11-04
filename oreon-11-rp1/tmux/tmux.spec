@@ -1,6 +1,6 @@
 %global source0_hash e79c699c7e949dccd0a4a125e17b8d1261e311b16979dbc8eb34542f3966d82e
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           tmux

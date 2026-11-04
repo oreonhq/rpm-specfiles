@@ -1,6 +1,6 @@
 %global source0_hash 51f74eb0f51cfa9873b85264dfdd5d46e8957ec95b88f0fb762f63d9e164c72e
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global tex_texinfo %{_datadir}/texlive/texmf-dist/tex/texinfo

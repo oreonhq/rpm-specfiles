@@ -1,6 +1,6 @@
 %global source0_hash 79f3d2c88f44b7eb5cf54d9792e03232297e17f97a179163f2750099a00f164d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: SELinux binary policy manipulation library

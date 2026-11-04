@@ -1,6 +1,6 @@
 %global source0_hash 659f40c440e31ba865c52c818a33d3ba6a97349e3353f8b1985179cb2aa71ec5
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:    usbutils

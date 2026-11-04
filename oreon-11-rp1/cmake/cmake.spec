@@ -1,6 +1,6 @@
 %global source0_hash f51b3c729f85d8dde46a92c071d2826ea6afb77d850f46894125de7cc51baa77
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Do we add appdata-files?

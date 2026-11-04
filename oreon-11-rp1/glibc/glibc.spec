@@ -1,6 +1,6 @@
 %global source0_hash ae553b76193e605bc40040558270fa6185ba752e3d3085df716ed4566dc54558
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global glibcsrcdir glibc-67dd5150c6c1f76262b7d76ecbc296c564376c74

@@ -1,6 +1,6 @@
 %global source0_hash f520810d27c74bf1c5d8b8885845c61e0c845f62d33e68b02e020633a8b62fe3
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # build against xz?

@@ -1,6 +1,6 @@
 %global source0_hash f25c6ab51548a73a75558742fb031e0625d6485fe5f9155949d6486a2408ab66
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: GNU macro processor

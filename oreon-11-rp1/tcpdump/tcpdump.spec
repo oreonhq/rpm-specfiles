@@ -1,7 +1,7 @@
 %global source0_hash 40a8cefd45f0d2a06827e6658efb830d484868c449ad80f7efb33516af44f3da
 %global source1_hash 082967d6bf793499d3d655cea2149e07c0da97287f1877a6eab88d17cb703d0d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %define tcpslice_dir tcpslice-1.8

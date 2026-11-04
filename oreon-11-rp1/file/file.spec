@@ -1,6 +1,6 @@
 %global source0_hash ed14656883b23a364b4057c05595d93252da9bc473d30106519519d0da141283
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond_without python3

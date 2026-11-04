@@ -1,6 +1,6 @@
 %global source0_hash 505cf43912e9480495c344c70260452e32aa2a73c546a026b3f100053b23ce91
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global perl_version    5.44.0

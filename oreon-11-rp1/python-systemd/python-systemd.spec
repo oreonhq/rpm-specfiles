@@ -1,6 +1,6 @@
 %global source0_hash fc2c2ff4f03bf1a110f6ba2cadb874f51a7c0ce4fa0261d2bbe3371548ddbc88
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           python-systemd

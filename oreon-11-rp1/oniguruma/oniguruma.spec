@@ -1,6 +1,6 @@
 %global source0_hash 2a5cfc5ae259e4e97f86b68dfffc152cdaffe94e2060b770cb827238d769fc05
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %undefine	_changelog_trimtime

@@ -2,7 +2,7 @@
 %global source1_hash 1d9dd4d8eed30520d83c0f331ac8ddad5b0c78b9fe8a4f456edbba7b6f871250
 %global source3_hash a764b07c95d32fff682da0cc58a8d61ccb168b9b070cfcde205a32465c692ed4
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Reflects the values hard-coded in various Makefile.am's in the source tree.

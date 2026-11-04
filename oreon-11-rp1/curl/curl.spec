@@ -1,6 +1,6 @@
 %global source0_hash aa1b66a70eace83dc624508745646c08ae561de512ab403adffb93ac87fc72e6
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # OpenSSL ENGINE support

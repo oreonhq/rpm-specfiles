@@ -1,6 +1,6 @@
 %global source0_hash 6c8a2148a7b85043b68492bce43316b0e2e214fc4e628c7ede078e76e216330b
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: Utilities for managing filesystem extended attributes

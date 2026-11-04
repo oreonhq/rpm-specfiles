@@ -1,6 +1,6 @@
 %global source0_hash ce7ebdc9789ae51f3e7d26b5408de7395ddea0950d5d73568ed9565f5fae4d4c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global libcurl_version 7.52.0

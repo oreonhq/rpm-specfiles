@@ -1,6 +1,6 @@
 %global source0_hash 82ad632d31ee05da13b537c124f819eb88e18851d9cb0c30ae0552084811588c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           hiredis

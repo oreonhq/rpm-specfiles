@@ -1,6 +1,6 @@
 %global source0_hash ed5ad317858e0a9badbbada70df40194002e16e8834ac24491307c88f96f9702
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A perfect hash function generator

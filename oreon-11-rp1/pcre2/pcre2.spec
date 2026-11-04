@@ -1,6 +1,6 @@
 %global source0_hash 53c156e1ba416a20da8e65395daa132da0d80e76910424caca3fcdae7831d384
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Add readline edditing in pcre2test tool

@@ -1,7 +1,7 @@
 %global source0_hash 66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7
 %global source1_hash 9264d3673cc1c633f77ab1469627864836e6500cb9b3823c571dcb1c10ba13cb
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # configuration on the builders

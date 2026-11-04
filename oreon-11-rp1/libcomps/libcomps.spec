@@ -1,6 +1,6 @@
 %global source0_hash c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %define __cmake_in_source_build 1

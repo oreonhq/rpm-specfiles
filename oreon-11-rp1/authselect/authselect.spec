@@ -1,6 +1,6 @@
 %global source0_hash 2219a37cb3cd9ab5ae271c7a03c5dc0d2458ffb922f67def5b89a3a065662697
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Do not terminate build if language files are empty.

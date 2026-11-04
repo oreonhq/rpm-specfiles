@@ -1,6 +1,6 @@
 %global source0_hash 9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # If the soname gets bumped we need to ship a compat library to be able

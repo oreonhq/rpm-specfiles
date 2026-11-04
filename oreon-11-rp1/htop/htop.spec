@@ -1,6 +1,6 @@
 %global source0_hash a8b164386494cb85bb255a415a3f5f80afe7a0c4491da5d113b3a0f951087e65
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           htop

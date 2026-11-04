@@ -1,6 +1,6 @@
 %global source0_hash 3f33b22135219c39c3c695f7b7171c2567d3e2a17c798c0a90607320cbb268f2
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: The GNU line editor

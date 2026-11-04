@@ -3,7 +3,7 @@
 %global source4_hash 7b399eee49aea00d96c0dda004de62eb2b5e9058097da08474f66c3efae951cb
 %global source5_hash 06a15976b2a76a4e507580540881d6a89df6de79ba38f533586c3f68bdcea314
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global upstream_sources 0 1

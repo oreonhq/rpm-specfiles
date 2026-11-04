@@ -1,6 +1,6 @@
 %global source0_hash 491108728f120ce05b539934b41a750235031a6df8abc6b47e57aff7de15094d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # hardening breaks the set-interpreter-long test on i686, x86_64, ppc64le, s390x

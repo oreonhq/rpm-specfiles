@@ -2,7 +2,7 @@
 %global source2_hash e54b09a439647e006b4831eec9785cbaaf3e07ab371c3a6ee6a68e1bdb9fbc6b
 %global source10_hash 21bc47f96cf0eb535e532697dce4cdfdbc91f59223bdc00d8495d191888c5fe8
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           rust

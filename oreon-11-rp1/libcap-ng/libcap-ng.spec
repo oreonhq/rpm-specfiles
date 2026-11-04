@@ -1,6 +1,6 @@
 %global source0_hash 399040138e0ca62fa2bcabd63da9af4431a246ef7a654561a0ca3cb00010a539
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global bpf_supported_arches aarch64 x86_64 ppc64le riscv64 s390x

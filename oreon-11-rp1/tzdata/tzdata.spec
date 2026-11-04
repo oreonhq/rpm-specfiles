@@ -2,7 +2,7 @@
 %global source1_hash cc3d27ca2a0d8399504551b920970d80af83bfb9c216e8082a15491921935d54
 %global source3_hash 4809b438f61e404dec1c857d56c8d60724312c19bd8b8cf720a1fbedf4f0766f
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: Timezone data

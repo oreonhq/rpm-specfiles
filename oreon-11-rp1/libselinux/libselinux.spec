@@ -1,6 +1,6 @@
 %global source0_hash 73d419c6e20e874adaa4019372cbd097eecf4d276e13f27ec5e67d35c0bd203c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %define ruby_inc %(pkg-config --cflags ruby)

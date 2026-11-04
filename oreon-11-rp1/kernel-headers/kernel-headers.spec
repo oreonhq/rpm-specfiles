@@ -1,6 +1,6 @@
 %global source0_hash 01710ee01737dac492f1bae52becd057e08d20d11589089aa06accff415c28dd
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # For a stable, released kernel, released_kernel should be 1. For rawhide

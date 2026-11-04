@@ -1,6 +1,6 @@
 %global source0_hash 59048b53be8d3904bf939313debf13956a881b0de79da40f7719a77bcd1e9c53
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Uncomment on initial build for soname bump.

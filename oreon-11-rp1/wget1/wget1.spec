@@ -1,6 +1,6 @@
 %global source0_hash 766e48423e79359ea31e41db9e5c289675947a7fcf2efdcedb726ac9d0da3784
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A utility for retrieving files using the HTTP or FTP protocols

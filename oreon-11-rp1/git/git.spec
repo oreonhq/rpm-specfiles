@@ -1,7 +1,7 @@
 %global source0_hash 26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3
 %global source1_hash bee7d2f96844063557b07b43811d81e1fc54563e0da2c36a975dfd432b196a5c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Pass --without docs to rpmbuild if you don't want the documentation

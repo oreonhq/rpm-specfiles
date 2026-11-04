@@ -3,7 +3,7 @@
 %global source2_hash 7372fd759173c636a318b5a1eef2f09d5a2ef598eefd78870abdf474ae47d316
 %global source3_hash fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global DATE 20261029

@@ -1,6 +1,6 @@
 %global source0_hash 931b44eabdd5f7d170803f3476397c8e9dea07209589e1194ff8379429991ccb
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
   %global meson_python_flags -Dwith_py2=false -Dwith_py3=true

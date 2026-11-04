@@ -1,7 +1,7 @@
 %global source0_hash a5479f2f8a6b0b2516767d2f7189c386c1dc858d997167d7ec5cfc798c7571a1
 %global source2_hash 8cb20c4ea91db0e27b247e813a98a5dfe4d4548084abecab7ca9db51a49be8ba
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: nmap

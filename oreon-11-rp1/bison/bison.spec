@@ -1,6 +1,6 @@
 %global source0_hash 9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: GNU general-purpose parser generator

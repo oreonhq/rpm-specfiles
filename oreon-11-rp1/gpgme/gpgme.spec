@@ -1,6 +1,6 @@
 %global source0_hash 0687a95b299871c4141f507c0f740de6b429c9ac067d0fa4e062e3264df5fb77
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond check 1

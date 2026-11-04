@@ -1,6 +1,6 @@
 %global source0_hash d170d0265e1e5030c574c8613a1fecc047413282b94c2bc4cf2e99477d82ee93
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: rdma-core

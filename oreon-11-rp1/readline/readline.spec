@@ -1,6 +1,6 @@
 %global source0_hash fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A library for editing typed command lines

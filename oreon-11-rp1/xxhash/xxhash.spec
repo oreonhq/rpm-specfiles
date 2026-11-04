@@ -1,6 +1,6 @@
 %global source0_hash 5738270935e7c3d38a79b3adf7c9692566ce7895a25f67de43ad52ab504acd32
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:		xxhash

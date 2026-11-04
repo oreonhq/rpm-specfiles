@@ -1,6 +1,6 @@
 %global source0_hash f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # See the bug #429880

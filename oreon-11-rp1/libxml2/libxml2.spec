@@ -1,6 +1,6 @@
 %global source0_hash 98087fd181d9070724f3fbc65c7377db03038eb92bd882374daff44940138821
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           libxml2

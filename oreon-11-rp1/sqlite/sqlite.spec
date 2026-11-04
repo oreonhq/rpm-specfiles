@@ -1,7 +1,7 @@
 %global source0_hash d18fa15aec74d8c17e1463f861095adc01b5ad190256acb4f91d22f0368d232b
 %global source1_hash a1d0f5de57485d062796ed7e67daff0758b50d00001a0f233a2c15aaf40bbdc8
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # bcond default logic is nicely backwards...

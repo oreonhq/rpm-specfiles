@@ -1,6 +1,6 @@
 %global source0_hash e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}

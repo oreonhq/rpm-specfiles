@@ -1,6 +1,6 @@
 %global source0_hash 621ff2b4faf214d7023143f6f9d496117c7c75131927837750b904140aff48a1
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: File system tree viewer

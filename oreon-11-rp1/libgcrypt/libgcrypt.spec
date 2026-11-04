@@ -1,6 +1,6 @@
 %global source0_hash 7ce33c2492221a0436f96a8500215e9f3e3dcb5fd26a757cd415e7a843babd5e
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: libgcrypt

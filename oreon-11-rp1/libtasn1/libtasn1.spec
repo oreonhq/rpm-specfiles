@@ -1,6 +1,6 @@
 %global source0_hash 1d8a444a223cc5464240777346e125de51d8e6abf0b8bac742ac84609167dc87
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary:	The ASN.1 library used in GNUTLS

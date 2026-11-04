@@ -1,7 +1,7 @@
 %global source0_hash fc51ca7196f1a3f5fdf6ffd3864b50f4f9c02333be28be4eeca057e103c0dd18
 %global source1_hash a4f9813fe769cd82a67e0be94296a9eafe14e0c3ca1dd198331e3ee6db25c1a1
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: libnl3

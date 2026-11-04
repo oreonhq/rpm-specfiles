@@ -1,6 +1,6 @@
 %global source0_hash 100fc873b848b9b0297d8a705e8e2ed326256c8483d9960ee1ffe264c8a5c3e3
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # We ship a .pc file but don't want to have a dep on pkg-config. We

@@ -1,6 +1,6 @@
 %global source0_hash 7c8b7f9fc8609141fdea9cece85249d308624391ff61dedaf528fcb337727dfd
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: GNU collection of diff utilities

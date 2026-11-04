@@ -1,6 +1,6 @@
 %global source0_hash 827c1eb9cb6e7c738b171745dac0888aa58c5924df2e59239318383de0729b98
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # This spec file has been automatically updated

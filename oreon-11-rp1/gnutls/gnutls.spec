@@ -1,7 +1,7 @@
 %global source0_hash ffed8ec1bf09c2426d4f14aae377de4753b53e537d685e604e99a8b16ca9c97e
 %global source300_hash b5057cfb990108c4a9f21832f1f35f3d98115012d1628e00650558e6b49e8285
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %define srpmhash() %{lua:

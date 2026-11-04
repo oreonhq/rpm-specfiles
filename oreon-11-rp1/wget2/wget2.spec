@@ -1,6 +1,6 @@
 %global source0_hash 4f1915b2a55a789a15f2f9ada7cc44bca81418e648f76fd88a7f4dd028b2149f
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond as_wget 1

@@ -1,6 +1,6 @@
 %global source0_hash ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           fmt

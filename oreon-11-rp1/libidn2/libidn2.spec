@@ -1,7 +1,7 @@
 %global source0_hash f557911bf6171621e1f72ff35f5b1825bb35b52ed45325dcdee931e5d3c0787a
 %global source2_hash 76fbde2d996f9e38d8f33abf6409b448ae556ad0f226ba7155b103eb7365c19e
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary:          Library to support IDNA2008 internationalized domain names

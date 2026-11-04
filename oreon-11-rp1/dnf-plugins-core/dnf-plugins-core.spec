@@ -1,6 +1,6 @@
 %global source0_hash 0f6966a6cb62912cd3520ef2a09ddfcdb48aa3091009f9834526b04f6de9a70a
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %{?!dnf_lowest_compatible: %global dnf_lowest_compatible 4.19.0}

@@ -1,6 +1,6 @@
 %global source0_hash ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # tests are enabled by default

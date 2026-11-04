@@ -1,6 +1,6 @@
 %global source0_hash 7b0d7aee291273ae02b661d14330e4e803ab6b673cd4aec39c0a00a5de2b793d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # SPDX-License-Identifier: MIT

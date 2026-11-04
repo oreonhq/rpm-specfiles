@@ -1,6 +1,6 @@
 %global source0_hash 7397d48865b1e743f437466586de1621bd1960da467227b7d05e400da5aad176
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global snapshot_date 20190603

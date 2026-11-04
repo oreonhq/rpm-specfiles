@@ -1,7 +1,7 @@
 %global source0_hash 3addbc00da01846b232fb3bc453538ea5468da43033f21bb345cb1e9073f5094
 %global source200_hash fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Recent so-version, so we do not bump accidentally.

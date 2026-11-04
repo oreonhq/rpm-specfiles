@@ -1,6 +1,6 @@
 %global source0_hash 0605f8d8a2f4668cb16e279ebcad8002cc83f44610633157e9c4b8fc183a479b
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Force out of source build

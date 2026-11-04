@@ -1,6 +1,6 @@
 %global source0_hash fabdc4436e9a8a152d38060602f491bee4245ad54656f01991f33d511c87bfb1
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # default dependencies

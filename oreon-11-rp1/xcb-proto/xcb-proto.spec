@@ -1,6 +1,6 @@
 %global source0_hash 2c1bacd2110f4799f74de6ebb714b94cf6f80fb112316b1219480fd22562148c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           xcb-proto

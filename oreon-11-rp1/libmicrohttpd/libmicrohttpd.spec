@@ -1,6 +1,6 @@
 %global source0_hash 04bfe8ef75db7d629a33de767599765cecadc56274a39822d5d081030d577685
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           libmicrohttpd

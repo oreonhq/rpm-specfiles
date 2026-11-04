@@ -1,6 +1,6 @@
 %global source0_hash 74d0e4dfa3d39ad8939e99bda37f5967aba528211076828464d2777d477fc0fb
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: Sample Authorization Protocol for X

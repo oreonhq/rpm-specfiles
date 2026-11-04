@@ -1,6 +1,6 @@
 %global source0_hash a5fd44395ec5725a65b7e55562b6c5c3e68c2cd59d8ae3cfeeabd53b4beddce4
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global git_date 20260731

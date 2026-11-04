@@ -1,7 +1,7 @@
 %global source0_hash 2a2c705e382c413643a458b837575c0eb0989477ab6fb99c87adbe9a259612ad
 %global source1_hash 6d072d8a37ffa36856bc1cce70f3d21189c65b753cf8575f96d38c195fcd85ca
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: libcap

@@ -1,6 +1,6 @@
 %global source0_hash 4d62ff37342ec7aed748535323930c7cf94acf71c3591882b26a7ea50f3edc16
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond_without selinux

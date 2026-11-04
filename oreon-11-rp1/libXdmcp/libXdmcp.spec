@@ -1,6 +1,6 @@
 %global source0_hash d8a5222828c3adab70adf69a5583f1d32eb5ece04304f7f8392b6a353aa2228c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: X Display Manager Control Protocol library

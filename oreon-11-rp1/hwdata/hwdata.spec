@@ -1,6 +1,6 @@
 %global source0_hash 5a71ab7a48c668ef912fcfdbec046949087019f8dd7fb967445d36fbeb778350
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: hwdata

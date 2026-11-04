@@ -1,6 +1,6 @@
 %global source0_hash 7fec50b27deddab5455a9633780b6341eddfb96215a7619e93a76eb27178f653
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # We can skip tests

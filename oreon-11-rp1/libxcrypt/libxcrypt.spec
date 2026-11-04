@@ -1,7 +1,7 @@
 %global source0_hash 71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071
 %global source3_hash 3b86e778174be05eb880a4f2411796b23bffe4649f8e19ba902dc6d9ca76b17e
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # Build with new api?

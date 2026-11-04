@@ -1,6 +1,6 @@
 %global source0_hash 7c697a447f7ee95ccbf71619478a024f43016f8448e8eb4ce683e2baff124d9d
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           iotop-c

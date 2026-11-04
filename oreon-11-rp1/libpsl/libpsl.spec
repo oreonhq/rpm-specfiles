@@ -1,6 +1,6 @@
 %global source0_hash 8fbb03054556498ba9c4cc48fcaa36a4483748c6504a65bdb9ba348f555b0e56
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           libpsl

@@ -1,6 +1,6 @@
 %global source0_hash 36cf8c16ec969826217ff7458535a29714cb471dadba1672a303034d029a6e64
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           perl-generators

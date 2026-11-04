@@ -1,5 +1,5 @@
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # OCaml has a bytecode backend that works on anything with a C

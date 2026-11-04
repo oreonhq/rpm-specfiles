@@ -1,6 +1,6 @@
 %global source0_hash 8d1756fd704f147549f606cd987050fb94b0b1ff621ea6aa4d6bf0b74450468a
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global homepage https://github.com/latchset/libverto

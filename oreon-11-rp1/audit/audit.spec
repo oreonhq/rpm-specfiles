@@ -1,7 +1,7 @@
 %global source0_hash 42876d195ee2ded19e5f72d7664096eee314928aa36ad346719ba5b25818fc84
 %global source1_hash 20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: User space tools for kernel auditing

@@ -1,6 +1,6 @@
 %global source0_hash 93c941aa17d5eb1d53fe838365f29a8b4e539c222a256d974ec8f30fc413e396
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           glib2

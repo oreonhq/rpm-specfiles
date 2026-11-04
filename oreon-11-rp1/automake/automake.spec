@@ -1,6 +1,6 @@
 %global source0_hash 168aa363278351b89af56684448f525a5bce5079d0b6842bd910fdd3f1646887
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global api_version 1.18

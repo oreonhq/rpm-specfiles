@@ -1,7 +1,7 @@
 %global source0_hash 16afbb9cefead2aa278105cf27d9f597bde7fbf3dbb85015857ca7ca6a4e89ba
 %global source2_hash dd0ffdf7d4262e887208af17617c7b84781969b832ebfd4ac24e9fcfddf93241
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: An XML parser library

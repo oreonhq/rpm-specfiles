@@ -1,6 +1,6 @@
 %global source0_hash bfd19cb06cc71f3352d567e90284d8cdac02ac89774bbeadf0b533b0c11432fd
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: The GNU versions of find utilities (find and xargs)

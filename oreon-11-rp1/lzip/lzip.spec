@@ -1,6 +1,6 @@
 %global source0_hash 641cf30961525cbe3b340cc883436c8854e9f5032f459f444de4782b621e6572
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           lzip

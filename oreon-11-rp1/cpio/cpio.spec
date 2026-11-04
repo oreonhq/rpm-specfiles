@@ -1,6 +1,6 @@
 %global source0_hash 937610b97c329a1ec9268553fb780037bcfff0dcffe9725ebc4fd9c1aa9075db
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A GNU archiving program
