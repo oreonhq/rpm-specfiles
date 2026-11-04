@@ -22,19 +22,16 @@ Source0:        https://files.pythonhosted.org/packages/source/p/python-dateutil
 
 Provides:  deprecated()
 
-# Drop redundant BuildRequires for python3-wheel
-Patch:        fix-pytest-9.1-parametrize.patch
-
 # Allow setuptools-scm dependency greater than v8.0
-Patch:        fix-pytest-9.1-parametrize.patch
+Patch:        relax-setuptools_scm-requires.patch
 
 # Fix dateutil module import in sphinx config file
-Patch:        fix-pytest-9.1-parametrize.patch
+Patch:        fix-sphinx-import.patch
 
 # Remove ctypes mock from sphinx config file
 # seems to be incompatible with Python 3.15
 # https://github.com/dateutil/dateutil/issues/1472
-Patch:        fix-pytest-9.1-parametrize.patch
+Patch:        remove-ctypes-mock.patch
 
 # Fix test compatibility with pytest >= 9.1 (non-Collection parametrize)
 # https://github.com/dateutil/dateutil/pull/1523
@@ -70,7 +67,7 @@ BuildRequires: pyproject-rpm-macros
 BuildRequires: python3dist(packaging)
 BuildRequires: python3dist(pip) >= 19
 BuildRequires: python3dist(setuptools)
-BuildRequires: python3dist(setuptools-scm) < 8~~
+BuildRequires: python3dist(setuptools-scm)
 BuildRequires: python3dist(six) >= 1.5
 BuildRequires: python3dist(wheel)
 

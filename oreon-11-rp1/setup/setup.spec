@@ -51,7 +51,6 @@ The setup package contains a set of important system configuration and
 setup files, such as passwd, group, and profile.
 
 %prep
-%oreon_sha256
 
 mkdir -p etc/profile.d
 cp %{lua: for i=1,15 do print(sources[i]..' ') end} etc/

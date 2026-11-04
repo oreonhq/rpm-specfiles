@@ -69,7 +69,6 @@ This subpackage of filesystem package contains rpm macro definitions
 and an rpm attribute generator.
 
 %prep
-%oreon_sha256
 
 rm -f $RPM_BUILD_DIR/filelist
 
