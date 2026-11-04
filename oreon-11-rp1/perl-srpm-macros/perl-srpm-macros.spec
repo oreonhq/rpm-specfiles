@@ -4,11 +4,12 @@
 %oreon_bootstrap
 Name:       perl-srpm-macros    
 Version:        1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:    RPM macros for building Perl source package from source repository
 License:    GPL-3.0-or-later
 Source0:    macros.perl-srpm
 BuildArch:  noarch
+BuildRequires:  oreon-rpm-macros
 
 %description
 These RPM macros are used for building Perl source packages from source

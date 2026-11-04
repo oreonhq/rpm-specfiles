@@ -5,13 +5,14 @@
 Name:           kernel-srpm-macros
 Version:        1.0
 # when bumping version and resetting release, don't forget to bump version of kernel-rpm-macros as well
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        RPM macros that list arches the full kernel is built on
 # The license is the standard (MIT) specified in
 # and as URL we provide dist-git URL
 License:        MIT
 URL:            https://src.fedoraproject.org/rpms/kernel-srpm-macros
 BuildArch:      noarch
+BuildRequires:  oreon-rpm-macros
 # We are now the ones shipping kmod.attr
 Conflicts:      redhat-rpm-config < 205
 # macros.kmp, kmodtool and rpmsort were moved from kernel-rpm-macros

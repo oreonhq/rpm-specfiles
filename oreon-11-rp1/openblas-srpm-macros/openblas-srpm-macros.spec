@@ -4,11 +4,12 @@
 %oreon_bootstrap
 Name:           openblas-srpm-macros
 Version:        2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        OpenBLAS architecture macros
 License:        MIT
 Source0:        macros.openblas-srpm
 BuildArch:      noarch
+BuildRequires:  oreon-rpm-macros
 
 %description
 %{summary}.

@@ -13,12 +13,13 @@
 
 Name:           ocaml-srpm-macros
 Version:        11
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 Summary:        OCaml architecture macros
 License:        GPL-2.0-or-later
 
 BuildArch:      noarch
+BuildRequires:  oreon-rpm-macros
 
 Source0:        macros.ocaml-srpm
 
