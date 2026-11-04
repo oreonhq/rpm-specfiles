@@ -204,6 +204,7 @@ URL: http://gcc.gnu.org
 # Need binutils which support --generate-missing-build-notes=yes >= 2.31
 # Need binutils which support .base64 >= 2.43
 BuildRequires: binutils >= 2.43
+BuildRequires: oreon-rpm-macros
 # While gcc doesn't include statically linked binaries, during testing
 # -static is used several times.
 BuildRequires: glibc-static

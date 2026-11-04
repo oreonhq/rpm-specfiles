@@ -4,6 +4,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 #region globals
 #region version
 %global maj_ver 23

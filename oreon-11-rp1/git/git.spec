@@ -4,6 +4,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 # Pass --without docs to rpmbuild if you don't want the documentation
 %bcond_without docs
 

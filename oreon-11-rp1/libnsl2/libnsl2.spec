@@ -3,6 +3,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 # Uncomment on initial build for soname bump.
 #global bump_soname 1
 %global sover 3

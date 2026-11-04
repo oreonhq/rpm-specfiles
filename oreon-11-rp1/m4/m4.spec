@@ -3,6 +3,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 Summary: GNU macro processor
 Name: m4
 Version:        1.4.21

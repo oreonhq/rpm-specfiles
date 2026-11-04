@@ -4,6 +4,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 Name: libnl3
 Version:        3.12.0
 Release:        1%{?dist}

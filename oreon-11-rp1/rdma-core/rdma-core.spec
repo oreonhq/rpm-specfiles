@@ -3,6 +3,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 Name: rdma-core
 Version:        64.0
 Release:        1%{?dist}

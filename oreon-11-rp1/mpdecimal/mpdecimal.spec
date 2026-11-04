@@ -4,6 +4,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+BuildRequires: oreon-rpm-macros
 # Whether to package the compatibility .so from the previous release.
 # This installs self as a build dependency and copies the files.
 # Once disabled, it can only be built when the previous version is tagged in.
