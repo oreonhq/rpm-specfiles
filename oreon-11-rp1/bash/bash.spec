@@ -14,7 +14,7 @@ Summary: The GNU Bourne Again shell
 Release:        1%{?dist}
 License: GPL-3.0-or-later
 Url: https://www.gnu.org/software/bash
-Source0:        https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/bash/bash-5.3.tar.gz
 # For now there isn't any doc
 #Source2: ftp://ftp.gnu.org/gnu/bash/bash-doc-%%{version}.tar.gz
 

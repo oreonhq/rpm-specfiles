@@ -51,7 +51,7 @@ Release:        1%{?dist}
 #     contrib/eqn2graph/eqn2graph.sh
 License: GPL-3.0-or-later AND GFDL-1.3-or-later AND BSD-4-Clause-UC AND MIT AND X11 AND LicenseRef-Oreon-Public-Domain
 URL: http://www.gnu.org/software/groff/
-Source0:        https://ftp.gnu.org/gnu/groff/groff-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/groff/groff-%{version}.tar.gz
 
 # resolves: #530788
 Patch0:        0001-missing-groff-x11-info-message-when-gxditview-not-fo.patch

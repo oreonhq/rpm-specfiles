@@ -8,7 +8,7 @@ Name: diffutils
 Version:        3.12
 Release:        1%{?dist}
 URL: https://www.gnu.org/software/diffutils/diffutils.html
-Source0:        https://ftp.gnu.org/gnu/diffutils/diffutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/diffutils/diffutils-%{version}.tar.xz
 # upstream fixes
 # cross compile build of 3.12 diffutils fails
 Patch:        0001-sdiff-port-back-to-C17.patch

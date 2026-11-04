@@ -14,7 +14,7 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later AND GPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
 
 URL: https://tiswww.case.edu/php/chet/readline/rltop.html
-Source0:        https://mirrors.kernel.org/gnu/readline/readline-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/readline/readline-%{version}.tar.gz
 
 # Official upstream patches
 # Patches are converted to apply with '-p1'

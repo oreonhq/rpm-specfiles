@@ -8,7 +8,7 @@ Name: m4
 Version:        1.4.21
 Release:        1%{?dist}
 License: GPL-3.0-or-later AND GFDL-1.3-or-later AND FSFULLR AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND MIT
-Source0:        https://mirrors.kernel.org/gnu/m4/m4-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/m4/m4-%{version}.tar.xz
 Source1:        m4-1.4.21.tar.xz.sig
 # Fix SIGSEGV in gnulib posix_spawn_file_actions_addchdir tests
 # https://lists.gnu.org/archive/html/bug-gnulib/2026-07/msg00165.html

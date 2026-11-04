@@ -51,7 +51,7 @@ Release:        1%{?dist}
 # usr/share/man/man1/*: generated from usr/bin/{aclocal,automake} using help2man
 License:    GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception AND GFDL-1.3-or-later AND FSFAP AND FSFUL AND FSFULLR AND FSFULLRWD AND X11 AND LicenseRef-Oreon-Public-Domain
 
-Source0:        ftp://ftp.gnu.org/gnu/automake/automake-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/automake/automake-%{version}.tar.xz
 
 # ~> downstream
 # which lead to .package_note-automake-1.16.5-3.fc36.x86_64.ld

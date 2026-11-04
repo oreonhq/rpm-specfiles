@@ -13,7 +13,7 @@ Release:        1%{?dist}
 # part in some files is not applicable here.
 License: GPL-3.0-or-later AND LGPL-2.1-or-later
 Url: http://www.gnu.org/software/wget/
-Source0:        https://ftp.gnu.org/gnu/wget/wget-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/wget/wget-%{version}.tar.gz
 
 Patch1:        wget-1.17-path.patch
 Patch2:        wget-1.25-fix-cve-2026-15146.patch

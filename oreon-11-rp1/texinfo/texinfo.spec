@@ -11,7 +11,7 @@ Version:        7.3
 Release:        1%{?dist}
 License: GPL-3.0-or-later
 Url: http://www.gnu.org/software/texinfo/
-Source0:        https://mirrors.kernel.org/gnu/texinfo/texinfo-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/texinfo/texinfo-%{version}.tar.xz
 Source1:        texinfo-7.3.tar.xz.sig
 Source2: fix-info-dir
 # Patch0: we need to fix template fix-info-dir generates

@@ -10,7 +10,7 @@ Release:        1%{?dist}
 # some used parts of gnulib are under various variants of LGPL
 License: GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 Url:     https://www.gnu.org/software/coreutils/
-Source0:        https://ftp.gnu.org/gnu/coreutils/coreutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/coreutils/coreutils-%{version}.tar.xz
 Source1:        coreutils-9.11.tar.xz.sig
 # From https://savannah.gnu.org/project/release-gpgkeys.php?group=coreutils&download=1
 # which is linked as project keyring on https://savannah.gnu.org/projects/coreutils

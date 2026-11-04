@@ -11,7 +11,7 @@ Epoch: 1
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/findutils/
 
-Source0:        https://ftp.gnu.org/gnu/findutils/findutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/findutils/findutils-%{version}.tar.xz
 Source1:        findutils-4.11.0.tar.xz.sig
 # From https://savannah.gnu.org/project/release-gpgkeys.php?group=findutils&download=1
 # which is linked as project keyring on https://savannah.gnu.org/projects/findutils

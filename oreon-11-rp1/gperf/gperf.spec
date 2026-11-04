@@ -8,7 +8,7 @@ Name: gperf
 Version:        3.2.1
 Release:        1%{?dist}
 License: GPL-3.0-or-later
-Source0:        https://ftp.gnu.org/pub/gnu/gperf/gperf-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/gperf/gperf-%{version}.tar.gz
 URL: http://www.gnu.org/software/gperf/
 
 BuildRequires:  gcc-c++

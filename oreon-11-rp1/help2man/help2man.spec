@@ -13,7 +13,7 @@ Version:        1.49.3
 Release:        1%{?dist}
 License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/help2man/
-Source0:        https://mirrors.kernel.org/gnu/help2man/help2man-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/help2man/help2man-%{version}.tar.xz
 
 %bcond_with nls
 

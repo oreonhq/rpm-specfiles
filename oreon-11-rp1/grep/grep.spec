@@ -10,7 +10,7 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
 URL: https://www.gnu.org/software/grep/
 
-Source0:        https://ftp.gnu.org/pub/gnu/grep/grep-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/grep/grep-%{version}.tar.xz
 Source1:        grep-3.12.tar.xz.sig
 Source2:        grep-keyring.gpg
 Source3: colorgrep.sh

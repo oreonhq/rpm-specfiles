@@ -30,7 +30,7 @@ Release:        1%{?dist}
 # Everything else is GPLv3+
 License: GPL-3.0-or-later and LGPL-2.0-or-later and GFDL-1.2-or-later
 URL: https://www.gnu.org/software/gettext/
-Source0:        https://ftp.gnu.org/pub/gnu/gettext/gettext-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/gettext/gettext-%{version}.tar.gz
 Source2: msghack.py
 Source3: msghack.1
 Patch1:        gettext-1.0-gnulib-posix_addchdr.patch

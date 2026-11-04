@@ -15,7 +15,7 @@ Summary:        An advanced file and recursive website downloader
 # Documentation is GFDL
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND GFDL-1.3-or-later
 URL:            https://gitlab.com/gnuwget/wget2
-Source0:        https://ftp.gnu.org/gnu/wget/wget2-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/wget/wget2-%{version}.tar.gz
 Source1:        wget2-2.3.0.tar.gz.sig
 # key 08302DB6A2670428
 Source2:        tim.ruehsen-keyring.asc

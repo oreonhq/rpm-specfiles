@@ -52,7 +52,7 @@ Release:        1%{?dist}
 # the text note that can be found in sources. That doesn't make sense to have 2 separate IDs
 # but that's how it is.
 License:    GPL-2.0-or-later AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GFDL-1.3-or-later AND FSFAP AND X11 AND LicenseRef-Oreon-Public-Domain
-Source0:        https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/autoconf/autoconf-%{version}.tar.xz
 Source1:    config.site
 Source2:    autoconf-init.el
 URL:        https://www.gnu.org/software/autoconf/

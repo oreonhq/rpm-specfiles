@@ -10,7 +10,7 @@ Version:        1.14
 Release:        1%{?dist}
 # info pages are under GFDL license
 License: GPL-3.0-or-later AND GFDL-1.3-only
-Source0:        https://ftp.gnu.org/gnu/gzip/gzip-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/gzip/gzip-%{version}.tar.xz
 Source1:        fdl-1.3.txt
 
 # downstream solution for coloured z*grep (#1034839)

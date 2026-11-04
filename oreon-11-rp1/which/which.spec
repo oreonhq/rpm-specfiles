@@ -11,7 +11,7 @@ Version:        2.25
 Release:        1%{?dist}
 License: GPL-3.0-only
 Url: https://savannah.gnu.org/projects/which/
-Source0:        https://mirrors.kernel.org/gnu/which/which-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/which/which-%{version}.tar.gz
 Source1: which2.sh
 Source2: which2.csh
 Patch0:        which-2.25-warning.patch

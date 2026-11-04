@@ -11,7 +11,7 @@ Version:        2.8
 Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: https://savannah.gnu.org/projects/patch/
-Source0:        https://mirrors.kernel.org/gnu/patch/patch-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/patch/patch-%{version}.tar.xz
 Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
 Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
 Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch

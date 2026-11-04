@@ -11,7 +11,7 @@ Release:        1%{?dist}
 # The entire source is GPLv2 except doc/ed.info and doc/ed.texi, which are GFDL
 License: GPL-2.0-only AND GFDL-1.3-no-invariants-or-later
 URL:     https://www.gnu.org/software/ed/
-Source0:        https://ftpmirror.gnu.org/ed/ed-%{version}.tar.lz
+Source0:        https://mirror.cs.odu.edu/gnu/ed/ed-%{version}.tar.lz
 Source1:        ed-1.22.6.tar.lz.sig
 Source2:        antoniodiazdiaz-keyring-2026.asc
 

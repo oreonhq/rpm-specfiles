@@ -12,7 +12,7 @@ Version:        4.4.1
 Release:        1%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.1-or-later AND GFDL-1.3-or-later AND FSFULLR
 URL: https://www.gnu.org/software/make/
-Source0:        https://mirrors.kernel.org/gnu/make/make-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/make/make-%{version}.tar.gz
 
 %if "%{name}" != "make"
 # Set this to the sub-package base name, for "make-latest"

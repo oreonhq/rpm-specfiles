@@ -1,5 +1,4 @@
 %global source0_hash 154ab23b60070e8f27013c22977f1129425d67d1e8acd6e13010e617811e4cff
-%global source2_hash 6f3a25696c269280eb751aeb6883f9ace848005a3c6a7a920d52fb34878ed2e7
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -157,12 +156,7 @@ URL: https://sourceware.org/binutils
 %bcond_without zstd
 
 # Note - in the future the gold linker may become deprecated.
-%ifnarch riscv64
-%bcond_without gold
-%else
-# RISC-V does not have ld.gold thus disable by default.
 %bcond_with gold
-%endif
 
 # Allow the user to override the compiler used to build the binutils.
 # The default build compiler is gcc if %%toolchain is not clang.
@@ -214,22 +208,21 @@ URL: https://sourceware.org/binutils
 # sources instead - but only for GOLD, not for the rest of the binutils.
 
 # FIXME: Delete this once the gold linker is fully deprecated.
-%define gold_tarball %(echo "binutils-with-gold-2.46.50-f85ff0c4bce")
-# %%define gold_tarball none
+%define gold_tarball none
 
 #----------------------------------------------------------------------------
 
 %if "%{source}" == "official-release"
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%%{version}.tar.xz
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/binutils/binutils-%{version}.tar.xz
 %elif "%{source}" == "tarball"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/binutils/binutils-%{version}.tar.xz
 %endif
 
 Source1: binutils-2.19.50.0.1-output-format.sed
@@ -609,7 +602,6 @@ use by developers.  It is NOT INTENDED FOR PRODUCTION use.
 
 %prep
 %oreon_sha256
-echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 
 
 %if "%{gold_tarball}" != "none"
@@ -627,7 +619,7 @@ mv ../%{gold_tarball}/elfcpp .
 %elif "%{source}" == "snapshot"
 %autosetup -p1 -n binutils-with-gold-%{version}-%{commit_id}
 %elif "%{source}" == "official-release"
-%autosetup -p1 -n binutils-with-gold-%{version}
+%autosetup -p1 -n binutils-%{version}
 %elif "%{source}" == "even-pre-release"
 %autosetup -p1 -n binutils-with-gold-%{version}
 %elif "%{source}" == "odd-pre-release"

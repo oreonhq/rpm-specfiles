@@ -19,7 +19,7 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/tar/
 
-Source0:        https://mirrors.kernel.org/gnu/tar/tar-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/tar/tar-%{version}.tar.xz
 Source1:        tar-1.35.tar.xz.sig
 
 # Note that all patches are documented in patch files (git format-patch format)

@@ -10,7 +10,7 @@ Name: libunistring
 Summary: GNU Unicode string library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://www.gnu.org/software/libunistring/
-Source0:        https://mirrors.kernel.org/gnu/libunistring/libunistring-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/libunistring/libunistring-%{version}.tar.xz
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires:  oreon-rpm-macros

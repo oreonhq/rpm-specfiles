@@ -39,7 +39,7 @@ Patch:        nettle-4.0-hobble-to-configure.patch
 Patch:        nettle-4.0-hobble-to-configure.patch
 
 %if %{with bundle_gmp}
-Source200:        https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
+Source200:        https://mirror.cs.odu.edu/gnu/gmp/gmp-6.2.1.tar.xz
 # Taken from the main gmp package
 Source201:	gmp-6.2.1-intel-cet.patch
 Source202:	gmp-6.2.1-zeroize-allocator.patch

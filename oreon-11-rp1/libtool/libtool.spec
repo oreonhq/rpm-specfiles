@@ -49,7 +49,7 @@ Release:        1%{?dist}
 License: GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-2.0-or-later WITH Libtool-exception AND LGPL-2.0-or-later WITH Libtool-exception AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND MIT AND FSFAP AND FSFULLR AND FSFULLRWD AND GFDL-1.3-or-later AND X11 AND LicenseRef-Oreon-public-domain
 URL:     http://www.gnu.org/software/libtool/
 
-Source0:        https://mirrors.kernel.org/gnu/libtool/libtool-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/libtool/libtool-%{version}.tar.xz
 
 # ~> downstream
 # ~> remove possibly once #1158915 gets fixed somehow

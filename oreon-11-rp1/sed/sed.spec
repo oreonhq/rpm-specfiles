@@ -12,7 +12,7 @@ Version:        4.10
 Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: http://sed.sourceforge.net/
-Source0:        https://mirrors.kernel.org/gnu/sed/sed-%{version}.tar.xz
+Source0:        https://mirror.cs.odu.edu/gnu/sed/sed-%{version}.tar.xz
 Source1:        https://sourceforge.net/projects/sed/files/sedfaq.txt/download
 Patch0:        sed-b-flag.patch
 Patch1:        sed-c-flag.patch

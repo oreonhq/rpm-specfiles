@@ -16,7 +16,7 @@
 # Conversly, glibc_autorequires is set for development snapshots, where
 # dependencies based on symbol versions are inaccurate.
 %{lua: if string.match(rpm.expand("%glibcsrcdir"), "^glibc%-[0-9.]+$") then
-    rpm.define("glibc_release_url https://ftp.gnu.org/gnu/glibc/")
+    rpm.define("glibc_release_url https://mirror.cs.odu.edu/gnu/glibc/")
   end
   local major, minor = string.match(rpm.expand("%glibcversion"),
                                     "^([0-9]+)%.([0-9]+)%.9000$")

@@ -10,7 +10,7 @@ Release:        1%{?dist}
 License: LGPL-2.1-or-later
 
 Url:     https://www.gnu.org/software/gnulib
-Source0:        https://ftp.gnu.org/gnu/gnulib/gnulib-l10n-%{version}.tar.gz
+Source0:        https://mirror.cs.odu.edu/gnu/gnulib/gnulib-l10n-%{version}.tar.gz
 Source1:        gnulib-l10n-20241231.tar.gz.sig
 
 # From https://www.haible.de/bruno/gpgkeys.html
