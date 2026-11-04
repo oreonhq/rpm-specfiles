@@ -1,5 +1,4 @@
 %global source0_hash 42876d195ee2ded19e5f72d7664096eee314928aa36ad346719ba5b25818fc84
-%global source1_hash 20e50fe7aae3e56378ebf0417d9de904f55a0e61e4df315333e632a4d3555d95
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -11,7 +10,6 @@ Release:        2%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: https://github.com/linux-audit/audit-userspace/
 Source0:        https://github.com/linux-%{name}/audit-userspace/archive/refs/tags/v%{version}.tar.gz
-Source1:        https://www.gnu.org/licenses/lgpl-2.1.txt
 BuildRequires: make gcc
 BuildRequires: autoconf automake libtool
 BuildRequires: kernel-headers >= 5.0
@@ -104,10 +102,8 @@ The audit rules package contains the rules and utilities to load audit rules.
 
 %prep
 %oreon_sha256
-echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 
 %setup -q -n %{name}-userspace-%{version}
-cp %{SOURCE1} .
 
 %build
 autoreconf -fv --install
@@ -199,7 +195,7 @@ fi
 
 %files libs
 %{!?_licensedir:%global license %%doc}
-%license lgpl-2.1.txt
+%license COPYING.LIB
 %{_libdir}/libaudit.so.1*
 %{_libdir}/libauparse.so.0*
 %{_libdir}/libauplugin.so.1*
