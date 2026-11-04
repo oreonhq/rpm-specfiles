@@ -1,0 +1,14 @@
+diff -up rpm-6.0.91/macros.in.siteconf rpm-6.0.91/macros.in
+--- rpm-6.0.91/macros.in.siteconf	2026-06-22 15:48:00.437505186 +0300
++++ rpm-6.0.91/macros.in	2026-06-22 15:48:22.102038036 +0300
+@@ -797,7 +797,9 @@ Supplements:   (%{name} = %{version}-%{r
+   %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+   export CLASSPATH}\
+   PKG_CONFIG_PATH=\"${PKG_CONFIG_PATH}:%{_libdir}/pkgconfig:%{_datadir}/pkgconfig\"\
+-  export PKG_CONFIG_PATH
++  export PKG_CONFIG_PATH\
++  CONFIG_SITE=${CONFIG_SITE:-NONE}\
++  export CONFIG_SITE
+ 
+ %___build_pre	\
+   . %{builddir}/rpmbuild.env\

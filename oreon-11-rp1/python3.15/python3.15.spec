@@ -94,7 +94,7 @@ License: Python-2.0.1
 # (the build never reaches optimized build - no data there),
 # hence the increased lower bound in the bcond.
 # https://discuss.python.org/t/building-the-jit-with-pre-built-stencils/91838/17
-%bcond jit_build_stencils %[%{with jit} && 1 >= 44]
+%bcond jit_build_stencils %[%{with jit}]
 %if %{with jit}
 # When built with JIT, it still needs to be enabled on runtime via PYTHON_JIT=1
 %global jit_flag --enable-experimental-jit=yes-off %{!?with_jit_build_stencils:--enable-prebuilt-jit-stencils}
