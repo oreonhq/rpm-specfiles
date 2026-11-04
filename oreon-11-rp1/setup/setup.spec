@@ -8,7 +8,7 @@ Name: setup
 Version: 2.15.1
 Release: 2%{?dist}
 Summary: Base system configuration files
-License: LicenseRef-Fedora-Public-Domain
+License: LicenseRef-Oreon-Public-Domain
 URL: https://pagure.io/setup
 BuildArch: noarch
 Source0: COPYING

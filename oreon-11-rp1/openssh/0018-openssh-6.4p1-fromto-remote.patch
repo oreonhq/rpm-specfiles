@@ -1,0 +1,29 @@
+From 3eba13cb9f6e5f2d099bd9b98d393f247b2b640c Mon Sep 17 00:00:00 2001
+From: Dmitry Belyavskiy <beldmit@gmail.com>
+Date: Thu, 15 May 2025 13:43:28 +0200
+Subject: [PATCH 18/53] openssh-6.4p1-fromto-remote
+
+# Use tty allocation for a remote scp (#985650)
+---
+ scp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/scp.c b/scp.c
+index 54ada858f..241ec32f9 100644
+--- a/scp.c
++++ b/scp.c
+@@ -1145,7 +1145,10 @@ toremote(int argc, char **argv, enum scp_mode_e mode, char *sftp_direct)
+ 			addargs(&alist, "%s", ssh_program);
+ 			addargs(&alist, "-x");
+ 			addargs(&alist, "-oClearAllForwardings=yes");
+-			addargs(&alist, "-n");
++			if (isatty(fileno(stdin)))
++				addargs(&alist, "-t");
++			else
++				addargs(&alist, "-n");
+ 			for (j = 0; j < remote_remote_args.num; j++) {
+ 				addargs(&alist, "%s",
+ 				    remote_remote_args.list[j]);
+-- 
+2.56.0
+

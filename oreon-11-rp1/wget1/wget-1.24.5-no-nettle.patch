@@ -1,0 +1,153 @@
+From 9476ce232a3dcadc205e963eb69a567f478fde95 Mon Sep 17 00:00:00 2001
+From: rpm-build <rpm-build>
+Date: Wed, 11 Dec 2024 17:14:58 +0900
+Subject: [PATCH] wget-1.24.5-no-nettle.patch
+
+---
+ src/http-ntlm.c | 91 ++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 68 insertions(+), 23 deletions(-)
+
+diff --git a/src/http-ntlm.c b/src/http-ntlm.c
+index ee054e0..9f5b50e 100644
+--- a/src/http-ntlm.c
++++ b/src/http-ntlm.c
+@@ -44,13 +44,14 @@ as that of the covered work.  */
+ 
+ #include "utils.h"
+ #include "http-ntlm.h"
++#include "md4.h"
+ 
+-#ifdef HAVE_NETTLE
+-# include <nettle/md4.h>
++#ifdef HAVE_LIBGNUTLS
++# include <gnutls/crypto.h>
++#elif defined HAVE_NETTLE
+ # include <nettle/des.h>
+ #else
+ # include <openssl/des.h>
+-# include <openssl/md4.h>
+ # include <openssl/opensslv.h>
+ 
+ # if OPENSSL_VERSION_NUMBER < 0x00907001L
+@@ -164,7 +165,31 @@ ntlm_input (struct ntlmdata *ntlm, const char *header)
+  * Turns a 56 bit key into the 64 bit, odd parity key and sets the key.  The
+  * key schedule ks is also set.
+  */
+-#ifdef HAVE_NETTLE
++#ifdef HAVE_LIBGNUTLS
++static void
++setup_des_key(unsigned char *key_56,
++              gnutls_cipher_hd_t *des)
++{
++  unsigned char key[8];
++  gnutls_datum_t _key;
++  int ret;
++
++  key[0] = key_56[0];
++  key[1] = ((key_56[0] << 7) & 0xFF) | (key_56[1] >> 1);
++  key[2] = ((key_56[1] << 6) & 0xFF) | (key_56[2] >> 2);
++  key[3] = ((key_56[2] << 5) & 0xFF) | (key_56[3] >> 3);
++  key[4] = ((key_56[3] << 4) & 0xFF) | (key_56[4] >> 4);
++  key[5] = ((key_56[4] << 3) & 0xFF) | (key_56[5] >> 5);
++  key[6] = ((key_56[5] << 2) & 0xFF) | (key_56[6] >> 6);
++  key[7] =  (key_56[6] << 1) & 0xFF;
++
++  _key.data = key;
++  _key.size = sizeof(key);
++  ret = gnutls_cipher_init(des, GNUTLS_CIPHER_DES_CBC, &_key, NULL);
++  if (ret < 0)
++    abort ();
++}
++#elif defined HAVE_NETTLE
+ static void
+ setup_des_key(unsigned char *key_56,
+               struct des_ctx *des)
+@@ -211,7 +236,28 @@ setup_des_key(unsigned char *key_56,
+ static void
+ calc_resp(unsigned char *keys, unsigned char *plaintext, unsigned char *results)
+ {
+-#ifdef HAVE_NETTLE
++#ifdef HAVE_LIBGNUTLS
++  gnutls_cipher_hd_t des;
++  int ret;
++
++  setup_des_key(keys, &des);
++  ret = gnutls_cipher_encrypt2(des, plaintext, 8, results, 8);
++  if (ret < 0)
++    abort ();
++  gnutls_cipher_deinit(des);
++
++  setup_des_key(keys + 7, &des);
++  ret = gnutls_cipher_encrypt2(des, plaintext, 8, results + 8, 8);
++  if (ret < 0)
++    abort ();
++  gnutls_cipher_deinit(des);
++
++  setup_des_key(keys + 14, &des);
++  ret = gnutls_cipher_encrypt2(des, plaintext, 8, results + 16, 8);
++  if (ret < 0)
++    abort ();
++  gnutls_cipher_deinit(des);
++#elif defined HAVE_NETTLE
+   struct des_ctx des;
+ 
+   setup_des_key(keys, &des);
+@@ -274,7 +320,22 @@ mkhash(const char *password,
+ 
+   {
+     /* create LanManager hashed password */
+-#ifdef HAVE_NETTLE
++#ifdef HAVE_LIBGNUTLS
++    gnutls_cipher_hd_t des;
++    int ret;
++
++    setup_des_key(pw, &des);
++    ret = gnutls_cipher_encrypt2(des, magic, 8, lmbuffer, 8);
++    if (ret < 0)
++      abort ();
++    gnutls_cipher_deinit(des);
++
++    setup_des_key(pw + 7, &des);
++    ret = gnutls_cipher_encrypt2(des, magic, 8, lmbuffer + 8, 8);
++    if (ret < 0)
++      abort ();
++    gnutls_cipher_deinit(des);
++#elif defined HAVE_NETTLE
+     struct des_ctx des;
+ 
+     setup_des_key(pw, &des);
+@@ -301,12 +362,6 @@ mkhash(const char *password,
+ 
+ #ifdef USE_NTRESPONSES
+   {
+-#ifdef HAVE_NETTLE
+-    struct md4_ctx MD4;
+-#else
+-    MD4_CTX MD4;
+-#endif
+-
+     unsigned char pw4[64];
+ 
+     len = strlen (password);
+@@ -319,17 +374,7 @@ mkhash(const char *password,
+       pw4[2 * i + 1] = 0;
+     }
+ 
+-#ifdef HAVE_NETTLE
+-    nettle_md4_init(&MD4);
+-    nettle_md4_update(&MD4, (unsigned) (2 * len), pw4);
+-    nettle_md4_digest(&MD4, MD4_DIGEST_SIZE, ntbuffer);
+-#else
+-    /* create NT hashed password */
+-    MD4_Init(&MD4);
+-    MD4_Update(&MD4, pw4, 2 * len);
+-    MD4_Final(ntbuffer, &MD4);
+-#endif
+-
++    md4_buffer((const char *) pw4, (unsigned) (2 * len), ntbuffer);
+     memset(ntbuffer + 16, 0, 5);
+   }
+ 
+-- 
+2.47.0
+

@@ -1,0 +1,179 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
+Date: Thu, 16 Apr 2026 14:39:41 +0200
+Subject: 00486: gh-148646: Add --enable-prebuilt-jit-stencils configure flag
+
+---
+ ...-04-16-14-39-33.gh-issue-148646.iIIgWF.rst |  7 +++++
+ Tools/jit/_targets.py                         | 25 +++++++++++-------
+ Tools/jit/build.py                            |  6 +++++
+ configure                                     | 26 +++++++++++++++++++
+ configure.ac                                  | 13 ++++++++++
+ 5 files changed, 67 insertions(+), 10 deletions(-)
+ create mode 100644 Misc/NEWS.d/next/Build/2026-04-16-14-39-33.gh-issue-148646.iIIgWF.rst
+
+diff --git a/Misc/NEWS.d/next/Build/2026-04-16-14-39-33.gh-issue-148646.iIIgWF.rst b/Misc/NEWS.d/next/Build/2026-04-16-14-39-33.gh-issue-148646.iIIgWF.rst
+new file mode 100644
+index 0000000000..a22ac00aae
+--- /dev/null
++++ b/Misc/NEWS.d/next/Build/2026-04-16-14-39-33.gh-issue-148646.iIIgWF.rst
+@@ -0,0 +1,7 @@
++Add a new ``--enable-prebuilt-jit-stencils`` configure flag that forces the
++build to use the existing provided JIT stencil headers even when the digest
++at the beginning of the file does not match expectations. The JIT shim
++object and unwind info are still rebuilt normally. That allows redistributors
++who prebuilt the JIT stencil headers on a system with a different autoconf
++version to still use them even when ``pyconfig.h`` is slightly different.
++It also allow them to build the JIT shim with different LLVM toolchain.
+diff --git a/Tools/jit/_targets.py b/Tools/jit/_targets.py
+index ceee383ea6..356cd96c99 100644
+--- a/Tools/jit/_targets.py
++++ b/Tools/jit/_targets.py
+@@ -341,6 +341,7 @@ def build(
+         *,
+         comment: str = "",
+         force: bool = False,
++        prebuilt: bool = False,
+         jit_stencils: pathlib.Path,
+         jit_shim_object: pathlib.Path,
+         jit_unwind_info: pathlib.Path,
+@@ -355,12 +356,15 @@ def build(
+             outline = "=" * len(warning)
+             print("\n".join(["", outline, warning, request, outline, ""]))
+         digest = f"// {self._compute_digest()}\n"
++        stencils_current = (
++            not force
++            and jit_stencils.exists()
++            and (prebuilt or jit_stencils.read_text().startswith(digest))
++        )
+         # The generated headers include the input digest as their first line.
+         # If every generated artifact is current, skip the expensive rebuild.
+         if (
+-            not force
+-            and jit_stencils.exists()
+-            and jit_stencils.read_text().startswith(digest)
++            stencils_current
+             and jit_shim_object.exists()
+             and jit_unwind_info.exists()
+             and jit_unwind_info.read_text().startswith(digest)
+@@ -377,13 +381,14 @@ def build(
+             lines=_writer.dump_unwind_info(unwind_info),
+         )
+         # Build the uop stencils after the shim metadata has been emitted.
+-        stencil_groups = ASYNCIO_RUNNER.run(self._build_stencils())
+-        self._write_generated_header(
+-            jit_stencils,
+-            digest=digest,
+-            comment=comment,
+-            lines=_writer.dump(stencil_groups, self.known_symbols),
+-        )
++        if not stencils_current:
++            stencil_groups = ASYNCIO_RUNNER.run(self._build_stencils())
++            self._write_generated_header(
++                jit_stencils,
++                digest=digest,
++                comment=comment,
++                lines=_writer.dump(stencil_groups, self.known_symbols),
++            )
+ 
+ 
+ class _COFF(
+diff --git a/Tools/jit/build.py b/Tools/jit/build.py
+index 16b8f4ac9c..14687584e7 100644
+--- a/Tools/jit/build.py
++++ b/Tools/jit/build.py
+@@ -69,6 +69,11 @@ def _write_target_dispatcher(
+     parser.add_argument(
+         "--llvm-tools-install-dir", help="Installation location of LLVM tools"
+     )
++    parser.add_argument(
++        "--prebuilt",
++        action="store_true",
++        help="accept prebuilt stencil headers even if the digest does not match",
++    )
+     args = parser.parse_args()
+     for target in args.target:
+         target.debug = args.debug
+@@ -85,6 +90,7 @@ def _write_target_dispatcher(
+         target.build(
+             comment=comment,
+             force=args.force,
++            prebuilt=args.prebuilt,
+             jit_stencils=args.output_dir / f"jit_stencils-{target.triple}.h",
+             jit_shim_object=args.output_dir / f"jit_shim-{target.triple}.o",
+             jit_unwind_info=args.output_dir / f"jit_unwind_info-{target.triple}.h",
+diff --git a/configure b/configure
+index 6f7ff1b04a..f49481574a 100755
+--- a/configure
++++ b/configure
+@@ -1119,6 +1119,7 @@ enable_safety
+ enable_slower_safety
+ with_frame_pointers
+ enable_experimental_jit
++enable_prebuilt_jit_stencils
+ with_dsymutil
+ with_address_sanitizer
+ with_memory_sanitizer
+@@ -1863,6 +1864,9 @@ Optional Features:
+   --enable-experimental-jit[=no|yes|yes-off|interpreter]
+                           build the experimental just-in-time compiler
+                           (default is no)
++  --enable-prebuilt-jit-stencils
++                          accept prebuilt JIT stencil headers even if the
++                          digest does not match (default is no)
+   --enable-loadable-sqlite-extensions
+                           support loadable extensions in the sqlite3 module,
+                           see Doc/library/sqlite3.rst (default is no)
+@@ -11396,6 +11400,28 @@ fi
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $tier2_flags $jit_flags" >&5
+ printf "%s\n" "$tier2_flags $jit_flags" >&6; }
+ 
++# Check for --enable-prebuilt-jit-stencils:
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for --enable-prebuilt-jit-stencils" >&5
++printf %s "checking for --enable-prebuilt-jit-stencils... " >&6; }
++# Check whether --enable-prebuilt-jit-stencils was given.
++if test ${enable_prebuilt_jit_stencils+y}
++then :
++  enableval=$enable_prebuilt_jit_stencils;
++else case e in #(
++  e) enable_prebuilt_jit_stencils=no ;;
++esac
++fi
++
++if test "x$enable_prebuilt_jit_stencils" = xno
++then :
++
++else case e in #(
++  e) as_fn_append REGEN_JIT_COMMAND " --prebuilt" ;;
++esac
++fi
++{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $enable_prebuilt_jit_stencils" >&5
++printf "%s\n" "$enable_prebuilt_jit_stencils" >&6; }
++
+ if test "$disable_gil" = "yes" -a "$enable_experimental_jit" != "no"; then
+   # GH-133171: This configuration builds the JIT but never actually uses it,
+   # which is surprising (and strictly worse than not building it at all):
+diff --git a/configure.ac b/configure.ac
+index 99238054b9..593a48a23c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2967,6 +2967,19 @@ AS_VAR_IF([jit_flags],
+ AC_SUBST([REGEN_JIT_COMMAND])
+ AC_MSG_RESULT([$tier2_flags $jit_flags])
+ 
++# Check for --enable-prebuilt-jit-stencils:
++AC_MSG_CHECKING([for --enable-prebuilt-jit-stencils])
++AC_ARG_ENABLE([prebuilt-jit-stencils],
++              [AS_HELP_STRING([--enable-prebuilt-jit-stencils],
++                              [accept prebuilt JIT stencil headers even if the digest does not match (default is no)])],
++              [],
++              [enable_prebuilt_jit_stencils=no])
++AS_VAR_IF([enable_prebuilt_jit_stencils],
++          [no],
++          [],
++          [AS_VAR_APPEND([REGEN_JIT_COMMAND], [" --prebuilt"])])
++AC_MSG_RESULT([$enable_prebuilt_jit_stencils])
++
+ if test "$disable_gil" = "yes" -a "$enable_experimental_jit" != "no"; then
+   # GH-133171: This configuration builds the JIT but never actually uses it,
+   # which is surprising (and strictly worse than not building it at all):
