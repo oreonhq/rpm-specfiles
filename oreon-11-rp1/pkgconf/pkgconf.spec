@@ -6,7 +6,7 @@
 
 Name: pkgconf
 Version: 3.0.10
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: compiler and linker flags for development libraries
 License: ISC
 URL: https://gitea.treehouse.systems/ariadne/pkgconf
@@ -28,8 +28,9 @@ Requires: pkgconf%{?_isa} = %{version}-%{release}
 Requires: pkgconf-m4 = %{version}-%{release}
 Provides: pkg-config = %{version}-%{release}
 Provides: pkg-config%{?_isa} = %{version}-%{release}
-Provides: pkgconfig = %{version}-%{release}
-Provides: pkgconfig%{?_isa} = %{version}-%{release}
+Provides: pkgconfig = 1:%{version}-%{release}
+Provides: pkgconfig%{?_isa} = 1:%{version}-%{release}
+Provides: pkgconfig(pkg-config) = %{version}
 
 %description pkg-config
 The pkg-config command and target-prefixed pkg-config links provided by pkgconf.
