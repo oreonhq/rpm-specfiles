@@ -67,7 +67,7 @@ to determine the necessary capabilities for a program.
 %oreon_sha256
 
 %setup -q
-touch -d @${SOURCE_DATE_EPOCH:?} NEWS
+touch -d @${SOURCE_DATE_EPOCH:-0} NEWS
 
 %build
 # Locate suitable vmlinux.h. In normal builds under mock,
