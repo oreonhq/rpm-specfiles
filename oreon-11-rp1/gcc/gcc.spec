@@ -1,4968 +1,1219 @@
-%global source0_hash 0c1af767651f6025df44bab5d2fd30cceefdd40612196c811fb6d05088aa0b00
+%global source0_hash e6738e29597f733270731aa90600f37ffdc045079dfc27ec7e8192cc81085c3e
 %global source1_hash 5202c52a364afc0b310a2fff71082d37351590f6339f1a42eacb8a974df7a200
 %global source2_hash 7372fd759173c636a318b5a1eef2f09d5a2ef598eefd78870abdf474ae47d316
-%global source3_hash fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
-
+%global source3_hash 01b06e2dba0e2635544fb8b301eda1105da36d63131054a42bb230b378d6d2c3
+%global nvptx_rev 212da2e781ed0f9423824e85eb04819958513f7a
+%global newlib_rev d35cc82b5ec15bb8a5fe0fe11e183d1887992e99
+%global annobin_ver 13.33
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global DATE 20261031
-%global gitrev 9854b2abd1c53ec5909a0c6fc2a89d27110865e9
-%global gcc_version 16.2.1
-%global gcc_major 16
-# Note, gcc_release must be integer, if you want to add suffixes to
-# %%{release}, append them after %%{gcc_release} on Release: line.
-%global gcc_release 3
-%global nvptx_tools_gitrev 212da2e781ed0f9423824e85eb04819958513f7a
-%global newlib_cygwin_gitrev d35cc82b5ec15bb8a5fe0fe11e183d1887992e99
-%global _unpackaged_files_terminate_build 0
-%global _find_debuginfo_opts --keep-section .a68_exports
-%global _performance_build 1
-# Hardening slows the compiler way too much.
-%undefine _hardened_build
-%undefine _auto_set_build_flags
-# Until annobin is fixed (#1519165).
-%undefine _annotated_build
-# Strip will fail on nvptx-none *.a archives and the brp-* scripts will
-# fail randomly depending on what is stripped last.
-%if 0%{?__brp_strip_static_archive:1}
-%global __brp_strip_static_archive %{__brp_strip_static_archive} || :
-%endif
-%if 0%{?__brp_strip_lto:1}
-%global __brp_strip_lto %{__brp_strip_lto} || :
-%endif
-%define bugurl https://bugzilla.redhat.com/bugzilla
-%{!?dist_bug_report_url: %global dist_bug_report_url %bugurl}
+%global gcc_3stage 0
+%global __brp_python_bytecompile %{nil}
+%global __strip %{_builddir}/gcc-host-strip
 
-%global multilib_64_archs sparc64 ppc64 ppc64p7 x86_64
-%ifarch %{ix86} x86_64 ia64 ppc %{power64} alpha s390x %{arm} aarch64 riscv64
-%global build_ada 1
-%else
-%global build_ada 0
-%endif
-%global build_objc 1
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 %{mips} riscv64
-%global build_go 1
-%else
-%global build_go 0
-%endif
-%ifarch %{ix86} x86_64 %{arm} aarch64 %{mips} s390 s390x riscv64
-%global build_d 1
-%else
-%global build_d 0
-%endif
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 %{mips} riscv64
-%global build_m2 1
-%else
-%global build_m2 0
-%endif
-%ifarch x86_64 aarch64 ppc64le
-%global build_cobol 1
-%else
-%global build_cobol 0
-%endif
-%global build_algol68 1
-%ifarch %{ix86} x86_64 ia64 ppc64le
-%global build_libquadmath 1
-%else
-%global build_libquadmath 0
-%endif
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 riscv64
-%global build_libasan 1
-%else
-%global build_libasan 0
-%endif
-%ifarch x86_64 aarch64
-%global build_libhwasan 1
-%else
-%global build_libhwasan 0
-%endif
-%ifarch x86_64 ppc64 ppc64le aarch64 s390x riscv64
-%global build_libtsan 1
-%else
-%global build_libtsan 0
-%endif
-%ifarch x86_64 ppc64 ppc64le aarch64 s390x riscv64
-%global build_liblsan 1
-%else
-%global build_liblsan 0
-%endif
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 riscv64
-%global build_libubsan 1
-%else
-%global build_libubsan 0
-%endif
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 %{mips} riscv64
-%global build_libatomic 1
-%else
-%global build_libatomic 0
-%endif
-%ifarch %{ix86} x86_64 %{arm} alpha ppc ppc64 ppc64le ppc64p7 s390 s390x aarch64 riscv64
-%global build_libitm 1
-%else
-%global build_libitm 0
-%endif
-%global build_isl 1
-%global build_libstdcxx_docs 1
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64le ppc64p7 s390 s390x %{arm} aarch64 %{mips} riscv64
-%global attr_ifunc 1
-%else
-%global attr_ifunc 0
-%endif
-%ifarch x86_64 ppc64le
-%global build_offload_nvptx 1
-%else
-%global build_offload_nvptx 0
-%endif
-%ifarch x86_64
-%global build_offload_amdgcn 1
-%else
-%global build_offload_amdgcn 0
-%endif
-%ifarch sparc64
-%global multilib_32_arch sparcv9
-%endif
-%ifarch ppc64 ppc64p7
-%global multilib_32_arch ppc
-%endif
-%ifarch x86_64
-%global multilib_32_arch i686
-%endif
-%global build_annobin_plugin 1
-%dnl rhel != 10
-%ifnarch %{ix86}
-%global build_cross 0
-%else
-%global build_cross 0
-%endif
-%global build_sysroot 0
-%global cross_targets aarch64-redhat-linux ppc64le-redhat-linux s390x-redhat-linux x86_64-redhat-linux
-%if %{build_sysroot}
-# sysroot package support (taken from that for glibc).  These contain
-# arch-specific packages, so turn off the rpmbuild check.
-%global _binaries_in_noarch_packages_terminate_build 0
-# Variant of %%dist that contains just the distribution release, no affixes.
-%global sysroot_dist fc%{oreon}
-
-%{?!sysroot_dist:%global sysroot_dist root}
-# The name of the sysroot package (suffixed with a library name).
-%global sysroot_package_arch sysroot-%{_arch}-%{sysroot_dist}
-# Installed path for the sysroot tree.  Must contain /sys-root/, which
-# triggers filtering.
-%global sysroot_prefix /usr/%{_arch}-redhat-linux/sys-root/%{sysroot_dist}
-%endif
-Summary: Various compilers (C, C++, Objective-C, ...)
 Name: gcc
-Version:        16.2.1
-Release:        1%{?dist}
-# License notes for some of the less obvious ones:
-#   gcc/doc/cppinternals.texi: Linux-man-pages-copyleft-2-para
-#   isl: MIT, BSD-2-Clause
-#   libcody: Apache-2.0
-#   libphobos/src/etc/c/curl.d: curl
-# All of the remaining license soup is in newlib.
-License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Oreon-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
-# The source for this package was pulled from upstream's vcs.
-# %%{gitrev} is some commit from the
-# https://gcc.gnu.org/git/?p=gcc.git;h=refs/vendors/redhat/heads/gcc-%%{gcc_major}-branch
-# branch.  Use the following command to generate the tarball:
-# ./update-gcc.sh %%{gitrev}
-# optionally if say /usr/src/gcc/.git/ is an existing gcc git clone
-# ./update-gcc.sh %%{gitrev} /usr/src/gcc/.git/
-# to speed up the clone operations.  Note, %%{gitrev} macro in
-# gcc.spec shouldn't be updated before running the script, the script
-# will update it, fill in some %%changelog details etc.
-Source0: https://gcc.gnu.org/pub/gcc/snapshots/16-%{DATE}/gcc-16-%{DATE}.tar.xz
-# The source for nvptx-tools package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
-# git --git-dir=nvptx-tools-dir.tmp/.git fetch --depth 1 origin %%{nvptx_tools_gitrev}
-# git --git-dir=nvptx-tools-dir.tmp/.git archive --prefix=nvptx-tools-%%{nvptx_tools_gitrev}/ %%{nvptx_tools_gitrev} | xz -9e > nvptx-tools-%%{nvptx_tools_gitrev}.tar.xz
-# rm -rf nvptx-tools-dir.tmp
-Source1:        https://github.com/MentorEmbedded/nvptx-tools/archive/212da2e781ed0f9423824e85eb04819958513f7a.tar.gz
-# The source for nvptx-newlib package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-# git clone https://sourceware.org/git/newlib-cygwin.git newlib-cygwin-dir.tmp
-# git --git-dir=newlib-cygwin-dir.tmp/.git archive --prefix=newlib-cygwin-%%{newlib_cygwin_gitrev}/ %%{newlib_cygwin_gitrev} ":(exclude)newlib/libc/sys/linux/include/rpc/*.[hx]" | xz -9e > newlib-cygwin-%%{newlib_cygwin_gitrev}.tar.xz
-# rm -rf newlib-cygwin-dir.tmp
-Source2:        https://github.com/mirror/newlib-cygwin/archive/d35cc82b5ec15bb8a5fe0fe11e183d1887992e99.tar.gz
-%global isl_version 0.24
-Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2
-URL: http://gcc.gnu.org
-# Need binutils with -pie support >= 2.14.90.0.4-4
-# Need binutils which can omit dot symbols and overlap .opd on ppc64 >= 2.15.91.0.2-4
-# Need binutils which handle -msecure-plt on ppc >= 2.16.91.0.2-2
-# Need binutils which support .weakref >= 2.16.91.0.3-1
-# Need binutils which support --hash-style=gnu >= 2.17.50.0.2-7
-# Need binutils which support mffgpr and mftgpr >= 2.17.50.0.2-8
-# Need binutils which support --build-id >= 2.17.50.0.17-3
-# Need binutils which support %%gnu_unique_object >= 2.19.51.0.14
-# Need binutils which support .cfi_sections >= 2.19.51.0.14-33
-# Need binutils which support --no-add-needed >= 2.20.51.0.2-12
-# Need binutils which support -plugin
-# Need binutils which support .loc view >= 2.30
-# Need binutils which support --generate-missing-build-notes=yes >= 2.31
-# Need binutils which support .base64 >= 2.43
-BuildRequires: binutils >= 2.43
+Version: 16.2.0
+Release: 7%{?dist}
+Summary: GNU Compiler Collection
+License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
+URL: https://gcc.gnu.org
+Source0: https://mirror.cs.odu.edu/gnu/gcc/gcc-%{version}/gcc-%{version}.tar.xz
+Source1: https://codeload.github.com/MentorEmbedded/nvptx-tools/tar.gz/%{nvptx_rev}#/nvptx-tools-%{nvptx_rev}.tar.gz
+Source2: https://codeload.github.com/mirror/newlib-cygwin/tar.gz/%{newlib_rev}#/newlib-cygwin-%{newlib_rev}.tar.gz
+Source3: https://nickc.fedorapeople.org/annobin-%{annobin_ver}.tar.xz
+Patch0: gcc16-csetjmp.patch
+
 BuildRequires: oreon-rpm-macros
-# While gcc doesn't include statically linked binaries, during testing
-# -static is used several times.
-BuildRequires: glibc-static
-BuildRequires: zlib-devel, gettext, dejagnu, bison, flex, sharutils
-BuildRequires: texinfo, texinfo-tex, /usr/bin/pod2man
-BuildRequires: systemtap-sdt-devel >= 1.3
-BuildRequires: gmp-devel >= 4.1.2-8, mpfr-devel >= 3.1.0, libmpc-devel >= 0.8.1
-BuildRequires: python3-devel, /usr/bin/python
-BuildRequires: gcc, gcc-c++, make
-%if %{build_go}
-BuildRequires: hostname, procps
-%endif
-%if %{build_cobol}
+BuildRequires: make
+BuildRequires: binutils
+BuildRequires: gcc
+BuildRequires: gcc-c++
+BuildRequires: glibc-devel
+BuildRequires: gmp-devel
+BuildRequires: mpfr-devel
+BuildRequires: mpc-devel
+BuildRequires: zlib-devel
+Requires: binutils
+Requires: cpp%{?_isa} = %{version}-%{release}
+Requires: glibc-devel
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%if %{without bootstrap} && !0%{?bootstrap}
+BuildRequires: texinfo
+BuildRequires: bison
+BuildRequires: flex
+BuildRequires: file
+BuildRequires: python3
 BuildRequires: libxml2-devel
+BuildRequires: gcc-gnat
+BuildRequires: libgnat
+BuildRequires: gcc-gdc
+BuildRequires: libgphobos-static
+%ifarch x86_64
+BuildRequires: llvm
+BuildRequires: lld
 %endif
-# For VTA guality testing
-BuildRequires: gdb
-# Make sure pthread.h doesn't contain __thread tokens
-# Make sure glibc supports stack protector
-# Make sure glibc supports DT_GNU_HASH
-BuildRequires: glibc-devel >= 2.4.90-13
-BuildRequires: elfutils-devel >= 0.147
-BuildRequires: elfutils-libelf-devel >= 0.147
-BuildRequires: libzstd-devel
-%ifarch ppc ppc64 ppc64le ppc64p7 s390 s390x sparc sparcv9 alpha
-# Make sure glibc supports TFmode long double
-BuildRequires: glibc >= 2.3.90-35
-%endif
-%ifarch %{multilib_64_archs}
-BuildRequires: (glibc32 or glibc-devel(%{__isa_name}-32))
-%endif
-%ifarch sparcv9 ppc
-BuildRequires: (glibc64 or glibc-devel(%{__isa_name}-64))
-%endif
-%if %{build_ada}
-# Ada requires Ada to build
-BuildRequires: gcc-gnat >= 3.1, libgnat >= 3.1
-%endif
-%if %{build_d}
-# D requires D to build
-BuildRequires: gcc-gdc >= 11.0.0, libgphobos-static >= 11.0.0
-%endif
-%ifarch ia64
-BuildRequires: libunwind >= 0.98
-%endif
-%if %{build_libstdcxx_docs}
-BuildRequires: doxygen >= 1.7.1
-BuildRequires: graphviz, dblatex, texlive-collection-latex, docbook5-style-xsl
-%endif
-%if %{build_offload_amdgcn}
-BuildRequires: llvm >= 15, lld >= 15
-%endif
-Requires: cpp = %{version}-%{release}
-# Need .eh_frame ld optimizations
-# Need proper visibility support
-# Need -pie support
-# Need --as-needed/--no-as-needed support
-# On ppc64, need omit dot symbols support and --non-overlapping-opd
-# Need binutils that owns /usr/bin/c++filt
-# Need binutils that support .weakref
-# Need binutils that supports --hash-style=gnu
-# Need binutils that support mffgpr/mftgpr
-# Need binutils that support --build-id
-# Need binutils that support %%gnu_unique_object
-# Need binutils that support .cfi_sections
-# Need binutils that support --no-add-needed
-# Need binutils that support -plugin
-# Need binutils that support .loc view >= 2.30
-# Need binutils which support --generate-missing-build-notes=yes >= 2.31
-# Need binutils that support .base64 >= 2.43
-Requires: binutils >= 2.43
-# Make sure gdb will understand DW_FORM_strp
-Conflicts: gdb < 5.1-2
-Requires: glibc-devel >= 2.2.90-12
-%ifarch ppc ppc64 ppc64le ppc64p7 s390 s390x sparc sparcv9 alpha
-# Make sure glibc supports TFmode long double
-Requires: glibc >= 2.3.90-35
-%endif
-%ifarch %{arm}
-Requires: glibc >= 2.16
-%endif
-Requires: libgcc >= %{version}-%{release}
-Requires: libgomp = %{version}-%{release}
-%if %{build_libatomic}
-Requires: libatomic = %{version}-%{release}
-Obsoletes: libatomic-static < %{version}-%{release}
-Provides: libatomic-static = %{version}-%{release}
-%endif
-# lto-wrapper invokes make
-Requires: make
-%if !%{build_ada}
-Obsoletes: gcc-gnat < %{version}-%{release}
-%endif
-Obsoletes: gcc-java < %{version}-%{release}
-AutoReq: true
-Provides: bundled(libiberty)
-Provides: bundled(libbacktrace)
-Provides: bundled(libffi)
-Provides: gcc(major) = %{gcc_major}
-
-Patch0:        gcc16-hack.patch
-Patch2:        gcc16-sparc-config-detection.patch
-Patch3:        gcc16-libgomp-omp_h-multilib.patch
-Patch4:        gcc16-libtool-no-rpath.patch
-Patch5:        gcc16-isl-dl.patch
-Patch6:        gcc16-isl-dl2.patch
-Patch7:        gcc16-libstdc++-docs.patch
-Patch8:        gcc16-no-add-needed.patch
-Patch9:        gcc16-Wno-format-security.patch
-Patch10:        gcc16-rh1574936.patch
-Patch11:        gcc16-d-shared-libphobos.patch
-Patch12:        gcc16-pr119006.patch
-
-Patch50:        isl-rh2155127.patch
-
-Patch100:        gcc16-fortran-fdec-duplicates.patch
-
-# On ARM EABI systems, we do want -gnueabi to be part of the
-# target triple.
-%ifnarch %{arm}
-%global _gnu %{nil}
-%else
-%global _gnu -gnueabi
-%endif
-%ifarch sparcv9
-%global gcc_target_platform sparc64-%{_vendor}-%{_target_os}
-%endif
-%ifarch ppc ppc64p7
-%global gcc_target_platform ppc64-%{_vendor}-%{_target_os}
-%endif
-%ifnarch sparcv9 ppc ppc64p7
-%global gcc_target_platform %{_target_platform}
-%endif
-
-%if %{build_go}
-# Avoid stripping these libraries and binaries.
-%global __os_install_post \
-chmod 644 %{buildroot}%{_prefix}/%{_lib}/libgo.so.25.* \
-chmod 644 %{buildroot}%{_prefix}/bin/go.gcc \
-chmod 644 %{buildroot}%{_prefix}/bin/gofmt.gcc \
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cgo \
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/buildid \
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/test2json \
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/vet \
-%__os_install_post \
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgo.so.25.* \
-chmod 755 %{buildroot}%{_prefix}/bin/go.gcc \
-chmod 755 %{buildroot}%{_prefix}/bin/gofmt.gcc \
-chmod 755 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cgo \
-chmod 755 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/buildid \
-chmod 755 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/test2json \
-chmod 755 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/vet \
-%{nil}
 %endif
 
 %description
-The gcc package contains the GNU Compiler Collection version %{gcc_major}.
-You'll need this package in order to compile C code.
+This directory contains the GNU Compiler Collection (GCC).
+
+The GNU Compiler Collection is free software.  See the files whose
+names start with COPYING for copying permission.  The manuals, and
+some of the runtime libraries, are under different terms; see the
+individual source files for details.
+
+%package -n cpp
+Summary: GNU C preprocessor
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n cpp
+The GNU C preprocessor. It is used by the C compiler to transform programs before compilation.
+
+%package -n gcc-c++
+Summary: GNU C++ compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libstdc++-devel%{?_isa} = %{version}-%{release}
+%description -n gcc-c++
+C++ support for the GNU Compiler Collection.
+
+%package -n gcc-gdb-plugin
+Summary: GCC plugin for GDB
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n gcc-gdb-plugin
+GCC plugin for GDB C expression evaluation.
+
+%package -n gcc-plugin-devel
+Summary: Files for building GCC plugins
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: gmp-devel
+Requires: mpfr-devel
+Requires: mpc-devel
+%description -n gcc-plugin-devel
+Header files for compiling GCC plugins.
 
 %package -n libgcc
-Summary: GCC version %{gcc_major} shared support library
-Autoreq: false
-%if !%{build_ada}
-Obsoletes: libgnat < %{version}-%{release}
-%endif
-Obsoletes: libmudflap < %{version}-%{release}
-Obsoletes: libmudflap-devel < %{version}-%{release}
-Obsoletes: libmudflap-static < %{version}-%{release}
-Obsoletes: libgcj < %{version}-%{release}
-Obsoletes: libgcj-devel < %{version}-%{release}
-Obsoletes: libgcj-src < %{version}-%{release}
-%ifarch %{ix86} x86_64
-Obsoletes: libcilkrts < %{version}-%{release}
-Obsoletes: libcilkrts-static < %{version}-%{release}
-Obsoletes: libmpx < %{version}-%{release}
-Obsoletes: libmpx-static < %{version}-%{release}
-%endif
-
+Summary: GCC shared support library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
 %description -n libgcc
-This package contains GCC shared support library which is needed
-e.g. for exception handling support.
-
-%package c++
-Summary: C++ support for GCC
-Requires: gcc = %{version}-%{release}
-Requires: libstdc++ = %{version}-%{release}
-Requires: libstdc++-devel = %{version}-%{release}
-Provides: gcc-g++ = %{version}-%{release}
-Provides: g++ = %{version}-%{release}
-Autoreq: true
-
-%description c++
-This package adds C++ support to the GNU Compiler Collection.
-It includes support for most of the current C++ specification,
-including templates and exception handling.
+GCC shared support library.
 
 %package -n libstdc++
 Summary: GNU Standard C++ Library
-Autoreq: true
-Requires: glibc >= 2.10.90-7
-BuildRequires: tzdata >= 2017c
-Recommends: tzdata >= 2017c
-
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libstdc++
-The libstdc++ package contains a rewritten standard compliant GCC Standard
-C++ Library.
+GNU Standard C++ Library.
 
 %package -n libstdc++-devel
-Summary: Header files and libraries for C++ development
+Summary: GNU Standard C++ Library headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
 Requires: libstdc++%{?_isa} = %{version}-%{release}
-Autoreq: true
-
+Requires: gcc%{?_isa} = %{version}-%{release}
 %description -n libstdc++-devel
-This is the GNU implementation of the standard C++ libraries.  This
-package includes the header files and libraries needed for C++
-development. This includes rewritten implementation of STL.
+Headers and link libraries for the GNU Standard C++ Library.
 
 %package -n libstdc++-static
-Summary: Static libraries for the GNU standard C++ library
-Requires: libstdc++-devel = %{version}-%{release}
-Autoreq: true
-
+Summary: GNU Standard C++ static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libstdc++-devel%{?_isa} = %{version}-%{release}
 %description -n libstdc++-static
-Static libraries for the GNU standard C++ library.
-
-%package -n libstdc++-docs
-Summary: Documentation for the GNU standard C++ library
-Autoreq: true
-
-%description -n libstdc++-docs
-Manual, doxygen generated API information and Frequently Asked Questions
-for the GNU standard C++ library.
-
-%package objc
-Summary: Objective-C support for GCC
-Requires: gcc = %{version}-%{release}
-Requires: libobjc = %{version}-%{release}
-Autoreq: true
-
-%description objc
-gcc-objc provides Objective-C support for the GCC.
-Mainly used on systems running NeXTSTEP, Objective-C is an
-object-oriented derivative of the C language.
-
-%package objc++
-Summary: Objective-C++ support for GCC
-Requires: gcc-c++ = %{version}-%{release}, gcc-objc = %{version}-%{release}
-Autoreq: true
-
-%description objc++
-gcc-objc++ package provides Objective-C++ support for the GCC.
-
-%package -n libobjc
-Summary: Objective-C runtime
-Autoreq: true
-
-%description -n libobjc
-This package contains Objective-C shared library which is needed to run
-Objective-C dynamically linked programs.
-
-%package gfortran
-Summary: Fortran support
-Requires: gcc = %{version}-%{release}
-Requires: libgfortran = %{version}-%{release}
-%if %{build_libquadmath}
-Requires: libquadmath = %{version}-%{release}
-Requires: libquadmath-devel = %{version}-%{release}
-%endif
-Provides: gcc-fortran = %{version}-%{release}
-Provides: gfortran = %{version}-%{release}
-Autoreq: true
-
-%description gfortran
-The gcc-gfortran package provides support for compiling Fortran
-programs with the GNU Compiler Collection.
-
-%package -n libgfortran
-Summary: Fortran runtime
-Autoreq: true
-
-%description -n libgfortran
-This package contains Fortran shared library which is needed to run
-Fortran dynamically linked programs.
-
-%package -n libgfortran-static
-Summary: Static Fortran libraries
-Requires: libgfortran = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
-%if %{build_libquadmath}
-Requires: libquadmath-static = %{version}-%{release}
-%endif
-
-%description -n libgfortran-static
-This package contains static Fortran libraries.
-
-%package gdc
-Summary: D support
-Requires: gcc = %{version}-%{release}
-Requires: libgphobos = %{version}-%{release}
-Provides: gcc-d = %{version}-%{release}
-Provides: gdc = %{version}-%{release}
-Autoreq: true
-
-%description gdc
-The gcc-gdc package provides support for compiling D
-programs with the GNU Compiler Collection.
-
-%package -n libgphobos
-Summary: D runtime
-Autoreq: true
-
-%description -n libgphobos
-This package contains D shared library which is needed to run
-D dynamically linked programs.
-
-%package -n libgphobos-static
-Summary: Static D libraries
-Requires: libgphobos = %{version}-%{release}
-Requires: gcc-gdc = %{version}-%{release}
-
-%description -n libgphobos-static
-This package contains static D libraries.
-
-%package gm2
-Summary: Modula-2 support
-Requires: gcc = %{version}-%{release}
-Requires: libgm2 = %{version}-%{release}
-Provides: gcc-m2 = %{version}-%{release}
-Provides: gm2 = %{version}-%{release}
-Autoreq: true
-
-%description gm2
-The gcc-gm2 package provides support for compiling Modula-2
-programs with the GNU Compiler Collection.
-
-%package -n libgm2
-Summary: Modula-2 runtime
-Autoreq: true
-
-%description -n libgm2
-This package contains Modula-2 shared libraries which are needed to run
-Modula-2 dynamically linked programs.
-
-%package -n libgm2-static
-Summary: Static Modula-2 libraries
-Requires: libgm2 = %{version}-%{release}
-Requires: gcc-gm2 = %{version}-%{release}
-
-%description -n libgm2-static
-This package contains static Modula-2 libraries.
-
-%package gcobol
-Summary: COBOL support
-Requires: gcc = %{version}-%{release}
-Requires: gcc-c++ = %{version}-%{release}
-Requires: libgcobol = %{version}-%{release}
-Autoreq: true
-
-%description gcobol
-The gcc-gcobol package provides support for compiling COBOL
-programs with the GNU Compiler Collection.
-
-%package -n libgcobol
-Summary: COBOL runtime
-Autoreq: true
-
-%description -n libgcobol
-This package contains COBOL shared libraries which are needed to run
-COBOL dynamically linked programs.
-
-%package -n libgcobol-static
-Summary: Static COBOL libraries
-Requires: libgcobol = %{version}-%{release}
-Requires: gcc-gcobol = %{version}-%{release}
-
-%description -n libgcobol-static
-This package contains static COBOL libraries.
-
-%package algol68
-Summary: Algol 68 support
-Requires: gcc = %{version}-%{release}
-Requires: libga68 = %{version}-%{release}
-Autoreq: true
-
-%description algol68
-The gcc-algol68 package provides support for compiling Algol 68
-programs with the GNU Compiler Collection.
-
-%package -n libga68
-Summary: Algol 68 runtime
-Autoreq: true
-
-%description -n libga68
-This package contains Algol 68 shared libraries which are needed to run
-Algol 68 dynamically linked programs.
-
-%package -n libga68-static
-Summary: Static Algol 68 libraries
-Requires: libga68 = %{version}-%{release}
-Requires: gcc-algol68 = %{version}-%{release}
-
-%description -n libga68-static
-This package contains static Algol 68 libraries.
+Static GNU Standard C++ Library.
 
 %package -n libgomp
-Summary: GCC OpenMP v5.2 shared support library
-
+Summary: GCC OpenMP runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgomp
-This package contains GCC shared support library which is needed
-for OpenMP v5.2 support.
-
-%package -n libgomp-offload-nvptx
-Summary: GCC OpenMP v5.2 plugin for offloading to NVPTX
-Requires: libgomp = %{version}-%{release}
-
-%description -n libgomp-offload-nvptx
-This package contains libgomp plugin for offloading to NVidia
-PTX.  The plugin needs libcuda.so.1 shared library that has to be
-installed separately.
-
-%package -n libgomp-offload-amdgcn
-Summary: GCC OpenMP v5.2 plugin for offloading to AMD GCN
-Requires: libgomp = %{version}-%{release}
-Requires: rocm-runtime >= 6.0.0
-
-%description -n libgomp-offload-amdgcn
-This package contains libgomp plugin for offloading to AMD ROCm capable
-devices.
-
-%package gdb-plugin
-Summary: GCC plugin for GDB
-Requires: gcc = %{version}-%{release}
-
-%description gdb-plugin
-This package contains GCC plugin for GDB C expression evaluation.
-
-%package -n libgccjit
-Summary: Library for embedding GCC inside programs and libraries
-Requires: gcc = %{version}-%{release}
-
-%description -n libgccjit
-This package contains shared library with GCC JIT front-end.
-
-%package -n libgccjit-devel
-Summary: Support for embedding GCC inside programs and libraries
-BuildRequires: python3-sphinx
-Requires: libgccjit = %{version}-%{release}
-
-%description -n libgccjit-devel
-This package contains header files and documentation for GCC JIT front-end.
-
-%package -n libgdiagnostics
-Summary: Library for emitting diagnostics
-
-%description -n libgdiagnostics
-This package contains libgdiagnostics shared library and sarif-replay program.
-
-%package -n libgdiagnostics-devel
-Summary: Support for emitting diagnostics
-Requires: libgdiagnostics = %{version}-%{release}
-
-%description -n libgdiagnostics-devel
-This package contains header files and documentation for the libgdiagnostics
-library.
-
-%package -n libquadmath
-Summary: GCC __float128 shared support library
-
-%description -n libquadmath
-This package contains GCC shared support library which is needed
-for __float128 math support and for Fortran REAL*16 support.
-
-%package -n libquadmath-devel
-Summary: GCC __float128 support
-Requires: libquadmath = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
-
-%description -n libquadmath-devel
-This package contains headers for building Fortran programs using
-REAL*16 and programs using __float128 math.
-
-%package -n libquadmath-static
-Summary: Static libraries for __float128 support
-Requires: libquadmath-devel = %{version}-%{release}
-
-%description -n libquadmath-static
-This package contains static libraries for building Fortran programs
-using REAL*16 and programs using __float128 math.
-
-%package -n libitm
-Summary: The GNU Transactional Memory library
-
-%description -n libitm
-This package contains the GNU Transactional Memory library
-which is a GCC transactional memory support runtime library.
-
-%package -n libitm-devel
-Summary: The GNU Transactional Memory support
-Requires: libitm = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
-
-%description -n libitm-devel
-This package contains headers and support files for the
-GNU Transactional Memory library.
-
-%package -n libitm-static
-Summary: The GNU Transactional Memory static library
-Requires: libitm-devel = %{version}-%{release}
-
-%description -n libitm-static
-This package contains GNU Transactional Memory static libraries.
+GCC OpenMP runtime library.
 
 %package -n libatomic
-Summary: The GNU Atomic library
-
+Summary: GCC atomic operations library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libatomic
-This package contains the GNU Atomic library
-which is a GCC support runtime library for atomic operations not supported
-by hardware.
+GCC support library for atomic operations.
+
+%package -n libitm
+Summary: GNU Transactional Memory library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libitm
+GNU Transactional Memory runtime library.
+
+%package -n libitm-devel
+Summary: GNU Transactional Memory headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libitm%{?_isa} = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+%description -n libitm-devel
+Headers for the GNU Transactional Memory library.
+
+%package -n libitm-static
+Summary: GNU Transactional Memory static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libitm-devel%{?_isa} = %{version}-%{release}
+%description -n libitm-static
+Static GNU Transactional Memory library.
 
 %package -n libasan
-Summary: The Address Sanitizer runtime library
-
+Summary: Address Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libasan
-This package contains the Address Sanitizer library
-which is used for -fsanitize=address instrumented programs.
+Address Sanitizer runtime library.
 
 %package -n libasan-static
-Summary: The Address Sanitizer static library
-Requires: libasan = %{version}-%{release}
-
+Summary: Address Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libasan%{?_isa} = %{version}-%{release}
 %description -n libasan-static
-This package contains Address Sanitizer static runtime library.
+Static Address Sanitizer runtime library.
 
 %package -n libhwasan
-Summary: The Hardware-assisted Address Sanitizer runtime library
-
+Summary: Hardware-assisted Address Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libhwasan
-This package contains the Hardware-assisted Address Sanitizer library
-which is used for -fsanitize=hwaddress instrumented programs.
+Hardware-assisted Address Sanitizer runtime library.
 
 %package -n libhwasan-static
-Summary: The Hardware-assisted Address Sanitizer static library
-Requires: libhwasan = %{version}-%{release}
-
+Summary: Hardware-assisted Address Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libhwasan%{?_isa} = %{version}-%{release}
 %description -n libhwasan-static
-This package contains Hardware-assisted Address Sanitizer static runtime
-library.
+Static Hardware-assisted Address Sanitizer runtime library.
 
 %package -n libtsan
-Summary: The Thread Sanitizer runtime library
-
+Summary: Thread Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libtsan
-This package contains the Thread Sanitizer library
-which is used for -fsanitize=thread instrumented programs.
+Thread Sanitizer runtime library.
 
 %package -n libtsan-static
-Summary: The Thread Sanitizer static library
-Requires: libtsan = %{version}-%{release}
-
+Summary: Thread Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libtsan%{?_isa} = %{version}-%{release}
 %description -n libtsan-static
-This package contains Thread Sanitizer static runtime library.
-
-%package -n libubsan
-Summary: The Undefined Behavior Sanitizer runtime library
-
-%description -n libubsan
-This package contains the Undefined Behavior Sanitizer library
-which is used for -fsanitize=undefined instrumented programs.
-
-%package -n libubsan-static
-Summary: The Undefined Behavior Sanitizer static library
-Requires: libubsan = %{version}-%{release}
-
-%description -n libubsan-static
-This package contains Undefined Behavior Sanitizer static runtime library.
+Static Thread Sanitizer runtime library.
 
 %package -n liblsan
-Summary: The Leak Sanitizer runtime library
-
+Summary: Leak Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n liblsan
-This package contains the Leak Sanitizer library
-which is used for -fsanitize=leak instrumented programs.
+Leak Sanitizer runtime library.
 
 %package -n liblsan-static
-Summary: The Leak Sanitizer static library
-Requires: liblsan = %{version}-%{release}
-
+Summary: Leak Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: liblsan%{?_isa} = %{version}-%{release}
 %description -n liblsan-static
-This package contains Leak Sanitizer static runtime library.
+Static Leak Sanitizer runtime library.
 
-%package -n cpp
-Summary: The C Preprocessor
-Requires: filesystem >= 3
-Provides: /lib/cpp
-Autoreq: true
+%package -n libubsan
+Summary: Undefined Behavior Sanitizer runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libubsan
+Undefined Behavior Sanitizer runtime library.
 
-%description -n cpp
-Cpp is the GNU C-Compatible Compiler Preprocessor.
-Cpp is a macro processor which is used automatically
-by the C compiler to transform your program before actual
-compilation. It is called a macro processor because it allows
-you to define macros, abbreviations for longer
-constructs.
+%package -n libubsan-static
+Summary: Undefined Behavior Sanitizer static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libubsan%{?_isa} = %{version}-%{release}
+%description -n libubsan-static
+Static Undefined Behavior Sanitizer runtime library.
 
-The C preprocessor provides four separate functionalities: the
-inclusion of header files (files of declarations that can be
-substituted into your program); macro expansion (you can define macros,
-and the C preprocessor will replace the macros with their definitions
-throughout the program); conditional compilation (using special
-preprocessing directives, you can include or exclude parts of the
-program according to various conditions); and line control (if you use
-a program to combine or rearrange source files into an intermediate
-file which is then compiled, you can use line control to inform the
-compiler about where each source line originated).
+%ifarch x86_64
+%package -n libquadmath
+Summary: GCC quad-precision math library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libquadmath
+GCC __float128 math library.
 
-You should install this package if you are a C programmer and you use
-macros.
+%package -n libquadmath-devel
+Summary: GCC quad-precision math headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libquadmath%{?_isa} = %{version}-%{release}
+Requires: gcc%{?_isa} = %{version}-%{release}
+%description -n libquadmath-devel
+Headers for the GCC __float128 math library.
 
-%package gnat
-Summary: Ada 83, 95, 2005 and 2012 support for GCC
-Requires: gcc = %{version}-%{release}
-Requires: libgnat = %{version}-%{release}, libgnat-devel = %{version}-%{release}
-Autoreq: true
+%package -n libquadmath-static
+Summary: GCC quad-precision math static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libquadmath-devel%{?_isa} = %{version}-%{release}
+%description -n libquadmath-static
+Static GCC __float128 math library.
+%endif
 
-%description gnat
-GNAT is a GNU Ada 83, 95, 2005 and 2012 front-end to GCC. This package includes
-development tools, the documents and Ada compiler.
+%if %{without bootstrap} && !0%{?bootstrap}
+%package -n gcc-objc
+Summary: GNU Objective-C compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libobjc%{?_isa} = %{version}-%{release}
+%description -n gcc-objc
+Objective-C support for the GNU Compiler Collection.
+
+%package -n gcc-objc++
+Summary: GNU Objective-C++ compiler
+Requires: gcc-c++%{?_isa} = %{version}-%{release}
+Requires: gcc-objc%{?_isa} = %{version}-%{release}
+%description -n gcc-objc++
+Objective-C++ support for the GNU Compiler Collection.
+
+%package -n gcc-gfortran
+Summary: GNU Fortran compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgfortran%{?_isa} = %{version}-%{release}
+%ifarch x86_64
+Requires: libquadmath%{?_isa} = %{version}-%{release}
+Requires: libquadmath-devel%{?_isa} = %{version}-%{release}
+%endif
+%description -n gcc-gfortran
+Fortran support for the GNU Compiler Collection.
+
+%package -n gcc-gdc
+Summary: GNU D compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgphobos%{?_isa} = %{version}-%{release}
+%description -n gcc-gdc
+D support for the GNU Compiler Collection.
+
+%package -n gcc-gm2
+Summary: GNU Modula-2 compiler
+Requires: gcc-c++%{?_isa} = %{version}-%{release}
+Requires: libgm2%{?_isa} = %{version}-%{release}
+%description -n gcc-gm2
+Modula-2 support for the GNU Compiler Collection.
+
+%package -n gcc-gcobol
+Summary: GNU COBOL compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgcobol%{?_isa} = %{version}-%{release}
+%description -n gcc-gcobol
+COBOL support for the GNU Compiler Collection.
+
+%package -n gcc-algol68
+Summary: GNU Algol 68 compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libga68%{?_isa} = %{version}-%{release}
+%description -n gcc-algol68
+Algol 68 support for the GNU Compiler Collection.
+
+%package -n gcc-gnat
+Summary: GNU Ada compiler
+Requires: gcc-c++%{?_isa} = %{version}-%{release}
+Requires: libgnat%{?_isa} = %{version}-%{release}
+%description -n gcc-gnat
+Ada support for the GNU Compiler Collection.
+
+%package -n gcc-go
+Summary: GNU Go compiler
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgo%{?_isa} = %{version}-%{release}
+%description -n gcc-go
+Go support for the GNU Compiler Collection.
+
+%package -n gcc-plugin-annobin
+Summary: Annobin plugin built by this GCC
+Requires: gcc%{?_isa} = %{version}-%{release}
+%description -n gcc-plugin-annobin
+Annobin plugin built by the same GCC it is installed with.
+
+%package -n libstdc++-docs
+Summary: GNU Standard C++ Library documentation
+License: GFDL-1.3-or-later
+%description -n libstdc++-docs
+Documentation for the GNU Standard C++ Library.
+
+%package -n libgfortran
+Summary: GNU Fortran runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%ifarch x86_64
+Requires: libquadmath%{?_isa} = %{version}-%{release}
+%endif
+%description -n libgfortran
+Fortran runtime library.
+
+%package -n libgfortran-static
+Summary: GNU Fortran static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgfortran%{?_isa} = %{version}-%{release}
+Requires: gcc-gfortran%{?_isa} = %{version}-%{release}
+%description -n libgfortran-static
+Static Fortran runtime library.
+
+%package -n libgphobos
+Summary: GNU D runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libgphobos
+D runtime library.
+
+%package -n libgphobos-static
+Summary: GNU D static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgphobos%{?_isa} = %{version}-%{release}
+%description -n libgphobos-static
+Static D runtime library.
+
+%package -n libgm2
+Summary: GNU Modula-2 runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libgm2
+Modula-2 runtime library.
+
+%package -n libgm2-static
+Summary: GNU Modula-2 static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgm2%{?_isa} = %{version}-%{release}
+%description -n libgm2-static
+Static Modula-2 runtime library.
+
+%package -n libgcobol
+Summary: GNU COBOL runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libgcobol
+COBOL runtime library.
+
+%package -n libgcobol-static
+Summary: GNU COBOL static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcobol%{?_isa} = %{version}-%{release}
+%description -n libgcobol-static
+Static COBOL runtime library.
+
+%package -n libga68
+Summary: GNU Algol 68 runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libga68
+Algol 68 runtime library.
+
+%package -n libga68-static
+Summary: GNU Algol 68 static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libga68%{?_isa} = %{version}-%{release}
+%description -n libga68-static
+Static Algol 68 runtime library.
 
 %package -n libgnat
-Summary: GNU Ada 83, 95, 2005 and 2012 runtime shared libraries
-Autoreq: true
-
+Summary: GNU Ada runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgnat
-GNAT is a GNU Ada 83, 95, 2005 and 2012 front-end to GCC. This package includes
-shared libraries, which are required to run programs compiled with the GNAT.
+Ada runtime library.
 
 %package -n libgnat-devel
-Summary: GNU Ada 83, 95, 2005 and 2012 libraries
-Autoreq: true
-
+Summary: GNU Ada development files
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgnat%{?_isa} = %{version}-%{release}
+Requires: gcc-gnat%{?_isa} = %{version}-%{release}
 %description -n libgnat-devel
-GNAT is a GNU Ada 83, 95, 2005 and 2012 front-end to GCC. This package includes
-libraries, which are required to compile with the GNAT.
+Ada source and link files.
 
 %package -n libgnat-static
-Summary: GNU Ada 83, 95, 2005 and 2012 static libraries
-Requires: libgnat-devel = %{version}-%{release}
-Autoreq: true
-
+Summary: GNU Ada static library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgnat-devel%{?_isa} = %{version}-%{release}
 %description -n libgnat-static
-GNAT is a GNU Ada 83, 95, 2005 and 2012 front-end to GCC. This package includes
-static libraries.
-
-%package go
-Summary: Go support
-Requires: gcc = %{version}-%{release}
-Requires: libgo = %{version}-%{release}
-Requires: libgo-devel = %{version}-%{release}
-Requires(post): %{_sbindir}/update-alternatives
-Requires(postun): %{_sbindir}/update-alternatives
-Provides: gccgo = %{version}-%{release}
-Autoreq: true
-
-%description go
-The gcc-go package provides support for compiling Go programs
-with the GNU Compiler Collection.
+Static Ada runtime library.
 
 %package -n libgo
 Summary: Go runtime
-Autoreq: true
-
+License: BSD-3-Clause
+Requires: libgcc%{?_isa} = %{version}-%{release}
 %description -n libgo
-This package contains Go shared library which is needed to run
-Go dynamically linked programs.
+Go runtime library.
 
 %package -n libgo-devel
-Summary: Go development libraries
-Requires: libgo = %{version}-%{release}
-Autoreq: true
-
+Summary: Go development files
+License: BSD-3-Clause
+Requires: libgo%{?_isa} = %{version}-%{release}
+Requires: gcc-go%{?_isa} = %{version}-%{release}
 %description -n libgo-devel
-This package includes libraries and support files for compiling
-Go programs.
+Go headers and link library.
 
 %package -n libgo-static
-Summary: Static Go libraries
-Requires: libgo = %{version}-%{release}
-Requires: gcc = %{version}-%{release}
-
+Summary: Go static library
+License: BSD-3-Clause
+Requires: libgo-devel%{?_isa} = %{version}-%{release}
 %description -n libgo-static
-This package contains static Go libraries.
+Static Go runtime library.
 
-%package plugin-devel
-Summary: Support for compiling GCC plugins
-Requires: gcc = %{version}-%{release}
-Requires: gmp-devel >= 4.1.2-8, mpfr-devel >= 3.1.0, libmpc-devel >= 0.8.1
+%package -n libobjc
+Summary: Objective-C runtime
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libobjc
+Objective-C runtime library.
 
-%description plugin-devel
-This package contains header files and other support files
-for compiling GCC plugins.  The GCC plugin ABI is currently
-not stable, so plugins must be rebuilt any time GCC is updated.
+%package -n libgccjit
+Summary: GCC just-in-time library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libgccjit
+Library for embedding GCC in a program.
 
-%package offload-nvptx
-Summary: Offloading compiler to NVPTX
-Requires: gcc = %{version}-%{release}
-Requires: libgomp-offload-nvptx = %{version}-%{release}
+%package -n libgccjit-devel
+Summary: GCC just-in-time headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgccjit%{?_isa} = %{version}-%{release}
+%description -n libgccjit-devel
+Headers for embedding GCC in a program.
 
-%description offload-nvptx
-The gcc-offload-nvptx package provides offloading support for
-NVidia PTX.  OpenMP and OpenACC programs linked with -fopenmp will
-by default add PTX code into the binaries, which can be offloaded
-to NVidia PTX capable devices if available.
+%package -n libgdiagnostics
+Summary: GCC diagnostics library
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgcc%{?_isa} = %{version}-%{release}
+%description -n libgdiagnostics
+Library for emitting compiler diagnostics.
 
-%package offload-amdgcn
-Summary: Offloading compiler to AMD GCN
-Requires: gcc = %{version}-%{release}
-Requires: libgomp-offload-amdgcn = %{version}-%{release}
-Requires: llvm >= 15, lld >= 15
+%package -n libgdiagnostics-devel
+Summary: GCC diagnostics headers
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgdiagnostics%{?_isa} = %{version}-%{release}
+%description -n libgdiagnostics-devel
+Headers for the GCC diagnostics library.
 
-%description offload-amdgcn
-The gcc-offload-amdgcn package provides offloading support for
-AMD GCN.  OpenMP and OpenACC programs linked with -fopenmp will
-by default add GCN code into the binaries, which can be offloaded
-to AMD ROCm capable devices if available.
+%ifarch x86_64
+%package -n libgomp-offload-nvptx
+Summary: OpenMP offload plugin for NVPTX
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgomp%{?_isa} = %{version}-%{release}
+%description -n libgomp-offload-nvptx
+OpenMP offload plugin for Nvidia PTX.
 
-%package plugin-annobin
-Summary: The annobin plugin for gcc, built by the installed version of gcc
-Requires: gcc = %{version}-%{release}
-%if %{build_annobin_plugin}
-BuildRequires: annobin-plugin-gcc >= 10.62, rpm-devel, binutils-devel, xz
+%package -n libgomp-offload-amdgcn
+Summary: OpenMP offload plugin for AMD GCN
+License: GPL-3.0-or-later WITH GCC-exception-3.1
+Requires: libgomp%{?_isa} = %{version}-%{release}
+%description -n libgomp-offload-amdgcn
+OpenMP offload plugin for AMD GCN.
+
+%package -n gcc-offload-nvptx
+Summary: GCC offloading compiler for NVPTX
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgomp-offload-nvptx%{?_isa} = %{version}-%{release}
+%description -n gcc-offload-nvptx
+Offloading compiler for Nvidia PTX.
+
+%package -n gcc-offload-amdgcn
+Summary: GCC offloading compiler for AMD GCN
+Requires: gcc%{?_isa} = %{version}-%{release}
+Requires: libgomp-offload-amdgcn%{?_isa} = %{version}-%{release}
+Requires: llvm
+Requires: lld
+%description -n gcc-offload-amdgcn
+Offloading compiler for AMD GCN.
 %endif
-
-%description plugin-annobin
-This package adds a version of the annobin plugin for gcc.  This version
-of the plugin is explicitly built by the same version of gcc that is installed
-so that there cannot be any synchronization problems.
-
-%package -n cross-gcc-aarch64
-Summary: Cross targeted AArch64 gcc for developer use.  Not intended for production.
-Provides: cross-gcc-aarch64 = %{version}-%{release}
-%if %{build_cross}
-Requires: binutils-aarch64-linux-gnu >= 2.41
-BuildRequires: binutils-aarch64-linux-gnu >= 2.41
-BuildRequires: sysroot-aarch64-%{sysroot_dist}-glibc >= 2.39
 %endif
-# Don't provide e.g. liblto_plugin.so()(64bit).
-AutoReqProv: no
-
-%description -n cross-gcc-aarch64
-This package contains a version of gcc that can compile code for AArch64
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-c++-aarch64
-Summary: Cross targeted AArch64 gcc-c++ for developer use.  Not intended for production.
-Provides: cross-gcc-c++-aarch64 = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-aarch64 = %{version}-%{release}
-%endif
-# ??? Otherwise this subpackage couldn't be installed, depends on libm.so
-# and libgcc_s.so
-AutoReqProv: no
-
-%description -n cross-gcc-c++-aarch64
-This package contains a version of g++ that can compile code for AArch64
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-plugin-aarch64
-Summary: Plugin headers for cross targeted AArch64 gcc for developer use.  Not intended for production.
-Provides: cross-gcc-plugin-aarch64 = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-aarch64 = %{version}-%{release}
-%endif
-AutoReqProv: no
-
-%description -n cross-gcc-plugin-aarch64
-This package contains header files and other support files for compiling GCC
-plugins for use with the non-production AArch64 cross compiler.
-
-%package -n cross-gcc-ppc64le
-Summary: Cross targeted PPC64le gcc for developer use.  Not intended for production.
-Provides: cross-gcc-ppc64le = %{version}-%{release}
-%if %{build_cross}
-Requires: binutils-powerpc64le-linux-gnu >= 2.41
-BuildRequires: binutils-powerpc64le-linux-gnu >= 2.41
-BuildRequires: sysroot-ppc64le-%{sysroot_dist}-glibc >= 2.39
-%endif
-# Don't provide e.g. liblto_plugin.so()(64bit).
-AutoReqProv: no
-
-%description -n cross-gcc-ppc64le
-This package contains a version of gcc that can compile code for PPC64le
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-c++-ppc64le
-Summary: Cross targeted PPC64le gcc-c++ for developer use.  Not intended for production.
-Provides: cross-gcc-c++-ppc64le = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-ppc64le = %{version}-%{release}
-%endif
-# ??? Otherwise this subpackage couldn't be installed, depends on libm.so
-# and libgcc_s.so
-AutoReqProv: no
-
-%description -n cross-gcc-c++-ppc64le
-This package contains a version of g++ that can compile code for PPC64le
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-plugin-ppc64le
-Summary: Plugin headers for cross targeted PPC64le gcc for developer use.  Not intended for production.
-Provides: cross-gcc-plugin-ppc64le = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-ppc64le = %{version}-%{release}
-%endif
-AutoReqProv: no
-
-%description -n cross-gcc-plugin-ppc64le
-This package contains header files and other support files for compiling GCC
-plugins for use with the non-production PPC64le cross compiler.
-
-%package -n cross-gcc-s390x
-Summary: Cross targeted S/390 gcc for developer use.  Not intended for production.
-Provides: cross-gcc-s390x = %{version}-%{release}
-%if %{build_cross}
-Requires: binutils-s390x-linux-gnu >= 2.41
-BuildRequires: binutils-s390x-linux-gnu >= 2.41
-BuildRequires: sysroot-s390x-%{sysroot_dist}-glibc >= 2.39
-%endif
-# Don't provide e.g. liblto_plugin.so()(64bit).
-AutoReqProv: no
-
-%description -n cross-gcc-s390x
-This package contains a version of gcc that can compile code for S/390
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-c++-s390x
-Summary: Cross targeted S/390 gcc-c++ for developer use.  Not intended for production.
-Provides: cross-gcc-c++-s390x = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-s390x = %{version}-%{release}
-%endif
-# ??? Otherwise this subpackage couldn't be installed, depends on libm.so
-# and libgcc_s.so
-AutoReqProv: no
-
-%description -n cross-gcc-c++-s390x
-This package contains a version of g++ that can compile code for S/390
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-plugin-s390x
-Summary: Plugin headers for cross targeted S/390 gcc for developer use.  Not intended for production.
-Provides: cross-gcc-plugin-s390x = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-s390x = %{version}-%{release}
-%endif
-AutoReqProv: no
-
-%description -n cross-gcc-plugin-s390x
-This package contains header files and other support files for compiling GCC
-plugins for use with the non-production S/390 cross compiler.
-
-%package -n cross-gcc-x86_64
-Summary: Cross targeted x86-64 gcc for developer use.  Not intended for production.
-Provides: cross-gcc-x86_64 = %{version}-%{release}
-%if %{build_cross}
-Requires: binutils-x86_64-linux-gnu >= 2.41
-BuildRequires: binutils-x86_64-linux-gnu >= 2.41
-BuildRequires: sysroot-x86_64-%{sysroot_dist}-glibc >= 2.39
-BuildRequires:  oreon-rpm-macros
-%endif
-# Don't provide e.g. liblto_plugin.so()(64bit).
-AutoReqProv: no
-
-%description -n cross-gcc-x86_64
-This package contains a version of gcc that can compile code for x86-64
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-c++-x86_64
-Summary: Cross targeted x86-64 gcc-c++ for developer use.  Not intended for production.
-Provides: cross-gcc-c++-x86_64 = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-x86_64 = %{version}-%{release}
-%endif
-# ??? Otherwise this subpackage couldn't be installed, depends on libm.so
-# and libgcc_s.so
-AutoReqProv: no
-
-%description -n cross-gcc-c++-x86_64
-This package contains a version of g++ that can compile code for x86-64
-(cross compiler).  This cross compiler is intended for developers to use
-during application development.  This cross compiler is not intended for
-production use, and output binary artifacts should not be used in
-production.  Generated binary artifacts contain binary annotations that
-mark them as cross compiled.
-
-%package -n cross-gcc-plugin-x86_64
-Summary: Plugin headers for cross targeted x86-64 gcc for developer use.  Not intended for production.
-Provides: cross-gcc-plugin-x86_64 = %{version}-%{release}
-%if %{build_cross}
-Requires: cross-gcc-x86_64 = %{version}-%{release}
-%endif
-AutoReqProv: no
-
-%description -n cross-gcc-plugin-x86_64
-This package contains header files and other support files for compiling GCC
-plugins for use with the non-production x86-64 cross compiler.
-
-%package -n %{sysroot_package_arch}-libgcc
-Summary: Sysroot package for libgcc, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-libgcc
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-libgcc
-This package contains development files for the libgcc package
-that can be installed across architectures.
-
-%package -n %{sysroot_package_arch}-libgomp
-Summary: Sysroot package for libgomp, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-libgomp
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-libgomp
-This package contains development files for the libgomp package
-that can be installed across architectures.
-
-%package -n %{sysroot_package_arch}-libstdc++
-Summary: Sysroot package for libstdc++, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-libstdc++
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-libstdc++
-This package contains development files for the libstdc++ package
-that can be installed across architectures.
-
-%package -n %{sysroot_package_arch}-libatomic
-Summary: Sysroot package for libatomic, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-libatomic
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-libatomic
-This package contains development files for the libatomic package
-that can be installed across architectures.
-
-%package -n %{sysroot_package_arch}-libitm
-Summary: Sysroot package for libitm, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-libitm
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-libitm
-This package contains development files for the libitm package
-that can be installed across architectures.
-
-%package -n %{sysroot_package_arch}-libsanitizer
-Summary: Sysroot package for sanitizer libraries, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-libsanitizer
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-libsanitizer
-This package contains development files for the sanitizer library packages
-that can be installed across architectures.
-
-%package -n %{sysroot_package_arch}-test-support
-Summary: GCC testsuite support files, %{_arch} architecture
-BuildArch: noarch
-Provides: sysroot-%{_arch}-test-support
-# The files are not usable for execution, so do not provide nor
-# require anything.
-AutoReqProv: no
-
-%description -n %{sysroot_package_arch}-test-support
-This package contains files from the GCC build to support running the GCC
-testsuites that can be installed across architectures.
 
 %prep
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 echo '%{source3_hash}  %{SOURCE3}' | sha256sum -c -
-
-%setup -q -n gcc-16-%{DATE} -a 1 -a 2 -a 3
-rm -rf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib/libc/sys/linux/include/rpc
-%autopatch -p0 -m 0 -M 4
-%if %{build_isl}
-%autopatch -p0 -m 5 -M 6
-%endif
-%if %{build_libstdcxx_docs}
-%autopatch -p0 7
-%endif
-%autopatch -p0 -m 8 -M 9
-%autopatch -p0 10
-%autopatch -p0 -m 11 -M 99
-touch -r isl-0.24/m4/ax_prog_cxx_for_build.m4 isl-0.24/m4/ax_prog_cc_for_build.m4
-
-
-%ifarch %{arm}
-rm -f gcc/testsuite/go.test/test/fixedbugs/issue19182.go
-%endif
-rm -f libphobos/testsuite/libphobos.gc/forkgc2.d
-#rm -rf libphobos/testsuite/libphobos.gc
-
-echo 'Oreon %{version}-%{gcc_release}' > gcc/DEV-PHASE.native
-echo 'Oreon %{version}-%{gcc_release} cross from %{_arch}' > gcc/DEV-PHASE.cross
-cp -p gcc/DEV-PHASE{.native,}
-
-./contrib/gcc_update --touch
-
-LC_ALL=C sed -i -e 's/\xa0/ /' gcc/doc/options.texi
-
-sed -i -e 's/Common Driver Var(flag_report_bug)/& Init(1)/' gcc/common.opt
-sed -i -e 's/m_report_bug = false;/m_report_bug = true;/' gcc/diagnostics/context.cc
-
-%ifarch ppc
-if [ -d libstdc++-v3/config/abi/post/powerpc64-linux-gnu ]; then
-  mkdir -p libstdc++-v3/config/abi/post/powerpc64-linux-gnu/64
-  mv libstdc++-v3/config/abi/post/powerpc64-linux-gnu/{,64/}baseline_symbols.txt
-  mv libstdc++-v3/config/abi/post/powerpc64-linux-gnu/{32/,}baseline_symbols.txt
-  rm -rf libstdc++-v3/config/abi/post/powerpc64-linux-gnu/32
-fi
-%endif
-%ifarch sparc
-if [ -d libstdc++-v3/config/abi/post/sparc64-linux-gnu ]; then
-  mkdir -p libstdc++-v3/config/abi/post/sparc64-linux-gnu/64
-  mv libstdc++-v3/config/abi/post/sparc64-linux-gnu/{,64/}baseline_symbols.txt
-  mv libstdc++-v3/config/abi/post/sparc64-linux-gnu/{32/,}baseline_symbols.txt
-  rm -rf libstdc++-v3/config/abi/post/sparc64-linux-gnu/32
-fi
-%endif
-
-# This test causes fork failures, because it spawns way too many threads
-rm -f gcc/testsuite/go.test/test/chan/goroutines.go
+%autosetup -p1
+tar -xf %{SOURCE1} -C %{_builddir}
+tar -xf %{SOURCE2} -C %{_builddir}
+tar -xf %{SOURCE3} -C %{_builddir}
+find %{_builddir}/gcc-%{version} -name ltmain.sh -exec sed -i \
+  's|\*) finalize_rpath="$finalize_rpath $libdir"$|\*) case "$libdir" in */../*) ;; *) finalize_rpath="$finalize_rpath $libdir" ;; esac|' \
+  {} +
 
 %build
+unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS GOFLAGS DFLAGS LDFLAGS
+export CFLAGS="-O2 -g"
+export CXXFLAGS="-O2 -g"
+export CFLAGS_FOR_TARGET="-O2 -g"
+export CXXFLAGS_FOR_TARGET="-O2 -g"
+export FCFLAGS_FOR_TARGET="-O2 -g"
+jobs=%{?_smp_build_ncpus}
+if [ -z "$jobs" ]; then jobs=1; fi
+src=%{_builddir}/gcc-%{version}
+target=$("$src/config.guess")
 
-export CONFIG_SITE=NONE
+step() {
+  name=$1
+  shift
+  echo "oreon gcc step $name"
+  set -o pipefail
+  if ! "$@" 2>&1 | tail -n 400; then
+    set +o pipefail
+    echo "oreon gcc step $name failed"
+    exit 1
+  fi
+  set +o pipefail
+}
 
-CC=gcc
-CXX=g++
-OPT_FLAGS="%{optflags}"
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[123]//g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/\(-Wp,\)\?-D_FORTIFY_SOURCE=[123]//g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/\(-Wp,\)\?-U_FORTIFY_SOURCE//g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-flto=auto//g;s/-flto//g;s/-ffat-lto-objects//g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-m64//g;s/-m32//g;s/-m31//g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-mfpmath=sse/-mfpmath=sse -msse2/g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/ -pipe / /g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-fno-omit-frame-pointer//g;s/-mbackchain//g;s/-mno-omit-leaf-frame-pointer//g'`
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-Werror=format-security/-Wformat-security/g'`
-%ifarch sparc
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-mcpu=ultrasparc/-mtune=ultrasparc/g;s/-mcpu=v[78]//g'`
+common() {
+  "$src/configure" \
+    --prefix=%{_prefix} \
+    --libdir=%{_libdir} \
+    --libexecdir=%{_libexecdir} \
+    --mandir=%{_mandir} \
+    --infodir=%{_infodir} \
+    --enable-threads=posix \
+    --enable-checking=release \
+    --with-system-zlib \
+    --with-gcc-major-version-only \
+    --disable-multilib \
+    --disable-nls \
+    --disable-libssp \
+    "$@"
+}
+
+%if %{with bootstrap} || 0%{?bootstrap}
+mkdir -p %{_builddir}/gcc-build
+cd %{_builddir}/gcc-build
+step bootstrap-configure common \
+  --enable-shared \
+  --with-linker-hash-style=gnu \
+  --enable-languages=c,c++,lto \
+  --enable-default-pie \
+  --enable-linker-build-id \
+  --disable-bootstrap \
+%ifnarch x86_64
+  --disable-libquadmath \
 %endif
-%ifarch %{ix86}
-OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-march=i.86//g'`
-%endif
-OPT_FLAGS=`echo "$OPT_FLAGS" | sed -e 's/[[:blank:]]\+/ /g'`
-case "$OPT_FLAGS" in
-  *-fasynchronous-unwind-tables*)
-    sed -i -e 's/-fno-exceptions /-fno-exceptions -fno-asynchronous-unwind-tables /' \
-      libgcc/Makefile.in
-    ;;
-esac
-
-%if %{build_offload_nvptx}
-mkdir obji
-IROOT=`pwd`/obji
-cd nvptx-tools-%{nvptx_tools_gitrev}
-rm -rf obj-%{gcc_target_platform}
-mkdir obj-%{gcc_target_platform}
-cd obj-%{gcc_target_platform}
-CC="$CC" CXX="$CXX" CFLAGS="%{optflags}" CXXFLAGS="%{optflags}" \
-../configure --prefix=%{_prefix}
-make %{?_smp_mflags}
-make install prefix=${IROOT}%{_prefix}
-cd ../..
-
-ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
-rm -rf obj-offload-nvptx-none
-mkdir obj-offload-nvptx-none
-
-cd obj-offload-nvptx-none
-CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
-	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
-		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
-	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
-	../configure --disable-bootstrap --disable-sjlj-exceptions \
-	--enable-newlib-io-long-long --with-build-time-tools=${IROOT}%{_prefix}/nvptx-none/bin \
-	--target nvptx-none --enable-as-accelerator-for=%{gcc_target_platform} \
-	--enable-languages=c,c++,fortran,lto \
-	--prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
-	--with-bugurl=%dist_bug_report_url \
-	--enable-checking=release --with-system-zlib \
-	--with-gcc-major-version-only --without-isl
-make %{?_smp_mflags}
-cd ..
-rm -f newlib
-%endif
-
-%if %{build_offload_amdgcn}
-mkdir -p objia%{_prefix}/bin objia%{_prefix}/amdgcn-amdhsa/bin
-IAROOT=`pwd`/objia
-ln -sf %{_prefix}/bin/llvm-ar ${IAROOT}%{_prefix}/bin/amdgcn-amdhsa-ar
-ln -sf %{_prefix}/bin/llvm-ar ${IAROOT}%{_prefix}/bin/amdgcn-amdhsa-ranlib
-ln -sf %{_prefix}/bin/llvm-mc ${IAROOT}%{_prefix}/bin/amdgcn-amdhsa-as
-ln -sf %{_prefix}/bin/llvm-nm ${IAROOT}%{_prefix}/bin/amdgcn-amdhsa-nm
-ln -sf %{_prefix}/bin/lld ${IAROOT}%{_prefix}/bin/amdgcn-amdhsa-ld
-ln -sf ../../bin/amdgcn-amdhsa-ar ${IAROOT}%{_prefix}/amdgcn-amdhsa/bin/ar
-ln -sf ../../bin/amdgcn-amdhsa-ranlib ${IAROOT}%{_prefix}/amdgcn-amdhsa/bin/ranlib
-ln -sf ../../bin/amdgcn-amdhsa-as ${IAROOT}%{_prefix}/amdgcn-amdhsa/bin/as
-ln -sf ../../bin/amdgcn-amdhsa-nm ${IAROOT}%{_prefix}/amdgcn-amdhsa/bin/nm
-ln -sf ../../bin/amdgcn-amdhsa-ld ${IAROOT}%{_prefix}/amdgcn-amdhsa/bin/ld
-
-ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
-rm -rf obj-offload-amdgcn-amdhsa
-mkdir obj-offload-amdgcn-amdhsa
-
-cd obj-offload-amdgcn-amdhsa
-CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
-	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
-		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
-	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
-	../configure --disable-bootstrap --disable-sjlj-exceptions \
-	--with-build-time-tools=${IAROOT}%{_prefix}/amdgcn-amdhsa/bin \
-	--target amdgcn-amdhsa --enable-as-accelerator-for=%{gcc_target_platform} \
-	--enable-languages=c,c++,fortran,lto \
-	--prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
-	--with-bugurl=%dist_bug_report_url \
-	--enable-checking=release --with-system-zlib \
-	--with-gcc-major-version-only --without-isl --disable-libquadmath
-make %{?_smp_mflags}
-cd ..
-rm -f newlib
-%endif
-
-rm -rf obj-%{gcc_target_platform}
-mkdir obj-%{gcc_target_platform}
-cd obj-%{gcc_target_platform}
-
-%if %{build_isl}
-mkdir isl-build isl-install
-%ifarch s390 s390x
-ISL_FLAG_PIC=-fPIC
+  --disable-libvtv
+step bootstrap-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %else
-ISL_FLAG_PIC=-fpic
-%endif
-cd isl-build
+%ifarch x86_64
+ln -sfn %{_builddir}/newlib-cygwin-%{newlib_rev}/newlib "$src/newlib"
+mkdir -p %{_builddir}/offload-root
+cd %{_builddir}/nvptx-tools-%{nvptx_rev}
+step nvptx-tools-configure ./configure --prefix=%{_prefix}
+step nvptx-tools-make make -s -j"$jobs"
+step nvptx-tools-install make -s install DESTDIR=%{_builddir}/offload-root
 
-%ifarch riscv64
-# Update config.{sub,guess} scripts for riscv64 (the original ones are too old)
-cp -f -v /usr/lib/rpm/%{_vendor}/config.guess ../../isl-%{isl_version}/config.guess
-cp -f -v /usr/lib/rpm/%{_vendor}/config.sub ../../isl-%{isl_version}/config.sub
+mkdir -p %{_builddir}/accel-nvptx
+cd %{_builddir}/accel-nvptx
+step nvptx-configure common \
+  --enable-shared \
+  --target=nvptx-none \
+  --enable-as-accelerator-for="$target" \
+  --enable-languages=c,c++,fortran,lto \
+  --disable-bootstrap \
+  --enable-threads=single \
+  --disable-sjlj-exceptions \
+  --with-newlib \
+  --enable-newlib-io-long-long \
+  --disable-libsanitizer \
+  --with-build-time-tools=%{_builddir}/offload-root%{_prefix}/nvptx-none/bin
+step nvptx-make make -s -j"$jobs"
+step nvptx-install make -s install DESTDIR=%{_builddir}/offload-root
+
+mkdir -p %{_builddir}/amdgcn-bin
+ln -sfn %{_bindir}/llvm-ar %{_builddir}/amdgcn-bin/ar
+ln -sfn %{_bindir}/llvm-ar %{_builddir}/amdgcn-bin/ranlib
+ln -sfn %{_bindir}/llvm-mc %{_builddir}/amdgcn-bin/as
+ln -sfn %{_bindir}/llvm-nm %{_builddir}/amdgcn-bin/nm
+ln -sfn %{_bindir}/lld %{_builddir}/amdgcn-bin/ld
+mkdir -p %{_builddir}/accel-amdgcn
+cd %{_builddir}/accel-amdgcn
+step amdgcn-configure common \
+  --enable-shared \
+  --target=amdgcn-amdhsa \
+  --enable-as-accelerator-for="$target" \
+  --enable-languages=c,c++,fortran,lto \
+  --disable-bootstrap \
+  --enable-threads=single \
+  --disable-sjlj-exceptions \
+  --with-newlib \
+  --disable-libsanitizer \
+  --with-build-time-tools=%{_builddir}/amdgcn-bin
+step amdgcn-make make -s -j"$jobs"
+step amdgcn-install make -s install DESTDIR=%{_builddir}/offload-root
+rm -f "$src/newlib"
+rm -rf \
+  %{_builddir}/accel-nvptx \
+  %{_builddir}/accel-amdgcn \
+  %{_builddir}/nvptx-tools-%{nvptx_rev} \
+  %{_builddir}/amdgcn-bin \
+  %{_builddir}/newlib-cygwin-%{newlib_rev}
 %endif
 
-sed -i 's|libisl\([^-]\)|libgcc%{gcc_major}privateisl\1|g' \
-  ../../isl-%{isl_version}/Makefile.{am,in}
-../../isl-%{isl_version}/configure \
-  CC=/usr/bin/gcc CXX=/usr/bin/g++ \
-  CFLAGS="${CFLAGS:-%optflags} $ISL_FLAG_PIC" --prefix=`cd ..; pwd`/isl-install
-make %{?_smp_mflags} CFLAGS="${CFLAGS:-%optflags} $ISL_FLAG_PIC"
-make install
-cd ../isl-install/lib
-rm libgcc%{gcc_major}privateisl.so{,.23}
-mv libgcc%{gcc_major}privateisl.so.23.1.0 libisl.so.23
-ln -sf libisl.so.23 libisl.so
-cd ../..
-%endif
-
-enablelgo=
-enablelada=
-enablelobjc=
-enableld=
-enablelm2=
-enablelcob=
-enablela68=
-%if %{build_objc}
-enablelobjc=,objc,obj-c++
-%endif
-%if %{build_ada}
-enablelada=,ada
-%endif
-%if %{build_go}
-enablelgo=,go
-%endif
-%if %{build_d}
-enableld=,d
-%endif
-%if %{build_m2}
-enablelm2=,m2
-%endif
-%if %{build_cobol}
-enablelcob=,cobol
-%endif
-%if %{build_algol68}
-enablela68=,algol68
-%endif
-offloadtgts=
-%if %{build_offload_nvptx}
-offloadtgts=nvptx-none
-%endif
-%if %{build_offload_amdgcn}
-offloadtgts=${offloadtgts:+${offloadtgts},}amdgcn-amdhsa
-%endif
-# CONFIGURE_OPTS_BASE are the configure options common to the native and cross
-# builds.  E.g., --prefix.  This cannot include arch-specific configure options.
-# CONFIGURE_OPTS_NATIVE are the configure options used for the native build
-# (that is, the regular non-cross build) and libgccjit.  This includes arch-specific
-# configure options (default -march and such).
-# CONFIGURE_OPTS = CONFIGURE_OPTS_BASE + CONFIGURE_OPTS_NATIVE
-# CONFIGURE_OPTS_CROSS are the configure options common to all the cross
-# builds.  E.g., only build C/C++.  This shall not be used for the native build.
-# Each cross compiler's configure options will be:
-# CONFIGURE_OPTS_BASE + CONFIGURE_OPTS_CROSS + --target= + --with-sysroot= + <arch-specific-opts>
-# It it very important that the arch-specific configure options used in
-# CONFIGURE_OPTS_NATIVE are in lockstep with the <arch-specific-opts>
-# used in the cross builds.
-CONFIGURE_OPTS_BASE="\
-	--prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
-	--with-bugurl=%dist_bug_report_url \
-	--enable-shared --enable-threads=posix --enable-checking=release \
-	--with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions \
-	--enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only \
-	--enable-plugin --enable-initfini-array \
-	--enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=%{_datadir}/zoneinfo \
-%if %{build_isl}
-	--with-isl=`pwd`/isl-install \
+mkdir -p %{_builddir}/gcc-build
+cd %{_builddir}/gcc-build
+step host-configure common \
+  --enable-shared \
+  --with-linker-hash-style=gnu \
+  --enable-languages=c,c++,fortran,objc,obj-c++,go,d,m2,cobol,algol68,ada,lto \
+  --enable-default-pie \
+  --enable-linker-build-id \
+%if %{gcc_3stage}
+  --enable-bootstrap \
 %else
-	--without-isl \
-%endif
-%if %{attr_ifunc}
-	--enable-gnu-indirect-function \
-%endif
-	"
-
-# NB: When updating CONFIGURE_OPTS_NATIVE, make sure to update the cross
-# compiler options as well (look for CONFIGURE_OPTS_FOR_ARCH).
-CONFIGURE_OPTS_NATIVE="\
-%ifarch ppc64le
-	--enable-targets=powerpcle-linux \
-%endif
-%ifarch ppc64le %{mips} s390x
-%ifarch s390x
-	--disable-multilib \
-%else
-	--disable-multilib \
-%endif
-%else
-	--enable-multilib \
-%endif
-%ifnarch %{mips}
-	--with-linker-hash-style=gnu \
-%endif
-%if %{build_offload_nvptx} || %{build_offload_amdgcn}
-	--enable-offload-targets=$offloadtgts --enable-offload-defaulted \
-%endif
-%if %{build_offload_nvptx}
-	--without-cuda-driver \
-%endif
-%ifarch %{arm}
-	--disable-sjlj-exceptions \
-%endif
-%ifarch ppc ppc64 ppc64le ppc64p7
-	--enable-secureplt \
-%endif
-%ifarch sparc sparcv9 sparc64 ppc ppc64 ppc64le ppc64p7 s390 s390x alpha
-	--with-long-double-128 \
-%endif
-%ifarch ppc64le
-	--with-long-double-format=ieee \
-%endif
-%ifarch sparc
-	--disable-linux-futex \
-%endif
-%ifarch sparc64
-	--with-cpu=ultrasparc \
-%endif
-%ifarch sparc sparcv9
-	--host=%{gcc_target_platform} --build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=v7
-%endif
-%ifarch ppc ppc64 ppc64p7
-%endif
-%ifarch ppc64le
-	--with-cpu-32=power8 --with-tune-32=power8 --with-cpu-64=power8 --with-tune-64=power8 \
-%endif
-%ifarch ppc
-	--build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=default32
-%endif
-%ifarch %{ix86} x86_64
-	--enable-cet \
-	--with-tune=generic \
-	--with-tls=gnu2 \
-%endif
-%ifarch %{ix86}
-	--with-arch=i686 \
+  --disable-bootstrap \
 %endif
 %ifarch x86_64
-	--with-arch_32=i686 \
-%endif
-%ifarch s390 s390x
-	--with-arch=z15 --with-tune=z17 \
-	--enable-decimal-float \
-%endif
-%ifarch armv7hl
-	--with-tune=generic-armv7-a --with-arch=armv7-a \
-	--with-float=hard --with-fpu=vfpv3-d16 --with-abi=aapcs-linux \
-%endif
-%ifarch mips mipsel
-	--with-arch=mips32r2 --with-fp-32=xx \
-%endif
-%ifarch mips64 mips64el
-	--with-arch=mips64r2 --with-abi=64 \
-%endif
-%ifarch riscv64
-	--with-arch=rv64gc --with-abi=lp64d --with-multilib-list=lp64d \
-%endif
-%ifnarch sparc sparcv9 ppc
-	--build=%{gcc_target_platform} \
-%endif
-%ifnarch %{arm}
-	--with-build-config=bootstrap-lto --enable-link-serialization=1 \
-%endif
-	--disable-libssp \
-%if %{build_libquadmath} == 0
-	--disable-libquadmath \
-%endif
-%if %{build_libatomic} == 0
-	--disable-libatomic \
-%endif
-%if %{build_libitm} == 0
-	--disable-libitm \
-%endif
-	"
-CONFIGURE_OPTS="$CONFIGURE_OPTS_BASE $CONFIGURE_OPTS_NATIVE"
-
-CONFIGURE_OPTS_CROSS="\
-	--enable-languages=c,c++ --disable-bootstrap \
-	--host=%{gcc_target_platform} --build=%{gcc_target_platform} \
-	--disable-multilib --disable-libstdcxx-pch --disable-libcc1 \
-	"
-
-CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
-	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
-		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
-	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
-	../configure --enable-bootstrap \
-	--enable-languages=c,c++,fortran${enablelobjc}${enablelada}${enablelgo}${enableld}${enablelm2}${enablelcob}${enablela68},lto \
-	$CONFIGURE_OPTS
-
-%ifarch sparc sparcv9 sparc64
-make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now bootstrap
+  --enable-offload-targets=nvptx-none=%{_builddir}/offload-root%{_prefix},amdgcn-amdhsa=%{_builddir}/offload-root%{_prefix} \
 %else
-make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now profiledbootstrap
+  --disable-libquadmath \
 %endif
-
-CC="`%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cc`"
-CXX="`%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cxx` `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-includes`"
-
-# Build libgccjit separately, so that normal compiler binaries aren't -fpic
-# unnecessarily.
-mkdir objlibgccjit
-cd objlibgccjit
-CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
-	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
-		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
-	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
-	../../configure --disable-bootstrap --enable-host-shared \
-	--enable-languages=jit --enable-libgdiagnostics $CONFIGURE_OPTS
-make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" all-gcc
-cp -a gcc/libgccjit.so* ../gcc/
-cd ../gcc/
-ln -sf xgcc %{gcc_target_platform}-gcc-%{gcc_major}
-cp -a Makefile{,.orig}
-sed -i -e '/^CHECK_TARGETS/s/$/ check-jit/' Makefile
-touch -r Makefile.orig Makefile
-rm Makefile.orig
-make jit.sphinx.html
-make jit.sphinx.install-html jit_htmldir=`pwd`/../../rpm.doc/libgccjit-devel/html
-cd ..
-
-# Build cross compilers here.
-%if %{build_cross}
-echo ==================== BUILD CROSS =========================
-# Get out of obj-%{gcc_target_platform}.
-pushd ..
-for crossarch in %{cross_targets}; do
-  CONFIGURE_OPTS_FOR_ARCH=
-  case $crossarch in
-    aarch64*)
-%ifarch aarch64
-      continue
+  --disable-libvtv
+%if %{gcc_3stage}
+step host-make make -s -j"$jobs" bootstrap LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+%else
+step host-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %endif
-      CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --disable-libquadmath"
-      ;;
-    s390x*)
-%ifarch s390x
-      continue
-%endif
-      CONFIGURE_OPTS_FOR_ARCH="--with-arch=z15 --with-tune=z17"
-      CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --enable-decimal-float"
-      CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --disable-libquadmath"
-      ;;
-    ppc64le*)
-%ifarch ppc64le
-      continue
-%endif
-      CONFIGURE_OPTS_FOR_ARCH="--with-cpu-32=power8 --with-tune-32=power8 --with-cpu-64=power8 --with-tune-64=power8"
-      CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --enable-secureplt --with-long-double-format=ieee --enable-targets=powerpcle-linux"
-      ;;
-    x86_64*)
-%ifarch x86_64
-      continue
-%endif
-      CONFIGURE_OPTS_FOR_ARCH="--with-arch_32=i686"
-      CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --enable-cet --with-tune=generic"
-      CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --with-tls=gnu2"
-      ;;
-    *)
-      echo >&2 "ERROR: unknown cross arch $crossarch"
-      exit 1
-      ;;
-  esac
-  CONFIGURE_OPTS_FOR_ARCH="$CONFIGURE_OPTS_FOR_ARCH --with-linker-hash-style=gnu --disable-libssp"
+rm -rf stage1-*
+step libstdcxx-docs make -s -C "$target/libstdc++-v3" doc-html-doxygen
 
-  mkdir obj-$crossarch
-  cd obj-$crossarch
-
-  OLDPATH=$PATH
-  ALTCROSS=`echo $crossarch | sed 's/redhat-linux/linux-gnu/;s/ppc64le/powerpc64le/'`
-  mkdir binutils-bin
-  for i in addr2line ar as c++filt ld ld.bfd nm objcopy objdump ranlib readelf \
-	   size strings strip; do
-    ln -sf %{_prefix}/bin/${ALTCROSS}-$i binutils-bin/${crossarch}-$i
-  done
-  PATH=`pwd`/binutils-bin:$PATH
-
-  # Temporarily replace DEV-PHASE.
-  cp -p ../gcc/DEV-PHASE{.cross,}
-
-  CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
-	  CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
-		    | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
-	  XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
-	  ../configure $CONFIGURE_OPTS_BASE $CONFIGURE_OPTS_CROSS \
-	  --with-sysroot=/usr/$crossarch/sys-root/%{sysroot_dist}/ \
-	  --with-gxx-include-dir="/usr/$crossarch/sys-root/%{sysroot_dist}/%{_prefix}/include/c++/%{gcc_major}" \
-	  --target=$crossarch \
-	  $CONFIGURE_OPTS_FOR_ARCH
-  make %{?_smp_mflags} LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now
-
-  PATH=$OLDPATH
-  # Restore DEV-PHASE.
-  cp -p ../gcc/DEV-PHASE{.native,}
-  # Out of obj-$crossarch.
-  cd ..
-done
-# Go back to obj-%{gcc_target_platform}.
-popd
-echo ==================== BUILD CROSS END =========================
+mkdir -p %{_builddir}/gcc-jit
+cd %{_builddir}/gcc-jit
+step jit-configure common \
+  --enable-shared \
+  --with-linker-hash-style=gnu \
+  --enable-languages=jit \
+  --enable-host-shared \
+  --enable-libgdiagnostics \
+  --disable-bootstrap \
+  --enable-linker-build-id \
+  --enable-default-pie \
+%ifnarch x86_64
+  --disable-libquadmath \
 %endif
-
-%if %{build_isl}
-cp -a isl-install/lib/libisl.so.23 gcc/
-%endif
-
-# Make generated man pages even if Pod::Man is not new enough
-perl -pi -e 's/head3/head2/' ../contrib/texi2pod.pl
-for i in ../gcc/doc/*.texi; do
-  cp -a $i $i.orig; sed 's/ftable/table/' $i.orig > $i
-done
-make -C gcc generated-manpages
-for i in ../gcc/doc/*.texi; do mv -f $i.orig $i; done
-
-# Make generated doxygen pages.
-%if %{build_libstdcxx_docs}
-cd %{gcc_target_platform}/libstdc++-v3
-make doc-html-doxygen
-make doc-man-doxygen
-cd ../..
-%endif
-
-# Copy various doc files here and there
-cd ..
-mkdir -p rpm.doc/{gfortran,objc,gdc,libphobos,gm2,libgm2,libgdiagnostics-devel,gcobol,libgcobol,algol68,libga68}
-mkdir -p rpm.doc/go rpm.doc/libgo rpm.doc/libquadmath rpm.doc/libitm
-mkdir -p rpm.doc/changelogs/{gcc/cp,gcc/ada,gcc/jit,libstdc++-v3,libobjc,libgomp,libcc1,libatomic,libsanitizer}
-
-for i in {gcc,gcc/cp,gcc/ada,gcc/jit,libstdc++-v3,libobjc,libgomp,libcc1,libatomic,libsanitizer}/ChangeLog*; do
-	cp -p $i rpm.doc/changelogs/$i
-done
-
-(cd gcc/fortran; for i in ChangeLog*; do
-	cp -p $i ../../rpm.doc/gfortran/$i
-done)
-(cd libgfortran; for i in ChangeLog*; do
-	cp -p $i ../rpm.doc/gfortran/$i.libgfortran
-done)
-%if %{build_objc}
-(cd libobjc; for i in README*; do
-	cp -p $i ../rpm.doc/objc/$i.libobjc
-done)
-%endif
-%if %{build_d}
-(cd gcc/d; for i in ChangeLog*; do
-	cp -p $i ../../rpm.doc/gdc/$i.gdc
-done)
-(cd libphobos; for i in ChangeLog*; do
-	cp -p $i ../rpm.doc/libphobos/$i.libphobos
-done
-cp -a src/LICENSE*.txt libdruntime/LICENSE.txt ../rpm.doc/libphobos/)
-%endif
-%if %{build_m2}
-(cd gcc/m2; for i in ChangeLog*; do
-	cp -p $i ../../rpm.doc/gm2/$i.gm2
-done)
-(cd libgm2; for i in ChangeLog*; do
-	cp -p $i ../rpm.doc/libgm2/$i.libgm2
-done)
-%endif
-%if %{build_cobol}
-(cd gcc/cobol; for i in ChangeLog*; do
-	cp -p $i ../../rpm.doc/gcobol/$i.gcobol
-done)
-(cd libgcobol; for i in ChangeLog*; do
-	cp -p $i ../rpm.doc/libgcobol/$i.libgcobol
-done)
-%endif
-%if %{build_algol68}
-(cd gcc/algol68; for i in ChangeLog*; do
-	cp -p $i ../../rpm.doc/algol68/$i.algol68
-done)
-(cd libga68; for i in ChangeLog*; do
-	cp -p $i ../rpm.doc/libga68/$i.libga68
-done)
-%endif
-%if %{build_libquadmath}
-(cd libquadmath; for i in ChangeLog* COPYING.LIB; do
-	cp -p $i ../rpm.doc/libquadmath/$i.libquadmath
-done;
-sed -n '/==========/,/==========/{/==========/d;s/^ \* *//p}' math/cosq.c \
-  > ../rpm.doc/libquadmath/LICENSE.SunPro)
-%endif
-%if %{build_libitm}
-(cd libitm; for i in ChangeLog*; do
-	cp -p $i ../rpm.doc/libitm/$i.libitm
-done)
-%endif
-%if %{build_go}
-(cd gcc/go; for i in README* ChangeLog*; do
-	cp -p $i ../../rpm.doc/go/$i
-done)
-(cd libgo; for i in LICENSE* PATENTS* README; do
-	cp -p $i ../rpm.doc/libgo/$i.libgo
-done)
-%endif
-(cd gcc/doc/libgdiagnostics; make html; \
-mv _build/html ../../../rpm.doc/libgdiagnostics-devel/html )
-
-rm -f rpm.doc/changelogs/gcc/ChangeLog.[1-9]
-find rpm.doc -name \*ChangeLog\* | xargs bzip2 -9
-
-%if %{build_annobin_plugin}
-mkdir annobin-plugin
-cd annobin-plugin
-tar xf %{_usrsrc}/annobin/latest-annobin.tar.xz
-cd annobin*
-touch aclocal.m4 configure Makefile.in */configure */config.h.in */Makefile.in
-ANNOBIN_FLAGS=../../obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags
-ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-16-%{DATE}/gcc"
-ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-16-%{DATE}/obj-%{gcc_target_platform}/gcc"
-ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-16-%{DATE}/include -I %{_builddir}/gcc-16-%{DATE}/libcpp/include"
-ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-16-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
-CC="`$ANNOBIN_FLAGS --build-cc`" CXX="`$ANNOBIN_FLAGS --build-cxx`" \
-  CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
-  CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
-  ./configure --with-gcc-plugin-dir=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin \
-	      --without-annocheck --without-tests --without-docs --disable-rpath --without-debuginfod \
-	      --without-clang-plugin --without-llvm-plugin
-make
-cd ../..
+  --disable-libvtv
+step jit-make make -s -j"$jobs" all-gcc
 %endif
 
 %install
-rm -rf %{buildroot}
-mkdir -p %{buildroot}
-
-# RISC-V ABI wants to install everything in /lib64/lp64d or /usr/lib64/lp64d.
-# Make these be symlinks to /lib64 or /usr/lib64 respectively. See:
-%ifarch riscv64
-for d in %{buildroot}%{_libdir} %{buildroot}/%{_lib} \
-	  %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib} \
-	  %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/%{_lib}; do
-  mkdir -p $d
-  (cd $d && ln -sf . lp64d)
-done
-%endif
-
-%if %{build_offload_nvptx}
-cd nvptx-tools-%{nvptx_tools_gitrev}
-cd obj-%{gcc_target_platform}
-make install prefix=%{buildroot}%{_prefix}
-cd ../..
-
-ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
-cd obj-offload-nvptx-none
-make prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
-  infodir=%{buildroot}%{_infodir} install
-rm -rf %{buildroot}%{_prefix}/libexec/gcc/nvptx-none/%{gcc_major}/install-tools
-rm -rf %{buildroot}%{_prefix}/libexec/gcc/nvptx-none/%{gcc_major}/g++-mapper-server
-rm -rf %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/{install-tools,plugin,cc1,cc1plus,f951}
-rm -rf %{buildroot}%{_infodir} %{buildroot}%{_mandir}/man7 %{buildroot}%{_prefix}/share/locale
-rm -rf %{buildroot}%{_prefix}/lib/gcc/nvptx-none/%{gcc_major}/{install-tools,plugin}
-rm -rf %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/{install-tools,plugin,include-fixed}
-rm -rf %{buildroot}%{_prefix}/%{_lib}/libc[cp]1*
-mv -f %{buildroot}%{_prefix}/nvptx-none/lib/*.{a,spec} %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/
-mv -f %{buildroot}%{_prefix}/nvptx-none/lib/mgomp/*.{a,spec} %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/mgomp/
-mv -f %{buildroot}%{_prefix}/lib/gcc/nvptx-none/%{gcc_major}/*.a %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/
-mv -f %{buildroot}%{_prefix}/lib/gcc/nvptx-none/%{gcc_major}/mgomp/*.a %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/mgomp/
-find %{buildroot}%{_prefix}/lib/gcc/nvptx-none %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none \
-     %{buildroot}%{_prefix}/nvptx-none/lib -name \*.la | xargs rm
-cd ..
-rm -f newlib
-%endif
-
-%if %{build_offload_amdgcn}
-mkdir -p %{buildroot}%{_prefix}/bin %{buildroot}%{_prefix}/amdgcn-amdhsa/bin
-ln -sf llvm-ar %{buildroot}%{_prefix}/bin/amdgcn-amdhsa-ar
-ln -sf llvm-ar %{buildroot}%{_prefix}/bin/amdgcn-amdhsa-ranlib
-ln -sf llvm-mc %{buildroot}%{_prefix}/bin/amdgcn-amdhsa-as
-ln -sf llvm-nm %{buildroot}%{_prefix}/bin/amdgcn-amdhsa-nm
-ln -sf lld %{buildroot}%{_prefix}/bin/amdgcn-amdhsa-ld
-ln -sf ../../bin/amdgcn-amdhsa-ar %{buildroot}%{_prefix}/amdgcn-amdhsa/bin/ar
-ln -sf ../../bin/amdgcn-amdhsa-ranlib %{buildroot}%{_prefix}/amdgcn-amdhsa/bin/ranlib
-ln -sf ../../bin/amdgcn-amdhsa-as %{buildroot}%{_prefix}/amdgcn-amdhsa/bin/as
-ln -sf ../../bin/amdgcn-amdhsa-nm %{buildroot}%{_prefix}/amdgcn-amdhsa/bin/nm
-ln -sf ../../bin/amdgcn-amdhsa-ld %{buildroot}%{_prefix}/amdgcn-amdhsa/bin/ld
-
-ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
-cd obj-offload-amdgcn-amdhsa
-make prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
-  infodir=%{buildroot}%{_infodir} install
-rm -rf %{buildroot}%{_prefix}/libexec/gcc/amdgcn-amdhsa/%{gcc_major}/install-tools
-rm -rf %{buildroot}%{_prefix}/libexec/gcc/amdgcn-amdhsa/%{gcc_major}/g++-mapper-server
-rm -rf %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/{install-tools,plugin,cc1,cc1plus,f951}
-rm -rf %{buildroot}%{_infodir} %{buildroot}%{_mandir}/man7 %{buildroot}%{_prefix}/share/locale
-rm -rf %{buildroot}%{_prefix}/lib/gcc/amdgcn-amdhsa/%{gcc_major}/{install-tools,plugin}
-rm -rf %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/{install-tools,plugin,include-fixed}
-rm -rf %{buildroot}%{_prefix}/%{_lib}/libc[cp]1*
-mv -f %{buildroot}%{_prefix}/amdgcn-amdhsa/lib/*.{a,spec} %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/
-mv -f %{buildroot}%{_prefix}/lib/gcc/amdgcn-amdhsa/%{gcc_major}/*.a %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/
-pushd %{buildroot}%{_prefix}/amdgcn-amdhsa/lib
-for i in gfx*; do
-mv -f %{buildroot}%{_prefix}/amdgcn-amdhsa/lib/$i/*.{a,spec} %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/$i/
-mv -f %{buildroot}%{_prefix}/lib/gcc/amdgcn-amdhsa/%{gcc_major}/$i/*.a %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/$i/
-done
-popd
-find %{buildroot}%{_prefix}/lib/gcc/amdgcn-amdhsa %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa \
-     %{buildroot}%{_prefix}/amdgcn-amdhsa/lib -name \*.la | xargs rm
-cd ..
-rm -f newlib
-%endif
-
-cd obj-%{gcc_target_platform}
-
-TARGET_PLATFORM=%{gcc_target_platform}
-
-# There are some MP bugs in libstdc++ Makefiles
-make -C %{gcc_target_platform}/libstdc++-v3
-
-make prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
-  infodir=%{buildroot}%{_infodir} install
-%if %{build_ada}
-chmod 644 %{buildroot}%{_infodir}/gnat*
-%endif
-
-%if %{build_cross}
-echo ==================== INSTALL CROSS =========================
-# Out of obj-%{gcc_target_platform}.
-pushd ..
-for crossarch in %{cross_targets}; do
-  [ -d obj-$crossarch ] || continue
-  cd obj-$crossarch
-
-  CROSS_LIBPATH=%{buildroot}%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/
-
-  # Temporarily replace DEV-PHASE.
-  cp -p ../gcc/DEV-PHASE{.cross,}
-
-  OLDPATH=$PATH
-  PATH=`pwd`/binutils-bin:$PATH
-
-  # --with-gxx-include-dir= doesn't prefix its argument with $(DESTDIR)
-  # and you can't install things into /usr unless you're root.
-  mkdir scratch
-  scratchdir=`pwd`/scratch
-  pushd $crossarch/libstdc++-v3
-  for i in `find . -name Makefile`; do
-    cp -a $i $i.save
-    sed -i -e 's?^gxx_include_dir = .*$?gxx_include_dir = '$scratchdir'?' $i
-    touch -r $i.save $i
-  done
-  popd
-
-  # Use -j1, because build-many-glibcs says:
-  # Parallel "make install" for GCC has race conditions that can
-  # cause it to fail; see
-  # <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=42980>.  Such
-  # problems are not known for binutils, but doing the
-  # installation in parallel within a particular toolchain build
-  # (as opposed to installation of one toolchain from
-  # build-many-glibcs.py running in parallel to the installation
-  # of other toolchains being built) is not known to be
-  # significantly beneficial, so it is simplest just to disable
-  # parallel install for cross tools here.
-  make -j1 prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
-    infodir=%{buildroot}%{_infodir} install
-
-  # Restore DEV-PHASE.
-  cp -p ../gcc/DEV-PHASE{.native,}
-
-  # Restore Makefiles with the old gxx_include_dir.
-  pushd $crossarch/libstdc++-v3
-  for i in `find . -name Makefile`; do
-    mv -f $i.save $i
-  done
-  popd
-  # We're not shipping C++ headers; nuke 'em.
-  rm -rf $scratchdir
-
-  # We do not ship these and GDB fails with:
-  # *** ERROR:: GDB exited with exit status 1 during index generation
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libssp.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libitm.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libgomp.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libatomic.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libstdc++.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libquadmath.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libasan.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libhwasan.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libtsan.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/liblsan.so.*
-  rm -rf %{buildroot}%{_prefix}/$crossarch/lib64/libubsan.so.*
-
-  # Move libgomp.spec to where it belongs for %files.
-  mv $crossarch/libgomp/libgomp.spec $CROSS_LIBPATH
-  # Likewise for libitm.spec
-%if %{build_libitm}
-  mv $crossarch/libitm/libitm.spec $CROSS_LIBPATH
-%endif
-  # Likewise for libsanitizer.spec
-  mv $crossarch/libsanitizer/libsanitizer.spec $CROSS_LIBPATH
-
-  ALTCROSS=`echo $crossarch | sed 's/redhat-linux/linux-gnu/;s/ppc64le/powerpc64le/'`
-  for i in as ld ld.bfd nm strip; do
-    ln -sf ../../../../bin/${ALTCROSS}-$i \
-      %{buildroot}%{_prefix}/libexec/gcc/$crossarch/%{gcc_major}/$i
-  done
-
-  cd ..
-
-  # No longer present.
-  #pushd $CROSS_LIBPATH
-  #mv include-fixed/syslimits.h include/syslimits.h
-  #mv include-fixed/limits.h include/limits.h
-  #popd
-
-  case $crossarch in
-    aarch64*)
-      OUTPUT_FORMAT_FOR_ARCH="elf64-littleaarch64"
-      ;;
-    s390x*)
-      OUTPUT_FORMAT_FOR_ARCH="elf64-s390"
-      ;;
-    ppc64le*)
-      OUTPUT_FORMAT_FOR_ARCH="elf64-powerpcle"
-      ;;
-    x86_64*)
-      OUTPUT_FORMAT_FOR_ARCH="elf64-x86-64"
-      ;;
-    *)
-      echo >&2 "ERROR: unknown cross arch $crossarch"
-      exit 1
-      ;;
+cat > %{_builddir}/gcc-host-strip << 'EOF'
+#!/bin/bash
+args=()
+saw=
+for a in "$@"; do
+  case "$a" in
+    */accel/*|*/nvptx-none/*|*/amdgcn-amdhsa/*) continue ;;
+    */*) saw=1 ;;
   esac
-
-  # The sysroot package creation should copy the same files as
-  # referenced in these linker scripts to the sysroot package
-  # location.
-  echo "/* GNU ld script
-   Use the shared library, but some functions are only in
-   the static library.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-GROUP ( =/lib64/libgcc_s.so.1 libgcc.a )" > $CROSS_LIBPATH/libgcc_s.so
-
-  echo "/* GNU ld script
-   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( AS_NEEDED ( -lgcc_s ) )" > $CROSS_LIBPATH/libgcc_s_asneeded.so
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libgomp.so.1 )" > $CROSS_LIBPATH/libgomp.so
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =/%{_prefix}/lib64/libstdc++.so.6 )" > $CROSS_LIBPATH/libstdc++.so
-
-  echo "/* GNU ld script
-   Use the static library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libstdc++.a )" > $CROSS_LIBPATH/libstdc++.a
-
-  echo "/* GNU ld script
-   Use the static library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libstdc++fs.a )" > $CROSS_LIBPATH/libstdc++fs.a
-
-  echo "/* GNU ld script
-   Use the static library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libstdc++exp.a )" > $CROSS_LIBPATH/libstdc++exp.a
-
-  echo "/* GNU ld script
-   Use the static library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libsupc++.a )" > $CROSS_LIBPATH/libsupc++.a
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libatomic.so.1 )" > $CROSS_LIBPATH/libatomic.so
-
-  echo "/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( AS_NEEDED ( -latomic ) )" > $CROSS_LIBPATH/libatomic_asneeded.so
-
-  echo "/* GNU ld script
-   Use the static library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libatomic.a )" > $CROSS_LIBPATH/libatomic.a
-
-  ln -sf libatomic.a $CROSS_LIBPATH/libatomic_asneeded.a
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libitm.so.1 )" > $CROSS_LIBPATH/libitm.so
-
-  echo "/* GNU ld script
-   Use the static library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libitm.a )" > $CROSS_LIBPATH/libitm.a
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libasan.so.8 )" > $CROSS_LIBPATH/libasan.so
-
-  echo "/* GNU ld script
-   Use the object from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libasan_preinit.o )" > $CROSS_LIBPATH/libasan_preinit.o
-
-  case $crossarch in
-    aarch64* | x86_64*)
-      echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libhwasan.so.0 )" > $CROSS_LIBPATH/libhwasan.so
-      ;;
-  esac
-
-  echo "/* GNU ld script
-   Use the object from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libhwasan_preinit.o )" > $CROSS_LIBPATH/libhwasan_preinit.o
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libtsan.so.2 )" > $CROSS_LIBPATH/libtsan.so
-
-  echo "/* GNU ld script
-   Use the object from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/libtsan_preinit.o )" > $CROSS_LIBPATH/libtsan_preinit.o
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/liblsan.so.0 )" > $CROSS_LIBPATH/liblsan.so
-
-  echo "/* GNU ld script
-   Use the object from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT( =%{_prefix}/lib/gcc/$crossarch/%{gcc_major}/liblsan_preinit.o )" > $CROSS_LIBPATH/liblsan_preinit.o
-
-  echo "/* GNU ld script
-   Use the shared library from sysroot.  */
-OUTPUT_FORMAT($OUTPUT_FORMAT_FOR_ARCH)
-INPUT ( =%{_prefix}/lib64/libubsan.so.1 )" > $CROSS_LIBPATH/libubsan.so
-
-  # Help plugins find out nvra.
-  echo gcc-%{version}-%{release}.%{_arch} > $CROSS_LIBPATH/rpmver
-
-  PATH=$OLDPATH
-
-  # TODO
-  # Add symlink to lto plugin in the binutils plugin directory.
-  #%{__mkdir_p} %{buildroot}%{_libdir}/bfd-plugins/
-  #ln -s ../../libexec/gcc/$crossarch/%{gcc_major}/liblto_plugin.so \
-  #   %{buildroot}%{_libdir}/$crossarch/bfd-plugins/
+  args+=("$a")
 done
-# Back to obj-%{gcc_target_platform}.
-popd
-echo ==================== INSTALL CROSS END =========================
-%endif
-FULLPATH=%{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-FULLEPATH=%{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-
-%if %{build_isl}
-cp -a isl-install/lib/libisl.so.23 $FULLPATH/
-%endif
-
-# fix some things
-ln -sf gcc %{buildroot}%{_prefix}/bin/cc
-rm -f %{buildroot}%{_prefix}/lib/cpp
-ln -sf ../bin/cpp %{buildroot}/%{_prefix}/lib/cpp
-ln -sf gfortran %{buildroot}%{_prefix}/bin/f95
+[ -n "$saw" ] || exit 0
+exec /usr/bin/strip "${args[@]}"
+EOF
+chmod 755 %{_builddir}/gcc-host-strip
+%if %{with bootstrap} || 0%{?bootstrap}
+cd %{_builddir}/gcc-build
+make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+find %{buildroot} -name '*.la' -delete
 rm -f %{buildroot}%{_infodir}/dir
-gzip -9 %{buildroot}%{_infodir}/*.info*
-%if %{build_ada}
-ln -sf gcc %{buildroot}%{_prefix}/bin/gnatgcc
-%endif
-mkdir -p %{buildroot}%{_fmoddir}
-
-%if %{build_go}
-mv %{buildroot}%{_prefix}/bin/go{,.gcc}
-mv %{buildroot}%{_prefix}/bin/gofmt{,.gcc}
-ln -sf /etc/alternatives/go %{buildroot}%{_prefix}/bin/go
-ln -sf /etc/alternatives/gofmt %{buildroot}%{_prefix}/bin/gofmt
-%endif
-
-cxxconfig="`find %{gcc_target_platform}/libstdc++-v3/include -name c++config.h`"
-for i in `find %{gcc_target_platform}/[36]*/libstdc++-v3/include -name c++config.h 2>/dev/null`; do
-  if ! diff -up $cxxconfig $i; then
-    cat > %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/bits/c++config.h <<EOF
-#ifndef _CPP_CPPCONFIG_WRAPPER
-#define _CPP_CPPCONFIG_WRAPPER 1
-#include <bits/wordsize.h>
-#if __WORDSIZE == 32
-%ifarch %{multilib_64_archs}
-`cat $(find %{gcc_target_platform}/32/libstdc++-v3/include -name c++config.h)`
+rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
+rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %else
-`cat $(find %{gcc_target_platform}/libstdc++-v3/include -name c++config.h)`
-%endif
-#else
-%ifarch %{multilib_64_archs}
-`cat $(find %{gcc_target_platform}/libstdc++-v3/include -name c++config.h)`
-%else
-`cat $(find %{gcc_target_platform}/64/libstdc++-v3/include -name c++config.h)`
-%endif
-#endif
-#endif
-EOF
-    break
+step() {
+  name=$1
+  shift
+  echo "oreon gcc step $name"
+  set -o pipefail
+  if ! "$@" 2>&1 | tail -n 400; then
+    set +o pipefail
+    echo "oreon gcc step $name failed"
+    exit 1
+  fi
+  set +o pipefail
+}
+cd %{_builddir}/gcc-build
+step host-install make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
+%ifarch x86_64
+target=$(%{_builddir}/gcc-%{version}/config.guess)
+off=%{_builddir}/offload-root%{_prefix}
+dest=%{buildroot}%{_prefix}
+mkdir -p "$dest/bin"
+for b in "$off"/bin/nvptx-none-* "$off"/bin/amdgcn-amdhsa-*; do
+  [ -e "$b" ] || continue
+  cp -a "$b" "$dest/bin/"
+done
+for tree in nvptx-none amdgcn-amdhsa; do
+  [ -d "$off/$tree" ] || continue
+  mkdir -p "$dest/$tree"
+  cp -a "$off/$tree/." "$dest/$tree/"
+done
+for src in "$off"/lib64/gcc/$target/*/accel "$off"/libexec/gcc/$target/*/accel \
+  "$off"/lib64/gcc/nvptx-none "$off"/lib64/gcc/amdgcn-amdhsa \
+  "$off"/libexec/gcc/nvptx-none "$off"/libexec/gcc/amdgcn-amdhsa; do
+  [ -d "$src" ] || continue
+  rel=${src#"$off/"}
+  mkdir -p "$dest/$(dirname "$rel")"
+  rm -rf "$dest/$rel"
+  cp -a "$src" "$dest/$rel"
+done
+for acc in nvptx-none amdgcn-amdhsa; do
+  for base in "$dest"/libexec/gcc/$target/*/accel/$acc "$dest"/lib64/gcc/$target/*/accel/$acc \
+    "$dest"/libexec/gcc/$acc/* "$dest"/lib64/gcc/$acc/*; do
+    [ -d "$base" ] || continue
+    rm -rf "$base/install-tools" "$base/plugin" "$base/g++-mapper-server" \
+      "$base/cc1" "$base/cc1plus" "$base/f951" "$base/include-fixed"
+  done
+  accdir=$(echo "$dest"/lib64/gcc/$target/*/accel/$acc)
+  [ -d "$accdir" ] || continue
+  if [ -d "$dest/$acc/lib" ]; then
+    find "$dest/$acc/lib" \( -name '*.a' -o -name '*.spec' \) -print | while read f; do
+      rel=${f#"$dest/$acc/lib/"}
+      mkdir -p "$accdir/$(dirname "$rel")"
+      mv -f "$f" "$accdir/$rel"
+    done
+  fi
+  srcbase=$(echo "$dest"/lib64/gcc/$acc/*)
+  if [ -d "$srcbase" ]; then
+    find "$srcbase" \( -name '*.a' -o -name '*.spec' \) -print | while read f; do
+      rel=${f#"$srcbase/"}
+      mkdir -p "$accdir/$(dirname "$rel")"
+      mv -f "$f" "$accdir/$rel"
+    done
   fi
 done
-
-for f in `find %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/ -name c++config.h`; do
-  for i in 1 2 4 8; do
-    sed -i -e 's/#define _GLIBCXX_ATOMIC_BUILTINS_'$i' 1/#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_'$i'\
-&\
-#endif/' $f
-  done
+for d in "$dest"/lib64/gcc/nvptx-none "$dest"/lib64/gcc/amdgcn-amdhsa \
+  "$dest"/lib64/gcc/$target/*/accel "$dest"/nvptx-none "$dest"/amdgcn-amdhsa; do
+  [ -d "$d" ] || continue
+  find "$d" -name '*.la' -delete
 done
-
-# Nuke bits/*.h.gch dirs
-# 1) sometimes it is hard to match the exact options used for building
-#    libstdc++-v3 or they aren't desirable
-# 2) there are multilib issues, conflicts etc. with this
-# 3) it is huge
-# People can always precompile on their own whatever they want, but
-# shipping this for everybody is unnecessary.
-rm -rf %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/bits/*.h.gch
-
-%if %{build_libstdcxx_docs}
-libstdcxx_doc_builddir=%{gcc_target_platform}/libstdc++-v3/doc/doxygen
-mkdir -p ../rpm.doc/libstdc++-v3
-cp -r -p ../libstdc++-v3/doc/html ../rpm.doc/libstdc++-v3/html
-cp -r -p $libstdcxx_doc_builddir/html ../rpm.doc/libstdc++-v3/html/api
-mkdir -p %{buildroot}%{_mandir}/man3
-cp -r -p $libstdcxx_doc_builddir/man/man3/* %{buildroot}%{_mandir}/man3/
-find ../rpm.doc/libstdc++-v3 -name \*~ -o -name \*.orig | xargs rm -f
 %endif
-
-%ifarch sparcv9 sparc64
-ln -f %{buildroot}%{_prefix}/bin/%{gcc_target_platform}-gcc \
-  %{buildroot}%{_prefix}/bin/sparc-%{_vendor}-%{_target_os}-gcc
-%endif
-%ifarch ppc ppc64 ppc64p7
-ln -f %{buildroot}%{_prefix}/bin/%{gcc_target_platform}-gcc \
-  %{buildroot}%{_prefix}/bin/ppc-%{_vendor}-%{_target_os}-gcc
-%endif
-
-FULLLSUBDIR=
-%ifarch sparcv9 ppc
-FULLLSUBDIR=lib32
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-FULLLSUBDIR=lib64
-%endif
-if [ -n "$FULLLSUBDIR" ]; then
-  FULLLPATH=$FULLPATH/$FULLLSUBDIR
-  mkdir -p $FULLLPATH
-else
-  FULLLPATH=$FULLPATH
+mkdir -p %{buildroot}%{_libdir} %{buildroot}%{_includedir} %{buildroot}%{_bindir}
+cp -a %{_builddir}/gcc-jit/gcc/libgccjit.so* %{buildroot}%{_libdir}/
+cp -a %{_builddir}/gcc-%{version}/gcc/jit/libgccjit*.h %{buildroot}%{_includedir}/
+cp -a %{_builddir}/gcc-jit/gcc/libgdiagnostics.so* %{buildroot}%{_libdir}/
+cp -a %{_builddir}/gcc-%{version}/gcc/libgdiagnostics*.h %{buildroot}%{_includedir}/
+cp -a %{_builddir}/gcc-jit/gcc/sarif-replay %{buildroot}%{_bindir}/
+if [ -f %{_builddir}/gcc-jit/gcc/doc/libgccjit.info ]; then
+  mkdir -p %{buildroot}%{_infodir}
+  cp -a %{_builddir}/gcc-jit/gcc/doc/libgccjit.info %{buildroot}%{_infodir}/
 fi
-
-find %{buildroot} -name \*.la | xargs rm -f
-
-mv %{buildroot}%{_prefix}/%{_lib}/libgfortran.spec $FULLPATH/
-%if %{build_d}
-mv %{buildroot}%{_prefix}/%{_lib}/libgphobos.spec $FULLPATH/
-%endif
-%if %{build_libitm}
-mv %{buildroot}%{_prefix}/%{_lib}/libitm.spec $FULLPATH/
-%endif
-%if %{build_libasan}
-mv %{buildroot}%{_prefix}/%{_lib}/libsanitizer.spec $FULLPATH/
-%endif
-%if %{build_cobol}
-mv %{buildroot}%{_prefix}/%{_lib}/libgcobol.spec $FULLPATH/
-%endif
-%if %{build_algol68}
-mv %{buildroot}%{_prefix}/%{_lib}/libga68.spec $FULLPATH/
-%endif
-
-mkdir -p %{buildroot}/%{_lib}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgcc_s.so.1 %{buildroot}/%{_lib}/libgcc_s-%{gcc_major}-%{DATE}.so.1
-chmod 755 %{buildroot}/%{_lib}/libgcc_s-%{gcc_major}-%{DATE}.so.1
-ln -sf libgcc_s-%{gcc_major}-%{DATE}.so.1 %{buildroot}/%{_lib}/libgcc_s.so.1
-%ifarch %{ix86} x86_64 ppc ppc64 ppc64p7 ppc64le %{arm} aarch64 riscv64
-rm -f $FULLPATH/libgcc_s.so
-echo '/* GNU ld script
-   Use the shared library, but some functions are only in
-   the static library, so try that secondarily.  */
-OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-GROUP ( /%{_lib}/libgcc_s.so.1 libgcc.a )' > $FULLPATH/libgcc_s.so
-%else
-ln -sf /%{_lib}/libgcc_s.so.1 $FULLPATH/libgcc_s.so
-%endif
-rm -f $FULLPATH/libgcc_s_asneeded.so
-echo '/* GNU ld script
-   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
-OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/libgcc_s_asneeded.so
-%ifarch sparcv9 ppc
-%ifarch ppc
-rm -f $FULLPATH/64/libgcc_s.so
-echo '/* GNU ld script
-   Use the shared library, but some functions are only in
-   the static library, so try that secondarily.  */
-OUTPUT_FORMAT('`gcc -m64 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-GROUP ( /lib64/libgcc_s.so.1 libgcc.a )' > $FULLPATH/64/libgcc_s.so
-%else
-ln -sf /lib64/libgcc_s.so.1 $FULLPATH/64/libgcc_s.so
-%endif
-rm -f $FULLPATH/64/libgcc_s_asneeded.so
-echo '/* GNU ld script
-   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
-OUTPUT_FORMAT('`gcc -m64 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/64/libgcc_s_asneeded.so
-%endif
-%ifarch %{multilib_64_archs}
-%ifarch x86_64 ppc64 ppc64p7
-rm -f $FULLPATH/64/libgcc_s.so
-echo '/* GNU ld script
-   Use the shared library, but some functions are only in
-   the static library, so try that secondarily.  */
-OUTPUT_FORMAT('`gcc -m32 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-GROUP ( /lib/libgcc_s.so.1 libgcc.a )' > $FULLPATH/32/libgcc_s.so
-%else
-ln -sf /lib/libgcc_s.so.1 $FULLPATH/32/libgcc_s.so
-%endif
-rm -f $FULLPATH/32/libgcc_s_asneeded.so
-echo '/* GNU ld script
-   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
-OUTPUT_FORMAT('`gcc -m32 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/32/libgcc_s_asneeded.so
-%endif
-
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgomp.spec $FULLPATH/
-
-%if %{build_ada}
-mv -f $FULLPATH/adalib/libgnarl-*.so %{buildroot}%{_prefix}/%{_lib}/
-mv -f $FULLPATH/adalib/libgnat-*.so %{buildroot}%{_prefix}/%{_lib}/
-rm -f $FULLPATH/adalib/libgnarl.so* $FULLPATH/adalib/libgnat.so*
-%endif
-
-mkdir -p %{buildroot}%{_prefix}/libexec/getconf
-if gcc/xgcc -B gcc/ -E -P -dD -xc /dev/null | grep '__LONG_MAX__.*\(2147483647\|0x7fffffff\($\|[LU]\)\)'; then
-  ln -sf POSIX_V6_ILP32_OFF32 %{buildroot}%{_prefix}/libexec/getconf/default
-else
-  ln -sf POSIX_V6_LP64_OFF64 %{buildroot}%{_prefix}/libexec/getconf/default
+rm -rf %{_builddir}/gcc-jit
+target=$(%{_builddir}/gcc-%{version}/config.guess)
+doc=%{_builddir}/gcc-build/$target/libstdc++-v3/doc/doxygen/html
+if ! test -d "$doc"; then
+  echo "missing libstdc++ docs $doc"
+  exit 1
 fi
-
-mkdir -p %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libstdc++*gdb.py* \
-      %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/
-%py_byte_compile %{python3} %{buildroot}%{_prefix}/share/gcc-%{gcc_major}/python/
-%py_byte_compile %{python3} %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/
-
-rm -f $FULLEPATH/libgccjit.so
-cp -a objlibgccjit/gcc/libgccjit.so* %{buildroot}%{_prefix}/%{_lib}/
-cp -a ../gcc/jit/libgccjit*.h %{buildroot}%{_prefix}/include/
-/usr/bin/install -c -m 644 objlibgccjit/gcc/doc/libgccjit.info %{buildroot}/%{_infodir}/
-gzip -9 %{buildroot}/%{_infodir}/libgccjit.info
-
-rm -f $FULLEPATH/libgdiagnostics.so
-cp -a objlibgccjit/gcc/libgdiagnostics.so* %{buildroot}%{_prefix}/%{_lib}/
-cp -a ../gcc/libgdiagnostics*.h %{buildroot}%{_prefix}/include/
-cp -a objlibgccjit/gcc/sarif-replay %{buildroot}%{_prefix}/bin/
-
-sed -e 's,\.\./include/,../../../../include/,' \
-  %{buildroot}%{_prefix}/%{_lib}/libstdc++.modules.json \
-  > $FULLPATH/libstdc++.modules.json
-
-pushd $FULLPATH
-if [ "%{_lib}" = "lib" ]; then
-%if %{build_objc}
-ln -sf ../../../libobjc.so.4 libobjc.so
-%endif
-ln -sf ../../../libstdc++.so.6.*[0-9] libstdc++.so
-ln -sf ../../../libgfortran.so.5.* libgfortran.so
-ln -sf ../../../libgomp.so.1.* libgomp.so
-%if %{build_go}
-ln -sf ../../../libgo.so.25.* libgo.so
-%endif
-%if %{build_libquadmath}
-ln -sf ../../../libquadmath.so.0.* libquadmath.so
-%endif
-%if %{build_d}
-ln -sf ../../../libgdruntime.so.7.* libgdruntime.so
-ln -sf ../../../libgphobos.so.7.* libgphobos.so
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  ln -sf ../../../libm2$i.so.21.* libm2$i.so
+mkdir -p %{buildroot}%{_docdir}/libstdc++-docs
+cp -a "$doc" %{buildroot}%{_docdir}/libstdc++-docs/html
+plug=$(echo %{buildroot}%{_libdir}/gcc/*/*/plugin)
+test -d "$plug"
+b=%{_builddir}/gcc-build
+src=%{_builddir}/gcc-%{version}
+test -f "$b/gcc/plugin-version.h"
+flags=$b/$target/libstdc++-v3/scripts/testsuite_flags
+test -x "$flags"
+inc="-I$b/gcc -I$src/gcc -I$src/include -I$src/libcpp/include"
+libs=
+for d in \
+  "$b/prev-$target/libstdc++-v3/src/.libs" \
+  "$b/$target/libstdc++-v3/src/.libs" \
+  "$b/$target/libgcc/.libs" \
+  "$b/gcc"
+do
+  [ -d "$d" ] || continue
+  libs=${libs:+$libs:}$d
 done
-%endif
-%if %{build_cobol}
-ln -sf ../../../libgcobol.so.2.* libgcobol.so
-%endif
-%if %{build_algol68}
-ln -sf ../../../libga68.so.2.* libga68.so
-objcopy --dump-section .a68_exports=ga68.m68 ../../../libga68.so.2.*
-%endif
-%if %{build_libitm}
-ln -sf ../../../libitm.so.1.* libitm.so
-%endif
-%if %{build_libatomic}
-ln -sf ../../../libatomic.so.1.* libatomic.so
-rm -f libatomic_asneeded.so libatomic_asneeded.a
-echo '/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
-ln -sf libatomic.a libatomic_asneeded.a
-%endif
-%if %{build_libasan}
-ln -sf ../../../libasan.so.8.* libasan.so
-mv ../../../libasan_preinit.o libasan_preinit.o
-%endif
-%if %{build_libubsan}
-ln -sf ../../../libubsan.so.1.* libubsan.so
-%endif
-else
-%if %{build_objc}
-ln -sf ../../../../%{_lib}/libobjc.so.4 libobjc.so
-%endif
-ln -sf ../../../../%{_lib}/libstdc++.so.6.*[0-9] libstdc++.so
-ln -sf ../../../../%{_lib}/libgfortran.so.5.* libgfortran.so
-ln -sf ../../../../%{_lib}/libgomp.so.1.* libgomp.so
-%if %{build_go}
-ln -sf ../../../../%{_lib}/libgo.so.25.* libgo.so
-%endif
-%if %{build_libquadmath}
-ln -sf ../../../../%{_lib}/libquadmath.so.0.* libquadmath.so
-%endif
-%if %{build_d}
-ln -sf ../../../../%{_lib}/libgdruntime.so.7.* libgdruntime.so
-ln -sf ../../../../%{_lib}/libgphobos.so.7.* libgphobos.so
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  ln -sf ../../../../%{_lib}/libm2$i.so.21.* libm2$i.so
-done
-%endif
-%if %{build_cobol}
-ln -sf ../../../../%{_lib}/libgcobol.so.2.* libgcobol.so
-%endif
-%if %{build_algol68}
-ln -sf ../../../../%{_lib}/libga68.so.2.* libga68.so
-objcopy --dump-section .a68_exports=ga68.m68 ../../../../%{_lib}/libga68.so.2.*
-%endif
-%if %{build_libitm}
-ln -sf ../../../../%{_lib}/libitm.so.1.* libitm.so
-%endif
-%if %{build_libatomic}
-ln -sf ../../../../%{_lib}/libatomic.so.1.* libatomic.so
-rm -f libatomic_asneeded.so libatomic_asneeded.a
-echo '/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
-ln -sf libatomic.a libatomic_asneeded.a
-%endif
-%if %{build_libasan}
-ln -sf ../../../../%{_lib}/libasan.so.8.* libasan.so
-mv ../../../../%{_lib}/libasan_preinit.o libasan_preinit.o
-%endif
-%if %{build_libubsan}
-ln -sf ../../../../%{_lib}/libubsan.so.1.* libubsan.so
-%endif
-%if %{build_libtsan}
-rm -f libtsan.so
-echo 'INPUT ( %{_prefix}/%{_lib}/'`echo ../../../../%{_lib}/libtsan.so.2.* | sed 's,^.*libt,libt,'`' )' > libtsan.so
-mv ../../../../%{_lib}/libtsan_preinit.o libtsan_preinit.o
-%endif
-%if %{build_libhwasan}
-rm -f libhwasan.so
-echo 'INPUT ( %{_prefix}/%{_lib}/'`echo ../../../../%{_lib}/libhwasan.so.0.* | sed 's,^.*libh,libh,'`' )' > libhwasan.so
-mv ../../../../%{_lib}/libhwasan_preinit.o libhwasan_preinit.o
-%endif
-%if %{build_liblsan}
-rm -f liblsan.so
-echo 'INPUT ( %{_prefix}/%{_lib}/'`echo ../../../../%{_lib}/liblsan.so.0.* | sed 's,^.*libl,libl,'`' )' > liblsan.so
-mv ../../../../%{_lib}/liblsan_preinit.o liblsan_preinit.o
-%endif
-fi
-mv -f %{buildroot}%{_prefix}/%{_lib}/libstdc++.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libstdc++fs.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libstdc++exp.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libsupc++.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgfortran.*a $FULLLPATH/
-%if %{build_objc}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libobjc.*a .
-%endif
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgomp.*a .
-%if %{build_libquadmath}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libquadmath.*a $FULLLPATH/
-%endif
-%if %{build_d}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgdruntime.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgphobos.*a $FULLLPATH/
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  mv -f %{buildroot}%{_prefix}/%{_lib}/libm2$i.*a $FULLLPATH/
-  rm -f m2/m2$i/*.{a,la}
-  ln -sf ../../libm2$i.so m2/m2$i/
-  ln -sf ../../libm2$i.a m2/m2$i/
-done
-%endif
-%if %{build_cobol}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgcobol.*a $FULLLPATH/
-%endif
-%if %{build_algol68}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libga68.*a $FULLLPATH/
-%endif
-%if %{build_libitm}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libitm.*a $FULLLPATH/
-%endif
-%if %{build_libatomic}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libatomic.*a $FULLPATH/
-%endif
-%if %{build_libasan}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libasan.*a $FULLLPATH/
-%endif
-%if %{build_libubsan}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libubsan.*a $FULLLPATH/
-%endif
-%if %{build_libtsan}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libtsan.*a $FULLPATH/
-%endif
-%if %{build_libhwasan}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libhwasan.*a $FULLPATH/
-%endif
-%if %{build_liblsan}
-mv -f %{buildroot}%{_prefix}/%{_lib}/liblsan.*a $FULLPATH/
-%endif
-%if %{build_go}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgo.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgobegin.*a $FULLLPATH/
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgolibbegin.*a $FULLLPATH/
+unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS LDFLAGS
+export CFLAGS="-O2 -g $inc"
+export CXXFLAGS="-O2 -g $inc $($flags --build-includes)"
+export LDFLAGS="-L$b/$target/libstdc++-v3/src/.libs -L$b/$target/libstdc++-v3/libsupc++/.libs"
+export LD_LIBRARY_PATH="$libs"
+mkdir -p %{_builddir}/annobin-build
+cd %{_builddir}/annobin-build
+CC="$b/gcc/xgcc -B$b/gcc/ -B$b/$target/libgcc/" \
+CXX="$b/gcc/xg++ -B$b/gcc/ -B$b/$target/libgcc/ -B$b/$target/libstdc++-v3/src/.libs -B$b/$target/libstdc++-v3/libsupc++/.libs -L$b/$target/libstdc++-v3/src/.libs -L$b/$target/libstdc++-v3/libsupc++/.libs" \
+%{_builddir}/annobin-%{annobin_ver}/configure \
+  --prefix=%{_prefix} \
+  --with-gcc-plugin-dir="${plug#%{buildroot}}" \
+  --with-clang-plugin=no \
+  --with-llvm-plugin=no \
+  --without-annocheck \
+  --without-docs \
+  --without-tests \
+  --without-debuginfod \
+  --disable-rpath
+make -s -j%{?_smp_build_ncpus}
+make -s install DESTDIR=%{buildroot}
+find %{buildroot} -name '*.la' -delete
+rm -f %{buildroot}%{_infodir}/dir
+rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
+rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %endif
 
-%if %{build_ada}
-%ifarch sparcv9 ppc
-rm -rf $FULLPATH/64/ada{include,lib}
-%endif
-%ifarch %{multilib_64_archs}
-rm -rf $FULLPATH/32/ada{include,lib}
-%endif
-if [ "$FULLPATH" != "$FULLLPATH" ]; then
-mv -f $FULLPATH/ada{include,lib} $FULLLPATH/
-pushd $FULLLPATH/adalib
-if [ "%{_lib}" = "lib" ]; then
-ln -sf ../../../../../libgnarl-*.so libgnarl.so
-ln -sf ../../../../../libgnarl-*.so libgnarl-%{gcc_major}.so
-ln -sf ../../../../../libgnat-*.so libgnat.so
-ln -sf ../../../../../libgnat-*.so libgnat-%{gcc_major}.so
-else
-ln -sf ../../../../../../%{_lib}/libgnarl-*.so libgnarl.so
-ln -sf ../../../../../../%{_lib}/libgnarl-*.so libgnarl-%{gcc_major}.so
-ln -sf ../../../../../../%{_lib}/libgnat-*.so libgnat.so
-ln -sf ../../../../../../%{_lib}/libgnat-*.so libgnat-%{gcc_major}.so
-fi
-popd
-else
-pushd $FULLPATH/adalib
-if [ "%{_lib}" = "lib" ]; then
-ln -sf ../../../../libgnarl-*.so libgnarl.so
-ln -sf ../../../../libgnarl-*.so libgnarl-%{gcc_major}.so
-ln -sf ../../../../libgnat-*.so libgnat.so
-ln -sf ../../../../libgnat-*.so libgnat-%{gcc_major}.so
-else
-ln -sf ../../../../../%{_lib}/libgnarl-*.so libgnarl.so
-ln -sf ../../../../../%{_lib}/libgnarl-*.so libgnarl-%{gcc_major}.so
-ln -sf ../../../../../%{_lib}/libgnat-*.so libgnat.so
-ln -sf ../../../../../%{_lib}/libgnat-*.so libgnat-%{gcc_major}.so
-fi
-popd
-fi
-%endif
+out=%{_builddir}/gcc-split
+rm -rf "$out"
+mkdir -p "$out"
+miss=%{_builddir}/gcc.miss
+: > "$miss"
+ROOT=%{buildroot}
 
-%ifarch sparcv9 ppc
-%if %{build_objc}
-ln -sf ../../../../../lib64/libobjc.so.4 64/libobjc.so
-%endif
-ln -sf ../`echo ../../../../lib/libstdc++.so.6.*[0-9] | sed s~/lib/~/lib64/~` 64/libstdc++.so
-ln -sf ../`echo ../../../../lib/libgfortran.so.5.* | sed s~/lib/~/lib64/~` 64/libgfortran.so
-ln -sf ../`echo ../../../../lib/libgomp.so.1.* | sed s~/lib/~/lib64/~` 64/libgomp.so
-%if %{build_go}
-rm -f libgo.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libgo.so.25.* | sed 's,^.*libg,libg,'`' )' > libgo.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libgo.so.25.* | sed 's,^.*libg,libg,'`' )' > 64/libgo.so
-%endif
-%if %{build_libquadmath}
-rm -f libquadmath.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libquadmath.so.0.* | sed 's,^.*libq,libq,'`' )' > libquadmath.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libquadmath.so.0.* | sed 's,^.*libq,libq,'`' )' > 64/libquadmath.so
-%endif
-%if %{build_d}
-rm -f libgdruntime.so libgphobos.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libgdruntime.so.7.* | sed 's,^.*libg,libg,'`' )' > libgdruntime.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libgdruntime.so.7.* | sed 's,^.*libg,libg,'`' )' > 64/libgdruntime.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libgphobos.so.7.* | sed 's,^.*libg,libg,'`' )' > libgphobos.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libgphobos.so.7.* | sed 's,^.*libg,libg,'`' )' > 64/libgphobos.so
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  rm -f libm2$i.so
-  echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > libm2$i.so
-  echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > 64/libm2$i.so
-  rm -f 64/m2/m2$i/*.{a,la}
-  ln -sf ../../libm2$i.so 64/m2/m2$i/
-  ln -sf ../../libm2$i.a 64/m2/m2$i/
-done
-%endif
-%if %{build_cobol}
-rm -f libgcobol.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > libgcobol.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > 64/libgcobol.so
-%endif
-%if %{build_algol68}
-rm -f libga68.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > libga68.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > 64/libga68.so
-objcopy --dump-section .a68_exports=64/ga68.m68 ../../../../lib/libga68.so.2.*
-%endif
-%if %{build_libitm}
-rm -f libitm.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libitm.so.1.* | sed 's,^.*libi,libi,'`' )' > libitm.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libitm.so.1.* | sed 's,^.*libi,libi,'`' )' > 64/libitm.so
-%endif
-%if %{build_libatomic}
-rm -f libatomic.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libatomic.so.1.* | sed 's,^.*liba,liba,'`' )' > libatomic.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libatomic.so.1.* | sed 's,^.*liba,liba,'`' )' > 64/libatomic.so
-mv -f %{buildroot}%{_prefix}/lib64/libatomic.*a 64/
-rm -f libatomic_asneeded.so libatomic_asneeded.a 64/libatomic_asneeded.so 64/libatomic_asneeded.a
-echo '/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
-ln -sf libatomic.a libatomic_asneeded.a
-echo '/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT('`gcc -m64 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -latomic ) )' > 64/libatomic_asneeded.so
-ln -sf libatomic.a 64/libatomic_asneeded.a
-%endif
-%if %{build_libasan}
-rm -f libasan.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libasan.so.8.* | sed 's,^.*liba,liba,'`' )' > libasan.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libasan.so.8.* | sed 's,^.*liba,liba,'`' )' > 64/libasan.so
-mv ../../../../lib64/libasan_preinit.o 64/libasan_preinit.o
-%endif
-%if %{build_libubsan}
-rm -f libubsan.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libubsan.so.1.* | sed 's,^.*libu,libu,'`' )' > libubsan.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libubsan.so.1.* | sed 's,^.*libu,libu,'`' )' > 64/libubsan.so
-%endif
-ln -sf lib32/libgfortran.a libgfortran.a
-ln -sf ../lib64/libgfortran.a 64/libgfortran.a
-%if %{build_objc}
-mv -f %{buildroot}%{_prefix}/lib64/libobjc.*a 64/
-%endif
-mv -f %{buildroot}%{_prefix}/lib64/libgomp.*a 64/
-ln -sf lib32/libstdc++.a libstdc++.a
-ln -sf ../lib64/libstdc++.a 64/libstdc++.a
-ln -sf lib32/libstdc++fs.a libstdc++fs.a
-ln -sf ../lib64/libstdc++fs.a 64/libstdc++fs.a
-ln -sf lib32/libstdc++exp.a libstdc++exp.a
-ln -sf ../lib64/libstdc++exp.a 64/libstdc++exp.a
-ln -sf lib32/libsupc++.a libsupc++.a
-ln -sf ../lib64/libsupc++.a 64/libsupc++.a
-%if %{build_libquadmath}
-ln -sf lib32/libquadmath.a libquadmath.a
-ln -sf ../lib64/libquadmath.a 64/libquadmath.a
-%endif
-%if %{build_d}
-ln -sf lib32/libgdruntime.a libgdruntime.a
-ln -sf ../lib64/libgdruntime.a 64/libgdruntime.a
-ln -sf lib32/libgphobos.a libgphobos.a
-ln -sf ../lib64/libgphobos.a 64/libgphobos.a
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  ln -sf lib32/libm2$i.a libm2$i.a
-  ln -sf ../lib64/libm2$i.a 64/libm2$i.a
-done
-%endif
-%if %{build_cobol}
-ln -sf lib32/libgcobol.a libgcobol.a
-ln -sf ../lib64/libgcobol.a 64/libgcobol.a
-%endif
-%if %{build_algol68}
-ln -sf lib32/libga68.a libga68.a
-ln -sf ../lib64/libga68.a 64/libga68.a
-%endif
-%if %{build_libitm}
-ln -sf lib32/libitm.a libitm.a
-ln -sf ../lib64/libitm.a 64/libitm.a
-%endif
-%if %{build_libasan}
-ln -sf lib32/libasan.a libasan.a
-ln -sf ../lib64/libasan.a 64/libasan.a
-%endif
-%if %{build_libubsan}
-ln -sf lib32/libubsan.a libubsan.a
-ln -sf ../lib64/libubsan.a 64/libubsan.a
-%endif
-%if %{build_go}
-ln -sf lib32/libgo.a libgo.a
-ln -sf ../lib64/libgo.a 64/libgo.a
-ln -sf lib32/libgobegin.a libgobegin.a
-ln -sf ../lib64/libgobegin.a 64/libgobegin.a
-ln -sf lib32/libgolibbegin.a libgolibbegin.a
-ln -sf ../lib64/libgolibbegin.a 64/libgolibbegin.a
-%endif
-%if %{build_ada}
-ln -sf lib32/adainclude adainclude
-ln -sf ../lib64/adainclude 64/adainclude
-ln -sf lib32/adalib adalib
-ln -sf ../lib64/adalib 64/adalib
-%endif
-%endif
-%ifarch %{multilib_64_archs}
-mkdir -p 32
-%if %{build_objc}
-ln -sf ../../../../libobjc.so.4 32/libobjc.so
-%endif
-ln -sf ../`echo ../../../../lib64/libstdc++.so.6.*[0-9] | sed s~/../lib64/~/~` 32/libstdc++.so
-ln -sf ../`echo ../../../../lib64/libgfortran.so.5.* | sed s~/../lib64/~/~` 32/libgfortran.so
-ln -sf ../`echo ../../../../lib64/libgomp.so.1.* | sed s~/../lib64/~/~` 32/libgomp.so
-%if %{build_go}
-rm -f libgo.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libgo.so.25.* | sed 's,^.*libg,libg,'`' )' > libgo.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libgo.so.25.* | sed 's,^.*libg,libg,'`' )' > 32/libgo.so
-%endif
-%if %{build_libquadmath}
-rm -f libquadmath.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libquadmath.so.0.* | sed 's,^.*libq,libq,'`' )' > libquadmath.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libquadmath.so.0.* | sed 's,^.*libq,libq,'`' )' > 32/libquadmath.so
-%endif
-%if %{build_d}
-rm -f libgdruntime.so libgphobos.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libgdruntime.so.7.* | sed 's,^.*libg,libg,'`' )' > libgdruntime.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libgdruntime.so.7.* | sed 's,^.*libg,libg,'`' )' > 32/libgdruntime.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libgphobos.so.7.* | sed 's,^.*libg,libg,'`' )' > libgphobos.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libgphobos.so.7.* | sed 's,^.*libg,libg,'`' )' > 32/libgphobos.so
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  rm -f libm2$i.so
-  echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > libm2$i.so
-  echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > 32/libm2$i.so
-  rm -f 32/m2/m2$i/*.{a,la}
-  ln -sf ../../libm2$i.so 32/m2/m2$i/
-  ln -sf ../../libm2$i.a 32/m2/m2$i/
-done
-%endif
-%if %{build_cobol}
-rm -f libgcobol.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > libgcobol.so
-#echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > 32/libgcobol.so
-%endif
-%if %{build_algol68}
-rm -f libga68.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > libga68.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > 32/libga68.so
-objcopy --dump-section .a68_exports=32/ga68.m68 ../../../../lib64/libga68.so.2.*
-%endif
-%if %{build_libitm}
-rm -f libitm.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libitm.so.1.* | sed 's,^.*libi,libi,'`' )' > libitm.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libitm.so.1.* | sed 's,^.*libi,libi,'`' )' > 32/libitm.so
-%endif
-%if %{build_libatomic}
-rm -f libatomic.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libatomic.so.1.* | sed 's,^.*liba,liba,'`' )' > libatomic.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libatomic.so.1.* | sed 's,^.*liba,liba,'`' )' > 32/libatomic.so
-mv -f %{buildroot}%{_prefix}/lib/libatomic.*a 32/
-rm -f libatomic_asneeded.so libatomic_asneeded.a 32/libatomic_asneeded.so 32/libatomic_asneeded.a
-echo '/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
-ln -sf libatomic.a libatomic_asneeded.a
-echo '/* GNU ld script
-   Add DT_NEEDED entry for -latomic only if needed.  */
-OUTPUT_FORMAT('`gcc -m32 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
-INPUT ( AS_NEEDED ( -latomic ) )' > 32/libatomic_asneeded.so
-ln -sf libatomic.a 32/libatomic_asneeded.a
-%endif
-%if %{build_libasan}
-rm -f libasan.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libasan.so.8.* | sed 's,^.*liba,liba,'`' )' > libasan.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libasan.so.8.* | sed 's,^.*liba,liba,'`' )' > 32/libasan.so
-mv ../../../../lib/libasan_preinit.o 32/libasan_preinit.o
-%endif
-%if %{build_libubsan}
-rm -f libubsan.so
-echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libubsan.so.1.* | sed 's,^.*libu,libu,'`' )' > libubsan.so
-echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libubsan.so.1.* | sed 's,^.*libu,libu,'`' )' > 32/libubsan.so
-%endif
-%if %{build_objc}
-mv -f %{buildroot}%{_prefix}/lib/libobjc.*a 32/
-%endif
-mv -f %{buildroot}%{_prefix}/lib/libgomp.*a 32/
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-ln -sf ../lib32/libgfortran.a 32/libgfortran.a
-ln -sf lib64/libgfortran.a libgfortran.a
-ln -sf ../lib32/libstdc++.a 32/libstdc++.a
-ln -sf lib64/libstdc++.a libstdc++.a
-ln -sf ../lib32/libstdc++fs.a 32/libstdc++fs.a
-ln -sf lib64/libstdc++fs.a libstdc++fs.a
-ln -sf ../lib32/libstdc++exp.a 32/libstdc++exp.a
-ln -sf lib64/libstdc++exp.a libstdc++exp.a
-ln -sf ../lib32/libsupc++.a 32/libsupc++.a
-ln -sf lib64/libsupc++.a libsupc++.a
-%if %{build_libquadmath}
-ln -sf ../lib32/libquadmath.a 32/libquadmath.a
-ln -sf lib64/libquadmath.a libquadmath.a
-%endif
-%if %{build_d}
-ln -sf ../lib32/libgdruntime.a 32/libgdruntime.a
-ln -sf lib64/libgdruntime.a libgdruntime.a
-ln -sf ../lib32/libgphobos.a 32/libgphobos.a
-ln -sf lib64/libgphobos.a libgphobos.a
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  ln -sf ../lib32/libm2$i.a 32/libm2$i.a
-  ln -sf lib64/libm2$i.a libm2$i.a
-done
-%endif
-%if %{build_cobol}
-ln -sf ../lib32/libgcobol.a 32/libgcobol.a
-ln -sf lib64/libgcobol.a libgcobol.a
-%endif
-%if %{build_algol68}
-ln -sf ../lib32/libga68.a 32/libga68.a
-ln -sf lib64/libga68.a libga68.a
-%endif
-%if %{build_libitm}
-ln -sf ../lib32/libitm.a 32/libitm.a
-ln -sf lib64/libitm.a libitm.a
-%endif
-%if %{build_libasan}
-ln -sf ../lib32/libasan.a 32/libasan.a
-ln -sf lib64/libasan.a libasan.a
-%endif
-%if %{build_libubsan}
-ln -sf ../lib32/libubsan.a 32/libubsan.a
-ln -sf lib64/libubsan.a libubsan.a
-%endif
-%if %{build_go}
-ln -sf ../lib32/libgo.a 32/libgo.a
-ln -sf lib64/libgo.a libgo.a
-ln -sf ../lib32/libgobegin.a 32/libgobegin.a
-ln -sf lib64/libgobegin.a libgobegin.a
-ln -sf ../lib32/libgolibbegin.a 32/libgolibbegin.a
-ln -sf lib64/libgolibbegin.a libgolibbegin.a
-%endif
-%if %{build_ada}
-ln -sf ../lib32/adainclude 32/adainclude
-ln -sf lib64/adainclude adainclude
-ln -sf ../lib32/adalib 32/adalib
-ln -sf lib64/adalib adalib
-%endif
-%else
-%ifarch %{multilib_64_archs}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgfortran.a 32/libgfortran.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libstdc++.a 32/libstdc++.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libstdc++fs.a 32/libstdc++fs.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libstdc++exp.a 32/libstdc++exp.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libsupc++.a 32/libsupc++.a
-%if %{build_libquadmath}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libquadmath.a 32/libquadmath.a
-%endif
-%if %{build_d}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgdruntime.a 32/libgdruntime.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgphobos.a 32/libgphobos.a
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libm2$i.a 32/libm2$i.a
-done
-%endif
-%if %{build_cobol}
-#ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgcobol.a 32/libgcobol.a
-%endif
-%if %{build_algol68}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libga68.a 32/libga68.a
-%endif
-%if %{build_libitm}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libitm.a 32/libitm.a
-%endif
-%if %{build_libasan}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libasan.a 32/libasan.a
-%endif
-%if %{build_libubsan}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libubsan.a 32/libubsan.a
-%endif
-%if %{build_go}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgo.a 32/libgo.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgobegin.a 32/libgobegin.a
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgolibbegin.a 32/libgolibbegin.a
-%endif
-%if %{build_ada}
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/adainclude 32/adainclude
-ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/adalib 32/adalib
-%endif
-%endif
-%endif
-
-# If we are building a debug package then copy all of the static archives
-# into the debug directory to keep them as unstripped copies.
-# if 0%{?_enable_debug_packages}
-%if 0
-for d in . $FULLLSUBDIR; do
-  mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d
-  for f in `find $d -maxdepth 1 -a \
-		\( -name libasan.a -o -name libatomic.a \
-		-o -name libcaf_single.a -o -name libcaf_shmem.a \
-		-o -name libgcc.a -o -name libgcc_eh.a \
-		-o -name libgcov.a -o -name libgfortran.a \
-		-o -name libgo.a -o -name libgobegin.a \
-		-o -name libgolibbegin.a -o -name libgomp.a \
-		-o -name libitm.a -o -name liblsan.a \
-		-o -name libobjc.a -o -name libgdruntime.a -o -name libgphobos.a \
-		-o -name libm2\*.a -o -name libquadmath.a -o -name libstdc++.a \
-		-o -name libstdc++fs.a -o -name libstdc++exp.a \
-		-o -name libsupc++.a -o -name libgcobol.a \
-		-o -name libtsan.a -o -name libubsan.a \) -a -type f`; do
-    cp -a $f $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d/
-  done
-done
-%endif
-
-# Strip debug info from Fortran/ObjC/Java static libraries
-strip -g `find . \( -name libgfortran.a -o -name libobjc.a -o -name libgomp.a \
-		    -o -name libgcc.a -o -name libgcov.a -o -name libquadmath.a \
-		    -o -name libgdruntime.a -o -name libgphobos.a -o -name libm2\*.a \
-		    -o -name libitm.a -o -name libgo.a -o -name libcaf\*.a \
-		    -o -name libatomic.a -o -name libasan.a -o -name libtsan.a \
-		    -o -name libubsan.a -o -name liblsan.a -o -name libcc1.a \
-		    -o -name libgcobol.a \) \
-		 -a -type f`
-popd
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgfortran.so.5.*
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgomp.so.1.*
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libcc1.so.0.*
-%if %{build_libquadmath}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libquadmath.so.0.*
-%endif
-%if %{build_d}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgdruntime.so.7.*
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgphobos.so.7.*
-%endif
-%if %{build_m2}
-for i in cor iso log min pim; do
-  chmod 755 %{buildroot}%{_prefix}/%{_lib}/libm2$i.so.21.*
-done
-%endif
-%if %{build_cobol}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgcobol.so.2.*
-%endif
-%if %{build_algol68}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libga68.so.2.*
-%endif
-%if %{build_libitm}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libitm.so.1.*
-%endif
-%if %{build_libatomic}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libatomic.so.1.*
-%endif
-%if %{build_libasan}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libasan.so.8.*
-%endif
-%if %{build_libubsan}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libubsan.so.1.*
-%endif
-%if %{build_libtsan}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libtsan.so.2.*
-%endif
-%if %{build_libhwasan}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libhwasan.so.0.*
-%endif
-%if %{build_liblsan}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/liblsan.so.0.*
-%endif
-%if %{build_go}
-# Avoid stripping these libraries and binaries.
-chmod 644 %{buildroot}%{_prefix}/%{_lib}/libgo.so.25.*
-chmod 644 %{buildroot}%{_prefix}/bin/go.gcc
-chmod 644 %{buildroot}%{_prefix}/bin/gofmt.gcc
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cgo
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/buildid
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/test2json
-chmod 644 %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/vet
-%endif
-%if %{build_objc}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libobjc.so.4.*
-%endif
-
-%if %{build_ada}
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgnarl*so*
-chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgnat*so*
-%endif
-
-for h in `find $FULLPATH/include -name \*.h`; do
-  if grep -q 'It has been auto-edited by fixincludes from' $h; then
-    rh=`grep -A2 'It has been auto-edited by fixincludes from' $h | tail -1 | sed 's|^.*"\(.*\)".*$|\1|'`
-    diff -up $rh $h || :
-    rm -f $h
-  fi
-done
-
-cat > %{buildroot}%{_prefix}/bin/c89 <<"EOF"
-#!/bin/sh
-fl="-std=c89"
-for opt; do
-  case "$opt" in
-    -ansi|-std=c89|-std=iso9899:1990) fl="";;
-    -std=*) echo "`basename $0` called with non ANSI/ISO C option $opt" >&2
-	    exit 1;;
+classify() {
+  rel=$1
+  bn=${rel##*/}
+  case $rel in
+    %{_docdir}/libstdc++-docs|%{_docdir}/libstdc++-docs/*) echo libstdc++-docs; return ;;
+    %{_prefix}/nvptx-none/*|%{_bindir}/nvptx-none-*|*accel-nvptx-none-*|*/accel/nvptx-none/*|%{_libdir}/gcc/nvptx-none/*|%{_libexecdir}/gcc/nvptx-none/*) echo gcc-offload-nvptx; return ;;
+    %{_prefix}/amdgcn-amdhsa/*|%{_bindir}/amdgcn-amdhsa-*|*accel-amdgcn-amdhsa-*|*/accel/amdgcn-amdhsa/*|%{_libdir}/gcc/amdgcn-amdhsa/*|%{_libexecdir}/gcc/amdgcn-amdhsa/*) echo gcc-offload-amdgcn; return ;;
+    */plugin/annobin.so*|*/plugin/gcc-annobin.so*) echo gcc-plugin-annobin; return ;;
+    */plugin/libcc1plugin.so*|*/plugin/libcp1plugin.so*|*/libcc1.so*) echo gcc-gdb-plugin; return ;;
+    */plugin/include/*|*/plugin/*.h|*/plugin/gtype.state) echo gcc-plugin-devel; return ;;
+    */plugin/liblto_plugin.so*) echo gcc; return ;;
+    */include/c++/*) echo libstdc++-devel; return ;;
+    */include/objc/*) echo gcc-objc; return ;;
+    */adainclude/*) echo libgnat-devel; return ;;
+    %{_prefix}/lib/go/*|%{_libdir}/go/*) echo libgo-devel; return ;;
+    */share/gcc-*/python/*) echo libstdc++; return ;;
+    */auto-load/*libstdc++*) echo libstdc++; return ;;
+    */auto-load/*libgfortran*) echo libgfortran; return ;;
+    */auto-load/*libgomp*) echo libgomp; return ;;
+    */auto-load/*libgcc*) echo libgcc; return ;;
+    */auto-load/*libobjc*) echo libobjc; return ;;
+    */auto-load/*libgnat*|*/auto-load/*libgnarl*) echo libgnat; return ;;
+    %{_docdir}/annobin*|%{_docdir}/annobin*/*) echo gcc-plugin-annobin; return ;;
+    */gfortran/*) echo gcc-gfortran; return ;;
   esac
-done
-exec gcc $fl ${1+"$@"}
-EOF
-cat > %{buildroot}%{_prefix}/bin/c99 <<"EOF"
-#!/bin/sh
-fl="-std=c99"
-for opt; do
-  case "$opt" in
-    -std=c99|-std=iso9899:1999) fl="";;
-    -std=*) echo "`basename $0` called with non ISO C99 option $opt" >&2
-	    exit 1;;
+  name=$bn
+  case $name in
+    "$target"-*) name=${name#"$target-"} ;;
   esac
-done
-exec gcc $fl ${1+"$@"}
-EOF
-chmod 755 %{buildroot}%{_prefix}/bin/c?9
-
-cd ..
-%find_lang %{name}
-%find_lang cpplib
-
-# Remove binaries we will not be including, so that they don't end up in
-# gcc-debuginfo
-rm -f %{buildroot}%{_prefix}/%{_lib}/{libffi*,libiberty.a} || :
-rm -f $FULLEPATH/install-tools/{mkheaders,fixincl}
-rm -f %{buildroot}%{_prefix}/lib/{32,64}/libiberty.a
-rm -f %{buildroot}%{_prefix}/%{_lib}/libvtv* || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gfortran || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gccgo || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gcj || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gcc-ar || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gcc-nm || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gcc-ranlib || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gdc || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gm2 || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gcobc || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-gcobol || :
-rm -f %{buildroot}%{_prefix}/bin/%{_target_platform}-ga68 || :
-
-%ifarch %{multilib_64_archs}
-# Remove libraries for the other arch on multilib arches
-rm -f %{buildroot}%{_prefix}/lib/lib*.so*
-rm -f %{buildroot}%{_prefix}/lib/lib*.a
-rm -f %{buildroot}/lib/libgcc_s*.so*
-%if %{build_go}
-rm -rf %{buildroot}%{_prefix}/lib/go/%{gcc_major}/%{gcc_target_platform}
-%ifnarch sparc64 ppc64 ppc64p7
-ln -sf %{multilib_32_arch}-%{_vendor}-%{_target_os} %{buildroot}%{_prefix}/lib/go/%{gcc_major}/%{gcc_target_platform}
-%endif
-%endif
-%else
-%ifarch sparcv9 ppc
-rm -f %{buildroot}%{_prefix}/lib64/lib*.so*
-rm -f %{buildroot}%{_prefix}/lib64/lib*.a
-rm -f %{buildroot}/lib64/libgcc_s*.so*
-%if %{build_go}
-rm -rf %{buildroot}%{_prefix}/lib64/go/%{gcc_major}/%{gcc_target_platform}
-%endif
-%endif
-%endif
-
-rm -f %{buildroot}%{_prefix}/lib*/lib*.spec || :
-rm -f %{buildroot}%{_prefix}/lib*/libstdc++.modules.json || :
-rm -f %{buildroot}%{_prefix}/%{_lib}/lib{asan,atomic,gcc_s,gcobol,ga68,gdruntime,gfortran,go,gomp-plugin-*,gomp,gphobos,hwasan}.so || :
-rm -f %{buildroot}%{_prefix}/%{_lib}/lib{itm,lsan,m2{cor,iso,log,min,pim},objc,quadmath,stdc++,tsan,ubsan,gcc_s_asneeded,atomic_asneeded}.so || :
-rm -f %{buildroot}%{_prefix}/%{_lib}/libatomic_asneeded.a || :
-rm -f %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/install-tools/{fixinc.sh,mkinstalldirs} || :
-rm -f %{buildroot}%{_prefix}/share/locale/*/LC_MESSAGES/libstdc++.mo || :
-rm -f %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include-fixed/README || :
-rm -rf %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ssp || :
-rm -rf %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/install-tools || :
-%ifarch ppc ppc64 ppc64le ppc64p7
-rm -f %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/{e,n}crt{i,n}.o || :
-%endif
-
-%if %{build_offload_nvptx}
-rm -f %{buildroot}%{_mandir}/man1/*-accel-*nvptx*
-find %{buildroot}%{_prefix}/nvptx-none/lib -name libstdc++.a-gdb.py | xargs rm -f || :
-find %{buildroot}%{_prefix}/nvptx-none/lib -name libstdc++.modules.json | xargs rm -f || :
-%endif
-%if %{build_offload_amdgcn}
-rm -f %{buildroot}%{_mandir}/man1/*-accel-*amdgcn*
-find %{buildroot}%{_prefix}/amdgcn-amdhsa/lib -name libstdc++.a-gdb.py | xargs rm -f || :
-find %{buildroot}%{_prefix}/amdgcn-amdhsa/lib -name libstdc++.modules.json | xargs rm -f || :
-%endif
-rm -f %{buildroot}%{_mandir}/man7/{gpl,gfdl,fsf-funding}.7*
-
-# Help plugins find out nvra.
-echo gcc-%{version}-%{release}.%{_arch} > $FULLPATH/rpmver
-
-# Add symlink to lto plugin in the binutils plugin directory.
-%{__mkdir_p} %{buildroot}%{_libdir}/bfd-plugins/
-ln -s ../../libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so \
-  %{buildroot}%{_libdir}/bfd-plugins/
-
-%if %{build_annobin_plugin}
-mkdir -p $FULLPATH/plugin
-rm -f $FULLPATH/plugin/gcc-annobin*
-cp -a %{_builddir}/gcc-16-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
-  $FULLPATH/plugin/gcc-annobin.so.0.0.0
-ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so.0
-ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so
-%endif
-
-%if %{build_sysroot}
-###############################################################################
-# Sysroot package creation.
-###############################################################################
-mkdir -p %{buildroot}/%{sysroot_prefix}
-pushd %{buildroot}/%{sysroot_prefix}
-mkdir -p usr/lib usr/lib64
-ln -s usr/lib lib
-ln -s usr/lib64 lib64
-# These match the files referenced in linker scripts generated for cross
-# compilers.
-for f in /%{_lib}/libgcc_s.so.1 \
-  %{_prefix}/%{_lib}/libgomp.so.1 \
-  %{_prefix}/%{_lib}/libstdc++.so.6 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.a \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++fs.a \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++exp.a \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libsupc++.a \
-%if %{build_libatomic}
-  %{_prefix}/%{_lib}/libatomic.so.1 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic.a \
-%endif
-%if %{build_libitm}
-  %{_prefix}/%{_lib}/libitm.so.1 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.a \
-%endif
-%if %{build_libasan}
-  %{_prefix}/%{_lib}/libasan.so.8 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan_preinit.o \
-%endif
-%if %{build_libhwasan}
-  %{_prefix}/%{_lib}/libhwasan.so.0 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libhwasan_preinit.o \
-%endif
-%if %{build_libtsan}
-  %{_prefix}/%{_lib}/libtsan.so.2 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libtsan_preinit.o \
-%endif
-%if %{build_liblsan}
-  %{_prefix}/%{_lib}/liblsan.so.0 \
-  %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/liblsan_preinit.o \
-%endif
-%if %{build_libubsan}
-  %{_prefix}/%{_lib}/libubsan.so.1 \
-%endif
-  ; do
-    mkdir -p %{buildroot}/%{sysroot_prefix}/$(dirname $f)
-    cp %{buildroot}$f %{buildroot}/%{sysroot_prefix}/$f
-done
-mkdir -p usr/include
-cp -a %{buildroot}%{_prefix}/include/c++ usr/include/c++
-popd
-# For cross testing.
-mkdir %{buildroot}/%{sysroot_prefix}/test-support
-cp obj-%{gcc_target_platform}/gcc/auto-host.h %{buildroot}/%{sysroot_prefix}/test-support/
-%endif
-
-%check
-cd obj-%{gcc_target_platform}
-
-# run the tests.
-LC_ALL=C make %{?_smp_mflags} -k check ALT_CC_UNDER_TEST=gcc ALT_CXX_UNDER_TEST=g++ \
-     RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector-strong/-foffload=disable}'" || :
-%if !%{build_annobin_plugin}
-if [ -f %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so ]; then
-  # Test whether current annobin plugin won't fail miserably with the newly built gcc.
-  echo -e '#include <stdio.h>\nint main () { printf ("Hello, world!\\n"); return 0; }' > annobin-test.c
-  echo -e '#include <iostream>\nint main () { std::cout << "Hello, world!" << std::endl; return 0; }' > annobin-test.C
-  `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cc` \
-  -O2 -g -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS \
-  -fexceptions -fstack-protector-strong -grecord-gcc-switches -o annobin-test{c,.c} \
-  -Wl,-rpath,%{gcc_target_platform}/libgcc/ \
-  -fplugin=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so \
-  2> ANNOBINOUT1 || echo Annobin test 1 FAIL > ANNOBINOUT2;
-  `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cxx` \
-  `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-includes` \
-  -O2 -g -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS \
-  -fexceptions -fstack-protector-strong -grecord-gcc-switches -o annobin-test{C,.C} \
-  -Wl,-rpath,%{gcc_target_platform}/libgcc/:%{gcc_target_platform}/libstdc++-v3/src/.libs/ \
-  -fplugin=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so \
-  -B %{gcc_target_platform}/libstdc++-v3/src/.libs/ \
-  2> ANNOBINOUT3 || echo Annobin test 2 FAIL > ANNOBINOUT4;
-  [ -f ./annobin-testc ] || echo Annobin test 1 MISSING > ANNOBINOUT5;
-  [ -f ./annobin-testc ] && \
-  ( ./annobin-testc > ANNOBINRES1 2>&1 || echo Annobin test 1 RUNFAIL > ANNOBINOUT6 );
-  [ -f ./annobin-testC ] || echo Annobin test 2 MISSING > ANNOBINOUT7;
-  [ -f ./annobin-testC ] && \
-  ( ./annobin-testC > ANNOBINRES2 2>&1 || echo Annobin test 2 RUNFAIL > ANNOBINOUT8 );
-  cat ANNOBINOUT[1-8] > ANNOBINOUT
-  touch ANNOBINRES1 ANNOBINRES2
-  [ -s ANNOBINOUT ] && echo Annobin testing FAILed > ANNOBINRES
-  cat ANNOBINOUT ANNOBINRES[12] >> ANNOBINRES
-  rm -f ANNOBINOUT* ANNOBINRES[12] annobin-test{c,C}
-fi
-%endif
-echo ====================TESTING=========================
-( LC_ALL=C ../contrib/test_summary || : ) 2>&1 | sed -n '/^cat.*EOF/,/^EOF/{/^cat.*EOF/d;/^EOF/d;/^LAST_UPDATED:/d;p;}'
-%if !%{build_annobin_plugin}
-[ -f ANNOBINRES ] && cat ANNOBINRES
-%endif
-echo ====================TESTING END=====================
-mkdir testlogs-%{_target_platform}-%{version}-%{release}
-for i in `find . -name \*.log -o -name \*.sum | grep -F testsuite/ | grep -v 'config.log\|acats.*/tests/'`; do
-  ln $i testlogs-%{_target_platform}-%{version}-%{release}/ || :
-done
-tar cf - testlogs-%{_target_platform}-%{version}-%{release} | xz -9e \
-  | uuencode testlogs-%{_target_platform}.tar.xz || :
-rm -rf testlogs-%{_target_platform}-%{version}-%{release}
-
-%post go
-%{_sbindir}/update-alternatives --install \
-  %{_prefix}/bin/go go %{_prefix}/bin/go.gcc 92 \
-  --slave %{_prefix}/bin/gofmt gofmt %{_prefix}/bin/gofmt.gcc
-
-%preun go
-if [ $1 = 0 ]; then
-  %{_sbindir}/update-alternatives --remove go %{_prefix}/bin/go.gcc
-fi
-
-%{?ldconfig:
-# Because glibc Prereq's libgcc and /sbin/ldconfig
-# comes from glibc, it might not exist yet when
-# libgcc is installed
-%post -n libgcc -p <lua>
-if posix.access ("%ldconfig", "x") then
-  rpm.execute ("%ldconfig")
-end
-
-%postun -n libgcc -p <lua>
-if posix.access ("%ldconfig", "x") then
-  rpm.execute ("%ldconfig")
-end
+  case $name in
+    cc1) echo cpp; return ;;
+    cc1plus|g++-mapper-server) echo gcc-c++; return ;;
+    cc1obj) echo gcc-objc; return ;;
+    cc1objplus) echo gcc-objc++; return ;;
+    f951) echo gcc-gfortran; return ;;
+    d21) echo gcc-gdc; return ;;
+    cc1gm2|gm2l) echo gcc-gm2; return ;;
+    cobol1) echo gcc-gcobol; return ;;
+    a681) echo gcc-algol68; return ;;
+    gnat1) echo gcc-gnat; return ;;
+    go1) echo gcc-go; return ;;
+    lto1|collect2|lto-wrapper) echo gcc; return ;;
+    cpp) echo cpp; return ;;
+    gcc|gcc-[0-9]*|gcc-ar|gcc-nm|gcc-ranlib|gcov|gcov-dump|gcov-tool|lto-dump|c89|c99) echo gcc; return ;;
+    g++|c++) echo gcc-c++; return ;;
+    gfortran) echo gcc-gfortran; return ;;
+    gdc) echo gcc-gdc; return ;;
+    gm2) echo gcc-gm2; return ;;
+    gcobol|gcobc) echo gcc-gcobol; return ;;
+    ga68) echo gcc-algol68; return ;;
+    gccgo|go|gofmt) echo gcc-go; return ;;
+    gnat|gnatbind|gnatmake|gnatlink|gnatls|gnatchop|gnatkr|gnatname|gnatprep|gnatclean|gnatsym|gnatdll) echo gcc-gnat; return ;;
+    sarif-replay) echo libgdiagnostics; return ;;
+    libgcc_s.so|libgcc_s_asneeded.so) echo gcc; return ;;
+    libgcc_s*) echo libgcc; return ;;
+    libsanitizer.spec) echo gcc; return ;;
+    libstdc++.so.[0-9]*) echo libstdc++; return ;;
+    libstdc++.so) echo gcc-c++; return ;;
+    libstdc++.modules.json|libstdc++fs.a|libstdc++exp.a) echo libstdc++-devel; return ;;
+    *libstdc++*-gdb.py) echo libstdc++; return ;;
+    *libgfortran*-gdb.py) echo libgfortran; return ;;
+    *libgomp*-gdb.py) echo libgomp; return ;;
+    *libgcc*-gdb.py) echo libgcc; return ;;
+    *libobjc*-gdb.py) echo libobjc; return ;;
+    *libgnat*-gdb.py|*libgnarl*-gdb.py) echo libgnat; return ;;
+    libstdc++*.a|libsupc++*.a) echo libstdc++-static; return ;;
+    libgomp-plugin-nvptx.so*) echo libgomp-offload-nvptx; return ;;
+    libgomp-plugin-gcn.so*) echo libgomp-offload-amdgcn; return ;;
+    libgomp.so|libgomp.a|libgomp.spec|omp.h|openacc.h|acc_prof.h) echo gcc; return ;;
+    omp_lib.h|omp_lib.mod|omp_lib.f90|openacc.mod|openacc_lib.h|openacc.f90|oacc_lib.h) echo gcc-gfortran; return ;;
+    libgomp.so.[0-9]*) echo libgomp; return ;;
+    libatomic.so|libatomic.a|libatomic_asneeded.so|libatomic_asneeded.a) echo gcc; return ;;
+    libatomic.so.[0-9]*) echo libatomic; return ;;
+    libitm.so.[0-9]*) echo libitm; return ;;
+    libitm.so) echo libitm-devel; return ;;
+    libitm.spec) echo gcc; return ;;
+    libitm.a) echo libitm-static; return ;;
+    libasan.so|libasan.spec|libasan_preinit.o) echo gcc; return ;;
+    libasan.so.[0-9]*) echo libasan; return ;;
+    libasan.a) echo libasan-static; return ;;
+    libhwasan.so|libhwasan.spec|libhwasan_preinit.o) echo gcc; return ;;
+    libhwasan.so.[0-9]*) echo libhwasan; return ;;
+    libhwasan.a) echo libhwasan-static; return ;;
+    libtsan.so|libtsan.spec|libtsan_preinit.o) echo gcc; return ;;
+    libtsan.so.[0-9]*) echo libtsan; return ;;
+    libtsan.a) echo libtsan-static; return ;;
+    liblsan.so|liblsan.spec|liblsan_preinit.o) echo gcc; return ;;
+    liblsan.so.[0-9]*) echo liblsan; return ;;
+    liblsan.a) echo liblsan-static; return ;;
+    libubsan.so|libubsan.spec) echo gcc; return ;;
+    libubsan.so.[0-9]*) echo libubsan; return ;;
+    libubsan.a) echo libubsan-static; return ;;
+    libquadmath.so.[0-9]*) echo libquadmath; return ;;
+    libquadmath.so|quadmath.h|quadmath_weak.h) echo libquadmath-devel; return ;;
+    libquadmath.a) echo libquadmath-static; return ;;
+    libgfortran.so|libgfortran.spec) echo gcc-gfortran; return ;;
+    libgfortran.so.[0-9]*) echo libgfortran; return ;;
+    libgfortran.a) echo libgfortran-static; return ;;
+    libgphobos.so|libgdruntime.so) echo gcc-gdc; return ;;
+    libgphobos.so.[0-9]*|libgdruntime.so.[0-9]*) echo libgphobos; return ;;
+    libgphobos.a|libgdruntime.a) echo libgphobos-static; return ;;
+    libgm2.so) echo gcc-gm2; return ;;
+    libgm2.so.[0-9]*|libm2*.so.[0-9]*) echo libgm2; return ;;
+    libm2*.so) echo gcc-gm2; return ;;
+    libgm2.a|libm2*.a) echo libgm2-static; return ;;
+    libgcobol.so) echo gcc-gcobol; return ;;
+    libgcobol.so.[0-9]*) echo libgcobol; return ;;
+    libgcobol.a) echo libgcobol-static; return ;;
+    libga68.so) echo gcc-algol68; return ;;
+    libga68.so.[0-9]*) echo libga68; return ;;
+    libga68.a) echo libga68-static; return ;;
+    libgnat.so|libgnarl.so) echo libgnat-devel; return ;;
+    libgnat.a|libgnarl.a) echo libgnat-static; return ;;
+    libgnat*|libgnarl*) echo libgnat; return ;;
+    libgo.so.[0-9]*) echo libgo; return ;;
+    libgo.so) echo libgo-devel; return ;;
+    libgo.a|libgobegin.a|libgolibbegin.a) echo libgo-static; return ;;
+    libobjc.so|libobjc.a|libobjc_gc.so|libobjc_gc.a) echo gcc-objc; return ;;
+    libobjc.so.[0-9]*|libobjc_gc.so.[0-9]*) echo libobjc; return ;;
+    libgccjit.so.[0-9]*) echo libgccjit; return ;;
+    libgccjit.so|libgccjit*.h|libgccjit.a) echo libgccjit-devel; return ;;
+    libgdiagnostics.so.[0-9]*) echo libgdiagnostics; return ;;
+    libgdiagnostics.so|libgdiagnostics*.h|libgdiagnostics.a) echo libgdiagnostics-devel; return ;;
+    itm.h|itm2.h) echo libitm-devel; return ;;
+    fsf-funding.7|gfdl.7|gpl.7) echo gcc; return ;;
+  esac
+  info=$name
+  info=${info%.gz}
+  case $info in
+    cpp.*) echo cpp; return ;;
+    g++.*) echo gcc-c++; return ;;
+    gcc.*|gccint.*|gccinstall.*|cppinternals.*|gcov.*|gcov-dump.*|gcov-tool.*|lto-dump.*) echo gcc; return ;;
+    gfortran.*|libgfortran.*) echo gcc-gfortran; return ;;
+    gdc.*|libgphobos.*) echo gcc-gdc; return ;;
+    gm2.*|libgm2.*|m2.*) echo gcc-gm2; return ;;
+    gcobol*|libgcobol.*) echo gcc-gcobol; return ;;
+    ga68*|libga68.*) echo gcc-algol68; return ;;
+    gccgo.*|libgo.*|go.*|gofmt.*) echo gcc-go; return ;;
+    gnat*|libgnat.*) echo gcc-gnat; return ;;
+    libgomp.*) echo libgomp; return ;;
+    libquadmath.*) echo libquadmath; return ;;
+    libitm.*) echo libitm; return ;;
+    libgccjit.*) echo libgccjit-devel; return ;;
+    libgdiagnostics.*) echo libgdiagnostics-devel; return ;;
+  esac
+  case $rel in
+    %{_prefix}/lib/gcc/*|%{_libdir}/gcc/*|%{_libexecdir}/gcc/*) echo gcc; return ;;
+  esac
+  return 1
 }
 
+set +x
+find "$ROOT" -print | sort | while read p; do
+  rel=${p#"$ROOT"}
+  [ -n "$rel" ] || continue
+  if [ -d "$p" ]; then
+    continue
+  fi
+  entry=$rel
+  case $rel in
+    *.1|*.3|*.7|*.info|*.info-[0-9]*|*.py) entry="${rel}*" ;;
+    *.1.gz|*.3.gz|*.7.gz|*.info.gz) entry="${rel%.gz}*" ;;
+  esac
+  pkg=$(classify "$rel") || { echo "$rel" >> "$miss"; continue; }
+  printf '%%s\n' "$entry" >> "$out/$pkg.files"
+done
+if [ -s "$miss" ]; then
+  echo "unpackaged gcc files:" >&2
+  cat "$miss" >&2
+  exit 1
+fi
+
+skip="|%{_prefix}|%{_bindir}|%{_libdir}|/usr/lib|%{_includedir}|%{_datadir}|%{_mandir}|%{_infodir}|%{_docdir}|%{_libexecdir}|%{_mandir}/man1|%{_mandir}/man3|%{_mandir}/man7|"
+find "$ROOT" -type d | sort | while read p; do
+  rel=${p#"$ROOT"}
+  [ -n "$rel" ] || continue
+  case $skip in
+    *"|$rel|"*) continue ;;
+  esac
+  owner=
+  best=0
+  for list in "$out"/*.files; do
+    n=$(grep -F -c "${rel}/" "$list" || true)
+    if [ "$n" -gt "$best" ]; then
+      best=$n
+      owner=$(basename "$list" .files)
+    fi
+  done
+  if [ -n "$owner" ]; then
+    echo "%%dir $rel" >> "$out/$owner.files"
+  fi
+done
+
+req="cpp gcc gcc-c++ gcc-gdb-plugin gcc-plugin-devel libgcc libstdc++ libstdc++-devel libstdc++-static libgomp libatomic libitm libitm-devel libitm-static libasan libasan-static libhwasan libhwasan-static libtsan libtsan-static liblsan liblsan-static libubsan libubsan-static"
+%ifarch x86_64
+req="$req libquadmath libquadmath-devel libquadmath-static"
+%endif
+%if %{without bootstrap} && !0%{?bootstrap}
+req="$req gcc-objc gcc-objc++ gcc-gfortran gcc-gdc gcc-gm2 gcc-gcobol gcc-algol68 gcc-gnat gcc-go gcc-plugin-annobin libstdc++-docs libgfortran libgfortran-static libgphobos libgphobos-static libgm2 libgm2-static libgcobol libgcobol-static libga68 libga68-static libgnat libgnat-devel libgnat-static libgo libgo-devel libgo-static libobjc libgccjit libgccjit-devel libgdiagnostics libgdiagnostics-devel"
+%ifarch x86_64
+req="$req libgomp-offload-nvptx libgomp-offload-amdgcn gcc-offload-nvptx gcc-offload-amdgcn"
+%endif
+%endif
+for n in $req; do
+  if ! test -s "$out/$n.files"; then
+    echo "empty gcc package $n"
+    exit 1
+  fi
+done
+
+%ldconfig_scriptlets -n libgcc
 %ldconfig_scriptlets -n libstdc++
-
-%ldconfig_scriptlets -n libobjc
-
-%ldconfig_scriptlets -n libgfortran
-
-%ldconfig_scriptlets -n libgphobos
-
-%ldconfig_scriptlets -n libgm2
-
-%ldconfig_scriptlets -n libgnat
-
 %ldconfig_scriptlets -n libgomp
-
-%ldconfig_scriptlets gdb-plugin
-
-%ldconfig_scriptlets -n libgccjit
-
-%ldconfig_scriptlets -n libgdiagnostics
-
-%ldconfig_scriptlets -n libquadmath
-
-%ldconfig_scriptlets -n libitm
-
 %ldconfig_scriptlets -n libatomic
-
+%ldconfig_scriptlets -n libitm
 %ldconfig_scriptlets -n libasan
-
-%ldconfig_scriptlets -n libubsan
-
-%ldconfig_scriptlets -n libtsan
-
-%ldconfig_scriptlets -n liblsan
-
 %ldconfig_scriptlets -n libhwasan
-
+%ldconfig_scriptlets -n libtsan
+%ldconfig_scriptlets -n liblsan
+%ldconfig_scriptlets -n libubsan
+%ifarch x86_64
+%ldconfig_scriptlets -n libquadmath
+%endif
+%if %{without bootstrap} && !0%{?bootstrap}
+%ldconfig_scriptlets -n libgccjit
+%ldconfig_scriptlets -n libgdiagnostics
+%ldconfig_scriptlets -n libgfortran
+%ldconfig_scriptlets -n libgphobos
+%ldconfig_scriptlets -n libgm2
+%ldconfig_scriptlets -n libgcobol
+%ldconfig_scriptlets -n libga68
+%ldconfig_scriptlets -n libgnat
 %ldconfig_scriptlets -n libgo
-
-%files -f %{name}.lang
-%{_prefix}/bin/cc
-%{_prefix}/bin/c89
-%{_prefix}/bin/c99
-%{_prefix}/bin/gcc
-%{_prefix}/bin/gcov
-%{_prefix}/bin/gcov-tool
-%{_prefix}/bin/gcov-dump
-%{_prefix}/bin/gcc-ar
-%{_prefix}/bin/gcc-nm
-%{_prefix}/bin/gcc-ranlib
-%{_prefix}/bin/lto-dump
-%ifarch ppc
-%{_prefix}/bin/%{_target_platform}-gcc
-%endif
-%ifarch sparc64 sparcv9
-%{_prefix}/bin/sparc-%{_vendor}-%{_target_os}-gcc
-%endif
-%ifarch ppc64 ppc64p7
-%{_prefix}/bin/ppc-%{_vendor}-%{_target_os}-gcc
-%endif
-%{_prefix}/bin/%{gcc_target_platform}-gcc
-%{_prefix}/bin/%{gcc_target_platform}-gcc-%{gcc_major}
-%{_mandir}/man1/gcc.1*
-%{_mandir}/man1/gcov.1*
-%{_mandir}/man1/gcov-tool.1*
-%{_mandir}/man1/gcov-dump.1*
-%{_mandir}/man1/lto-dump.1*
-%{_infodir}/gcc*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/lto1
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/lto-wrapper
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so*
-%{_libdir}/bfd-plugins/liblto_plugin.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/rpmver
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stddef.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdarg.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdfix.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/varargs.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/float.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/limits.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdbool.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/iso646.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/syslimits.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/unwind.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/omp.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/openacc.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/acc_prof.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdint.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdint-gcc.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdalign.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdnoreturn.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdatomic.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/gcov.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdckdint.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/stdcountof.h
-%ifarch %{ix86} x86_64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/emmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/pmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/tmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ammintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/smmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/nmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/bmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/wmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/immintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avxintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/x86intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/fma4intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xopintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/lwpintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/popcntintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/bmiintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/tbmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ia32intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx2intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/bmi2intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/f16cintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/fmaintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/lzcntintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/rtmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xtestintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/adxintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/prfchwintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/rdseedintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/fxsrintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xsaveintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xsaveoptintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512cdintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512fintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/shaintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mm_malloc.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mm3dnow.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/cpuid.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/cross-stdarg.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bwintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512dqintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512ifmaintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512ifmavlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vbmiintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vbmivlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vlbwintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vldqintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/clflushoptintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/clwbintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mwaitxintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xsavecintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xsavesintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/clzerointrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/pkuintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vpopcntdqintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/sgxintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/gfniintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/cetintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/cet.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vbmi2intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vbmi2vlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vnniintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vnnivlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/vaesintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/vpclmulqdqintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vpopcntdqvlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bitalgintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/pconfigintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/wbnoinvdintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/movdirintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/waitpkgintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/cldemoteintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bf16vlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bf16intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/enqcmdintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vp2intersectintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512vp2intersectvlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/serializeintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/tsxldtrkintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxtileintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxint8intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxbf16intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/x86gprintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/uintrintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/hresetintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/keylockerintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avxvnniintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mwaitintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512fp16intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512fp16vlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avxifmaintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avxvnniint8intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avxneconvertintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/cmpccxaddintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxfp16intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/prfchiintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/raointintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxcomplexintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bitalgvlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avxvnniint16intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/sha512intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/sm3intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/sm4intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/usermsrintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxavx512intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxfp8intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxmovrsintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amxtf32intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx10_2bf16intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx10_2convertintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx10_2copyintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx10_2mediaintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx10_2minmaxintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx10_2satcvtintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/movrsintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/avx512bmmvlintrin.h
-%endif
-%ifarch ia64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ia64intrin.h
-%endif
-%ifarch ppc ppc64 ppc64le ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ppc-asm.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/altivec.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ppu_intrinsics.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/si2vmx.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/spu2vmx.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/vec_types.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/htmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/htmxlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/bmi2intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/bmiintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/xmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mm_malloc.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/emmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/x86intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/pmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/tmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/smmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/amo.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/nmmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/immintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/x86gprintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/rs6000-vecdefines.h
-%endif
-%ifarch %{arm}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/unwind-arm-common.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/mmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_neon.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_acle.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_cmse.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_fp16.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_bf16.h
-%endif
-%ifarch aarch64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_neon.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_acle.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_fp16.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_bf16.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_sve.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_sme.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_neon_sve_bridge.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_private_fp8.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/arm_private_neon_types.h
-%endif
-%ifarch sparc sparcv9 sparc64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/visintrin.h
-%endif
-%ifarch s390 s390x
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/s390intrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/htmintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/htmxlintrin.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/vecintrin.h
-%endif
-%ifarch riscv64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/riscv_vector.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/riscv_crypto.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/riscv_bitmanip.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/riscv_th_vector.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/sifive_vector.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/andes_vector.h
-%endif
-%if %{build_libasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/sanitizer
-%endif
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/collect2
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/crt*.o
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcc.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcov.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcc_eh.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcc_s.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgomp.spec
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgomp.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgomp.so
-%if %{build_libitm}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.spec
-%endif
-%if %{build_libasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libsanitizer.spec
-%endif
-%if %{build_isl}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libisl.so.*
-%endif
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/crt*.o
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgcc.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgcov.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgcc_eh.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgcc_s.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgomp.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgomp.so
-%if %{build_libquadmath}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libquadmath.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libquadmath.so
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libitm.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libitm.so
-%endif
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libatomic.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libatomic.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libatomic_asneeded.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libatomic_asneeded.so
-%endif
-%if %{build_libasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libasan.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libasan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libasan_preinit.o
-%endif
-%if %{build_libubsan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libubsan.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libubsan.so
-%endif
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/crt*.o
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgcc.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgcov.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgcc_eh.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgcc_s.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgomp.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgomp.so
-%if %{build_libquadmath}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libquadmath.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libquadmath.so
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libitm.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libitm.so
-%endif
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libatomic.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libatomic.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libatomic_asneeded.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libatomic_asneeded.so
-%endif
-%if %{build_libasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libasan.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libasan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libasan_preinit.o
-%endif
-%if %{build_libubsan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libubsan.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libubsan.so
-%endif
-%endif
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%if %{build_libquadmath}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libquadmath.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libquadmath.so
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.so
-%endif
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic_asneeded.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic_asneeded.so
-%endif
-%if %{build_libasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan_preinit.o
-%endif
-%if %{build_libubsan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libubsan.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libubsan.so
-%endif
-%else
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic_asneeded.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic_asneeded.so
-%endif
-%if %{build_libasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan_preinit.o
-%endif
-%if %{build_libubsan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libubsan.so
-%endif
-%endif
-%if %{build_libtsan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libtsan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libtsan_preinit.o
-%endif
-%if %{build_libhwasan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libhwasan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libhwasan_preinit.o
-%endif
-%if %{build_liblsan}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/liblsan.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/liblsan_preinit.o
-%endif
-%{_prefix}/libexec/getconf/default
-%doc gcc/README* rpm.doc/changelogs/gcc/ChangeLog*
-%{!?_licensedir:%global license %%doc}
-%license gcc/COPYING* COPYING.RUNTIME
-
-%files -n cpp -f cpplib.lang
-%{_prefix}/lib/cpp
-%{_prefix}/bin/cpp
-%{_mandir}/man1/cpp.1*
-%{_infodir}/cpp*
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cc1
-
-%files -n libgcc
-/%{_lib}/libgcc_s-%{gcc_major}-%{DATE}.so.1
-/%{_lib}/libgcc_s.so.1
-%{!?_licensedir:%global license %%doc}
-%license gcc/COPYING* COPYING.RUNTIME
-
-%files c++
-%{_prefix}/bin/%{gcc_target_platform}-*++
-%{_prefix}/bin/g++
-%{_prefix}/bin/c++
-%{_mandir}/man1/g++.1*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cc1plus
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/g++-mapper-server
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libstdc++.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libstdc++.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libstdc++fs.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libstdc++exp.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libsupc++.a
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libstdc++.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libstdc++.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libstdc++fs.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libstdc++exp.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libsupc++.a
-%endif
-%ifarch sparcv9 ppc %{multilib_64_archs}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.so
-%endif
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++fs.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++exp.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libsupc++.a
-%endif
-%doc rpm.doc/changelogs/gcc/cp/ChangeLog*
-
-%files -n libstdc++
-%{_prefix}/%{_lib}/libstdc++.so.6*
-%dir %{_datadir}/gdb
-%dir %{_datadir}/gdb/auto-load
-%dir %{_datadir}/gdb/auto-load/%{_prefix}
-%dir %{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/
-# Package symlink to keep compatibility
-%ifarch riscv64
-%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/lp64d
-%endif
-%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/libstdc*gdb.py*
-%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/__pycache__
-%dir %{_prefix}/share/gcc-%{gcc_major}
-%dir %{_prefix}/share/gcc-%{gcc_major}/python
-%{_prefix}/share/gcc-%{gcc_major}/python/libstdcxx
-
-%files -n libstdc++-devel
-%dir %{_prefix}/include/c++
-%{_prefix}/include/c++/%{gcc_major}
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifnarch sparcv9 ppc %{multilib_64_archs}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.so
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.modules.json
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libstdc++fs.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libstdc++exp.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libstdc++fs.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libstdc++exp.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++fs.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++exp.a
-%endif
-%doc rpm.doc/changelogs/libstdc++-v3/ChangeLog* libstdc++-v3/README*
-
-%files -n libstdc++-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libstdc++.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libsupc++.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libstdc++.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libsupc++.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libsupc++.a
-%endif
-
-%if %{build_libstdcxx_docs}
-%files -n libstdc++-docs
-%{_mandir}/man3/*
-%doc rpm.doc/libstdc++-v3/html
-%endif
-
-%if %{build_objc}
-%files objc
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/objc
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cc1obj
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libobjc.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libobjc.so
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libobjc.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libobjc.so
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libobjc.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libobjc.so
-%endif
-%doc rpm.doc/objc/*
-%doc libobjc/THREADS* rpm.doc/changelogs/libobjc/ChangeLog*
-
-%files objc++
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cc1objplus
-
-%files -n libobjc
-%{_prefix}/%{_lib}/libobjc.so.4*
-%endif
-
-%files gfortran
-%{_prefix}/bin/gfortran
-%{_prefix}/bin/f95
-%{_mandir}/man1/gfortran.1*
-%{_infodir}/gfortran*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/ISO_Fortran_binding.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/omp_lib.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/omp_lib.f90
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/omp_lib.mod
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/omp_lib_kinds.mod
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/openacc.f90
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/openacc.mod
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/openacc_kinds.mod
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/openacc_lib.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/ieee_arithmetic.mod
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/ieee_exceptions.mod
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/finclude/ieee_features.mod
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/f951
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgfortran.spec
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libcaf_single.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libcaf_shmem.a
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgfortran.a
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgfortran.so
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libcaf_single.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libcaf_shmem.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgfortran.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgfortran.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/finclude
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libcaf_single.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libcaf_shmem.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgfortran.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgfortran.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/finclude
-%endif
-%dir %{_fmoddir}
-%doc rpm.doc/gfortran/*
-
-%files -n libgfortran
-%{_prefix}/%{_lib}/libgfortran.so.5*
-
-%files -n libgfortran-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libgfortran.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libgfortran.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgfortran.a
-%endif
-
-%if %{build_d}
-%files gdc
-%{_prefix}/bin/gdc
-%{_mandir}/man1/gdc.1*
-%{_infodir}/gdc*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/d
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/d21
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgphobos.spec
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgdruntime.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgphobos.a
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgdruntime.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgphobos.so
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgdruntime.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgphobos.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgdruntime.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgphobos.so
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgdruntime.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgphobos.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgdruntime.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgphobos.so
-%endif
-%doc rpm.doc/gdc/*
-
-%files -n libgphobos
-%{_prefix}/%{_lib}/libgdruntime.so.7*
-%{_prefix}/%{_lib}/libgphobos.so.7*
-%doc rpm.doc/libphobos/*
-
-%files -n libgphobos-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libgdruntime.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libgphobos.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libgdruntime.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libgphobos.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgdruntime.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgphobos.a
-%endif
-%endif
-
-%if %{build_m2}
-%files gm2
-%{_prefix}/bin/gm2
-%{_mandir}/man1/gm2.1*
-%{_infodir}/m2*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/m2
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cc1gm2
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libm2*.a
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libm2*.so
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/m2
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libm2*.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libm2*.so
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/m2
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libm2*.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libm2*.so
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/m2rte.so
-%doc rpm.doc/gm2/*
-
-%files -n libgm2
-%{_prefix}/%{_lib}/libm2*.so.21*
-%doc rpm.doc/libgm2/*
-
-%files -n libgm2-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libm2*.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libm2*.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libm2*.a
-%endif
-%endif
-
-%if %{build_cobol}
-%files gcobol
-%{_prefix}/bin/gcobol
-%{_prefix}/bin/gcobc
-%{_mandir}/man1/gcobol.1*
-%{_mandir}/man3/gcobol-io.3*
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cobol1
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcobol.spec
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcobol.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/cobol
-%doc rpm.doc/gcobol/*
-
-%files -n libgcobol
-%{_prefix}/%{_lib}/libgcobol.so.2*
-%doc rpm.doc/libgcobol/*
-
-%files -n libgcobol-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgcobol.a
-%endif
-
-%if %{build_algol68}
-%files algol68
-%{_prefix}/bin/ga68
-%{_mandir}/man1/ga68.1*
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/a681
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libga68.spec
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libga68.a
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libga68.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/ga68.m68
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libga68.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libga68.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/ga68.m68
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libga68.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libga68.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/ga68.m68
-%endif
-%{_infodir}/ga68*
-%doc rpm.doc/algol68/*
-
-%files -n libga68
-%{_prefix}/%{_lib}/libga68.so.2*
-%doc rpm.doc/libga68/*
-
-%files -n libga68-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libga68.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libga68.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libga68.a
-%endif
-%endif
-
-%if %{build_ada}
-%files gnat
-%{_prefix}/bin/gnat
-%{_prefix}/bin/gnat[^i]*
-%{_infodir}/gnat*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/adainclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/adalib
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/ada_target_properties
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/adainclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/adalib
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/ada_target_properties
-%endif
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adainclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib
-%endif
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/ada_target_properties
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/gnat1
-%doc rpm.doc/changelogs/gcc/ada/ChangeLog*
-
-%files -n libgnat
-%{_prefix}/%{_lib}/libgnat-*.so
-%{_prefix}/%{_lib}/libgnarl-*.so
-
-%files -n libgnat-devel
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adainclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adalib
-%exclude %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adalib/libgnat.a
-%exclude %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adalib/libgnarl.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adainclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adalib
-%exclude %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adalib/libgnat.a
-%exclude %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adalib/libgnarl.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adainclude
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib
-%exclude %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib/libgnat.a
-%exclude %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib/libgnarl.a
+%ldconfig_scriptlets -n libobjc
+%endif
+
+%files -f %{_builddir}/gcc-split/gcc.files
+%license COPYING3
+%files -n cpp -f %{_builddir}/gcc-split/cpp.files
+%license COPYING3
+%files -n gcc-c++ -f %{_builddir}/gcc-split/gcc-c++.files
+%license COPYING3
+%files -n gcc-gdb-plugin -f %{_builddir}/gcc-split/gcc-gdb-plugin.files
+%license COPYING3
+%files -n gcc-plugin-devel -f %{_builddir}/gcc-split/gcc-plugin-devel.files
+%license COPYING3
+%files -n libgcc -f %{_builddir}/gcc-split/libgcc.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libstdc++ -f %{_builddir}/gcc-split/libstdc++.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libstdc++-devel -f %{_builddir}/gcc-split/libstdc++-devel.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libstdc++-static -f %{_builddir}/gcc-split/libstdc++-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgomp -f %{_builddir}/gcc-split/libgomp.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libatomic -f %{_builddir}/gcc-split/libatomic.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libitm -f %{_builddir}/gcc-split/libitm.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libitm-devel -f %{_builddir}/gcc-split/libitm-devel.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libitm-static -f %{_builddir}/gcc-split/libitm-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libasan -f %{_builddir}/gcc-split/libasan.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libasan-static -f %{_builddir}/gcc-split/libasan-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libhwasan -f %{_builddir}/gcc-split/libhwasan.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libhwasan-static -f %{_builddir}/gcc-split/libhwasan-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libtsan -f %{_builddir}/gcc-split/libtsan.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libtsan-static -f %{_builddir}/gcc-split/libtsan-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n liblsan -f %{_builddir}/gcc-split/liblsan.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n liblsan-static -f %{_builddir}/gcc-split/liblsan-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libubsan -f %{_builddir}/gcc-split/libubsan.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libubsan-static -f %{_builddir}/gcc-split/libubsan-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%ifarch x86_64
+%files -n libquadmath -f %{_builddir}/gcc-split/libquadmath.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libquadmath-devel -f %{_builddir}/gcc-split/libquadmath-devel.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libquadmath-static -f %{_builddir}/gcc-split/libquadmath-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%endif
+%if %{without bootstrap} && !0%{?bootstrap}
+%files -n gcc-objc -f %{_builddir}/gcc-split/gcc-objc.files
+%license COPYING3
+%files -n gcc-objc++ -f %{_builddir}/gcc-split/gcc-objc++.files
+%license COPYING3
+%files -n gcc-gfortran -f %{_builddir}/gcc-split/gcc-gfortran.files
+%license COPYING3
+%files -n gcc-gdc -f %{_builddir}/gcc-split/gcc-gdc.files
+%license COPYING3
+%files -n gcc-gm2 -f %{_builddir}/gcc-split/gcc-gm2.files
+%license COPYING3
+%files -n gcc-gcobol -f %{_builddir}/gcc-split/gcc-gcobol.files
+%license COPYING3
+%files -n gcc-algol68 -f %{_builddir}/gcc-split/gcc-algol68.files
+%license COPYING3
+%files -n gcc-gnat -f %{_builddir}/gcc-split/gcc-gnat.files
+%license COPYING3
+%files -n gcc-go -f %{_builddir}/gcc-split/gcc-go.files
+%license COPYING3
+%files -n gcc-plugin-annobin -f %{_builddir}/gcc-split/gcc-plugin-annobin.files
+%license COPYING3
+%files -n libstdc++-docs -f %{_builddir}/gcc-split/libstdc++-docs.files
+%files -n libgfortran -f %{_builddir}/gcc-split/libgfortran.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgfortran-static -f %{_builddir}/gcc-split/libgfortran-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgphobos -f %{_builddir}/gcc-split/libgphobos.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgphobos-static -f %{_builddir}/gcc-split/libgphobos-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgm2 -f %{_builddir}/gcc-split/libgm2.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgm2-static -f %{_builddir}/gcc-split/libgm2-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgcobol -f %{_builddir}/gcc-split/libgcobol.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgcobol-static -f %{_builddir}/gcc-split/libgcobol-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libga68 -f %{_builddir}/gcc-split/libga68.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libga68-static -f %{_builddir}/gcc-split/libga68-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgnat -f %{_builddir}/gcc-split/libgnat.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgnat-devel -f %{_builddir}/gcc-split/libgnat-devel.files
+%license COPYING3
+%files -n libgnat-static -f %{_builddir}/gcc-split/libgnat-static.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgo -f %{_builddir}/gcc-split/libgo.files
+%license libgo/LICENSE
+%files -n libgo-devel -f %{_builddir}/gcc-split/libgo-devel.files
+%license libgo/LICENSE
+%files -n libgo-static -f %{_builddir}/gcc-split/libgo-static.files
+%license libgo/LICENSE
+%files -n libobjc -f %{_builddir}/gcc-split/libobjc.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgccjit -f %{_builddir}/gcc-split/libgccjit.files
+%license COPYING3
+%files -n libgccjit-devel -f %{_builddir}/gcc-split/libgccjit-devel.files
+%license COPYING3
+%files -n libgdiagnostics -f %{_builddir}/gcc-split/libgdiagnostics.files
+%license COPYING3
+%files -n libgdiagnostics-devel -f %{_builddir}/gcc-split/libgdiagnostics-devel.files
+%license COPYING3
+%ifarch x86_64
+%files -n libgomp-offload-nvptx -f %{_builddir}/gcc-split/libgomp-offload-nvptx.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n libgomp-offload-amdgcn -f %{_builddir}/gcc-split/libgomp-offload-amdgcn.files
+%license COPYING.RUNTIME COPYING3.LIB
+%files -n gcc-offload-nvptx -f %{_builddir}/gcc-split/gcc-offload-nvptx.files
+%license COPYING3
+%files -n gcc-offload-amdgcn -f %{_builddir}/gcc-split/gcc-offload-amdgcn.files
+%license COPYING3
 %endif
-
-%files -n libgnat-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adalib
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adalib/libgnat.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/adalib/libgnarl.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adalib
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adalib/libgnat.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/adalib/libgnarl.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib/libgnat.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/adalib/libgnarl.a
-%endif
-%endif
-
-%files -n libgomp
-%{_prefix}/%{_lib}/libgomp.so.1*
-%{_infodir}/libgomp.info*
-%doc rpm.doc/changelogs/libgomp/ChangeLog*
-
-%if %{build_libquadmath}
-%files -n libquadmath
-%{_prefix}/%{_lib}/libquadmath.so.0*
-%{_infodir}/libquadmath.info*
-%{!?_licensedir:%global license %%doc}
-%license rpm.doc/libquadmath/COPYING*
-
-%files -n libquadmath-devel
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/quadmath.h
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include/quadmath_weak.h
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libquadmath.so
-%endif
-%doc rpm.doc/libquadmath/ChangeLog*
-
-%files -n libquadmath-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libquadmath.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libquadmath.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libquadmath.a
-%endif
-%endif
-
-%if %{build_libitm}
-%files -n libitm
-%{_prefix}/%{_lib}/libitm.so.1*
-%{_infodir}/libitm.info*
-
-%files -n libitm-devel
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/include
-#%%{_prefix}/lib/gcc/%%{gcc_target_platform}/%%{gcc_major}/include/itm.h
-#%%{_prefix}/lib/gcc/%%{gcc_target_platform}/%%{gcc_major}/include/itm_weak.h
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.so
-%endif
-%doc rpm.doc/libitm/ChangeLog*
-
-%files -n libitm-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libitm.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libitm.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.a
-%endif
-%endif
-
-%if %{build_libatomic}
-%files -n libatomic
-%{_prefix}/%{_lib}/libatomic.so.1*
-%doc rpm.doc/changelogs/libatomic/ChangeLog*
-%endif
-
-%if %{build_libasan}
-%files -n libasan
-%{_prefix}/%{_lib}/libasan.so.8*
-
-%files -n libasan-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libasan.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libasan.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan.a
-%endif
-%doc rpm.doc/changelogs/libsanitizer/ChangeLog*
-%{!?_licensedir:%global license %%doc}
-%license libsanitizer/LICENSE.TXT
-%endif
-
-%if %{build_libubsan}
-%files -n libubsan
-%{_prefix}/%{_lib}/libubsan.so.1*
-
-%files -n libubsan-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libubsan.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libubsan.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libubsan.a
-%endif
-%doc rpm.doc/changelogs/libsanitizer/ChangeLog*
-%{!?_licensedir:%global license %%doc}
-%license libsanitizer/LICENSE.TXT
-%endif
-
-%if %{build_libtsan}
-%files -n libtsan
-%{_prefix}/%{_lib}/libtsan.so.2*
-
-%files -n libtsan-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libtsan.a
-%doc rpm.doc/changelogs/libsanitizer/ChangeLog*
-%{!?_licensedir:%global license %%doc}
-%license libsanitizer/LICENSE.TXT
-%endif
-
-%if %{build_libhwasan}
-%files -n libhwasan
-%{_prefix}/%{_lib}/libhwasan.so.0*
-
-%files -n libhwasan-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libhwasan.a
-%doc rpm.doc/changelogs/libsanitizer/ChangeLog*
-%{!?_licensedir:%global license %%doc}
-%license libsanitizer/LICENSE.TXT
-%endif
-
-%if %{build_liblsan}
-%files -n liblsan
-%{_prefix}/%{_lib}/liblsan.so.0*
-
-%files -n liblsan-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/liblsan.a
-%doc rpm.doc/changelogs/libsanitizer/ChangeLog*
-%{!?_licensedir:%global license %%doc}
-%license libsanitizer/LICENSE.TXT
-%endif
-
-%if %{build_go}
-%files go
-%ghost %{_prefix}/bin/go
-%attr(755,root,root) %{_prefix}/bin/go.gcc
-%{_prefix}/bin/gccgo
-%ghost %{_prefix}/bin/gofmt
-%attr(755,root,root) %{_prefix}/bin/gofmt.gcc
-%{_mandir}/man1/gccgo.1*
-%{_mandir}/man1/go.1*
-%{_mandir}/man1/gofmt.1*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/go1
-%attr(755,root,root) %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cgo
-%attr(755,root,root) %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/buildid
-%attr(755,root,root) %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/test2json
-%attr(755,root,root) %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/vet
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgo.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgo.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgobegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libgolibbegin.a
-%endif
-%ifarch %{multilib_64_archs}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgo.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgo.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgobegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libgolibbegin.a
-%endif
-%ifarch sparcv9 ppc %{multilib_64_archs}
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgo.so
-%endif
-%ifarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgo.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgobegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgolibbegin.a
-%endif
-%doc rpm.doc/go/*
-
-%files -n libgo
-%{_prefix}/%{_lib}/libgo.so.25
-%attr(755,root,root) %{_prefix}/%{_lib}/libgo.so.25.*
-%doc rpm.doc/libgo/*
-
-%files -n libgo-devel
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/%{_lib}/go
-%dir %{_prefix}/%{_lib}/go/%{gcc_major}
-%{_prefix}/%{_lib}/go/%{gcc_major}/%{gcc_target_platform}
-%ifarch %{multilib_64_archs}
-%ifnarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/go
-%dir %{_prefix}/lib/go/%{gcc_major}
-%{_prefix}/lib/go/%{gcc_major}/%{gcc_target_platform}
-%endif
-%endif
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libgobegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libgolibbegin.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libgobegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libgolibbegin.a
-%endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgobegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgolibbegin.a
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgo.so
-%endif
-
-%files -n libgo-static
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%ifarch sparcv9 ppc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib32/libgo.a
-%endif
-%ifarch sparc64 ppc64 ppc64p7
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/lib64/libgo.a
 %endif
-%ifnarch sparcv9 sparc64 ppc ppc64 ppc64p7
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libgo.a
-%endif
-%endif
-
-%files -n libgccjit
-%{_prefix}/%{_lib}/libgccjit.so.*
-%doc rpm.doc/changelogs/gcc/jit/ChangeLog*
-
-%files -n libgccjit-devel
-%{_prefix}/%{_lib}/libgccjit.so
-%{_prefix}/include/libgccjit*.h
-%{_infodir}/libgccjit.info*
-%doc rpm.doc/libgccjit-devel/*
-%doc gcc/jit/docs/examples
-
-%files -n libgdiagnostics
-%{_prefix}/bin/sarif-replay
-%{_prefix}/%{_lib}/libgdiagnostics.so.*
-
-%files -n libgdiagnostics-devel
-%{_prefix}/%{_lib}/libgdiagnostics.so
-%{_prefix}/include/libgdiagnostics*.h
-%doc rpm.doc/libgdiagnostics-devel/*
-
-%files plugin-devel
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/gtype.state
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/include
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/plugin
-
-%files gdb-plugin
-%{_prefix}/%{_lib}/libcc1.so*
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/libcc1plugin.so*
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/libcp1plugin.so*
-%doc rpm.doc/changelogs/libcc1/ChangeLog*
-
-%if %{build_offload_nvptx}
-%files offload-nvptx
-%{_prefix}/bin/nvptx-none-*
-%{_prefix}/bin/%{gcc_target_platform}-accel-nvptx-none-gcc
-%{_prefix}/bin/%{gcc_target_platform}-accel-nvptx-none-lto-dump
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel
-%{_prefix}/lib/gcc/nvptx-none
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none
-%dir %{_prefix}/nvptx-none
-%{_prefix}/nvptx-none/bin
-%{_prefix}/nvptx-none/include
-
-%files -n libgomp-offload-nvptx
-%{_prefix}/%{_lib}/libgomp-plugin-nvptx.so.*
-%endif
-
-%if %{build_offload_amdgcn}
-%files offload-amdgcn
-%{_prefix}/bin/amdgcn-amdhsa-*
-%{_prefix}/bin/%{gcc_target_platform}-accel-amdgcn-amdhsa-gcc
-%{_prefix}/bin/%{gcc_target_platform}-accel-amdgcn-amdhsa-lto-dump
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel
-%{_prefix}/lib/gcc/amdgcn-amdhsa
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa
-%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa
-%dir %{_prefix}/amdgcn-amdhsa
-%{_prefix}/amdgcn-amdhsa/bin
-%{_prefix}/amdgcn-amdhsa/include
-
-%files -n libgomp-offload-amdgcn
-%{_prefix}/%{_lib}/libgomp-plugin-gcn.so.*
-%endif
-
-%if %{build_annobin_plugin}
-%files plugin-annobin
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}
-%dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/gcc-annobin.so
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/gcc-annobin.so.0
-%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/gcc-annobin.so.0.0.0
-%endif
-
-%if %{build_cross}
-%ifnarch aarch64
-%files -n cross-gcc-aarch64
-%{_prefix}/bin/aarch64-redhat-linux-cpp
-%{_prefix}/bin/aarch64-redhat-linux-gcc
-%{_prefix}/bin/aarch64-redhat-linux-gcc-%{gcc_major}
-%{_prefix}/bin/aarch64-redhat-linux-gcc-ar
-%{_prefix}/bin/aarch64-redhat-linux-gcc-nm
-%{_prefix}/bin/aarch64-redhat-linux-gcc-ranlib
-%{_prefix}/bin/aarch64-redhat-linux-gcov*
-%{_prefix}/bin/aarch64-redhat-linux-lto-dump
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/cc1
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/collect2
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/lto1
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/lto-wrapper
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/liblto_plugin.so
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/as
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/ld
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/ld.bfd
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/nm
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/strip
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/include
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/include/sanitizer
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/crt*.o
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgcc.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgcc_eh.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgcov.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/include/*.h
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/include/sanitizer/*.h
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/rpmver
-# These are here for ld(1) purposes only.
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgcc_s.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgomp.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libgomp.spec
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libatomic.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libatomic_asneeded.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libatomic.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libatomic_asneeded.a
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libitm.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libitm.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libitm.spec
-%endif
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libasan.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libasan_preinit.o
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libhwasan.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libhwasan_preinit.o
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libtsan.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libtsan_preinit.o
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/liblsan.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/liblsan_preinit.o
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libubsan.so
-
-%files -n cross-gcc-c++-aarch64
-%{_prefix}/bin/aarch64-redhat-linux-c++
-%{_prefix}/bin/aarch64-redhat-linux-g++
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/cc1plus
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/g++-mapper-server
-# For ld(1) purposes only.
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libstdc++.so
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libstdc++.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libstdc++fs.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libstdc++exp.a
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/libsupc++.a
-
-%files -n cross-gcc-plugin-aarch64
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/plugin/gtype.state
-%{_prefix}/lib/gcc/aarch64-redhat-linux/%{gcc_major}/plugin/include
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/aarch64-redhat-linux
-%dir %{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}
-%{_prefix}/libexec/gcc/aarch64-redhat-linux/%{gcc_major}/plugin
-%endif
-
-%ifnarch ppc64le
-%files -n cross-gcc-ppc64le
-%{_prefix}/bin/ppc64le-redhat-linux-cpp
-%{_prefix}/bin/ppc64le-redhat-linux-gcc
-%{_prefix}/bin/ppc64le-redhat-linux-gcc-%{gcc_major}
-%{_prefix}/bin/ppc64le-redhat-linux-gcc-ar
-%{_prefix}/bin/ppc64le-redhat-linux-gcc-nm
-%{_prefix}/bin/ppc64le-redhat-linux-gcc-ranlib
-%{_prefix}/bin/ppc64le-redhat-linux-gcov*
-%{_prefix}/bin/ppc64le-redhat-linux-lto-dump
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/cc1
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/collect2
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/lto1
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/lto-wrapper
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/liblto_plugin.so
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/as
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/ld
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/ld.bfd
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/nm
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/strip
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/include
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/include/sanitizer
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/crt*.o
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgcc.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgcc_eh.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgcov.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/include/*.h
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/include/sanitizer/*.h
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/rpmver
-# These are here for ld(1) purposes only.
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgcc_s.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgomp.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libgomp.spec
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libatomic.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libatomic_asneeded.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libatomic.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libatomic_asneeded.a
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libitm.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libitm.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libitm.spec
-%endif
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libasan.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libasan_preinit.o
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libtsan.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libtsan_preinit.o
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/liblsan.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/liblsan_preinit.o
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libubsan.so
-
-%files -n cross-gcc-c++-ppc64le
-%{_prefix}/bin/ppc64le-redhat-linux-c++
-%{_prefix}/bin/ppc64le-redhat-linux-g++
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/cc1plus
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/g++-mapper-server
-# For ld(1) purposes only.
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libstdc++.so
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libstdc++.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libstdc++fs.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libstdc++exp.a
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/libsupc++.a
-
-%files -n cross-gcc-plugin-ppc64le
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/plugin/gtype.state
-%{_prefix}/lib/gcc/ppc64le-redhat-linux/%{gcc_major}/plugin/include
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/ppc64le-redhat-linux
-%dir %{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}
-%{_prefix}/libexec/gcc/ppc64le-redhat-linux/%{gcc_major}/plugin
-%endif
-
-%ifnarch s390x
-%files -n cross-gcc-s390x
-%{_prefix}/bin/s390x-redhat-linux-cpp
-%{_prefix}/bin/s390x-redhat-linux-gcc
-%{_prefix}/bin/s390x-redhat-linux-gcc-%{gcc_major}
-%{_prefix}/bin/s390x-redhat-linux-gcc-ar
-%{_prefix}/bin/s390x-redhat-linux-gcc-nm
-%{_prefix}/bin/s390x-redhat-linux-gcc-ranlib
-%{_prefix}/bin/s390x-redhat-linux-gcov*
-%{_prefix}/bin/s390x-redhat-linux-lto-dump
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/cc1
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/collect2
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/lto1
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/lto-wrapper
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/liblto_plugin.so
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/as
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/ld
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/ld.bfd
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/nm
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/strip
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/include
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/include/sanitizer
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/crt*.o
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgcc.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgcc_eh.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgcov.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/include/*.h
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/include/sanitizer/*.h
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/rpmver
-# These are here for ld(1) purposes only.
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgcc_s.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgomp.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libgomp.spec
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libatomic.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libatomic_asneeded.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libatomic.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libatomic_asneeded.a
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libitm.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libitm.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libitm.spec
-%endif
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libasan.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libasan_preinit.o
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libtsan.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libtsan_preinit.o
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/liblsan.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/liblsan_preinit.o
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libubsan.so
-
-%files -n cross-gcc-c++-s390x
-%{_prefix}/bin/s390x-redhat-linux-c++
-%{_prefix}/bin/s390x-redhat-linux-g++
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/cc1plus
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/g++-mapper-server
-# For ld(1) purposes only.
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libstdc++.so
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libstdc++.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libstdc++fs.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libstdc++exp.a
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/libsupc++.a
-
-%files -n cross-gcc-plugin-s390x
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/plugin/gtype.state
-%{_prefix}/lib/gcc/s390x-redhat-linux/%{gcc_major}/plugin/include
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/s390x-redhat-linux
-%dir %{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}
-%{_prefix}/libexec/gcc/s390x-redhat-linux/%{gcc_major}/plugin
-%endif
-
-%ifnarch x86_64
-%files -n cross-gcc-x86_64
-%{_prefix}/bin/x86_64-redhat-linux-cpp
-%{_prefix}/bin/x86_64-redhat-linux-gcc
-%{_prefix}/bin/x86_64-redhat-linux-gcc-%{gcc_major}
-%{_prefix}/bin/x86_64-redhat-linux-gcc-ar
-%{_prefix}/bin/x86_64-redhat-linux-gcc-nm
-%{_prefix}/bin/x86_64-redhat-linux-gcc-ranlib
-%{_prefix}/bin/x86_64-redhat-linux-gcov*
-%{_prefix}/bin/x86_64-redhat-linux-lto-dump
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/cc1
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/collect2
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/lto1
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/lto-wrapper
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/liblto_plugin.so
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/as
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/ld
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/ld.bfd
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/nm
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/strip
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/include
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/include/sanitizer
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/crt*.o
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgcc.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgcc_eh.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgcov.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/include/*.h
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/include/sanitizer/*.h
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/rpmver
-# These are here for ld(1) purposes only.
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgcc_s.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgcc_s_asneeded.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgomp.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libgomp.spec
-%if %{build_libatomic}
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libatomic.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libatomic_asneeded.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libatomic.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libatomic_asneeded.a
-%endif
-%if %{build_libitm}
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libitm.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libitm.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libitm.spec
-%endif
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libasan.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libasan_preinit.o
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libtsan.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libtsan_preinit.o
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/liblsan.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/liblsan_preinit.o
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libubsan.so
-
-%files -n cross-gcc-c++-x86_64
-%{_prefix}/bin/x86_64-redhat-linux-c++
-%{_prefix}/bin/x86_64-redhat-linux-g++
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/cc1plus
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/g++-mapper-server
-# For ld(1) purposes only.
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libstdc++.so
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libstdc++.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libstdc++fs.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libstdc++exp.a
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/libsupc++.a
-
-%files -n cross-gcc-plugin-x86_64
-%dir %{_prefix}/lib/gcc
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}
-%dir %{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/plugin
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/plugin/gtype.state
-%{_prefix}/lib/gcc/x86_64-redhat-linux/%{gcc_major}/plugin/include
-%dir %{_prefix}/libexec/gcc
-%dir %{_prefix}/libexec/gcc/x86_64-redhat-linux
-%dir %{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}
-%{_prefix}/libexec/gcc/x86_64-redhat-linux/%{gcc_major}/plugin
-%endif
-
-%dnl build_cross
-%endif
-
-%if %{build_sysroot}
-%files -n %{sysroot_package_arch}-libgcc
-# Package the symlinks into usr/ here.
-%{sysroot_prefix}/lib
-%{sysroot_prefix}/lib64
-%{sysroot_prefix}%{_prefix}/%{_lib}/libgcc_s.so.1
-
-%files -n %{sysroot_package_arch}-libgomp
-%{sysroot_prefix}%{_prefix}/%{_lib}/libgomp.so.1
-
-%files -n %{sysroot_package_arch}-libstdc++
-%{sysroot_prefix}%{_prefix}/include/c++
-%{sysroot_prefix}%{_prefix}/%{_lib}/libstdc++.so.6
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++.a
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++fs.a
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libstdc++exp.a
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libsupc++.a
-
-%if %{build_libatomic}
-%files -n %{sysroot_package_arch}-libatomic
-%{sysroot_prefix}%{_prefix}/%{_lib}/libatomic.so.1
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libatomic.a
-%endif
-
-%if %{build_libitm}
-%files -n %{sysroot_package_arch}-libitm
-%{sysroot_prefix}%{_prefix}/%{_lib}/libitm.so.1
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libitm.a
-%endif
-
-%files -n %{sysroot_package_arch}-libsanitizer
-%if %{build_libasan}
-%{sysroot_prefix}%{_prefix}/%{_lib}/libasan.so.8
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libasan_preinit.o
-%endif
-%if %{build_libhwasan}
-%{sysroot_prefix}%{_prefix}/%{_lib}/libhwasan.so.0
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libhwasan_preinit.o
-%endif
-%if %{build_libtsan}
-%{sysroot_prefix}%{_prefix}/%{_lib}/libtsan.so.2
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libtsan_preinit.o
-%endif
-%if %{build_liblsan}
-%{sysroot_prefix}%{_prefix}/%{_lib}/liblsan.so.0
-%{sysroot_prefix}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/liblsan_preinit.o
-%endif
-%if %{build_libubsan}
-%{sysroot_prefix}%{_prefix}/%{_lib}/libubsan.so.1
-%endif
-
-%files -n %{sysroot_package_arch}-test-support
-# Package the symlinks into usr/ here.
-%{sysroot_prefix}/test-support
-%{sysroot_prefix}/test-support/auto-host.h
-
-%dnl build_cross
-%endif
-
