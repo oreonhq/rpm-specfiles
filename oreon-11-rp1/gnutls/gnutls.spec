@@ -40,11 +40,7 @@ Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_without mingw
 
-%if 0%{?rhel} >= 9 && %{with fips}
-%bcond_without bundled_gmp
-%else
 %bcond_with bundled_gmp
-%endif
 
 
 %define fips_requires() %{lua:

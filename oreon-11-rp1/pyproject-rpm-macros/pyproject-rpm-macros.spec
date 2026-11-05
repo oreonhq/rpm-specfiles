@@ -10,8 +10,8 @@ Summary:        RPM macros for PEP 517 Python packages
 License:        MIT
 
 %bcond tests 1
-%bcond pytest_xdist %[1 || %{defined epel}]
-%bcond tox_tests %[1 || %{defined epel}]
+%bcond pytest_xdist 1
+%bcond tox_tests 1
 
 # The idea is to follow the spirit of semver
 # Given version X.Y.Z:

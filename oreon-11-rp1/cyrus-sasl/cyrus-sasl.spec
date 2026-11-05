@@ -7,7 +7,7 @@
 
 %global _plugindir2 %{_libdir}/sasl2
 %global bootstrap_cyrus_sasl 0
-%global bdb_migration %[!(0 >= 10)]
+%global bdb_migration 1
 %global gdbm_db_file /etc/sasl2/sasldb2
 
 Summary: The Cyrus SASL library

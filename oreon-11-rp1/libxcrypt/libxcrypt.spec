@@ -8,8 +8,7 @@
 %bcond_without new_api
 
 
-# Build the compat package?
-%if 0%{?oreon} >= 999 || (0%{?rhel} >= 11 && !0%{?eln}) || %{without new_api}
+%if %{without new_api}
 %bcond_with    compat_pkg
 %else
 %bcond_without compat_pkg

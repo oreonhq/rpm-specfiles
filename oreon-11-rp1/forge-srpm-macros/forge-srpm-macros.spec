@@ -45,15 +45,11 @@ Requires:       redhat-rpm-config >= 266-1
 
 
 %build
-%if %{defined el9}
-%make_build epel9-build
-%endif
-
 
 %install
 %make_build \
     DESTDIR=%{buildroot} \
-    RPMMACRODIR=%{_rpmmacrodir} RPMLUADIR=%{_rpmluadir} %{?el9:epel9-}install
+    RPMMACRODIR=%{_rpmmacrodir} RPMLUADIR=%{_rpmluadir} install
 
 
 %check
@@ -67,13 +63,8 @@ export MACRO_LUA_DIR="%{buildroot}%{_rpmluadir}"
 %files
 %license LICENSES/GPL-1.0-or-later.txt
 %doc README.md NEWS.md
-%if %{undefined el9}
 %{_rpmluadir}/oreon/srpm/forge.lua
 %{_rpmmacrodir}/macros.forge
-%else
-%{_rpmluadir}/oreon/srpm/forge_epel.lua
-%{_rpmmacrodir}/macros.zzz-forge_epel
-%endif
 %{_rpmluadir}/oreon/srpm/_forge_util.lua
 
 

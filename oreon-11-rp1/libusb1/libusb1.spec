@@ -4,7 +4,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%bcond mingw %[1 && !0%{?flatpak}]
+%bcond mingw 1
 
 Summary:        Library for accessing USB devices
 Name:           libusb1

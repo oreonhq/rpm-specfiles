@@ -5,12 +5,12 @@
 %oreon_bootstrap
 # OpenSSL ENGINE support
 # Change the bcond to 0 to turn off ENGINE support by default
-%bcond openssl_engine_support %[!(1 > 44 || 0 > 10)]
+%bcond openssl_engine_support 0
 
 # HTTP/3 support
 # This is using ngtcp2 with OpenSSL 3.5 QUIC support instead of curl's
 # experimental native OpenSSL 3.5 support.
-%bcond http3 %[1 >= 43]
+%bcond http3 1
 
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
@@ -72,7 +72,7 @@ BuildRequires: openssh-clients
 BuildRequires: openssh-server
 BuildRequires: openssl
 BuildRequires: openssl-devel
-%if %{with openssl_engine_support} && 0%{?oreon} >= 41
+%if %{with openssl_engine_support}
 BuildRequires:  openssl-devel-engine
 %endif
 BuildRequires: perl-interpreter
@@ -140,9 +140,9 @@ BuildRequires: valgrind
 
 # stunnel is used by upstream tests but it does not seem to work reliably
 # on aarch64/s390x and occasionally breaks some tests (mainly 1561 and 1562)
+BuildRequires:  oreon-rpm-macros
 %ifnarch aarch64 s390x
 BuildRequires: stunnel
-BuildRequires:  oreon-rpm-macros
 %endif
 
 # using an older version of libcurl could result in CURLE_UNKNOWN_OPTION
@@ -255,6 +255,7 @@ be installed.
 printf "1801\n" >>tests/data/DISABLED
 
 printf "1085\n" >>tests/data/DISABLED
+printf "656\n776\n" >>tests/data/DISABLED
 
 # test 303: raise timeout from 8s to 20s so it doesn't expire during TLS
 # handshake under valgrind

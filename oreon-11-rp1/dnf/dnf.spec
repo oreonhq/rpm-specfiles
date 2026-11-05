@@ -14,7 +14,7 @@
 %global conflicts_dnf_plugins_extras_version 4.0.4
 %global conflicts_dnfdaemon_version 0.3.19
 
-%bcond dnf5_obsoletes_dnf %[1 > 40 || 0 > 10]
+%bcond dnf5_obsoletes_dnf 1
 
 
 

@@ -111,10 +111,6 @@ BuildRequires:  oreon-rpm-macros
 # Install binutils-devel to enable symbol demangling.
 %define buildrequires_stacktrace BuildRequires: elfutils-devel binutils-devel
 %define buildrequires_selinux BuildRequires: libselinux-devel
-%if 0%{?suse_version} >= 1100
-%define buildrequires_stacktrace BuildRequires: libdw-devel binutils-devel
-%define buildrequires_selinux BuildRequires: libselinux-devel
-%endif
 %{?buildrequires_stacktrace}
 %{?buildrequires_selinux}
 
@@ -123,7 +119,7 @@ Recommends: yama-ptrace-enable
 
 # OBS compatibility
 %{?!buildroot:BuildRoot: %_tmppath/buildroot-%name-%version-%release}
-%define maybe_use_defattr %{?suse_version:%%defattr(-,root,root)}
+%define maybe_use_defattr %{nil}
 
 # Fallback definitions for make_build/make_install macros
 %{?!__make:       %global __make %_bindir/make}

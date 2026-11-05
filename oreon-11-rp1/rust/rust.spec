@@ -768,18 +768,7 @@ find -name '*.rs' -type f -perm /111 -exec chmod -v -x '{}' '+'
 %endif
 
 # These are similar to __cflags_arch_* in /usr/lib/rpm/redhat/macros
-%global rustc_target_cpus %{lua: do
-  local oreon = tonumber(rpm.expand("1"))
-  local rhel = tonumber(rpm.expand("0"))
-  local env =
-    " RUSTC_TARGET_CPU_X86_64=x86-64" .. ((rhel >= 10) and "-v3" or (rhel == 9) and "-v2" or "")
-    .. " RUSTC_TARGET_CPU_PPC64LE=" .. ((rhel >= 9) and "pwr9" or "pwr8")
-    .. " RUSTC_TARGET_CPU_S390X=" ..
-        ((rhel >= 11 or oreon >= 45) and "z15" or (rhel >= 9) and "z14" or
-         (rhel == 8 or oreon >= 38) and "z13" or
-         (oreon >= 26) and "zEC12" or (rhel == 7) and "z196" or "z10")
-  print(env)
-end}
+%global rustc_target_cpus RUSTC_TARGET_CPU_X86_64=x86-64 RUSTC_TARGET_CPU_PPC64LE=pwr8 RUSTC_TARGET_CPU_S390X=z15
 
 # Set up shared environment variables for build/install/check.
 # *_USE_PKG_CONFIG=1 convinces *-sys crates to use the system library.

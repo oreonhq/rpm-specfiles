@@ -17,10 +17,6 @@
 # set sphinx package name according to distro
 %global requires_python2_sphinx python2-sphinx
 %global requires_python3_sphinx python3-sphinx
-%if 0%{?suse_version}
-    %global requires_python2_sphinx python2-Sphinx
-    %global requires_python3_sphinx python3-Sphinx
-%endif
 
 %bcond_with valgrind
 
@@ -114,9 +110,7 @@ Development files for %{name}.
 Summary:        Python 2 bindings for the libdnf library.
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  python2-devel
-%if !0%{?mageia}
 BuildRequires:  %{requires_python2_sphinx}
-%endif
 BuildRequires:  swig >= %{swig_version}
 
 %description -n python2-%{name}
@@ -187,11 +181,6 @@ mkdir build-py3
 %build
 %if %{with python2}
 pushd build-py2
-%if 0%{?mageia} || 0%{?suse_version}
-    cd ..
-    %define _cmake_builddir build-py2
-    %define __builddir build-py2
-%endif
   %cmake -DPYTHON_DESIRED:FILEPATH=%{__python2} -DWITH_MAN=OFF ../ %{!?with_zchunk:-DWITH_ZCHUNK=OFF} %{!?with_valgrind:-DDISABLE_VALGRIND=1} %{_cmake_opts} -DLIBDNF_MAJOR_VERSION=%{libdnf_major_version} -DLIBDNF_MINOR_VERSION=%{libdnf_minor_version} -DLIBDNF_MICRO_VERSION=%{libdnf_micro_version} \
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF}
   %cmake_build
@@ -201,11 +190,6 @@ popd
 
 %if %{with python3}
 pushd build-py3
-%if 0%{?mageia} || 0%{?suse_version}
-    cd ..
-    %define _cmake_builddir build-py3
-    %define __builddir build-py3
-%endif
   %cmake -DPYTHON_DESIRED:FILEPATH=%{__python3} -DWITH_GIR=0 -DWITH_MAN=0 -Dgtkdoc=0 ../ %{!?with_zchunk:-DWITH_ZCHUNK=OFF} %{!?with_valgrind:-DDISABLE_VALGRIND=1} %{_cmake_opts} -DLIBDNF_MAJOR_VERSION=%{libdnf_major_version} -DLIBDNF_MINOR_VERSION=%{libdnf_minor_version} -DLIBDNF_MICRO_VERSION=%{libdnf_micro_version} \
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF}
   %cmake_build

@@ -37,11 +37,7 @@ sed -i 's/\tinstall/\t$(INSTALL)/g' Makefile
 make PREFIX=%{_prefix} %{?_smp_mflags}
 
 %install
-%if 0%{?el7}
-%make_install PREFIX=%{_prefix} INSTALL="%{__install} -p"
-%else
 %make_install PREFIX=%{_prefix}
-%endif
 
 %check
 make check

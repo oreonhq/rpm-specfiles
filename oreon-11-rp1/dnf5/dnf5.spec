@@ -15,7 +15,7 @@
 %bcond_with    sanitizers
 
 # Core features
-%bcond dnf5_obsoletes_dnf %[1 > 40 || 0 > 10]
+%bcond dnf5_obsoletes_dnf 1
 %bcond_without acl
 %bcond_without comps
 %bcond_without modulemd

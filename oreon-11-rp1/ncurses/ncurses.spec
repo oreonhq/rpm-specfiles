@@ -3,8 +3,8 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%bcond compat_libs %[!(0 >= 10) || %{defined eln}]
-%bcond gpm %[!(0 >= 10)]
+%bcond compat_libs 1
+%bcond gpm 1
 
 Summary: Ncurses support utilities
 Name: ncurses

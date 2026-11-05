@@ -30,7 +30,7 @@
 # bootstrap ordering issues with the bin/sbin merge.
 #
 # triggers and the required matching virtual provides.
-%bcond sbin_compat %[1 >= 43]
+%bcond sbin_compat 1
 
 # riscv64 has LTO disabled globally
 %bcond lto       %["%_arch" != "riscv64"]
@@ -761,8 +761,6 @@ main systemd package and is meant for use in exitrds.
        upstream=%{?with_upstream}%{!?with_upstream:0}
        obs=%{?with_obs}%{!?with_obs:0}
        report_standalone=%{?with_report_standalone}%{!?with_report_standalone:0}
-       oreon=45
-       rhel=
        _arch=%{_arch}
        '**'}
 
@@ -953,7 +951,7 @@ CONFIGURE_OPTS=(
 
 # If dynamic spec generation is available, directly pick up the triggers
 # from the build directory for upstream builds.
-%if %{with upstream} && (0%{?oreon} >= 41 || 0%{?rhel} >= 11)
+%if %{with upstream}
 # Include the triggers
 cp %{_vpath_builddir}/src/rpm/triggers.systemd.sh %{specpartsdir}/triggers.specpart
 %else
@@ -1150,7 +1148,7 @@ meson test -C %{_vpath_builddir} -t 6 --print-errorlogs
 
 #############################################################################################
 
-%if %{without upstream} || (0%{?oreon} < 41 && 0%{?rhel} < 11)
+%if %{without upstream}
 %include %{SOURCE1}
 %endif
 

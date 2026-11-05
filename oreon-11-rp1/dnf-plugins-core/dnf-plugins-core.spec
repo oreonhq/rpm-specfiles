@@ -10,7 +10,7 @@
 
 %define __cmake_in_source_build 1
 
-%bcond dnf5_obsoletes_dnf %[1 > 40 || 0 > 10]
+%bcond dnf5_obsoletes_dnf 1
 
 %bcond_with debug_plugin
 
@@ -237,7 +237,7 @@ Leaves Plugin for DNF, Python 3 version. List all installed packages
 not required by any other installed package.
 %endif
 
-%if 0%{?rhel} == 0 && %{with python2}
+%if %{with python2}
 %package -n python2-dnf-plugin-local
 Summary:        Local Plugin for DNF
 Requires:       %{_bindir}/createrepo_c
@@ -256,7 +256,7 @@ Local Plugin for DNF, Python 2 version. Automatically copy all downloaded packag
 repository on the local filesystem and generating repo metadata.
 %endif
 
-%if %{with python3} && 0%{?rhel} == 0
+%if %{with python3}
 %package -n python3-dnf-plugin-local
 Summary:        Local Plugin for DNF
 Requires:       %{_bindir}/createrepo_c
@@ -741,14 +741,14 @@ ln -sf %{yum_utils_subpackage_name}.1.gz %{buildroot}%{_mandir}/man1/repotrack.1
 %{_mandir}/man8/dnf*-leaves.*
 %endif
 
-%if 0%{?rhel} == 0 && %{with python2}
+%if %{with python2}
 %files -n python2-dnf-plugin-local
 %config(noreplace) %{_sysconfdir}/dnf/plugins/local.conf
 %{python2_sitelib}/dnf-plugins/local.*
 %{_mandir}/man8/dnf*-local.*
 %endif
 
-%if %{with python3} && 0%{?rhel} == 0
+%if %{with python3}
 %files -n python3-dnf-plugin-local
 %config(noreplace) %{_sysconfdir}/dnf/plugins/local.conf
 %{python3_sitelib}/dnf-plugins/local.*

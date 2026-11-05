@@ -23,7 +23,7 @@
 # Whether to use RPM build wheels from the python-{pip,setuptools,wheel}-wheel packages
 # Uses upstream bundled prebuilt wheels otherwise
 # Only F44+ has a pip new enough to work with Python 3.15
-%bcond rpmwheels %[%{without bootstrap} && (1 > 43 || 0)]
+%bcond rpmwheels %{without bootstrap}
 
 # Expensive optimizations (mainly, profile-guided optimizations)
 # We don't have to switch it off for bootstrap, but it speeds up the first build,

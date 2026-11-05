@@ -88,7 +88,7 @@ BuildRequires: oreon-rpm-macros
 %endif
 
 # MLIR version 22 started to require nanobind >= 2.9, which is only available
-%if %{without compat_build} && %{defined oreon} && 0%{?oreon} >= 44
+%if %{without compat_build}
 %ifarch %{ix86}
 %bcond_with mlir
 %else
@@ -107,7 +107,7 @@ BuildRequires: oreon-rpm-macros
 %endif
 
 #region flang
-%if %{without compat_build} && %{defined oreon} && 0%{?oreon} >= 44
+%if %{without compat_build}
 %if %{maj_ver} >= 24
 # Flang is not supported on i686
 %ifnarch i686
@@ -173,7 +173,7 @@ end
 
 
 # The libcxx build condition also enables libcxxabi and libunwind.
-%if %{without compat_build} && %{defined oreon}
+%if %{without compat_build}
 %bcond_without libcxx
 %else
 %bcond_with libcxx
@@ -181,7 +181,7 @@ end
 
 # I've called the build condition "build_bolt" to indicate that this does not
 # necessarily "use" BOLT in order to build LLVM.
-%if %{without compat_build} && %{defined oreon}
+%if %{without compat_build}
 # BOLT only supports aarch64 and x86_64
 %ifarch aarch64 x86_64
 %bcond_without build_bolt
@@ -192,7 +192,7 @@ end
 %bcond_with build_bolt
 %endif
 
-%if %{without compat_build} && %{defined oreon}
+%if %{without compat_build}
 %bcond_without polly
 %else
 %bcond_with polly
@@ -243,7 +243,7 @@ end
 %global _lto_cflags %nil
 %endif
 
-%if 0%{undefined rhel} && %{without compat_build}
+%if %{without compat_build}
 %bcond_without libclc
 %else
 %bcond_with libclc
@@ -676,13 +676,6 @@ BuildRequires: python%{python3_pkgversion}-nanobind-devel
 
 # This is required because we need "ps" when running LLDB tests
 BuildRequires: procps-ng
-
-# For reproducible pyc file generation
-%if %{without compat_build} && (0%{?rhel} == 9 || 0%{?rhel} == 10)
-BuildRequires: /usr/bin/marshalparser
-BuildRequires:  oreon-rpm-macros
-%global py_reproducible_pyc_path %{buildroot}%{python3_sitelib}
-%endif
 
 Requires:	%{pkg_name_llvm}-libs%{?_isa} = %{version}-%{release}
 
@@ -1436,7 +1429,7 @@ cd llvm/utils/lit
 %ifarch %ix86 riscv64
 %global reduce_debuginfo 1
 %endif
-%if 0%{?rhel} == 8 || %{with fastclang}
+%if %{with fastclang}
 %global reduce_debuginfo 1
 %endif
 
@@ -1503,11 +1496,6 @@ cd llvm/utils/lit
 
 %ifarch x86_64
 %global cfg_file_content %{cfg_file_content} -march=x86-64
-%endif
-
-# We want to use DWARF-5 on all snapshot builds.
-%if %{without snapshot_build} && %{defined rhel} && 0%{?rhel} < 10
-%global cfg_file_content %{cfg_file_content} -gdwarf-4 -g0
 %endif
 
 %if %{defined gts_version}

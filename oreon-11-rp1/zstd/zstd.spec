@@ -18,7 +18,7 @@
 # enable pzstd support by default
 %bcond_without pzstd
 
-%bcond gtest %[ !0 ]
+%bcond gtest 1
 
 Name:           zstd
 Version:        1.5.7
