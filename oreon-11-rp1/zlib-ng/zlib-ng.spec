@@ -28,7 +28,7 @@ License:	Zlib
 Url:		https://github.com/zlib-ng/zlib-ng
 Source0:        https://github.com/zlib-ng/zlib-ng/archive/%{version}/zlib-ng-%{version}.tar.gz
 
-Patch:        pr2152.patch
+Patch:        far.diff
 Patch:        pr2152.patch
 
 BuildRequires:	cmake >= 3.1

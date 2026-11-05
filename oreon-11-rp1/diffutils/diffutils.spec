@@ -11,11 +11,11 @@ URL: https://www.gnu.org/software/diffutils/diffutils.html
 Source0:        https://mirror.cs.odu.edu/gnu/diffutils/diffutils-%{version}.tar.xz
 # upstream fixes
 # cross compile build of 3.12 diffutils fails
-Patch:        0001-sdiff-port-back-to-C17.patch
+Patch:        diffutils-3.12-cross-compiler-build-fail.patch
 # sdiff: continue → break
-Patch:        0001-sdiff-port-back-to-C17.patch
+Patch:        diffutils-3.12-sdiff-continue-break.patch
 # sdiff: pacify gcc -flto -Wmaybe-uninitialized
-Patch:        0001-sdiff-port-back-to-C17.patch
+Patch:        0001-sdiff-pacify-gcc-flto-Wmaybe-uninitialized.patch
 # sdiff: port back to C17
 Patch:        0001-sdiff-port-back-to-C17.patch
 License: GPL-3.0-or-later

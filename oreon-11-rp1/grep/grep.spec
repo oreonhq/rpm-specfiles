@@ -19,7 +19,7 @@ Source5: GREP_COLORS
 Source6: grepconf.sh
 
 # upstream ticket 39445
-Patch:        grep-3.12-test-write-error-msg-drop.patch
+Patch:        grep-3.5-help-align.patch
 # upstream ticket 77800
 Patch:        grep-3.12-test-write-error-msg-drop.patch
 

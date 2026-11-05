@@ -53,29 +53,29 @@ Source0:        https://mirror.cs.odu.edu/gnu/libtool/libtool-%{version}.tar.xz
 
 # ~> downstream
 # ~> remove possibly once #1158915 gets fixed somehow
-Patch:        libtool-nodocs.patch
+Patch:        libtool-2.4.5-rpath.patch
 
 # See the rhbz#1289759 and rhbz#1214506.  We disable hardening namely because
 # that bakes the CFLAGS/LDFLAGS into installed /bin/libtool and ltmain.sh files.
 # At the same time we want to have libltdl.so hardened.  Downstream-only patch.
 %undefine _hardened_build
-Patch:        libtool-nodocs.patch
+Patch:        libtool-2.4.7-hardening.patch
 
 # non-PIC libraries are not supported on ARMv7
 # Since we removed "-fPIC" from global CFLAGS this test fails on this arch (as expected)
 # Please refer to the following ticket regarding PIC support on ARM:
 # https://bugs.launchpad.net/ubuntu/+source/gcc-4.4/+bug/503448
-Patch:        libtool-nodocs.patch
+Patch:        libtool-2.4.6-disable_non-pic_arm.patch
 
 # Discussion re-opened upstream:
 # https://lists.gnu.org/archive/html/bug-libtool/2025-01/msg00004.html
 # Patch was already sent in 2022:
 # https://lists.gnu.org/archive/html/libtool-patches/2022-02/msg00000.html
-Patch:        libtool-nodocs.patch
+Patch:        libtool-2.4.6-keep-compiler-deps.patch
 
 # Patch sent upstream
 # https://lists.gnu.org/archive/html/libtool-patches/2024-02/msg00002.html
-Patch:        libtool-nodocs.patch
+Patch:        riscv-non-PIC-into-shared-objects.patch
 
 %if ! 0%{?_module_build}
 Patch:        libtool-nodocs.patch

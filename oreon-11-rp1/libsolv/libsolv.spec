@@ -55,10 +55,10 @@ URL:            https://github.com/openSUSE/libsolv
 Source0:        https://github.com/openSUSE/libsolv/archive/%{version}/libsolv-%{version}.tar.gz
 # Provides: python3dist(solv) in python3-solv
 # https://github.com/openSUSE/libsolv/pull/602
-Patch:        0003-Fix-a-buffer-overflow-when-decompressing-solv-pages.patch
+Patch:        0001-Python-Provide-dist-info-metadata.patch
 # Add "rpm" INSTALLER to Python metadata, not suitable for upstream.
 # Requires Python-Provide-dist-info-metadata.patch.
-Patch:        0003-Fix-a-buffer-overflow-when-decompressing-solv-pages.patch
+Patch:        0002-Add-INSTALLER-to-Python-metadata.patch
 # Fix a buffer overflow when decompressing solv pages (CVE-2026-48864),
 # rejected by upstream, <https://github.com/openSUSE/libsolv/pull/622>.
 Patch:        0003-Fix-a-buffer-overflow-when-decompressing-solv-pages.patch

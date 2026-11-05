@@ -13,7 +13,7 @@ URL:            https://www.gtk.org
 Source0:        https://download.gnome.org/sources/glib/2.90/glib-%{version}.tar.xz
 
 # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/903
-Patch:        default-terminal.patch
+Patch:        gnutls-hmac.patch
 
 Patch:        default-terminal.patch
 

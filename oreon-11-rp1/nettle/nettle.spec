@@ -35,7 +35,7 @@ Source2:	nettle-release-keyring.gpg
 Source100:	%{name}-%{version_old}-hobbled.tar.xz
 Source101:	nettle-3.5-remove-ecc-testsuite.patch
 %endif
-Patch:        nettle-4.0-hobble-to-configure.patch
+Patch:        nettle-4.0-zeroize-stack.patch
 Patch:        nettle-4.0-hobble-to-configure.patch
 
 %if %{with bundle_gmp}

@@ -18,15 +18,15 @@ Source0:        https://github.com/cronie-crond/cronie/releases/download/cronie-
 Source1:   cronie-tmpfiles.conf
 Source2:   cronie-anacron-tmpfiles.conf
 
-Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
+Patch:        0001-do-no-leak-file-descriptors.patch
 # https://github.com/cronie-crond/cronie/issues/193
-Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
+Patch:        make_error_func_prototype_complete.patch
 # https://github.com/cronie-crond/cronie/pull/200
-Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
+Patch:        fix_range_parsing.patch
 # https://github.com/cronie-crond/cronie/pull/201
-Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
+Patch:        move_parsing_code.patch
 # https://github.com/cronie-crond/cronie/pull/206
-Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
+Patch:        crontab-fix-backup-failure.patch
 # https://github.com/cronie-crond/cronie/pull/210
 Patch:        forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
 

@@ -24,7 +24,7 @@ URL:            http://www.lysator.liu.se/~nisse/nettle/
 Source0:        http://www.lysator.liu.se/~nisse/archive/nettle-%{version}.tar.gz
 Source1:        nettle-3.10.1.tar.gz.sig
 Source2:	nettle-release-keyring.gpg
-Patch:        nettle-3.10-hobble-to-configure.patch
+Patch:        nettle-3.8-zeroize-stack.patch
 Patch:        nettle-3.10-hobble-to-configure.patch
 
 %if %{with bundle_gmp}

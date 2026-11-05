@@ -12,13 +12,13 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: https://savannah.gnu.org/projects/patch/
 Source0:        https://mirror.cs.odu.edu/gnu/patch/patch-%{version}.tar.xz
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
+Patch:        0001-patch:Add-some-missing-filename-quoting.patch
+Patch:        0002-patch:Reject-empty-filenames.patch
+Patch:        0003-patch:Skip-read-only-check-when-output-file-specified.patch
+Patch:        0004-patch:Avoid-null-pointer-derefence-with-bad-hunks.patch
+Patch:        0005-patch:Port-to-POSIX-ed.patch
+Patch:        0006-patch:Dont-infloop-on-null-ranges.patch
+Patch:        0007-patch:Remove-symlink-caching.patch
 Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
 
 BuildRequires: make
