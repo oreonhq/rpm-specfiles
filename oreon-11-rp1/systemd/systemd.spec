@@ -149,12 +149,13 @@ Source26:       systemd-user
 # Those are downstream-only patches, but we don't want them in packit builds.
 
 # Create user journals for users with high UIDs
-Patch:        0002-machined-continue-without-resolve.hook-socket.patch
+Patch:        30846.patch
 
 # userdb: create userdb root directory with correct label
 # We can drop this after SELinux policy is updated to handle the transition.
-Patch:        0002-machined-continue-without-resolve.hook-socket.patch
+Patch:        0001-core-create-userdb-root-directory-with-correct-label.patch
 
+# temp workaround
 Patch:        0002-machined-continue-without-resolve.hook-socket.patch
 
 %endif
