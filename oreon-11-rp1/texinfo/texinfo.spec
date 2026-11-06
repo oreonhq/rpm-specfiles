@@ -33,6 +33,7 @@ BuildRequires: perl-generators
 BuildRequires: ncurses-devel, help2man, perl(Data::Dumper)
 BuildRequires: perl(Locale::Messages), perl(Unicode::EastAsianWidth), perl(Text::Unidecode)
 BuildRequires: perl(Storable), perl(Unicode::Normalize), perl(File::Copy)
+BuildRequires: glibc-langpack-en
 BuildRequires:  oreon-rpm-macros
 
 # Texinfo perl packages are not installed in default perl library dirs

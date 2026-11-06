@@ -101,6 +101,7 @@ BuildRequires: gettext-devel
 
 # For s390x... FDO package notes are bogus.
 Patch1:        elfutils-0.186-fdo-swap.patch
+Patch2:        elfutils-stackprof-skip-missing-event.patch
 
 %description
 Elfutils is a collection of utilities, including stack (to show

@@ -1,0 +1,12 @@
+diff --git a/tests/run-stackprof-user.sh b/tests/run-stackprof-user.sh
+--- a/tests/run-stackprof-user.sh
++++ b/tests/run-stackprof-user.sh
+@@ -50,7 +50,7 @@ if [ "x$HAVE_LIBPFM" = "x1" ]; then
+     testrun ${abs_top_builddir}/src/stackprof -v -e perf::BRANCHES:freq=4000 -g -- timeout 2 /bin/sh -c "while true; do true; done" 2>&1 | tee test.out
+     tempfiles gmon.*
+     grep "^perf_event_attr configuration type=0 config=4 sample_freq=4000" test.out
+-    grep "Starting stack profile collection pid" test.out
++    grep "Starting stack profile collection pid" test.out || (grep "ERROR: no perf fds opened" test.out && echo "perf event unavailable" && exit 77)
+     grep -E "^buildid [0-9a-f]+" test.out
+ fi
+ 
