@@ -39,6 +39,7 @@ BuildRequires: python3-devel
 BuildRequires: systemd-rpm-macros
 BuildRequires: systemd-devel
 BuildRequires: zlib-devel
+BuildRequires: oreon-rpm-macros
 
 # For gpg verification of source tarball
 BuildRequires: gnupg2
@@ -69,7 +70,6 @@ BuildRequires: mingw64-libxml2
 BuildRequires: mingw64-openssl
 BuildRequires: mingw64-python3
 BuildRequires: mingw64-zlib
-BuildRequires:  oreon-rpm-macros
 %endif
 
 %description
@@ -162,8 +162,6 @@ rm -f "$RPM_BUILD_ROOT%{_libdir}/libnghttp2.la"
 # will be installed via %%doc
 rm -f "$RPM_BUILD_ROOT%{_datadir}/doc/nghttp2/README.rst"
 
-%ldconfig_scriptlets -n libnghttp2
-
 %if %{with_mingw}
 %mingw_make_install
 %mingw_debug_install_post
@@ -175,6 +173,8 @@ rm -f "%{buildroot}%{mingw64_datadir}/doc/nghttp2/README.rst"
 rm -r "%{buildroot}%{mingw32_mandir}/man1"
 rm -r "%{buildroot}%{mingw64_mandir}/man1"
 %endif
+
+%ldconfig_scriptlets -n libnghttp2
 
 %post
 %systemd_post nghttpx.service
