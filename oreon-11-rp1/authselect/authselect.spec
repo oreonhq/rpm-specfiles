@@ -111,8 +111,6 @@ autoreconf -if
 find $RPM_BUILD_ROOT -name "*.la" -exec %__rm -f {} \;
 find $RPM_BUILD_ROOT -name "*.a" -exec %__rm -f {} \;
 
-%ldconfig_scriptlets libs
-
 %files libs -f %{name}.lang -f %{name}-profiles.5.lang
 %dir %{_sysconfdir}/authselect
 %dir %{_sysconfdir}/authselect/custom
@@ -196,12 +194,14 @@ find $RPM_BUILD_ROOT -name "*.a" -exec %__rm -f {} \;
 %{_datadir}/bash-completion/completions/authselect.bash
 
 %post libs
+/sbin/ldconfig
 %systemd_post authselect-apply-changes.service authselect-first-boot.service
 
 %preun libs
 %systemd_preun authselect-apply-changes.service authselect-first-boot.service
 
 %postun libs
+/sbin/ldconfig
 %systemd_postun authselect-apply-changes.service authselect-first-boot.service
 
 %posttrans libs

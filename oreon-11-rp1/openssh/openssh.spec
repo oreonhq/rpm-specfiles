@@ -344,7 +344,7 @@ popd
 %endif
 
 %check
-OPENSSL_CONF=/dev/null %{SOURCE22} %{SOURCE23}  # ./parallel_tests.sh parallel_tests.Makefile
+OPENSSL_CONF=/dev/null /usr/bin/bash %{SOURCE22} %{SOURCE23}
 #make tests
 
 %install

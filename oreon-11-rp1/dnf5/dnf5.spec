@@ -1183,5 +1183,6 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %find_lang libdnf5-plugin-rhsm
 %endif
 
-%ldconfig_scriptlets
+%ldconfig_scriptlets -n libdnf5
+%ldconfig_scriptlets -n libdnf5-cli
 

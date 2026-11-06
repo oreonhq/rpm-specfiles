@@ -646,12 +646,12 @@ useful as a reference for code completion tools in various editors.
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 echo '%{source10_hash}  %{SOURCE10}' | sha256sum -c -
 
-%oreon_gpgverify
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 
 %ifarch %{bootstrap_arches}
-%oreon_gpgverify
-%oreon_gpgverify
-%oreon_gpgverify
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE%{bootstrap_sig_cargo}} --data %{SOURCE%{bootstrap_source_cargo}}
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE%{bootstrap_sig_rustc}} --data %{SOURCE%{bootstrap_source_rustc}}
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE%{bootstrap_sig_std}} --data %{SOURCE%{bootstrap_source_std}}
 rm -rf %{local_rust_root}
 %setup -q -n cargo-%{bootstrap_suffix} -T -b %{bootstrap_source_cargo}
 ./install.sh --prefix=%{local_rust_root} --disable-ldconfig
