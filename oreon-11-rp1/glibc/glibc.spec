@@ -316,7 +316,7 @@ rpm.define("__debug_install_post bash " .. wrapper
 # turn off the rpmbuild check.
 %global _binaries_in_noarch_packages_terminate_build 0
 # Variant of %%dist that contains just the distribution release, no affixes.
-%global sysroot_dist fc%{oreon}
+%global sysroot_dist or11
 
 %{?!sysroot_dist:%global sysroot_dist root}
 # The name of the sysroot package.

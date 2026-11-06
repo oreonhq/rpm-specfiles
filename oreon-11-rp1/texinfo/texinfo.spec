@@ -32,7 +32,7 @@ BuildRequires: gcc
 BuildRequires: perl-generators
 BuildRequires: ncurses-devel, help2man, perl(Data::Dumper)
 BuildRequires: perl(Locale::Messages), perl(Unicode::EastAsianWidth), perl(Text::Unidecode)
-BuildRequires: perl(Storable), perl(Unicode::Normalize)
+BuildRequires: perl(Storable), perl(Unicode::Normalize), perl(File::Copy)
 BuildRequires:  oreon-rpm-macros
 
 # Texinfo perl packages are not installed in default perl library dirs
@@ -104,8 +104,7 @@ install -Dpm0755 -t %{buildroot}%{_sbindir} contrib/fix-info-dir
 %find_lang %{name}_document
 
 %check
-#export ALL_TESTS=yes
-#%make_build check
+%make_build check
 
 %post tex
 %{_bindir}/texconfig-sys rehash 2> /dev/null || :

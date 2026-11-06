@@ -12,9 +12,9 @@ Version:        0.197
 %global baserelease 1
 Release:        1%{?dist}
 URL: http://elfutils.org/
-%global source_url ftp://sourceware.org/pub/elfutils/%{version}/
+%global source_url https://sourceware.org/pub/elfutils/%{version}/
 License: GPL-3.0-or-later AND (GPL-2.0-or-later OR LGPL-3.0-or-later) AND GFDL-1.3-no-invariants-or-later
-Source0:        ftp://sourceware.org/pub/elfutils/%{version}/elfutils-%{version}.tar.bz2
+Source0:        https://sourceware.org/pub/elfutils/%{version}/elfutils-%{version}.tar.bz2
 Source1: elfutils-debuginfod.sysusers
 Summary: A collection of utilities and DSOs to handle ELF files and DWARF data
 
