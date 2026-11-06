@@ -429,6 +429,7 @@ BuildRequires: python3 python3-devel
 
 # This GCC version is needed for -fstack-clash-protection support.
 BuildRequires: gcc >= 7.2.1-6
+BuildRequires: annobin-plugin-gcc
 %global enablekernel 3.2
 Conflicts: kernel < %{enablekernel}
 %define target %{_target_cpu}-redhat-linux
