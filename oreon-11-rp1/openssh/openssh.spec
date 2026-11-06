@@ -118,6 +118,7 @@ Patch0050:        0050-openssh-10.2p1-pam-auth.patch
 Patch0051:        0051-gssapi-s4u.patch
 Patch0052:        0052-openssh-10.2p1-pkcs11-uri.patch
 Patch0053:        0053-gssapi-tests.patch
+Patch0054:        0054-sk-helper-log-stderr.patch
 
 License: BSD-3-Clause AND BSD-2-Clause AND ISC AND SSH-OpenSSH AND ssh-keyscan AND snprintf AND LicenseRef-Oreon-Public-Domain AND X11-distribute-modifications-variant
 Requires: openssl-libs >= 1:3.5.0
@@ -328,6 +329,10 @@ make regress/misc/sk-dummy/sk-dummy.so \
 	CFLAGS="$CFLAGS -fno-lto" \
 	CFLAGS_NOPIE="$CFLAGS -fno-lto" \
 	LDFLAGS_NOPIE="$sk_ldflags"
+%ifarch x86_64
+rm -f ssh-sk-helper ssh-sk-helper.o ssh-sk.o sk-usbhid.o ssherr-nolibcrypto.o
+make ssh-sk-helper CFLAGS="$CFLAGS -fno-lto" LDFLAGS="$LDFLAGS -fno-lto"
+%endif
 
 # Define a variable to toggle gtk2/gtk3 building.  This is necessary
 # because RPM doesn't handle nested %%if statements.
