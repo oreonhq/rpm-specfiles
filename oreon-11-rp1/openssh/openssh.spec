@@ -319,7 +319,15 @@ fi
 %endif
 
 %make_build
-make regress/misc/sk-dummy/sk-dummy.so
+rm -f ed25519.lo ed25519-openssl.lo regress/misc/sk-dummy/*.lo regress/misc/sk-dummy/sk-dummy.so
+sk_ldflags="-fno-lto"
+%ifarch x86_64
+sk_ldflags="$sk_ldflags -Wl,-z,cet-report=error"
+%endif
+make regress/misc/sk-dummy/sk-dummy.so \
+	CFLAGS="$CFLAGS -fno-lto" \
+	CFLAGS_NOPIE="$CFLAGS -fno-lto" \
+	LDFLAGS_NOPIE="$sk_ldflags"
 
 # Define a variable to toggle gtk2/gtk3 building.  This is necessary
 # because RPM doesn't handle nested %%if statements.
@@ -344,9 +352,6 @@ popd
 %endif
 
 %check
-%ifarch x86_64
-export GLIBC_TUNABLES=glibc.cpu.hwcaps=-IBT,-SHSTK
-%endif
 OPENSSL_CONF=/dev/null /usr/bin/bash %{SOURCE22} %{SOURCE23}
 #make tests
 
