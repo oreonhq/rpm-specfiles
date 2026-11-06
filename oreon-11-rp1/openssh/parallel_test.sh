@@ -13,32 +13,6 @@ PARALLEL_MAKEFILE=$1
 
 SPLIT=24
 
-# helper has to actually exec. unconfined_exec_t is denied on the x86
-# builder, and a label applied here is what the test copies inherit.
-sk_helper_ok() {
-    local out
-    out=$(./ssh-sk-helper </dev/null 2>&1 || true)
-    case "$out" in
-        *"ssh_msg_recv failed"*|*"disabled at compile time"*|*"usage:"*)
-            return 0
-            ;;
-    esac
-    printf '%s\n' "$out" >&2
-    return 1
-}
-if ! sk_helper_ok; then
-    chcon -t unconfined_exec_t ssh-sk-helper || :
-    if ! sk_helper_ok; then
-        chcon --reference=ssh-keygen ssh-sk-helper 2>/dev/null || \
-            restorecon -F ssh-sk-helper 2>/dev/null || :
-        if ! sk_helper_ok; then
-            ls -Z ssh-sk-helper ssh-keygen >&2 || :
-            echo "ssh-sk-helper will not start" >&2
-            exit 1
-        fi
-    fi
-fi
-
 # work around something else that only crops up in brew
 export TEST_SSH_UNSAFE_PERMISSIONS=1
 
