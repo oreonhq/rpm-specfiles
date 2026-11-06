@@ -288,10 +288,6 @@ else
 fi
 %endif
 
-CFLAGS=${CFLAGS//-O3/-O2}
-CFLAGS=${CFLAGS//-mprefer-vector-width=256/}
-export CFLAGS
-
 %configure \
 	--sysconfdir=%{_sysconfdir}/ssh \
 	--libexecdir=%{_libexecdir}/openssh \
@@ -348,6 +344,20 @@ popd
 %endif
 
 %check
+mv ssh-sk-helper .ssh-sk-helper.bin
+cat > ssh-sk-helper << 'EOF'
+#!/bin/bash
+d=$(dirname "$0")
+log=$(mktemp "$d/sk-helper.trace.XXXXXX")
+"$d/.ssh-sk-helper.bin" "$@" 2>>"$log"
+rc=$?
+echo "sk-helper-rc $rc" >&2
+cat "$log" >&2
+rm -f "$log"
+exit $rc
+EOF
+chmod 755 ssh-sk-helper .ssh-sk-helper.bin
+chcon -t unconfined_exec_t ssh-sk-helper .ssh-sk-helper.bin || :
 OPENSSL_CONF=/dev/null /usr/bin/bash %{SOURCE22} %{SOURCE23}
 #make tests
 
