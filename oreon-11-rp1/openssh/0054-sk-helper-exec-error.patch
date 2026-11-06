@@ -1,0 +1,49 @@
+--- a/ssh-sk-client.c	2026-11-06 14:25:05.996272114 -0800
++++ b/ssh-sk-client.c	2026-11-06 14:25:05.978315448 -0800
+@@ -46,7 +46,7 @@
+ start_helper(int *fdp, pid_t *pidp, void (**osigchldp)(int))
+ {
+ 	void (*osigchld)(int);
+-	int oerrno, pair[2], execpipe[2];
++	int oerrno, pair[2], execpipe[2], efd, fd;
+ 	ssize_t n;
+ 	pid_t pid;
+ 	char execbuf[100], *helper, *verbosity = NULL;
+@@ -88,23 +88,33 @@
+ 	}
+ 	if (pid == 0) {
+ 		close(execpipe[0]);
+-		FD_CLOSEONEXEC(execpipe[1]);
++		efd = execpipe[1];
++		if (efd <= STDERR_FILENO) {
++			fd = fcntl(efd, F_DUPFD_CLOEXEC, STDERR_FILENO + 1);
++			if (fd != -1) {
++				close(efd);
++				efd = fd;
++			}
++		} else
++			FD_CLOSEONEXEC(efd);
+ 		if ((dup2(pair[1], STDIN_FILENO) == -1) ||
+ 		    (dup2(pair[1], STDOUT_FILENO) == -1)) {
+ 			snprintf(execbuf, sizeof execbuf,
+ 			    "dup2: %s", strerror(errno));
+-			write(execpipe[1], execbuf, strlen(execbuf)+1);
++			write(efd, execbuf, strlen(execbuf)+1);
+ 			_exit(1);
+ 		}
+ 		close(pair[0]);
+ 		close(pair[1]);
+-		closefrom(STDERR_FILENO + 1);
++		closefrom(efd + 1);
++		for (fd = STDERR_FILENO + 1; fd < efd; fd++)
++			close(fd);
+ 		debug_f("starting %s %s", helper,
+ 		    verbosity == NULL ? "" : verbosity);
+ 		execlp(helper, helper, verbosity, (char *)NULL);
+ 		snprintf(execbuf, sizeof execbuf,
+ 		    "execlp: %s", strerror(errno));
+-		write(execpipe[1], execbuf, strlen(execbuf)+1);
++		write(efd, execbuf, strlen(execbuf)+1);
+ 		_exit(1);
+ 	}
+ 	close(pair[1]);

@@ -118,6 +118,7 @@ Patch0050:        0050-openssh-10.2p1-pam-auth.patch
 Patch0051:        0051-gssapi-s4u.patch
 Patch0052:        0052-openssh-10.2p1-pkcs11-uri.patch
 Patch0053:        0053-gssapi-tests.patch
+Patch0054:        0054-sk-helper-exec-error.patch
 
 License: BSD-3-Clause AND BSD-2-Clause AND ISC AND SSH-OpenSSH AND ssh-keyscan AND snprintf AND LicenseRef-Oreon-Public-Domain AND X11-distribute-modifications-variant
 Requires: openssl-libs >= 1:3.5.0
@@ -344,20 +345,6 @@ popd
 %endif
 
 %check
-mv ssh-sk-helper .ssh-sk-helper.bin
-cat > ssh-sk-helper << 'EOF'
-#!/bin/bash
-d=$(dirname "$0")
-log=$(mktemp "$d/sk-helper.trace.XXXXXX")
-"$d/.ssh-sk-helper.bin" "$@" 2>>"$log"
-rc=$?
-echo "sk-helper-rc $rc" >&2
-cat "$log" >&2
-rm -f "$log"
-exit $rc
-EOF
-chmod 755 ssh-sk-helper .ssh-sk-helper.bin
-chcon -t unconfined_exec_t ssh-sk-helper .ssh-sk-helper.bin || :
 OPENSSL_CONF=/dev/null /usr/bin/bash %{SOURCE22} %{SOURCE23}
 #make tests
 
