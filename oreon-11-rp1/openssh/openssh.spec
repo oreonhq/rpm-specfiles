@@ -331,7 +331,7 @@ make regress/misc/sk-dummy/sk-dummy.so \
 	LDFLAGS_NOPIE="$sk_ldflags"
 %ifarch x86_64
 rm -f ssh-sk-helper ssh-sk-helper.o ssh-sk.o sk-usbhid.o ssherr-nolibcrypto.o
-make ssh-sk-helper CFLAGS="$CFLAGS -fno-lto" LDFLAGS="$LDFLAGS -fno-lto"
+make ssh-sk-helper CFLAGS="$CFLAGS -fno-lto" LDFLAGS="-L. -Lopenbsd-compat/ $LDFLAGS -fno-lto"
 %endif
 
 # Define a variable to toggle gtk2/gtk3 building.  This is necessary
