@@ -118,7 +118,6 @@ Patch0050:        0050-openssh-10.2p1-pam-auth.patch
 Patch0051:        0051-gssapi-s4u.patch
 Patch0052:        0052-openssh-10.2p1-pkcs11-uri.patch
 Patch0053:        0053-gssapi-tests.patch
-Patch0054:        0054-sk-helper-log-stderr.patch
 
 License: BSD-3-Clause AND BSD-2-Clause AND ISC AND SSH-OpenSSH AND ssh-keyscan AND snprintf AND LicenseRef-Oreon-Public-Domain AND X11-distribute-modifications-variant
 Requires: openssl-libs >= 1:3.5.0
@@ -320,20 +319,7 @@ fi
 %endif
 
 %make_build
-rm -f ed25519.lo ed25519-openssl.lo regress/misc/sk-dummy/*.lo regress/misc/sk-dummy/sk-dummy.so
-sk_cflags="$CFLAGS -fno-lto"
-%ifarch x86_64
-sk_cflags=$(printf '%s\n' "$sk_cflags" | sed -E 's/-fcf-protection(=[^ ]*)?//; s/-mtls-dialect=[^ ]*//; s/-mprefer-vector-width=[^ ]*//')
-sk_cflags="$sk_cflags -fcf-protection=none -mtls-dialect=gnu"
-%endif
-make regress/misc/sk-dummy/sk-dummy.so \
-	CFLAGS="$sk_cflags" \
-	CFLAGS_NOPIE="$sk_cflags" \
-	LDFLAGS_NOPIE="-fno-lto"
-%ifarch x86_64
-rm -f ssh-sk-helper ssh-sk-helper.o ssh-sk.o sk-usbhid.o ssherr-nolibcrypto.o
-make ssh-sk-helper CFLAGS="$sk_cflags" LDFLAGS="-L. -Lopenbsd-compat/ $LDFLAGS -fno-lto"
-%endif
+make regress/misc/sk-dummy/sk-dummy.so
 
 # Define a variable to toggle gtk2/gtk3 building.  This is necessary
 # because RPM doesn't handle nested %%if statements.
