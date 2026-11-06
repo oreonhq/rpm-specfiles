@@ -288,6 +288,10 @@ else
 fi
 %endif
 
+CFLAGS=${CFLAGS//-O3/-O2}
+CFLAGS=${CFLAGS//-mprefer-vector-width=256/}
+export CFLAGS
+
 %configure \
 	--sysconfdir=%{_sysconfdir}/ssh \
 	--libexecdir=%{_libexecdir}/openssh \
