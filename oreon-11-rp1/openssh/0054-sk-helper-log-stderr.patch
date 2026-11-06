@@ -18,3 +18,12 @@
  
  	/*
  	 * Rearrange our file descriptors a little; we don't trust the
+@@ -347,7 +347,7 @@
+ 		fatal_r(r, "%s: parse", __progname);
+ 
+ 	if (!vflag && log_level_name((LogLevel)ll) != NULL)
+-		log_init(__progname, (LogLevel)ll, log_facility, log_stderr);
++		log_init(__progname, (LogLevel)ll, log_facility, 1);
+ 
+ 	switch (rtype) {
+ 	case SSH_SK_HELPER_SIGN:

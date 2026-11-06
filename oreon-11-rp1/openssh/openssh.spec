@@ -321,17 +321,18 @@ fi
 
 %make_build
 rm -f ed25519.lo ed25519-openssl.lo regress/misc/sk-dummy/*.lo regress/misc/sk-dummy/sk-dummy.so
-sk_ldflags="-fno-lto"
+sk_cflags="$CFLAGS -fno-lto"
 %ifarch x86_64
-sk_ldflags="$sk_ldflags -Wl,-z,cet-report=error"
+sk_cflags=$(printf '%s\n' "$sk_cflags" | sed -E 's/-fcf-protection(=[^ ]*)?//; s/-mtls-dialect=[^ ]*//; s/-mprefer-vector-width=[^ ]*//')
+sk_cflags="$sk_cflags -fcf-protection=none -mtls-dialect=gnu"
 %endif
 make regress/misc/sk-dummy/sk-dummy.so \
-	CFLAGS="$CFLAGS -fno-lto" \
-	CFLAGS_NOPIE="$CFLAGS -fno-lto" \
-	LDFLAGS_NOPIE="$sk_ldflags"
+	CFLAGS="$sk_cflags" \
+	CFLAGS_NOPIE="$sk_cflags" \
+	LDFLAGS_NOPIE="-fno-lto"
 %ifarch x86_64
 rm -f ssh-sk-helper ssh-sk-helper.o ssh-sk.o sk-usbhid.o ssherr-nolibcrypto.o
-make ssh-sk-helper CFLAGS="$CFLAGS -fno-lto" LDFLAGS="-L. -Lopenbsd-compat/ $LDFLAGS -fno-lto"
+make ssh-sk-helper CFLAGS="$sk_cflags" LDFLAGS="-L. -Lopenbsd-compat/ $LDFLAGS -fno-lto"
 %endif
 
 # Define a variable to toggle gtk2/gtk3 building.  This is necessary
