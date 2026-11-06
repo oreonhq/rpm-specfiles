@@ -344,6 +344,9 @@ popd
 %endif
 
 %check
+%ifarch x86_64
+export GLIBC_TUNABLES=glibc.cpu.hwcaps=-IBT,-SHSTK
+%endif
 OPENSSL_CONF=/dev/null /usr/bin/bash %{SOURCE22} %{SOURCE23}
 #make tests
 

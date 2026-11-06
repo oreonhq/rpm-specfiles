@@ -1084,6 +1084,12 @@ DNF5 plugin for working with RPM package manifest files.
     -DVERSION_MAJOR=%{project_version_major} \
     -DVERSION_MINOR=%{project_version_minor} \
     -DVERSION_MICRO=%{project_version_micro}
+find %{__cmake_builddir} -type f -name '*.ninja' -exec sed -i \
+  -e 's| -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1||g' \
+  -e 's| -specs=/usr/lib/rpm/redhat/redhat-hardened-ld||g' \
+  -e 's| -specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors||g' \
+  -e 's| -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1||g' \
+  {} +
 %cmake_build
 %if %{with man}
     %cmake_build --target doc-man
