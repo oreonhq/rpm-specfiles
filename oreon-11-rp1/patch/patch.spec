@@ -27,8 +27,6 @@ BuildRequires: libselinux-devel
 BuildRequires: libattr-devel
 BuildRequires: ed
 BuildRequires: autoconf automake
-BuildRequires:  oreon-rpm-macros
-
 Requires: ed
 
 Provides: bundled(gnulib) = %{gnulib_ver}
@@ -44,7 +42,7 @@ Patch should be installed because it is a common way of upgrading
 applications.
 
 %prep
-%oreon_sha256
+echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
 
 %autosetup -p1
 

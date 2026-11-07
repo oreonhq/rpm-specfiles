@@ -68,8 +68,7 @@ defined in simple policy definition files.
 %prep
 %oreon_sha256
 
-%setup -q -n oreon-crypto-policies-%{git_commit_hash}-%{git_commit}
-%autopatch -p1
+%setup -q -n fedora-crypto-policies-%{git_commit_hash}-%{git_commit}
 
 %build
 %make_build \

@@ -3,16 +3,14 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global forgeurl https://github.com/akheron/jansson
 Version:        2.14
-%forgemeta
 
 Name:		jansson
 Release:        1%{?dist}
 Summary:	C library for encoding, decoding and manipulating JSON data
 
 License:	MIT AND LicenseRef-Oreon-Public-Domain
-URL:		%{forgeurl}
+URL:		https://github.com/akheron/jansson
 Source0:        https://github.com/akheron/jansson/archive/v%{version}/jansson-%{version}.tar.gz
 
 # Fix the tests.
@@ -45,7 +43,7 @@ Development documentation for jansson.
 %prep
 %oreon_sha256
 
-%forgeautosetup -p1
+%autosetup -p1 -n jansson-%{version}
 
 
 %build

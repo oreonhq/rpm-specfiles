@@ -112,9 +112,6 @@ ln -s -f %{buildroot}%{_libdir}/libimaevm.so.%{compat_soversion}.0.0 %{buildroot
 popd
 %endif
 
-%ldconfig_scriptlets
-
-# IMA setup tools
 install -D -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_datadir}/ima/dracut-98-integrity.conf
 
 mkdir -p -m 755 $RPM_BUILD_ROOT%{_datadir}/ima/policies
@@ -125,6 +122,8 @@ done < %{SOURCE200}
 
 install -D %{SOURCE3} $RPM_BUILD_ROOT%{_bindir}/ima-add-sigs
 install -D %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}/ima-setup
+
+%ldconfig_scriptlets
 
 %files
 %license LICENSES.txt COPYING

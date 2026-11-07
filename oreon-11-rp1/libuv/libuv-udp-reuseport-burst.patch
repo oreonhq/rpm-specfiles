@@ -1,0 +1,11 @@
+--- a/test/test-udp-reuseport.c
++++ b/test/test-udp-reuseport.c
+@@ -72,7 +72,7 @@
+ #else
+ 
+ #define NUM_RECEIVING_THREADS 2
+-#define MAX_UDP_DATAGRAMS 10
++#define MAX_UDP_DATAGRAMS 64
+ 
+ static uv_udp_t udp_send_handles[MAX_UDP_DATAGRAMS];
+ static uv_udp_send_t udp_send_requests[MAX_UDP_DATAGRAMS];

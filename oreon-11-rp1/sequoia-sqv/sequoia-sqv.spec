@@ -21,6 +21,7 @@ BuildRequires: rustc
 BuildRequires: cargo
 BuildRequires: pkgconf
 BuildRequires: openssl-devel >= 1:4.0
+BuildRequires: clang-devel
 Requires: openssl-libs
 
 %description

@@ -4,12 +4,21 @@ set -euo pipefail
 key=
 sig=
 data=
+stdin_data=
 
 while [ $# -gt 0 ]; do
   case $1 in
     --key) key=$2; shift 2 ;;
     --sig) sig=$2; shift 2 ;;
-    --data) data=$2; shift 2 ;;
+    --data)
+      data=$2
+      shift 2
+      if [ "$data" = - ]; then
+        stdin_data=$(mktemp)
+        cat > "$stdin_data"
+        data=$stdin_data
+      fi
+      ;;
     *)
       echo "oreon-gpgverify: unknown arg $1" >&2
       exit 2
@@ -30,7 +39,7 @@ for f in "$key" "$sig" "$data"; do
 done
 
 tmp=$(mktemp -d)
-trap 'rm -rf "$tmp"' EXIT
+trap 'rm -rf "$tmp" ${stdin_data:+"$stdin_data"}' EXIT
 mkdir -m 700 "$tmp/gnupg"
 GNUPGHOME="$tmp/gnupg" gpg --batch --quiet --import "$key"
 GNUPGHOME="$tmp/gnupg" gpg --batch --quiet --export > "$tmp/ring.gpg"

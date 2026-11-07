@@ -1,19 +1,15 @@
-%global source0_hash bd17e99219aa2fb6a8acb3d11deffcb588708c70fc29f346e20ea7f71d3a48f0
+%global source0_hash 229459746e6933aabad983aafee125a9fad492db49af2887509eb4311287d7a2
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global base_version 5.78
-
 Name:           perl-Exporter
 Version:        5.79
 Release:        1%{?dist}
 Summary:        Implements default import method for modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Exporter
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.78.tar.gz
-# Upgrade to 5.79 based on perl-5.42.0
-Patch0:        Exporter-5.78-Upgrade-to-5.79.patch
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.79.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -50,8 +46,7 @@ with "%{_libexecdir}/%{name}/test".
 %prep
 %oreon_sha256
 
-%setup -q -n Exporter-%{base_version}
-%patch -P0 -p1
+%setup -q -n Exporter-%{version}
 
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

@@ -115,7 +115,11 @@ install -p -m 644 -t %{buildroot}%{_fileattrsdir} libsymlink.attr
 
 mkdir -p %{buildroot}%{_rpmluadir}/oreon/rpm
 mkdir -p %{buildroot}%{_rpmluadir}/oreon/srpm
+mkdir -p %{buildroot}%{_rpmluadir}/fedora
 install -p -m 644 -t %{buildroot}%{_rpmluadir}/oreon common.lua
+install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
+mkdir -p %{buildroot}%{_rpmconfigdir}/redhat
+install -p -m 644 oreon-hardened-cc1 %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-cc1
 
 install -p -m 644 %{SOURCE35} .
 
@@ -165,3 +169,5 @@ install -p -m 644 %{SOURCE35} .
 %dir %{_rpmluadir}/oreon/srpm
 %dir %{_rpmluadir}/oreon/rpm
 %{_rpmluadir}/oreon/common.lua
+%{_rpmluadir}/fedora/common.lua
+%{_rpmconfigdir}/redhat/redhat-hardened-cc1

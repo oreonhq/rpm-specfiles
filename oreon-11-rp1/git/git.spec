@@ -464,7 +464,9 @@ Requires:       subversion
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 
 # Verify GPG signatures
-xz -dc '%{SOURCE0}' | %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data -
+xz -dc '%{SOURCE0}' > %{_builddir}/git-verify.tar
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{_builddir}/git-verify.tar
+rm -f %{_builddir}/git-verify.tar
 
 %autosetup -p1 -n %{name}-%{real_version}
 

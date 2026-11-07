@@ -1296,7 +1296,7 @@ exit 0
 # Do not run "alternatives --auto ld" here.  Leave the setting to
 # however the user previously had it set.  See BZ 1592069 for more details.
 
-%ldconfig_post
+/sbin/ldconfig
 
 exit 0
 
@@ -1327,7 +1327,6 @@ exit 0
 
 #----------------------------------------------------------------------------
 
-%postun
 %ldconfig_postun
 
 #----------------------------------------------------------------------------

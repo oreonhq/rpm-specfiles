@@ -15,7 +15,7 @@ import pytest
 BASEDIR = Path(__file__).parent
 
 PRELOAD_LUA = (
-    'package.preload["fedora.rpm.pyproject_getopt"]'
+    'package.preload["oreon.rpm.pyproject_getopt"]'
     f' = loadfile("{BASEDIR}/pyproject_getopt.lua")'
 )
 

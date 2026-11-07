@@ -13,6 +13,7 @@ URL:            https://xcb.freedesktop.org/
 Source0:        https://xorg.freedesktop.org/archive/individual/proto/xcb-proto-%{version}.tar.xz
 
 BuildArch:      noarch
+%{!?python3_sitelib:%global python3_sitelib %(python3 -c "import sysconfig; print(sysconfig.get_path('purelib'))")}
 
 BuildRequires:  autoconf automake
 BuildRequires:  libxml2

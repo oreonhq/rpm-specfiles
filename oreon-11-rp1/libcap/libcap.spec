@@ -74,7 +74,9 @@ the capability status of processes and threads.
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 
-gzip -cd %{SOURCE0} | %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data -
+gzip -cd %{SOURCE0} > %{_builddir}/libcap-verify.tar
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{_builddir}/libcap-verify.tar
+rm -f %{_builddir}/libcap-verify.tar
 %autosetup -p1
 
 

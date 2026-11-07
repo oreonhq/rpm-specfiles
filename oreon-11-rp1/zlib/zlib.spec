@@ -10,7 +10,7 @@ Release: 1%{?dist}
 Summary: zlib, a general purpose data compression library
 License: Zlib
 URL: https://zlib.net/
-Source0: https://zlib.net/zlib-%{version}.tar.gz
+Source0: https://github.com/madler/zlib/releases/download/v%{version}/zlib-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc

@@ -42,6 +42,10 @@ Requires:       redhat-rpm-config >= 266-1
 %oreon_sha256
 
 %autosetup -n %{name}-v%{version}
+find . -type f \( -name '*.lua' -o -name 'macros*' \) -print0 | \
+  xargs -0 sed -i \
+    -e 's/fedora\.common/oreon.common/g' \
+    -e 's/fedora\.srpm/oreon.srpm/g'
 
 
 %build

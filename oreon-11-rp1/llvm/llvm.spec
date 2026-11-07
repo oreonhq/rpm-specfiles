@@ -2945,7 +2945,7 @@ cp %{_vpath_builddir}/.ninja_log %{buildroot}%{_datadir}
 #endregion check
 
 #region misc
-%ldconfig_scriptlets -n %{pkg_name-llvm}-libs
+%ldconfig_scriptlets -n %{pkg_name_llvm}-libs
 
 %if %{without compat_build}
 %ldconfig_scriptlets -n %{pkg_name_lld}-libs

@@ -1,0 +1,35 @@
+--- a/lib/ngtcp2_addr.c	2026-11-06 17:48:07.943653849 -0800
++++ b/lib/ngtcp2_addr.c	2026-11-06 17:48:29.576489866 -0800
+@@ -40,18 +40,32 @@
+ }
+ 
+ void ngtcp2_addr_copy(ngtcp2_addr *dest, const ngtcp2_addr *src) {
++#if defined(__GNUC__) && __GNUC__ >= 11
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
++#endif
+   dest->addrlen = src->addrlen;
+   if (src->addrlen) {
+     memcpy(dest->addr, src->addr, (size_t)src->addrlen);
+   }
++#if defined(__GNUC__) && __GNUC__ >= 11
++#pragma GCC diagnostic pop
++#endif
+ }
+ 
+ void ngtcp2_addr_copy_byte(ngtcp2_addr *dest, const ngtcp2_sockaddr *addr,
+                            ngtcp2_socklen addrlen) {
++#if defined(__GNUC__) && __GNUC__ >= 11
++#pragma GCC diagnostic push
++#pragma GCC diagnostic ignored "-Wstringop-overflow"
++#endif
+   dest->addrlen = addrlen;
+   if (addrlen) {
+     memcpy(dest->addr, addr, (size_t)addrlen);
+   }
++#if defined(__GNUC__) && __GNUC__ >= 11
++#pragma GCC diagnostic pop
++#endif
+ }
+ 
+ int ngtcp2_sockaddr_eq(const ngtcp2_sockaddr *a, const ngtcp2_sockaddr *b) {

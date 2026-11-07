@@ -13,8 +13,8 @@ Version:        2026e
 Release:        1%{?dist}
 License: LicenseRef-Oreon-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
 URL: https://www.iana.org/time-zones
-Source0:        ftp://ftp.iana.org/tz/releases/tzdata%{version}.tar.gz
-Source1:        ftp://ftp.iana.org/tz/releases/tzcode%{version}.tar.gz
+Source0:        https://data.iana.org/time-zones/releases/tzdata%{version}.tar.gz
+Source1:        https://data.iana.org/time-zones/releases/tzcode%{version}.tar.gz
 
 Patch002:        0002-Fix-have-snprintf-error.patch
 

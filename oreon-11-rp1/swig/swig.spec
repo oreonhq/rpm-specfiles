@@ -200,6 +200,10 @@ for all in CHANGES README; do
 done
 
 %build
+if [ ! -e %{_rpmconfigdir}/redhat/redhat-hardened-cc1 ]; then
+  mkdir -p %{_rpmconfigdir}/redhat
+  cp -a %{_rpmconfigdir}/oreon/oreon-hardened-cc1 %{_rpmconfigdir}/redhat/redhat-hardened-cc1
+fi
 %if %{golang}
 # Go tests are failing due to binutils changes related to linker setting as
 # Use workaround decribed in the bugzilla.

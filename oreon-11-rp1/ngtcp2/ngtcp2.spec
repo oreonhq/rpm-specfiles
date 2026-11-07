@@ -20,6 +20,7 @@ License:        MIT
 URL:            https://github.com/ngtcp2/ngtcp2
 VCS:            git:%{url}.git
 Source0:        https://github.com/ngtcp2/ngtcp2/releases/download/v%{version}/ngtcp2-%{version}.tar.xz
+Patch0:         ngtcp2-addr-memcpy.patch
 Source1:        ngtcp2-1.25.0.tar.xz.asc
 Source2:        tatsuhiro-t.asc
 # Release does not contain all parts to build documentation

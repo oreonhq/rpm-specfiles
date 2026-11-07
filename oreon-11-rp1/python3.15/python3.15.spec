@@ -1178,7 +1178,7 @@ BuildPython freethreading-debug \
 %if %{with freethreading_build}
 BuildPython freethreading \
   "--without-ensurepip %{optimizations_flag} --disable-gil" \
-  "%{optflags_optimized}"
+  "%{optflags_optimized} -fprofile-update=atomic -fprofile-correction -Wno-error=coverage-mismatch"
 %endif
 
 # ======================================================

@@ -32,6 +32,7 @@ Source1:        https://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
 # cp temp/keysuv.gpg .
 Source2:        keysuv.gpg
 Source3:        libuv.abignore
+Patch0:         libuv-udp-reuseport-burst.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc

@@ -1,4 +1,4 @@
-%global source0_hash 617d1b276660e5a01209d7b58159450e400cf636634a7a9c2cfd50a1c6675d01
+%global source0_hash 96c65cc96a2fe9fe9293cc496482c34bd2eed8a8b560db94506659cd2e5b87ca
 %global source1_hash 3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04
 %global source2_hash 8f50ad958916d6a8f79fba2363501475571acce752757f9126fe9d2f17dd920d
 
@@ -14,9 +14,9 @@ Summary:        Cross-vendor public domain suffix database
 
 License:        MPL-2.0
 URL:            https://publicsuffix.org/
-Source0:        https://publicsuffix.org/list/public_suffix_list.dat
+Source0:        https://raw.githubusercontent.com/publicsuffix/list/18ecca5d54471f21918798da451dd8d03a18f3c7/public_suffix_list.dat
 Source1:        https://www.mozilla.org/media/MPL/2.0/index.txt
-Source2:        https://github.com/publicsuffix/list/raw/main/tests/test_psl.txt
+Source2:        https://raw.githubusercontent.com/publicsuffix/list/18ecca5d54471f21918798da451dd8d03a18f3c7/tests/test_psl.txt
 
 BuildArch:      noarch
 

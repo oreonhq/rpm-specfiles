@@ -129,9 +129,8 @@ popd
 %ldconfig_scriptlets
 
 %check
-# Tests are randomly failing when run in parallel
-%global _smp_build_ncpus 1
-%ctest
+# 2222 is shared by the server tests, parallel ctest just loses the bind
+%__ctest --test-dir "%{__cmake_builddir}" --output-on-failure --force-new-ctest-process -j1
 
 %files
 %doc AUTHORS BSD CHANGELOG README

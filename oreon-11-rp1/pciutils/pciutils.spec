@@ -22,7 +22,6 @@ Patch2:        pciutils-dir-d.patch
 Requires:	hwdata
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRequires:	gcc make sed kmod-devel
-BuildRequires:  oreon-rpm-macros
 Provides:	/sbin/lspci /sbin/setpci
 Provides:	/bin/lspci
 
@@ -54,7 +53,7 @@ This package contains a static library for inspecting and setting
 devices connected to the PCI bus.
 
 %prep
-%oreon_sha256
+echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
 
 %autosetup -p1
 

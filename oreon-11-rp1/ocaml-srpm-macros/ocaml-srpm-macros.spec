@@ -21,7 +21,6 @@ Summary:        OCaml architecture macros
 License:        GPL-2.0-or-later
 
 BuildArch:      noarch
-BuildRequires:  oreon-rpm-macros
 
 Source0:        macros.ocaml-srpm
 
@@ -34,7 +33,7 @@ SRPMS.  It does not pull in any other OCaml dependencies.
 
 
 %prep
-%oreon_sha256
+echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
 
 
 

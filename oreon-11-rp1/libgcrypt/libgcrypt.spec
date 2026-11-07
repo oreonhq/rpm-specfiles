@@ -54,6 +54,18 @@ applications using libgcrypt.
 %patch 5 -p1
 
 %build
+if [ -x %{_rpmconfigdir}/oreon/oreon-annobin-plugin-select.sh ]; then
+  %{_rpmconfigdir}/oreon/oreon-annobin-plugin-select.sh || :
+fi
+plugindir=$(gcc -print-file-name=plugin)
+if [ -n "$plugindir" ] && [ ! -e "$plugindir/annobin.so" ]; then
+  for cand in "$plugindir"/gcc-annobin.so "$plugindir"/annobin.so.*; do
+    if [ -e "$cand" ]; then
+      ln -sfn "$(basename "$cand")" "$plugindir/annobin.so"
+      break
+    fi
+  done
+fi
 # should be all algorithms except SM3 and SM4, aria
 export DIGESTS='crc gostr3411-94 md4 md5 rmd160 sha1 sha256 sha512 sha3 tiger whirlpool stribog blake2'
 export CIPHERS='arcfour blowfish cast5 des aes twofish serpent rfc2268 seed camellia idea salsa20 gost28147 chacha20'

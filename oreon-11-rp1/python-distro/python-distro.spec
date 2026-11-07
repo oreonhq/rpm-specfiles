@@ -16,6 +16,7 @@ Source0:        https://github.com/python-distro/distro/archive/v%{version}/dist
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
+BuildRequires:  python3dist(setuptools)
 BuildRequires:  oreon-rpm-macros
  
 %global _description \
@@ -44,9 +45,6 @@ Suggests:       /usr/bin/lsb_release
 %oreon_sha256
 
 %autosetup -n %{pypi_name}-%{version}
-
-# generated BuildRequires, refresh with: orbscli plan bake
-BuildRequires: python3dist(setuptools)
 
 %build
 %pyproject_wheel

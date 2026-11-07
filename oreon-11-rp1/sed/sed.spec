@@ -1,5 +1,4 @@
 %global source0_hash b8e72182b2ec96a3574e2998c47b7aaa64cc20ce000d8e9ac313cc07cecf28c7
-%global source1_hash 58fad59b70d631f3e1a40442b9c1f52d4a76c5dea7acd34f72c3c2e3527d6a43
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -13,7 +12,6 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: http://sed.sourceforge.net/
 Source0:        https://mirror.cs.odu.edu/gnu/sed/sed-%{version}.tar.xz
-Source1:        https://sourceforge.net/projects/sed/files/sedfaq.txt/download
 Patch0:        sed-b-flag.patch
 Patch1:        sed-c-flag.patch
 #Patch2: sed-covscan-annotations.patch
@@ -48,7 +46,6 @@ specified in a script file or from the command line.
 
 %prep
 %oreon_sha256
-echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 
 %autosetup -p1
 
@@ -61,8 +58,6 @@ echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 sed -i s/"SELinux is enabled on this system."// ./doc/sed.1
 sed -i s/"SELinux is disabled on this system."// ./doc/sed.1
 
-install -m 644 -p %{SOURCE1} sedfaq.txt
-gzip -9 sedfaq.txt
 
 %check
 echo ====================TESTING=========================
@@ -79,7 +74,7 @@ rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir
 %files -f %{name}.lang
 %{!?_licensedir:%global license %%doc}
 %license COPYING 
-%doc BUGS NEWS THANKS README AUTHORS sedfaq.txt.gz
+%doc BUGS NEWS THANKS README AUTHORS
 %{_bindir}/sed
 %{_infodir}/sed.info*
 %{_mandir}/man1/sed.1*

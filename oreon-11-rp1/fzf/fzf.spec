@@ -7,16 +7,15 @@
 
 # https://github.com/junegunn/fzf
 %global goipath         github.com/junegunn/fzf
+%global gourl           https://github.com/junegunn/fzf
 Version:        0.74.5
-
-%gometa
 
 Name:           fzf
 Release:        1%{?dist}
 Summary:        A command-line fuzzy finder written in Go
 
 License:        MIT
-URL:            %{gourl}
+URL:            https://github.com/junegunn/fzf
 Source0:        https://github.com/junegunn/fzf/archive/v%{version}/fzf-%{version}.tar.gz
 Source1:        README.Oreon
 
@@ -27,6 +26,8 @@ BuildRequires:  golang(github.com/mattn/go-isatty) >= 0.0.20
 BuildRequires:  golang(github.com/rivo/uniseg) >= 0.4.7
 BuildRequires:  golang(golang.org/x/sys/unix) >= 0.28
 BuildRequires:  golang(golang.org/x/term) >= 0.25
+BuildRequires:  go-rpm-macros
+BuildRequires:  go-srpm-macros
 BuildRequires:  oreon-rpm-macros
 
 
@@ -40,6 +41,8 @@ etc.
 
 %prep
 %oreon_sha256
+mkdir -p %{_rpmluadir}/fedora
+ln -sfn %{_rpmluadir}/oreon/common.lua %{_rpmluadir}/fedora/common.lua
 
 %goprep
 cp %{SOURCE1} .

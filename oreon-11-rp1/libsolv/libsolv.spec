@@ -182,6 +182,10 @@ rm src/chksum_impl.c src/md5.{c,h} src/sha1.{c,h} src/sha2.{c,h}
 %endif
 
 %build
+if [ ! -e %{_rpmconfigdir}/redhat/redhat-hardened-cc1 ]; then
+  mkdir -p %{_rpmconfigdir}/redhat
+  cp -a %{_rpmconfigdir}/oreon/oreon-hardened-cc1 %{_rpmconfigdir}/redhat/redhat-hardened-cc1
+fi
 %cmake -GNinja                                            \
   -DFEDORA=1                                              \
   -DENABLE_RPMDB=ON                                       \

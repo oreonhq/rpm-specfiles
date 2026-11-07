@@ -1,16 +1,16 @@
-%global source0_hash a0d6fd43cd9d519e65d83cb8f78e9310756d2104efa5ee521952df75bb8b5efb
+%global source0_hash fd8269e4a03f801cc22b9e0fdf9b34cf39b90b799620badd8416041356d972af
 %global debug_package %{nil}
 
 Name: pyproject-srpm-macros
-Version: 1.18.7
-Release: 1%{?dist}
+Version: 1.24.0
+Release: 2%{?dist}
 Summary: SRPM macros for pyproject packages
 License: MIT
 URL: https://github.com/rpm-software-management/pyproject-rpm-macros
 BuildArch: noarch
 Source0: macros.aaa-pyproject-srpm
 Source1: LICENSE
-Requires: (pyproject-rpm-macros = %{version}-%{release} if pyproject-rpm-macros)
+Requires: (pyproject-rpm-macros >= 1.24.0 if pyproject-rpm-macros)
 Requires: (rpm-build >= 4.14.90 if rpm-build)
 
 BuildRequires: oreon-rpm-macros

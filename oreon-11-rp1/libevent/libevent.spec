@@ -70,8 +70,7 @@ This package contains the development documentation for %{name}.
 
 %autosetup -p1 -n libevent-%{version}-stable
 
-%{__python3} %{_rpmconfigdir}/oreon/pathfix.py -i %{__python3} -pn test/check-dumpevents.py \
-                               event_rpcgen.py
+sed -i '1s|^#!.*python.*|#!%{__python3}|' test/check-dumpevents.py event_rpcgen.py
 
 %build
 # We're patching doxygen.am, so regenerate the autotools stuff to be
