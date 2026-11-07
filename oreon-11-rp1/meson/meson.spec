@@ -20,8 +20,6 @@ Source0:        https://github.com/mesonbuild/meson/archive/%{version}/meson-%{v
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
-BuildRequires:  zlib >= 1.3.2
-BuildRequires:  zlib-devel >= 1.3.2
 Requires:       ninja-build
 
 Requires:       meson-srpm-macros = %{version}-%{release}
@@ -78,7 +76,6 @@ BuildRequires:  itstool
 BuildRequires:  mercurial
 BuildRequires:  gcovr
 BuildRequires:  pkgconfig(zlib)
-BuildRequires:  zlib-static
 BuildRequires:  python3dist(cython)
 BuildRequires:  python3dist(fastjsonschema)
 BuildRequires:  pkgconfig(sdl2)

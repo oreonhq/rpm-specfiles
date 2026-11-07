@@ -1,35 +1,37 @@
---- a/lib/ngtcp2_addr.c	2026-11-06 17:48:07.943653849 -0800
-+++ b/lib/ngtcp2_addr.c	2026-11-06 17:48:29.576489866 -0800
-@@ -40,18 +40,32 @@
+--- a/lib/ngtcp2_addr.c	2026-11-07 00:43:14.667563757 -0800
++++ b/lib/ngtcp2_addr.c	2026-11-07 00:43:24.677117048 -0800
+@@ -29,16 +29,19 @@
+ 
+ #include "ngtcp2_unreachable.h"
+ 
++#if defined(__GNUC__) && __GNUC__ >= 11
++__attribute__((noipa))
++#endif
+ ngtcp2_addr *ngtcp2_addr_init(ngtcp2_addr *dest, const ngtcp2_sockaddr *addr,
+                               ngtcp2_socklen addrlen) {
+-  *dest = (ngtcp2_addr){
+-    .addr = (ngtcp2_sockaddr *)addr,
+-    .addrlen = addrlen,
+-  };
+-
++  dest->addr = (ngtcp2_sockaddr *)addr;
++  dest->addrlen = addrlen;
+   return dest;
  }
  
- void ngtcp2_addr_copy(ngtcp2_addr *dest, const ngtcp2_addr *src) {
 +#if defined(__GNUC__) && __GNUC__ >= 11
-+#pragma GCC diagnostic push
-+#pragma GCC diagnostic ignored "-Wstringop-overflow"
++__attribute__((noipa))
 +#endif
+ void ngtcp2_addr_copy(ngtcp2_addr *dest, const ngtcp2_addr *src) {
    dest->addrlen = src->addrlen;
    if (src->addrlen) {
-     memcpy(dest->addr, src->addr, (size_t)src->addrlen);
+@@ -46,6 +49,9 @@
    }
-+#if defined(__GNUC__) && __GNUC__ >= 11
-+#pragma GCC diagnostic pop
-+#endif
  }
  
++#if defined(__GNUC__) && __GNUC__ >= 11
++__attribute__((noipa))
++#endif
  void ngtcp2_addr_copy_byte(ngtcp2_addr *dest, const ngtcp2_sockaddr *addr,
                             ngtcp2_socklen addrlen) {
-+#if defined(__GNUC__) && __GNUC__ >= 11
-+#pragma GCC diagnostic push
-+#pragma GCC diagnostic ignored "-Wstringop-overflow"
-+#endif
    dest->addrlen = addrlen;
-   if (addrlen) {
-     memcpy(dest->addr, addr, (size_t)addrlen);
-   }
-+#if defined(__GNUC__) && __GNUC__ >= 11
-+#pragma GCC diagnostic pop
-+#endif
- }
- 
- int ngtcp2_sockaddr_eq(const ngtcp2_sockaddr *a, const ngtcp2_sockaddr *b) {

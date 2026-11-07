@@ -8,6 +8,7 @@ BuildRequires: oreon-rpm-macros
 %define py3_shebang_fix() find %{*} -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
 %define cmake_build %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
 %define __ninja_common_opts %{?_smp_mflags}
+%define cmake %{set_build_flags}; %__cmake %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} %{?_cmake_generator:-G %{_cmake_generator}} -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} -DCMAKE_INSTALL_FULL_SBINDIR:PATH=%{_sbindir} -DCMAKE_INSTALL_SBINDIR:PATH=%(s=%{_sbindir}; echo ${s##*/}) -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} -DLIB_INSTALL_DIR:PATH=%{_libdir} -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir} -DSHARE_INSTALL_PREFIX:PATH=%{_datadir} %{?_cmake_lib_suffix64} %{?_cmake_shared_libs}
 #region globals
 #region version
 %global maj_ver 23

@@ -197,10 +197,7 @@ for cand in "$plugindir/gcc-annobin.so" "$plugindir/annobin.so"; do
   fi
 done
 if [ -n "$plugin" ]; then
-  cat > "$specdir/annobin-cc1" << EOF
-*cc1_options:
-+ %%{!iplugindir*:%%:find-plugindir()} -fplugin=$plugin
-EOF
+  printf '%s\n' '*cc1_options:' "+ -fplugin=$plugin" > "$specdir/annobin-cc1"
 else
   cp -L %{_rpmconfigdir}/oreon/oreon-annobin-cc1 "$specdir/annobin-cc1"
 fi
@@ -218,7 +215,10 @@ args = []
 for a in sys.argv[1:]:
     if a.startswith("-specs="):
         path = a[len("-specs="):]
-        path = repl.get(path, path)
+        if "annobin-cc1" in path:
+            path = specdir + "/annobin-cc1"
+        else:
+            path = repl.get(path, path)
         if "/redhat/" in path and not os.path.exists(path):
             continue
         a = "-specs=" + path
@@ -285,7 +285,8 @@ export CXX="$wrapdir/g++"
 %ctest
 
 # Python smoke test (not tested in %%ctest):
-export PYTHONPATH=%{buildroot}%{python3_sitearch}
+pyplat=$(%{python3} -c "import sysconfig; print(sysconfig.get_path('platlib'))")
+export PYTHONPATH="%{buildroot}$pyplat"
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %python3 -c 'import solv'
 
