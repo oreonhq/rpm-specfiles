@@ -40,6 +40,7 @@ BuildRequires:  gnupg2
 # Documentation
 BuildRequires:  make
 BuildRequires:  python3-sphinx
+BuildRequires:  python3-markupsafe
 BuildRequires:  oreon-rpm-macros
 
 

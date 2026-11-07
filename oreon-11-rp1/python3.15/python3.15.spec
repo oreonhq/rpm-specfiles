@@ -1020,6 +1020,7 @@ sed -i "s/AC_PREREQ(\[2\.72\])/AC_PREREQ([2.69])/" configure.ac
 # ======================================================
 
 %build
+export MAKEFLAGS="${MAKEFLAGS:+$MAKEFLAGS }-s"
 
 # The build process embeds version info extracted from the Git repository
 # into the Py_GetBuildInfo and sys.version strings.

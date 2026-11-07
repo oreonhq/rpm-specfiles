@@ -182,10 +182,49 @@ rm src/chksum_impl.c src/md5.{c,h} src/sha1.{c,h} src/sha2.{c,h}
 %endif
 
 %build
-if [ ! -e %{_rpmconfigdir}/redhat/redhat-hardened-cc1 ]; then
-  mkdir -p %{_rpmconfigdir}/redhat
-  cp -a %{_rpmconfigdir}/oreon/oreon-hardened-cc1 %{_rpmconfigdir}/redhat/redhat-hardened-cc1
-fi
+specdir=$PWD/oreon-specs
+wrapdir=$PWD/oreon-cc
+mkdir -p "$specdir" "$wrapdir"
+cp -a %{_rpmconfigdir}/oreon/oreon-hardened-cc1 "$specdir/hardened-cc1"
+cp -a %{_rpmconfigdir}/oreon/oreon-hardened-ld "$specdir/hardened-ld"
+cp -a %{_rpmconfigdir}/oreon/oreon-hardened-ld-errors "$specdir/hardened-ld-errors"
+cp -a %{_rpmconfigdir}/oreon/oreon-annobin-cc1 "$specdir/annobin-cc1"
+cat > "$wrapdir/ccwrap.py" << 'PY'
+import os, sys
+specdir = os.environ["OREON_SPECDIR"]
+rpm = os.environ["OREON_RPMCONFIG"]
+repl = {
+    rpm + "/redhat/redhat-hardened-cc1": specdir + "/hardened-cc1",
+    rpm + "/oreon/oreon-annobin-cc1": specdir + "/annobin-cc1",
+    rpm + "/redhat/redhat-hardened-ld": specdir + "/hardened-ld",
+    rpm + "/redhat/redhat-hardened-ld-errors": specdir + "/hardened-ld-errors",
+}
+args = []
+for a in sys.argv[1:]:
+    if a.startswith("-specs="):
+        path = a[len("-specs="):]
+        path = repl.get(path, path)
+        if "/redhat/" in path and not os.path.exists(path):
+            continue
+        a = "-specs=" + path
+    args.append(a)
+os.execv(os.environ["OREON_REAL_CC"], [os.environ["OREON_REAL_CC"], *args])
+PY
+for pair in "gcc:/usr/bin/gcc" "cc:/usr/bin/gcc" "g++:/usr/bin/g++" "c++:/usr/bin/c++"; do
+  name=${pair%%:*}
+  real=${pair#*:}
+  cat > "$wrapdir/$name" << EOF
+#!/bin/sh
+export OREON_SPECDIR="$specdir"
+export OREON_RPMCONFIG="%{_rpmconfigdir}"
+export OREON_REAL_CC=$real
+exec /usr/bin/python3 "$wrapdir/ccwrap.py" "\$@"
+EOF
+  chmod +x "$wrapdir/$name"
+done
+export PATH="$wrapdir:$PATH"
+export CC="$wrapdir/gcc"
+export CXX="$wrapdir/g++"
 %cmake -GNinja                                            \
   -DFEDORA=1                                              \
   -DENABLE_RPMDB=ON                                       \

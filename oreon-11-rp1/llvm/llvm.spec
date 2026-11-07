@@ -5,6 +5,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 BuildRequires: oreon-rpm-macros
+%global py3_shebang_fix find %* -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
 #region globals
 #region version
 %global maj_ver 23

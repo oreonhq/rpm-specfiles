@@ -35,6 +35,7 @@ BuildRequires:  make
 BuildRequires:  libtool
 BuildRequires:  libev-devel
 BuildRequires:  python3-sphinx
+BuildRequires:  python3-markupsafe
 BuildRequires:  python3-sphinx_rtd_theme
 BuildRequires:  gnupg2
 

@@ -706,7 +706,7 @@ done
 
 # Compile python files
 %if 0%{!?_without_python:1}
-%py_byte_compile %{__python3} %{buildroot}%{_datadir}/gdb/python/gdb
+%{__python3} -m compileall -o 0 -o 1 -s %{buildroot} -p / --invalidation-mode=timestamp %{buildroot}%{_datadir}/gdb/python/gdb
 
 # BZ 999645: /usr/share/gdb/auto-load/ needs filesystem symlinks
 for i in $(echo bin lib $(basename %{_libdir}) sbin|tr ' ' '\n'|sort -u);do

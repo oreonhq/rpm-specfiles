@@ -17,6 +17,9 @@ BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
 BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3dist(pip)
+BuildRequires:  python3dist(wheel)
+BuildRequires:  pyproject-rpm-macros
 BuildRequires:  oreon-rpm-macros
  
 %global _description \

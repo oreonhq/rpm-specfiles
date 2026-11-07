@@ -16,6 +16,7 @@ Summary:        Macros to simplify packaging of forge-hosted projects
 License:        GPL-1.0-or-later
 URL:            https://git.sr.ht/~gotmax23/forge-srpm-macros
 Source0:        https://git.sr.ht/~gotmax23/forge-srpm-macros/archive/v%{version}.tar.gz#/forge-srpm-macros-%{version}.tar.gz
+Source100:      https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c61a4d537767a59645b82a0b521206e1e25c2/pyyaml-6.0.3.tar.gz
 
 BuildArch:      noarch
 
@@ -58,6 +59,9 @@ find . -type f \( -name '*.lua' -o -name 'macros*' \) -print0 | \
 
 %check
 %if %{with tests}
+echo "d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f  %{SOURCE100}" | sha256sum -c -
+tar -xzf %{SOURCE100} -C %{_builddir}
+export PYTHONPATH="%{_builddir}/pyyaml-6.0.3/lib${PYTHONPATH:+:$PYTHONPATH}"
 export MACRO_DIR=%{buildroot}%{_rpmmacrodir}
 export MACRO_LUA_DIR="%{buildroot}%{_rpmluadir}"
 %pytest

@@ -17,6 +17,7 @@ BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(Config)
 BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
+BuildRequires:  perl(Test::More)
 # Run-time:
 BuildRequires:  perl(Carp) >= 1.05
 BuildRequires:  perl(strict)

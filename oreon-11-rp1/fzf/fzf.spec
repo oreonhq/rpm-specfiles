@@ -8,6 +8,7 @@
 # https://github.com/junegunn/fzf
 %global goipath         github.com/junegunn/fzf
 %global gourl           https://github.com/junegunn/fzf
+%global gobuilddir      %{_builddir}/fzf-%{version}/_build
 Version:        0.74.5
 
 Name:           fzf
@@ -41,17 +42,17 @@ etc.
 
 %prep
 %oreon_sha256
-mkdir -p %{_rpmluadir}/fedora
-ln -sfn %{_rpmluadir}/oreon/common.lua %{_rpmluadir}/fedora/common.lua
-
-%goprep
+%setup -q
+mkdir -p %{gobuilddir}/src/github.com/junegunn
+ln -sfn %{_builddir}/fzf-%{version} %{gobuilddir}/src/%{goipath}
 cp %{SOURCE1} .
-%autopatch -p1
 
 
 %build
-export LDFLAGS='-X main.version=%{version} -X main.revision=Oreon '
-%gobuild -o %{gobuilddir}/bin/fzf %{goipath}
+export GO111MODULE=off
+export GOPATH="%{gobuilddir}:%{gopath}"
+cd %{gobuilddir}/src/%{goipath}
+go build -buildmode=pie -ldflags "-linkmode=external -X main.version=%{version} -X main.revision=Oreon" -o %{gobuilddir}/bin/fzf .
 
 
 %install
@@ -73,7 +74,10 @@ install -Dpm0644 -t %{buildroot}%{_datadir}/fzf/shell shell/key-bindings.*
 
 %if %{with check}
 %check
-%gocheck
+export GO111MODULE=off
+export GOPATH="%{gobuilddir}:%{gopath}"
+cd %{gobuilddir}/src/%{goipath}
+go test ./...
 %endif
 
 

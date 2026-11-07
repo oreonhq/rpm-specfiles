@@ -51,11 +51,6 @@ Summary:        %{summary}
 %oreon_sha256
 
 %autosetup -p1 -n six-%{version}
-mkdir -p %{_rpmluadir}/fedora/rpm %{_rpmconfigdir}/redhat
-ln -sfn %{_rpmluadir}/oreon/rpm/pyproject_getopt.lua %{_rpmluadir}/fedora/rpm/pyproject_getopt.lua
-for s in pyproject_wheel.py pyproject_save_files.py pyproject_preprocess_record.py pyproject_patch_metadata.py pyproject_verify_license.py pyproject_buildrequires.py pyproject_dependency_overrides.py; do
-  ln -sfn %{_rpmconfigdir}/oreon/$s %{_rpmconfigdir}/redhat/$s
-done
 
 
 %build

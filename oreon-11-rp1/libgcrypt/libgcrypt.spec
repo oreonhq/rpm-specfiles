@@ -54,18 +54,61 @@ applications using libgcrypt.
 %patch 5 -p1
 
 %build
-if [ -x %{_rpmconfigdir}/oreon/oreon-annobin-plugin-select.sh ]; then
-  %{_rpmconfigdir}/oreon/oreon-annobin-plugin-select.sh || :
+specdir=$PWD/oreon-specs
+wrapdir=$PWD/oreon-cc
+mkdir -p "$specdir" "$wrapdir"
+plugindir=$(/usr/bin/gcc -print-file-name=plugin)
+plugin=
+for cand in "$plugindir"/gcc-annobin.so "$plugindir"/annobin.so "$plugindir"/annobin.so.*; do
+  if [ -e "$cand" ]; then
+    plugin=$cand
+    break
+  fi
+done
+if [ -n "$plugin" ]; then
+  sed "s|-fplugin=annobin|-fplugin=$plugin|" %{_rpmconfigdir}/oreon/oreon-annobin-cc1 > "$specdir/annobin-cc1"
+else
+  cp -a %{_rpmconfigdir}/oreon/oreon-annobin-cc1 "$specdir/annobin-cc1"
 fi
-plugindir=$(gcc -print-file-name=plugin)
-if [ -n "$plugindir" ] && [ ! -e "$plugindir/annobin.so" ]; then
-  for cand in "$plugindir"/gcc-annobin.so "$plugindir"/annobin.so.*; do
-    if [ -e "$cand" ]; then
-      ln -sfn "$(basename "$cand")" "$plugindir/annobin.so"
-      break
-    fi
-  done
-fi
+cp -a %{_rpmconfigdir}/oreon/oreon-hardened-cc1 "$specdir/hardened-cc1"
+cp -a %{_rpmconfigdir}/oreon/oreon-hardened-ld "$specdir/hardened-ld"
+cp -a %{_rpmconfigdir}/oreon/oreon-hardened-ld-errors "$specdir/hardened-ld-errors"
+cat > "$wrapdir/ccwrap.py" << 'PY'
+import os, sys
+specdir = os.environ["OREON_SPECDIR"]
+rpm = os.environ["OREON_RPMCONFIG"]
+repl = {
+    rpm + "/redhat/redhat-hardened-cc1": specdir + "/hardened-cc1",
+    rpm + "/oreon/oreon-annobin-cc1": specdir + "/annobin-cc1",
+    rpm + "/redhat/redhat-hardened-ld": specdir + "/hardened-ld",
+    rpm + "/redhat/redhat-hardened-ld-errors": specdir + "/hardened-ld-errors",
+}
+args = []
+for a in sys.argv[1:]:
+    if a.startswith("-specs="):
+        path = a[len("-specs="):]
+        path = repl.get(path, path)
+        if "/redhat/" in path and not os.path.exists(path):
+            continue
+        a = "-specs=" + path
+    args.append(a)
+os.execv(os.environ["OREON_REAL_CC"], [os.environ["OREON_REAL_CC"], *args])
+PY
+for pair in "gcc:/usr/bin/gcc" "cc:/usr/bin/gcc" "g++:/usr/bin/g++" "c++:/usr/bin/c++"; do
+  name=${pair%%:*}
+  real=${pair#*:}
+  cat > "$wrapdir/$name" << EOF
+#!/bin/sh
+export OREON_SPECDIR="$specdir"
+export OREON_RPMCONFIG="%{_rpmconfigdir}"
+export OREON_REAL_CC=$real
+exec /usr/bin/python3 "$wrapdir/ccwrap.py" "\$@"
+EOF
+  chmod +x "$wrapdir/$name"
+done
+export PATH="$wrapdir:$PATH"
+export CC="$wrapdir/gcc"
+export CXX="$wrapdir/g++"
 # should be all algorithms except SM3 and SM4, aria
 export DIGESTS='crc gostr3411-94 md4 md5 rmd160 sha1 sha256 sha512 sha3 tiger whirlpool stribog blake2'
 export CIPHERS='arcfour blowfish cast5 des aes twofish serpent rfc2268 seed camellia idea salsa20 gost28147 chacha20'

@@ -178,7 +178,7 @@ skip_32bit=1
 
 if [ "${width}" != 32 ] || [ "${skip_32bit}" != 1 ]; then
 	%{buildroot}%{_bindir}/strace -V
-	%make_build -k check VERBOSE=1 CFLAGS="${CFLAGS} -Wno-error=stringop-overread -Wno-error=stringop-overflow"
+	%make_build -k check VERBOSE=1 CFLAGS="${CFLAGS} -Wno-error=stringop-overread -Wno-error=stringop-overflow -Wno-error=format-overflow"
 	echo 'BEGIN OF TEST SUITE INFORMATION'
 	tail -n 99999 -- tests*/test-suite.log tests*/ksysent.gen.log
 	find tests* -type f -name '*.log' -print0 |

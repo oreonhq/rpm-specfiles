@@ -46,6 +46,7 @@ BuildRequires:  python3-devel
 # For docs
 BuildRequires:  make
 BuildRequires:  python3dist(sphinx)
+BuildRequires:  python3-markupsafe
 BuildRequires:  python3dist(sphinx-rtd-theme)
 
 # For tests

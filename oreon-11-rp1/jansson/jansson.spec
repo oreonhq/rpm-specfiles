@@ -19,6 +19,7 @@ Patch:        0001-Fix-the-check-exports-tests-for-versioned-symbols.patch
 
 BuildRequires:	gcc
 BuildRequires:	python3-sphinx
+BuildRequires:	python3-markupsafe
 BuildRequires:  make
 BuildRequires:  autoconf, automake, libtool
 BuildRequires:  oreon-rpm-macros

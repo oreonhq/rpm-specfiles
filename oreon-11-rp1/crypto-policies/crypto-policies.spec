@@ -110,7 +110,7 @@ for f in %{buildroot}%{_datarootdir}/crypto-policies/DEFAULT/* ; do
     ln -sf %{_datarootdir}/crypto-policies/DEFAULT/$(basename $f) %{buildroot}%{_sysconfdir}/crypto-policies/back-ends/$(basename $f .txt).config
 done
 
-%py_byte_compile %{__python3} %{buildroot}%{_datadir}/crypto-policies/python
+%{__python3} -m compileall -o 0 -o 1 -s %{buildroot} -p / --invalidation-mode=timestamp %{buildroot}%{_datadir}/crypto-policies/python
 
 %check
 make test %{?_smp_mflags} SKIP_LINTING=1 \
