@@ -47,6 +47,9 @@ find . -type f \( -name '*.lua' -o -name 'macros*' \) -print0 | \
   xargs -0 sed -i \
     -e 's/fedora\.common/oreon.common/g' \
     -e 's/fedora\.srpm/oreon.srpm/g'
+sed -i 's|fedora/srpm|oreon/srpm|g' Makefile
+mkdir -p rpm/lua/oreon
+mv rpm/lua/fedora/srpm rpm/lua/oreon/srpm
 
 
 %build

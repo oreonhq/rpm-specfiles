@@ -1,0 +1,11 @@
+--- a/opcodes/aarch64-opc.c	2026-11-06 21:46:23.813664896 -0800
++++ b/opcodes/aarch64-opc.c	2026-11-06 21:47:37.943809265 -0800
+@@ -4507,6 +4507,8 @@
+       for (i = 1; i < num_conds && opnd->cond->names[i]; ++i)
+ 	{
+ 	  size_t len = comment != NULL ? strlen (comment) : 0;
++	  if (comment == NULL)
++	    break;
+ 	  if (i == 1)
+ 	    snprintf (comment + len, comment_size - len, "%s = %s",
+ 		      opnd->cond->names[0], opnd->cond->names[i]);

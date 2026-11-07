@@ -19,6 +19,7 @@ License:        (Apache-2.0 AND BSD-3-Clause) OR BSD-3-Clause
 
 URL:            https://github.com/dateutil/dateutil
 Source0:        https://files.pythonhosted.org/packages/source/p/python-dateutil/python-dateutil-%{version}.tar.gz
+Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.4.tar.gz
 
 Provides:  deprecated()
 
@@ -101,6 +102,9 @@ mv NEWS.new NEWS
 
 %build
 %pyproject_wheel
+echo '2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6  %{SOURCE10}' | sha256sum -c -
+tar -xzf %{SOURCE10} -C %{_builddir}
+export PYTHONPATH="%{_builddir}/markupsafe-3.0.4/src${PYTHONPATH:+:$PYTHONPATH}"
 make -C docs html
 
 

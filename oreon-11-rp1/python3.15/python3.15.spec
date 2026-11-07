@@ -1339,12 +1339,8 @@ done
 # Switch all shebangs to refer to the specific Python version.
 # This currently only covers files matching ^[a-zA-Z0-9_]+\.py$,
 # so handle files named using other naming scheme separately.
-LD_LIBRARY_PATH=./build/optimized ./build/optimized/python \
-  %{_rpmconfigdir}/oreon/pathfix.py \
-  -i "%{_bindir}/python%{pybasever}" -pn \
-  %{buildroot} \
-  %{buildroot}%{_bindir}/*%{pybasever}.py \
-  %{buildroot}$DirHoldingGdbPy/*.py
+find %{buildroot} -type f -name '*.py' -print0 | \
+  xargs -0 sed -i '1s|^#!.*python.*|#!%{_bindir}/python%{pybasever}|'
 
 # Remove shebang lines from .py files that aren't executable, and
 # remove executability from .py files that don't have a shebang line:

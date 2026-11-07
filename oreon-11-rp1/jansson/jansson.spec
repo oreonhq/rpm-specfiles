@@ -12,6 +12,7 @@ Summary:	C library for encoding, decoding and manipulating JSON data
 License:	MIT AND LicenseRef-Oreon-Public-Domain
 URL:		https://github.com/akheron/jansson
 Source0:        https://github.com/akheron/jansson/archive/v%{version}/jansson-%{version}.tar.gz
+Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.4.tar.gz
 
 # Fix the tests.
 # Upstream commit 0677666f65b988b2dd44d02966a08fea490d5883
@@ -51,6 +52,9 @@ Development documentation for jansson.
 autoreconf -f -i -v
 %configure --disable-static
 %make_build
+echo '2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6  %{SOURCE10}' | sha256sum -c -
+tar -xzf %{SOURCE10} -C %{_builddir}
+export PYTHONPATH="%{_builddir}/markupsafe-3.0.4/src${PYTHONPATH:+:$PYTHONPATH}"
 make html
 
 %check

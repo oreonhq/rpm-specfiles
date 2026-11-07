@@ -5,7 +5,9 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 BuildRequires: oreon-rpm-macros
-%global py3_shebang_fix find %* -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
+%define py3_shebang_fix() find %{*} -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
+%define cmake_build %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
+%define __ninja_common_opts %{?_smp_mflags}
 #region globals
 #region version
 %global maj_ver 23
@@ -634,6 +636,7 @@ BuildRequires:	libedit-devel
 %endif
 # We need python3-devel for %%py3_shebang_fix
 BuildRequires:	python%{python3_pkgversion}-devel
+BuildRequires:	python%{python3_pkgversion}-packaging
 
 # For gpg source verification
 BuildRequires:	gnupg2
@@ -1367,26 +1370,15 @@ echo '%{source42_hash}  %{SOURCE42}' | sha256sum -c -
 
 #region LLVM preparation
 
-%py3_shebang_fix \
-	llvm/tools/opt-viewer/*.py
+%py3_shebang_fix llvm/tools/opt-viewer/*.py
 
 #endregion LLVM preparation
 
 #region CLANG preparation
 
-%py3_shebang_fix \
-	clang-tools-extra/clang-tidy/tool/ \
-	clang-tools-extra/clang-include-fixer/find-all-symbols/tool/run-find-all-symbols.py
+%py3_shebang_fix clang-tools-extra/clang-tidy/tool/ clang-tools-extra/clang-include-fixer/find-all-symbols/tool/run-find-all-symbols.py
 
-%py3_shebang_fix \
-	clang/tools/clang-format/ \
-	clang/tools/clang-format/git-clang-format \
-	clang/utils/hmaptool/hmaptool \
-	clang/tools/scan-view/bin/scan-view \
-	clang/tools/scan-view/share/Reporter.py \
-	clang/tools/scan-view/share/startfile.py \
-	clang/tools/scan-build-py/bin/* \
-	clang/tools/scan-build-py/libexec/*
+%py3_shebang_fix clang/tools/clang-format/ clang/tools/clang-format/git-clang-format clang/utils/hmaptool/hmaptool clang/tools/scan-view/bin/scan-view clang/tools/scan-view/share/Reporter.py clang/tools/scan-view/share/startfile.py clang/tools/scan-build-py/bin/* clang/tools/scan-build-py/libexec/*
 
 #endregion CLANG preparation
 

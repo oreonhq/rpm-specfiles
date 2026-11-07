@@ -59,20 +59,23 @@ wrapdir=$PWD/oreon-cc
 mkdir -p "$specdir" "$wrapdir"
 plugindir=$(/usr/bin/gcc -print-file-name=plugin)
 plugin=
-for cand in "$plugindir"/gcc-annobin.so "$plugindir"/annobin.so "$plugindir"/annobin.so.*; do
+for cand in "$plugindir/gcc-annobin.so" "$plugindir/annobin.so"; do
   if [ -e "$cand" ]; then
     plugin=$cand
     break
   fi
 done
 if [ -n "$plugin" ]; then
-  sed "s|-fplugin=annobin|-fplugin=$plugin|" %{_rpmconfigdir}/oreon/oreon-annobin-cc1 > "$specdir/annobin-cc1"
+  cat > "$specdir/annobin-cc1" << EOF
+*cc1_options:
++ %%{!iplugindir*:%%:find-plugindir()} -fplugin=$plugin
+EOF
 else
-  cp -a %{_rpmconfigdir}/oreon/oreon-annobin-cc1 "$specdir/annobin-cc1"
+  cp -L %{_rpmconfigdir}/oreon/oreon-annobin-cc1 "$specdir/annobin-cc1"
 fi
-cp -a %{_rpmconfigdir}/oreon/oreon-hardened-cc1 "$specdir/hardened-cc1"
-cp -a %{_rpmconfigdir}/oreon/oreon-hardened-ld "$specdir/hardened-ld"
-cp -a %{_rpmconfigdir}/oreon/oreon-hardened-ld-errors "$specdir/hardened-ld-errors"
+cp -L %{_rpmconfigdir}/oreon/oreon-hardened-cc1 "$specdir/hardened-cc1"
+cp -L %{_rpmconfigdir}/oreon/oreon-hardened-ld "$specdir/hardened-ld"
+cp -L %{_rpmconfigdir}/oreon/oreon-hardened-ld-errors "$specdir/hardened-ld-errors"
 cat > "$wrapdir/ccwrap.py" << 'PY'
 import os, sys
 specdir = os.environ["OREON_SPECDIR"]

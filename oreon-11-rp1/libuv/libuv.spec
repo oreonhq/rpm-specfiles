@@ -32,6 +32,7 @@ Source1:        https://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
 # cp temp/keysuv.gpg .
 Source2:        keysuv.gpg
 Source3:        libuv.abignore
+Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.4.tar.gz
 Patch0:         libuv-udp-reuseport-burst.patch
 
 BuildRequires:  cmake
@@ -81,6 +82,9 @@ gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %endif
 %cmake_build
 # Build Documentation
+echo '2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6  %{SOURCE10}' | sha256sum -c -
+tar -xzf %{SOURCE10} -C %{_builddir}
+export PYTHONPATH="%{_builddir}/markupsafe-3.0.4/src${PYTHONPATH:+:$PYTHONPATH}"
 cd docs
 make man
 cd ..

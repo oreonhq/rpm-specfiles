@@ -28,6 +28,7 @@ Source2:        tatsuhiro-t.asc
 Source3:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v%{version}/doc/mkapiref.py
 Source4:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v%{version}/doc/source/index.rst
 Source5:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v%{version}/doc/source/programmers-guide.rst
+Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.4.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  gcc
@@ -128,6 +129,9 @@ install -p -m 644 %{SOURCE5} doc/source/
 autoreconf -fsi
 %configure --with-gnutls --with-openssl --with-libev --disable-static --enable-werror
 %make_build
+echo '2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6  %{SOURCE10}' | sha256sum -c -
+tar -xzf %{SOURCE10} -C %{_builddir}
+export PYTHONPATH="%{_builddir}/markupsafe-3.0.4/src${PYTHONPATH:+:$PYTHONPATH}"
 %make_build html
 
 rm -f doc/build/html/.buildinfo

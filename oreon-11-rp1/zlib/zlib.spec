@@ -20,10 +20,15 @@ BuildRequires: make
 %description
 zlib 1.3.2 is a general purpose data compression library. All the code is thread safe (though see the FAQ for caveats). The data format used by the zlib library is described by RFCs (Request for Comments) 1950 to 1952 at https://datatracker.ietf.org/doc/html/rfc1950 (zlib format), rfc1951 (deflate format) and rfc1952 (gzip format).
 
+Obsoletes: zlib-ng-compat < 3
+Provides: zlib-ng-compat = 2.3.3
+
 %package devel
 Summary: zlib, a general purpose data compression library
 Requires: zlib%{?_isa} = %{version}-%{release}
 Provides: pkgconfig(zlib)
+Obsoletes: zlib-ng-compat-devel < 3
+Provides: zlib-ng-compat-devel = 2.3.3
 
 %description devel
 zlib 1.3.2 is a general purpose data compression library. All the code is thread safe (though see the FAQ for caveats). The data format used by the zlib library is described by RFCs (Request for Comments) 1950 to 1952 at https://datatracker.ietf.org/doc/html/rfc1950 (zlib format), rfc1951 (deflate format) and rfc1952 (gzip format).

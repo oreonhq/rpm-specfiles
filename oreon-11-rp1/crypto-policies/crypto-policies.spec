@@ -22,6 +22,7 @@ Summary:        System-wide crypto policies
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/redhat-crypto/oreon-crypto-policies
 Source0:        https://gitlab.com/redhat-crypto/fedora-%{name}/-/archive/6488aef/crypto-policies-git6488aef.tar.gz
+Patch0:         openssh-no-mldsa.patch
 
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -69,6 +70,7 @@ defined in simple policy definition files.
 %oreon_sha256
 
 %setup -q -n fedora-crypto-policies-%{git_commit_hash}-%{git_commit}
+patch -p1 < %{PATCH0}
 
 %build
 %make_build \

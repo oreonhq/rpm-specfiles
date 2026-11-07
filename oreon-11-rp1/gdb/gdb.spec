@@ -48,6 +48,7 @@ License: GPL-3.0-or-later AND BSD-3-Clause AND FSFAP AND LGPL-2.1-or-later AND G
 # Do not provide URL for snapshots as the file lasts there only for 2 days.
 # ftp://sourceware.org/pub/gdb/releases/FIXME{tarname}.tar.xz
 Source0:        https://sourceware.org/pub/gdb/releases/gdb-%{version}.tar.xz
+Patch0:         gdb-aarch64-opc-null-comment.patch
 URL: https://gnu.org/software/gdb/
 
 # For our convenience

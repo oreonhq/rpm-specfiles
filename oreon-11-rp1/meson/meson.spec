@@ -20,6 +20,8 @@ Source0:        https://github.com/mesonbuild/meson/archive/%{version}/meson-%{v
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
+BuildRequires:  zlib >= 1.3.2
+BuildRequires:  zlib-devel >= 1.3.2
 Requires:       ninja-build
 
 Requires:       meson-srpm-macros = %{version}-%{release}
