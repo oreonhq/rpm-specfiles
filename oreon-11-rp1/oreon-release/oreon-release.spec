@@ -6,7 +6,7 @@
 
 %global distro Oreon
 %global major 11
-%global release_name Rp1
+%global release_name RP1
 
 Name: oreon-release
 Version: %{major}
