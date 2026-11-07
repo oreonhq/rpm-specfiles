@@ -32,6 +32,7 @@ Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/mark
 
 BuildRequires:  autoconf
 BuildRequires:  gcc
+BuildRequires:  gdb
 BuildRequires:  make
 BuildRequires:  libtool
 BuildRequires:  libev-devel

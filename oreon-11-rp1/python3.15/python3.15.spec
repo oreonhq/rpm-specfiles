@@ -3,6 +3,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+%global __debug_install_post %{__find_debuginfo} -j1 %{?_missing_build_ids_terminate_build:--strict-build-id} %{?_no_recompute_build_ids:-n} %{?_include_minidebuginfo:-m} %{?_include_gdb_index:-i} %{?_unique_build_ids:--build-id-seed "%{VERSION}-%{RELEASE}"} %{?_unique_debug_names:--unique-debug-suffix "-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_unique_debug_srcs:--unique-debug-src-base "%{name}-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_find_debuginfo_dwz_opts} %{?_find_debuginfo_opts} %{?_find_debuginfo_vendor_opts} %{?_debugsource_packages:-S debugsourcefiles.list} "%{builddir}/%{?buildsubdir}"
 # ======================
 # Bootstrap conditionals
 # ======================
@@ -1379,7 +1380,7 @@ PYTHONPATH="%{_rpmconfigdir}/redhat" \
 # -x - skip test modules with SyntaxErrors (taken from the Makefile)
 LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
 %{buildroot}%{_bindir}/python%{pybasever} -s -B -m compileall \
--f %{_smp_mflags} -o 0 -o 1 -o 2 -s %{buildroot} -p / %{buildroot} --hardlink-dupes --invalidation-mode=timestamp \
+-f -j1 -o 0 -o 1 -o 2 -s %{buildroot} -p / %{buildroot} --hardlink-dupes --invalidation-mode=timestamp \
 -x 'bad_coding|badsyntax|site-packages'
 
 # Turn this BRP off, it is done by compileall2 --hardlink-dupes above

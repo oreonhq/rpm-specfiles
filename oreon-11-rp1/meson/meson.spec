@@ -20,6 +20,7 @@ Source0:        https://github.com/mesonbuild/meson/archive/%{version}/meson-%{v
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
+BuildRequires:  python3-pip
 Requires:       ninja-build
 
 Requires:       meson-srpm-macros = %{version}-%{release}

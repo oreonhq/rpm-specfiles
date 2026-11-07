@@ -64,6 +64,7 @@ Patch:        0002-Add-INSTALLER-to-Python-metadata.patch
 Patch:        0003-Fix-a-buffer-overflow-when-decompressing-solv-pages.patch
 
 BuildRequires:  cmake >= 3.5
+BuildRequires:  gdb
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(rpm)
@@ -222,6 +223,10 @@ for a in sys.argv[1:]:
         if "/redhat/" in path and not os.path.exists(path):
             continue
         a = "-specs=" + path
+    elif a == "-fplugin=annobin" or a.startswith("-fplugin=annobin"):
+        plug = os.environ.get("OREON_ANNOBIN")
+        if plug:
+            a = "-fplugin=" + plug
     args.append(a)
 os.execv(os.environ["OREON_REAL_CC"], [os.environ["OREON_REAL_CC"], *args])
 PY
@@ -232,6 +237,7 @@ for pair in "gcc:/usr/bin/gcc" "cc:/usr/bin/gcc" "g++:/usr/bin/g++" "c++:/usr/bi
 #!/bin/sh
 export OREON_SPECDIR="$specdir"
 export OREON_RPMCONFIG="%{_rpmconfigdir}"
+export OREON_ANNOBIN="$plugin"
 export OREON_REAL_CC=$real
 exec /usr/bin/python3 "$wrapdir/ccwrap.py" "\$@"
 EOF
