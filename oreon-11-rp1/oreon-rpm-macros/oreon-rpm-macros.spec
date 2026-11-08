@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 Name:           oreon-rpm-macros
 Version:        1
 Release:        4%{?dist}

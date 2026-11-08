@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 %global codename Foxy
 # Package is only arch specific due to missing deps on arm
 # Debuginfo package is useless.

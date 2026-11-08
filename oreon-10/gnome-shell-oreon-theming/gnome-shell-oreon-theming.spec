@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 Name:           gnome-shell-oreon-theming
 Version:        3
 Release:        1%{?dist}

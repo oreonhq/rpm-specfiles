@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 %global source0_hash 04bfe8ef75db7d629a33de767599765cecadc56274a39822d5d081030d577685
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}

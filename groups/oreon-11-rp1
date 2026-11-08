@@ -1,0 +1,86 @@
+# Package groups for Oreon 11 (Release Pack 1) ONLY
+
+[rpm-and-base]
+summary: the release itself, rpm, and the packages every other spec assumes exist
+maintainer: Brandon Lester
+packages: filesystem, setup, rpm, rpm-sequoia, tree-pkg, chkconfig, oreon-release, oreon-defense, oreon-rpm-config, oreon-rpm-macros, ca-certificates, hwdata, tzdata
+
+[srpm-macros]
+summary: macros imported into other specs. a mistake here breaks the whole tree
+maintainer: Brandon Lester
+packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macros, go-srpm-macros, java-srpm-macros, kernel-srpm-macros, lua-srpm-macros, ocaml-srpm-macros, openblas-srpm-macros, package-notes-srpm-macros, perl-srpm-macros, perl-generators, pyproject-rpm-macros, pyproject-srpm-macros, python-srpm-macros, qt6-srpm-macros, rust-srpm-macros
+
+[toolchain]
+summary: compilers, libc, binutils, debuggers. these are slow and they fill disks
+maintainer: Brandon Lester
+packages: gcc, binutils, glibc, gdb, llvm, elfutils, libtool, ccache, dwz, debugedit, patchelf, kernel-headers
+
+[build-tools]
+summary: the tools that turn a tarball into a package
+maintainer: Brandon Lester
+packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, gnulib-l10n, orbscli
+
+[shell-and-users]
+summary: login, shells, core unix tools
+maintainer: Brandon Lester
+packages: bash, bash-completion, coreutils, util-linux, shadow-utils, pam, sudo, acl, attr, cracklib, libpwquality, authselect
+
+[compression]
+summary: archives and the libraries that implement them
+maintainer: Brandon Lester
+packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarchive, zchunk, gzip, tar, cpio
+
+[crypto]
+summary: tls, gpg, and the policy that tells the rest what to use
+maintainer: Brandon Lester
+packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, crypto-policies, libsodium, keyutils, krb5, libxcrypt
+
+[python]
+summary: interpreters and the python modules the build root needs
+maintainer: Brandon Lester
+packages: python3, python3.15, python3-build, python3-installer, python3-jinja2, python3-markupsafe, python3-packaging, python3-pefile, python3-pyelftools, python3-pyproject-hooks, python3-setuptools, python3-setuptools_scm, python3-vcs-versioning, python3-wheel, python-dateutil, python-dbus, python-distro, python-six, python-systemd, python-tzdata, swig
+
+[perl]
+summary: perl and the small modules other specs require by name
+maintainer: Brandon Lester
+packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Oreon-VSP
+
+[languages]
+summary: other language runtimes and the generators that wrap them
+maintainer: Brandon Lester
+packages: lua, rust, mpdecimal, fmt, toml11
+
+[networking]
+summary: http, ssh, dns names, and the libraries under them
+maintainer: Brandon Lester
+packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2, openldap, cyrus-sasl, libpsl, publicsuffix-list, libidn2, libunistring, rsync, libmicrohttpd
+
+[services]
+summary: pid 1, dbus, cron, logging
+maintainer: Brandon Lester
+packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate
+
+[packaging-stack]
+summary: dnf and the libraries it links
+maintainer: Brandon Lester
+packages: dnf, dnf5, dnf-plugins-core, libdnf, libsolv, librepo, libcomps, libmodulemd
+
+[selinux-and-caps]
+summary: policy, audit, capabilities
+maintainer: Brandon Lester
+packages: libselinux, libsepol, libsemanage, audit, ima-evm-utils, libcap, libcap-ng, libseccomp, fsverity-utils
+
+[libraries]
+summary: shared libraries that are not big enough to be their own group
+maintainer: Brandon Lester
+packages: glib2, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, json-c, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm
+
+[x11]
+summary: the x11 client libraries we actually build
+maintainer: Brandon Lester
+packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans
+
+[admin-tools]
+summary: things a person runs on a booted system
+maintainer: Brandon Lester
+packages: procps-ng, man-db, nano, htop, iotop-c, fastfetch, tmux, git, fzf, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot

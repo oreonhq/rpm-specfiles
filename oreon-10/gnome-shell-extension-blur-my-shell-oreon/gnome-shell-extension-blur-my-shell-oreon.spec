@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 ## START: Set by rpmautospec
 ## (rpmautospec version 0.7.3)
 ## RPMAUTOSPEC: autorelease, autochangelog

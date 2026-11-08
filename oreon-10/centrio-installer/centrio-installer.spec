@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 Name:           centrio-installer
 Version:        1.0
 Release:        96%{?dist}

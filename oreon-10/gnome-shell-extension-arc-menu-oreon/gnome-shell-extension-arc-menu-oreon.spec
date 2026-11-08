@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 %global ename  arc-menu-oreon
 	
 %global extdir %{_datadir}/gnome-shell/extensions/arcmenu@arcmenu.com

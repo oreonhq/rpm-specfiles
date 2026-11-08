@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 %global extdir      %{_datadir}/gnome-shell/extensions/dash-to-panel@jderose9.github.com
 %global gschemadir  %{_datadir}/glib-2.0/schemas
 

@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 %global distro  Oreon
 %define release_name    10 Core 'Foxy'
 %global major   10

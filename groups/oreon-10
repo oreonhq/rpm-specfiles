@@ -1,0 +1,6 @@
+# Package groups for Oreon 10 ONLY
+
+[oreon-10-desktop]
+summary: Oreon 10 Desktop Group
+maintainer: Brandon Lester
+packages: bspwm, centrio-installer, dmenu, gnome-shell-extension-arc-menu-oreon, gnome-shell-extension-blur-my-shell-oreon, gnome-shell-extension-dash-to-panel-oreon, gnome-shell-oreon-theming, herbstluftwm, kernel-oreon, oreon-defense, oreon-logos, oreon-release, oreon-shell-theme, sxhkd, wine

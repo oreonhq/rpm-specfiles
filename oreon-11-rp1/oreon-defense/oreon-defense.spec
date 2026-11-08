@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 Name:           oreon-defense
 Version:        1.0.17
 Release:        2%{?dist}

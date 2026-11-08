@@ -1,3 +1,6 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 # All global changes to build and install should follow this line.
 
 # Disable LTO in userspace packages.
