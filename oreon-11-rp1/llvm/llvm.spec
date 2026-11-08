@@ -303,6 +303,9 @@ end
 #
 # NOTE: Originally this is only needed for PGO but it doesn't hurt to have it on all the time.
 %global build_ldflags %{?build_ldflags} -Wl,--build-id=sha1
+%if 0%{with lto_build}
+%global build_ldflags %{build_ldflags} -Wl,--thinlto-cache-policy=prune_interval=0s:prune_after=1s:cache_size=100%
+%endif
 
 #region LLVM globals
 
@@ -1421,6 +1424,8 @@ cd llvm/utils/lit
 
 #region build
 %build
+mkdir -p %{_tmppath}
+export TMPDIR=%{_tmppath}
 # TODO(kkleine): In clang we had this %ifarch s390 s390x aarch64 %ix86 ppc64le
 # Decrease debuginfo verbosity to reduce memory consumption during final library linking.
 %global reduce_debuginfo 0
@@ -1938,6 +1943,12 @@ cd $OLD_CWD
 %if 0%{with lto_build}
   %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_ENABLE_LTO:BOOL=Thin
   %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_ENABLE_FATLTO=ON
+  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_C_ARCHIVE_CREATE="<CMAKE_AR> DqcT <TARGET> <LINK_FLAGS> <OBJECTS>"
+  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_CXX_ARCHIVE_CREATE="<CMAKE_AR> DqcT <TARGET> <LINK_FLAGS> <OBJECTS>"
+  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_Fortran_ARCHIVE_CREATE="<CMAKE_AR> DqcT <TARGET> <LINK_FLAGS> <OBJECTS>"
+  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_C_ARCHIVE_APPEND="<CMAKE_AR> DqT <TARGET> <LINK_FLAGS> <OBJECTS>"
+  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_CXX_ARCHIVE_APPEND="<CMAKE_AR> DqT <TARGET> <LINK_FLAGS> <OBJECTS>"
+  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_Fortran_ARCHIVE_APPEND="<CMAKE_AR> DqT <TARGET> <LINK_FLAGS> <OBJECTS>"
 %endif
 
 %if 0%{with use_lld}
@@ -1976,8 +1987,20 @@ cd $OLD_CWD
 #endregion Final stage
 
 %if %{with lto_build}
-# The LTO cache is not needed anymore.
-# Remove it in order to free disk space.
+cd %{_vpath_builddir}
+find . -name '*.a' -print0 | while IFS= read -r -d '' archive; do
+  list=$(mktemp)
+  llvm-ar t "$archive" > "$list"
+  first=$(head -n 1 "$list")
+  case $first in
+    */*)
+      tmp=${archive}.thick
+      llvm-ar Dqc "$tmp" @"$list" && mv -f "$tmp" "$archive"
+      ;;
+  esac
+  rm -f "$list"
+done
+cd - >/dev/null
 rm -rfv %{_vpath_builddir}/lto.cache
 %endif
 
