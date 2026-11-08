@@ -651,6 +651,7 @@ BuildRequires:	libxml2-devel
 
 # For clang-offload-packager
 BuildRequires: elfutils-libelf-devel
+BuildRequires: gdb
 BuildRequires: libffi-devel
 
 # For scan-build
@@ -1424,18 +1425,16 @@ cd llvm/utils/lit
 mkdir -p %{_tmppath}
 export TMPDIR=%{_tmppath}
 cat > $RPM_BUILD_DIR/lto-cache-policy.cmake << 'EOF'
-function(oreon_lto_cache_policy)
-  if(NOT "${LLVM_USE_LINKER}" MATCHES "lld")
-    return()
+macro(oreon_lto_cache_policy)
+  if("${LLVM_USE_LINKER}" MATCHES "lld")
+    set(_flag "-Wl,--thinlto-cache-policy=prune_interval=0s:prune_after=1s:cache_size=100%")
+    foreach(_kind EXE SHARED MODULE)
+      if(NOT "${CMAKE_${_kind}_LINKER_FLAGS}" MATCHES "thinlto-cache-policy")
+        set(CMAKE_${_kind}_LINKER_FLAGS "${CMAKE_${_kind}_LINKER_FLAGS} ${_flag}")
+      endif()
+    endforeach()
   endif()
-  set(flag "-Wl,--thinlto-cache-policy=prune_interval=0s:prune_after=1s:cache_size=100%")
-  foreach(kind EXE SHARED MODULE)
-    set(var "CMAKE_${kind}_LINKER_FLAGS")
-    if(NOT "${${var}}" MATCHES "thinlto-cache-policy")
-      set("${var}" "${${var}} ${flag}" CACHE STRING "" FORCE)
-    endif()
-  endforeach()
-endfunction()
+endmacro()
 cmake_language(DEFER CALL oreon_lto_cache_policy)
 EOF
 # TODO(kkleine): In clang we had this %ifarch s390 s390x aarch64 %ix86 ppc64le
