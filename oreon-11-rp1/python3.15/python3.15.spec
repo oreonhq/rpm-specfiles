@@ -3,7 +3,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global __debug_install_post %{__find_debuginfo} -j1 %{?_missing_build_ids_terminate_build:--strict-build-id} %{?_no_recompute_build_ids:-n} %{?_include_minidebuginfo:-m} %{?_include_gdb_index:-i} %{?_unique_build_ids:--build-id-seed "%{VERSION}-%{RELEASE}"} %{?_unique_debug_names:--unique-debug-suffix "-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_unique_debug_srcs:--unique-debug-src-base "%{name}-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_find_debuginfo_dwz_opts} %{?_find_debuginfo_opts} %{?_find_debuginfo_vendor_opts} %{?_debugsource_packages:-S debugsourcefiles.list} "%{builddir}/%{?buildsubdir}"
+%define __debug_install_post %{__find_debuginfo} -j1 %{?_missing_build_ids_terminate_build:--strict-build-id} %{?_no_recompute_build_ids:-n} %{?_include_minidebuginfo:-m} %{?_include_gdb_index:-i} %{?_unique_build_ids:--build-id-seed "%{VERSION}-%{RELEASE}"} %{?_unique_debug_names:--unique-debug-suffix "-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_unique_debug_srcs:--unique-debug-src-base "%{name}-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_find_debuginfo_dwz_opts} %{?_find_debuginfo_opts} %{?_find_debuginfo_vendor_opts} %{?_debugsource_packages:-S debugsourcefiles.list} "%{builddir}/%{?buildsubdir}"
 # ======================
 # Bootstrap conditionals
 # ======================

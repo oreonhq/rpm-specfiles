@@ -28,6 +28,7 @@ BuildRequires: autoconf, automake, libtool
 BuildRequires: make
 BuildRequires: gnupg2
 BuildRequires: annobin-annocheck binutils
+BuildRequires: gdb
 BuildRequires:  oreon-rpm-macros
 
 %package devel

@@ -3,6 +3,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+%{!?python3_sitelib:%global python3_sitelib %(python3 -c "import sysconfig; print(sysconfig.get_path('purelib'))")}
 # We can skip tests
 %bcond_without testsuite
 

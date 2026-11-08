@@ -286,6 +286,17 @@ export CXX="$wrapdir/g++"
 
 %install
 %cmake_install
+%if %{with python_bindings}
+: > python3-solv.files
+find %{buildroot} -path '*/site-packages/*' | while read -r f; do
+  b=${f#%{buildroot}}
+  case $b in
+    */site-packages/_solv.so|*/site-packages/solv.py|*/site-packages/__pycache__/solv.*|*/site-packages/solv-*.dist-info|*/site-packages/solv-*.dist-info/*)
+      echo "$b" >> python3-solv.files
+      ;;
+  esac
+done
+%endif
 
 %check
 %ctest
@@ -373,10 +384,6 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %endif
 
 %if %{with python_bindings}
-%files -n python3-%{libname}
-%{python3_sitearch}/_%{libname}.so
-%{python3_sitearch}/%{libname}.py
-%{python3_sitearch}/__pycache__/%{libname}.*
-%{python3_sitearch}/%{libname}-*.dist-info/
+%files -n python3-%{libname} -f python3-solv.files
 %endif
 

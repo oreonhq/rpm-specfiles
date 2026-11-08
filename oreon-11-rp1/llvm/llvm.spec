@@ -6,9 +6,9 @@
 %oreon_bootstrap
 BuildRequires: oreon-rpm-macros
 %define py3_shebang_fix() find %{*} -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
-%define cmake_build %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags}
+%define cmake_build() %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags} %{?1:--target %{1}} > cmake-build.out || { tail -n 200 cmake-build.out; exit 1; }
 %define __ninja_common_opts %{?_smp_mflags}
-%define cmake %{set_build_flags}; %__cmake %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} %{?_cmake_generator:-G %{_cmake_generator}} -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} -DCMAKE_INSTALL_FULL_SBINDIR:PATH=%{_sbindir} -DCMAKE_INSTALL_SBINDIR:PATH=%(s=%{_sbindir}; echo ${s##*/}) -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} -DLIB_INSTALL_DIR:PATH=%{_libdir} -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir} -DSHARE_INSTALL_PREFIX:PATH=%{_datadir} %{?_cmake_lib_suffix64} %{?_cmake_shared_libs}
+%define cmake %{set_build_flags}; CFLAGS=$(echo "$CFLAGS" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-specs=[^ ]*//g'); export CFLAGS; CXXFLAGS=$(echo "$CXXFLAGS" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-specs=[^ ]*//g'); export CXXFLAGS; %__cmake %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} %{?_cmake_generator:-G %{_cmake_generator}} -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} -DCMAKE_INSTALL_FULL_SBINDIR:PATH=%{_sbindir} -DCMAKE_INSTALL_SBINDIR:PATH=%(s=%{_sbindir}; echo ${s##*/}) -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} -DLIB_INSTALL_DIR:PATH=%{_libdir} -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir} -DSHARE_INSTALL_PREFIX:PATH=%{_datadir} %{?_cmake_lib_suffix64} %{?_cmake_shared_libs}
 %global optflags %{optflags} -gz=zstd
 #region globals
 #region version
@@ -1866,8 +1866,7 @@ fi
 %global cxxfilt %{_bindir}/llvm-cxxfilt
 %endif
 %global cmake_config_args_instrumented %{cmake_config_args_instrumented} \\\
-  -DLLVM_PROFDATA=%{profdata} \\\
-  -DLLVM_ENABLE_LTO:BOOL=OFF
+  -DLLVM_PROFDATA=%{profdata}
 
 # TODO(kkleine): Should we see warnings like:
 # "function control flow change detected (hash mismatch)"
@@ -1875,15 +1874,15 @@ fi
 %cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
 
 # Build all the tools we need in order to build generate-profdata and llvm-profdata
-%cmake_build --target libclang-cpp.so
-%cmake_build --target clang
-%cmake_build --target lld
-%cmake_build --target llvm-ar
-%cmake_build --target llvm-ranlib
+%cmake_build libclang-cpp.so
+%cmake_build clang
+%cmake_build lld
+%cmake_build llvm-ar
+%cmake_build llvm-ranlib
 #endregion Instrument LLVM
 
 #region Perf training
-%cmake_build --target generate-profdata
+%cmake_build generate-profdata
 
 # Show top 10 functions in the profile
 %{profdata} show --topn=10 %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata | %{cxxfilt}
@@ -1947,18 +1946,18 @@ cd $OLD_CWD
 # Build libLLVM.so first.  This ensures that when libLLVM.so is linking, there
 # are no other compile jobs running.  This will help reduce OOM errors on the
 # builders without having to artificially limit the number of concurrent jobs.
-%cmake_build --target LLVM
+%cmake_build LLVM
 
 # Also build libclang-cpp.so separately to avoid OOM errors.
 # This is to fix occasional OOM errors on the ppc64le COPR builders.
-%cmake_build --target libclang-cpp.so
+%cmake_build libclang-cpp.so
 
 # Same for the three large MLIR dylibs.
 %if %{with mlir}
-%cmake_build --target libMLIR.so
-%cmake_build --target libMLIR-C.so
+%cmake_build libMLIR.so
+%cmake_build libMLIR-C.so
 %if "%{mlir_jit}" == "ON"
-%cmake_build --target libMLIRPythonCAPI.so
+%cmake_build libMLIRPythonCAPI.so
 %endif
 %endif
 
@@ -1970,7 +1969,7 @@ cd $OLD_CWD
 #   /usr/lib64/libomptarget.devicertl.a
 #   /usr/lib64/libomptarget-amdgpu-*.bc
 #   /usr/lib64/libomptarget-nvptx-*.bc
-%cmake_build --target runtimes
+%cmake_build runtimes
 #endregion Final stage
 
 %if %{with lto_build}
@@ -2575,13 +2574,13 @@ function adjust_lit_filter_out()
 #region Test LLVM lit
 # It's fine to always run this, even if we're not shipping python-lit.
 reset_test_opts
-%cmake_build --target check-lit
+%cmake_build check-lit
 #endregion Test LLVM lit
 
 #region Test libclc
 %if %{with libclc}
 reset_test_opts
-%cmake_build --target check-libclc
+%cmake_build check-libclc
 %endif
 #endregion Test libclc
 
@@ -2594,14 +2593,14 @@ export LIT_XFAIL="tools/UpdateTestChecks"
 
 adjust_lit_filter_out test_list_filter_out
 
-%cmake_build --target check-llvm
+%cmake_build check-llvm
 #endregion Test LLVM
 
 #region Test CLANG
 reset_test_opts
 export LIT_XFAIL="$LIT_XFAIL;clang/test/CodeGen/profile-filter.c"
 
-%cmake_build --target check-clang
+%cmake_build check-clang
 #endregion Test Clang
 
 #region Test Clang Tools
@@ -2610,7 +2609,7 @@ reset_test_opts
 # Clang Tools :: clang-tidy/checkers/altera/struct-pack-align.cpp
 export LIT_XFAIL="$LIT_XFAIL;clang-tidy/checkers/altera/struct-pack-align.cpp"
 %endif
-%cmake_build --target check-clang-tools
+%cmake_build check-clang-tools
 #endregion Test Clang Tools
 
 #region Test OPENMP
@@ -2794,7 +2793,7 @@ export LIT_OPTS="$LIT_OPTS --max-retries-per-test=4"
 export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}
 %endif
 
-%cmake_build --target check-openmp
+%cmake_build check-openmp
 #endregion Test OPENMP
 
 %if %{with lldb}
@@ -2803,17 +2802,17 @@ export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_tr
 ## TODO(kkleine): Come back and re-enable testing for LLDB
 ## #region LLDB unit tests
 ## reset_test_opts
-## %%cmake_build --target check-lldb-unit
+## %%cmake_build check-lldb-unit
 ## #endregion LLDB unit tests
 ##
 ## #region LLDB SB API tests
 ## reset_test_opts
-## %%cmake_build --target check-lldb-api
+## %%cmake_build check-lldb-api
 ## #endregion LLDB SB API tests
 ##
 ## #region LLDB shell tests
 ## reset_test_opts
-## %%cmake_build --target check-lldb-shell
+## %%cmake_build check-lldb-shell
 ## #endregion LLDB shell tests
 %endif
 %endif
@@ -2824,7 +2823,7 @@ export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_tr
 
 #region Test LLD
 reset_test_opts
-%cmake_build --target check-lld
+%cmake_build check-lld
 #endregion Test LLD
 
 #region Test MLIR
@@ -2860,7 +2859,7 @@ test_list_filter_out+=("MLIR :: mlir-pdll-lsp-server/view-output.test")
 adjust_lit_filter_out test_list_filter_out
 
 export PYTHONPATH=%{buildroot}/%{python3_sitearch}
-%cmake_build --target check-mlir
+%cmake_build check-mlir
 %endif
 #endregion Test MLIR
 
@@ -2894,14 +2893,14 @@ fi
 
 adjust_lit_filter_out test_list_filter_out
 
-%cmake_build --target check-bolt
+%cmake_build check-bolt
 %endif
 #endregion BOLT tests
 
 #region polly tests
 %if %{with polly}
 reset_test_opts
-%cmake_build --target check-polly
+%cmake_build check-polly
 %endif
 #endregion polly tests
 
@@ -2925,8 +2924,8 @@ export LIT_XFAIL="$LIT_XFAIL;Integration/debug-complex-1.f90"
 
 adjust_lit_filter_out test_list_filter_out
 
-%cmake_build --target check-flang
-%cmake_build --target check-flang-rt
+%cmake_build check-flang
+%cmake_build check-flang-rt
 
 %endif
 #endregion flang tests

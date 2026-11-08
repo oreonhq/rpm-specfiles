@@ -1,12 +1,7 @@
---- a/lib/ngtcp2_addr.c	2026-11-07 00:43:14.667563757 -0800
-+++ b/lib/ngtcp2_addr.c	2026-11-07 00:43:24.677117048 -0800
-@@ -29,16 +29,19 @@
+--- a/lib/ngtcp2_addr.c	2026-11-07 16:57:08.124017200 -0800
++++ b/lib/ngtcp2_addr.c	2026-11-07 16:58:02.192457415 -0800
+@@ -31,14 +31,14 @@
  
- #include "ngtcp2_unreachable.h"
- 
-+#if defined(__GNUC__) && __GNUC__ >= 11
-+__attribute__((noipa))
-+#endif
  ngtcp2_addr *ngtcp2_addr_init(ngtcp2_addr *dest, const ngtcp2_sockaddr *addr,
                                ngtcp2_socklen addrlen) {
 -  *dest = (ngtcp2_addr){
@@ -25,7 +20,7 @@
  void ngtcp2_addr_copy(ngtcp2_addr *dest, const ngtcp2_addr *src) {
    dest->addrlen = src->addrlen;
    if (src->addrlen) {
-@@ -46,6 +49,9 @@
+@@ -46,6 +46,9 @@
    }
  }
  
