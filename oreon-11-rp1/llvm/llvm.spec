@@ -303,9 +303,6 @@ end
 #
 # NOTE: Originally this is only needed for PGO but it doesn't hurt to have it on all the time.
 %global build_ldflags %{?build_ldflags} -Wl,--build-id=sha1
-%if 0%{with lto_build}
-%global build_ldflags %{build_ldflags} -Wl,--thinlto-cache-policy=prune_interval=0s:prune_after=1s:cache_size=100%
-%endif
 
 #region LLVM globals
 
@@ -1426,6 +1423,21 @@ cd llvm/utils/lit
 %build
 mkdir -p %{_tmppath}
 export TMPDIR=%{_tmppath}
+cat > $RPM_BUILD_DIR/lto-cache-policy.cmake << 'EOF'
+function(oreon_lto_cache_policy)
+  if(NOT "${LLVM_USE_LINKER}" MATCHES "lld")
+    return()
+  endif()
+  set(flag "-Wl,--thinlto-cache-policy=prune_interval=0s:prune_after=1s:cache_size=100%")
+  foreach(kind EXE SHARED MODULE)
+    set(var "CMAKE_${kind}_LINKER_FLAGS")
+    if(NOT "${${var}}" MATCHES "thinlto-cache-policy")
+      set("${var}" "${${var}} ${flag}" CACHE STRING "" FORCE)
+    endif()
+  endforeach()
+endfunction()
+cmake_language(DEFER CALL oreon_lto_cache_policy)
+EOF
 # TODO(kkleine): In clang we had this %ifarch s390 s390x aarch64 %ix86 ppc64le
 # Decrease debuginfo verbosity to reduce memory consumption during final library linking.
 %global reduce_debuginfo 0
@@ -1879,7 +1891,7 @@ fi
 # TODO(kkleine): Should we see warnings like:
 # "function control flow change detected (hash mismatch)"
 # then read https://issues.chromium.org/issues/40633598 again.
-%cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
+%cmake -G Ninja %{cmake_config_args_instrumented} -DCMAKE_PROJECT_INCLUDE=$RPM_BUILD_DIR/lto-cache-policy.cmake $extra_cmake_args
 
 # Build all the tools we need in order to build generate-profdata and llvm-profdata
 %cmake_build libclang-cpp.so
@@ -1953,6 +1965,7 @@ cd $OLD_CWD
 
 %if 0%{with use_lld}
 %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_USE_LINKER=lld
+%global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_PROJECT_INCLUDE=$RPM_BUILD_DIR/lto-cache-policy.cmake
 %endif
 
 %cmake -G Ninja %{cmake_config_args} %{extra_cmake_opts} $extra_cmake_args
