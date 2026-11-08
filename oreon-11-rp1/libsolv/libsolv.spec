@@ -294,7 +294,11 @@ export CXX="$wrapdir/g++"
 find %{buildroot} -path '*/site-packages/*' | while read -r f; do
   b=${f#%{buildroot}}
   case $b in
-    */site-packages/_solv.so|*/site-packages/solv.py|*/site-packages/__pycache__/solv.*|*/site-packages/solv-*.dist-info|*/site-packages/solv-*.dist-info/*)
+    */site-packages/_solv.so)
+      echo "$b" >> python3-solv.files
+      echo "${b%%/_solv.so}/__pycache__/solv.*" >> python3-solv.files
+      ;;
+    */site-packages/solv.py|*/site-packages/__pycache__/solv.*|*/site-packages/solv-*.dist-info|*/site-packages/solv-*.dist-info/*)
       echo "$b" >> python3-solv.files
       ;;
   esac
