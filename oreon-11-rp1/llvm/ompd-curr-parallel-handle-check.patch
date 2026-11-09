@@ -1,0 +1,10 @@
+--- a/openmp/libompd/test/api_tests/test_ompd_get_curr_parallel_handle.c
++++ b/openmp/libompd/test/api_tests/test_ompd_get_curr_parallel_handle.c
+@@ -11,6 +11,6 @@ int main() {
+   { printf("Parallel level 1, thread num = %d.\n", omp_get_thread_num()); }
+   return 0;
+ }
+-// CMD: Return code is stale_handle
++// CMD: {{Return code is stale_handle|ompd_rc_unavailable, Not in parallel region}}
+ // CHECK-NOT: Failed
+ // CHECK-NOT: Skip

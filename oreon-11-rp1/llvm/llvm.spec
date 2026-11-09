@@ -572,6 +572,10 @@ Patch2207:        0001-AggressiveInstCombine-Fix-crash-when-folding-consecu.patc
 # https://github.com/llvm/llvm-project/pull/227851
 Patch2307:        227851.patch
 
+# ompd_get_curr_parallel_handle returns unavailable outside a team.
+# The test only accepted stale_handle.
+Patch2308:        ompd-curr-parallel-handle-check.patch
+
 
 %if %{with fastclang}
 # fastclang depends on overriding default conditionals via
