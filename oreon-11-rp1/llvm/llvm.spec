@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 819ecf7351f1a66f76b2d701d8942faaf5faeb324cb90c9d5b090de142434bb2
-%global source42_hash b7b4b998a49ca14faebcc292e7dd2fbb2ba71b4655001d61959e32e4bd7c5b10
+%global source0_hash fb50b1eac93ddeb3aa8dab4cfe324dff74f4a9c2bdee6160c9e36188f8d06a6e
+%global source42_hash ba08a070d4ad120913b60254968f051bf497195b06a065155edb83e8e59e9425
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -15,7 +15,7 @@ BuildRequires: oreon-rpm-macros
 #region version
 %global maj_ver 23
 %global min_ver 1
-%global patch_ver 4
+%global patch_ver 5
 #global rc_ver rc3
 
 %bcond_with snapshot_build
@@ -430,7 +430,7 @@ end
 #region packages
 #region main package
 Name:		%{pkg_name_llvm}
-Version:        23.1.4
+Version:        23.1.5
 Release:        1%{?dist}
 Summary:	The Low Level Virtual Machine
 
@@ -444,10 +444,10 @@ Source42:        https://github.com/llvm/llvm-project/releases/download/llvmorg-
 %endif
 %else
 Source0:        https://github.com/llvm/llvm-project/releases/download/llvmorg-%{version}/llvm-project-%{version}.src.tar.xz
-Source1:        llvm-project-23.1.4.src.tar.xz.sig
+Source1:        llvm-project-23.1.5.src.tar.xz.sig
 %if %{build_docs} == 0
 Source42:        https://github.com/llvm/llvm-project/releases/download/llvmorg-%{version}/llvm_man_pages-%{version}.tar.xz
-Source43:        llvm_man_pages-23.1.4.tar.xz.sig
+Source43:        llvm_man_pages-23.1.5.tar.xz.sig
 %endif
 %endif
 Source6: release-keys.asc
@@ -560,7 +560,6 @@ Patch2301:        0001-mlir-Disable-some-tests-when-the-execution-engine-is.patc
 Patch2205:        0001-FIX-some-OMPT-tests-that-fail-on-RISC-V-156914.patch
 Patch2305:        0001-FIX-some-OMPT-tests-that-fail-on-RISC-V-156914.patch
 Patch2206:        223681.patch
-Patch2306:        223681.patch
 
 # Fix an illegal zext from combined loads (rhbz#2512927)
 # https://github.com/llvm/llvm-project/pull/207229
