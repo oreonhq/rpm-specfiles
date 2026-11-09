@@ -9,8 +9,6 @@
 %oreon_bootstrap
 BuildRequires: oreon-rpm-macros
 %define py3_shebang_fix() find %{*} -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
-%define cmake_build() stdbuf -oL -eL %__cmake --build "%{__cmake_builddir}" %{?_smp_mflags} %{?1:--target %{1}} > cmake-build.out || { awk 'length($0)<500 && /error:|FAILED:|fatal error|Killed|No space|Argument list|ninja:|Segmentation|Cannot allocate|out of memory/ {print}' cmake-build.out | tail -n 80; echo "-- last lines --"; awk 'length($0)<240' cmake-build.out | tail -n 40; exit 1; }
-%define __ninja_common_opts %{?_smp_mflags}
 %define cmake %{set_build_flags}; CFLAGS=$(echo "$CFLAGS" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-specs=[^ ]*//g'); export CFLAGS; CXXFLAGS=$(echo "$CXXFLAGS" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-specs=[^ ]*//g'); export CXXFLAGS; %__cmake %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} %{?_cmake_generator:-G %{_cmake_generator}} -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} -DCMAKE_INSTALL_FULL_SBINDIR:PATH=%{_sbindir} -DCMAKE_INSTALL_SBINDIR:PATH=%(s=%{_sbindir}; echo ${s##*/}) -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} -DLIB_INSTALL_DIR:PATH=%{_libdir} -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir} -DSHARE_INSTALL_PREFIX:PATH=%{_datadir} %{?_cmake_lib_suffix64} %{?_cmake_shared_libs}
 %global optflags %{optflags} -gz=zstd
 #region globals
@@ -1426,21 +1424,6 @@ cd llvm/utils/lit
 
 #region build
 %build
-mkdir -p %{_tmppath}
-export TMPDIR=%{_tmppath}
-cat > $RPM_BUILD_DIR/lto-cache-policy.cmake << 'EOF'
-macro(oreon_lto_cache_policy)
-  if("${LLVM_USE_LINKER}" MATCHES "lld")
-    set(_flag "-Wl,--thinlto-cache-policy=prune_interval=0s:prune_after=1s:cache_size=100%")
-    foreach(_kind EXE SHARED MODULE)
-      if(NOT "${CMAKE_${_kind}_LINKER_FLAGS}" MATCHES "thinlto-cache-policy")
-        set(CMAKE_${_kind}_LINKER_FLAGS "${CMAKE_${_kind}_LINKER_FLAGS} ${_flag}")
-      endif()
-    endforeach()
-  endif()
-endmacro()
-cmake_language(DEFER CALL oreon_lto_cache_policy)
-EOF
 # TODO(kkleine): In clang we had this %ifarch s390 s390x aarch64 %ix86 ppc64le
 # Decrease debuginfo verbosity to reduce memory consumption during final library linking.
 %global reduce_debuginfo 0
@@ -1531,6 +1514,51 @@ export ASMFLAGS="%{build_cflags}"
 %define _find_debuginfo_dwz_opts %{nil}
 
 cd llvm
+
+OREON_NINJA_FILTER="$RPM_BUILD_DIR/oreon-ninja-filter.awk"
+cat > "$OREON_NINJA_FILTER" <<'OREON_AWK'
+/^\[[0-9]+\/[0-9]+\]/ {
+  if (match($0, /^\[([0-9]+)\/([0-9]+)\]/, m)) {
+    if (m[1] % 50 == 0 || $0 ~ /FAILED:|fatal error:|^error: /) {
+      printf "[ninja %%s/%%s]\n", m[1], m[2]
+      fflush()
+    }
+    next
+  }
+}
+/^-- Performing Test / { next }
+/^-- Check for working / { next }
+/^-- Looking for / { next }
+/^-- Detecting / { next }
+/FAILED:|fatal error:|^error: |ninja: build stopped|subcommand failed|^RPM build errors:|^ERROR:|Cannot stat|cpio: |CMake Error|Killed|No space left|Cannot allocate memory/ {
+  print
+  fflush()
+  next
+}
+/^\+ \/usr\/bin\/cmake --build/ || /^Run Build Command/ || /^-- .+ project is/ || /^-- Build files have been written/ {
+  print
+  fflush()
+  next
+}
+{ next }
+OREON_AWK
+
+oreon_ninja_filter() {
+  gawk -f "$OREON_NINJA_FILTER"
+}
+
+oreon_build_fail_summary() {
+  echo "========== OREON BUILD FAILED exit $1 =========="
+  df -h "$RPM_BUILD_DIR" /builddir 2>/dev/null || df -h || true
+  echo "check filtered output above for FAILED/error lines"
+}
+
+oreon_done() {
+  if [ "$1" -ne 0 ]; then
+    oreon_build_fail_summary "$1"
+    exit "$1"
+  fi
+}
 
 # Remember old values to reset to
 OLD_PATH="$PATH"
@@ -1894,18 +1922,39 @@ fi
 # TODO(kkleine): Should we see warnings like:
 # "function control flow change detected (hash mismatch)"
 # then read https://issues.chromium.org/issues/40633598 again.
-%cmake -G Ninja %{cmake_config_args_instrumented} -DCMAKE_PROJECT_INCLUDE=$RPM_BUILD_DIR/lto-cache-policy.cmake $extra_cmake_args
+%cmake -G Ninja %{cmake_config_args_instrumented} $extra_cmake_args
 
-# Build all the tools we need in order to build generate-profdata and llvm-profdata
-%cmake_build libclang-cpp.so
-%cmake_build clang
-%cmake_build lld
-%cmake_build llvm-ar
-%cmake_build llvm-ranlib
+(
+%cmake_build --target libclang-cpp.so
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
+
+(
+%cmake_build --target clang
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
+
+(
+%cmake_build --target lld
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
+
+(
+%cmake_build --target llvm-ar
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
+
+(
+%cmake_build --target llvm-ranlib
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 #endregion Instrument LLVM
 
 #region Perf training
-%cmake_build generate-profdata
+(
+%cmake_build --target generate-profdata
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 
 # Show top 10 functions in the profile
 %{profdata} show --topn=10 %{builddir_instrumented}/tools/clang/utils/perf-training/clang.profdata | %{cxxfilt}
@@ -1958,17 +2007,10 @@ cd $OLD_CWD
 %if 0%{with lto_build}
   %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_ENABLE_LTO:BOOL=Thin
   %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_ENABLE_FATLTO=ON
-  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_C_ARCHIVE_CREATE="<CMAKE_AR> DqcT <TARGET> <LINK_FLAGS> <OBJECTS>"
-  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_CXX_ARCHIVE_CREATE="<CMAKE_AR> DqcT <TARGET> <LINK_FLAGS> <OBJECTS>"
-  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_Fortran_ARCHIVE_CREATE="<CMAKE_AR> DqcT <TARGET> <LINK_FLAGS> <OBJECTS>"
-  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_C_ARCHIVE_APPEND="<CMAKE_AR> DqT <TARGET> <LINK_FLAGS> <OBJECTS>"
-  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_CXX_ARCHIVE_APPEND="<CMAKE_AR> DqT <TARGET> <LINK_FLAGS> <OBJECTS>"
-  %global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_Fortran_ARCHIVE_APPEND="<CMAKE_AR> DqT <TARGET> <LINK_FLAGS> <OBJECTS>"
 %endif
 
 %if 0%{with use_lld}
 %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_USE_LINKER=lld
-%global extra_cmake_opts %{extra_cmake_opts} -DCMAKE_PROJECT_INCLUDE=$RPM_BUILD_DIR/lto-cache-policy.cmake
 %endif
 
 %cmake -G Ninja %{cmake_config_args} %{extra_cmake_opts} $extra_cmake_args
@@ -1976,22 +2018,42 @@ cd $OLD_CWD
 # Build libLLVM.so first.  This ensures that when libLLVM.so is linking, there
 # are no other compile jobs running.  This will help reduce OOM errors on the
 # builders without having to artificially limit the number of concurrent jobs.
-%cmake_build LLVM
+(
+%cmake_build --target LLVM
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 
 # Also build libclang-cpp.so separately to avoid OOM errors.
 # This is to fix occasional OOM errors on the ppc64le COPR builders.
-%cmake_build libclang-cpp.so
+(
+%cmake_build --target libclang-cpp.so
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 
 # Same for the three large MLIR dylibs.
 %if %{with mlir}
-%cmake_build libMLIR.so
-%cmake_build libMLIR-C.so
+(
+%cmake_build --target libMLIR.so
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
+
+(
+%cmake_build --target libMLIR-C.so
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
+
 %if "%{mlir_jit}" == "ON"
-%cmake_build libMLIRPythonCAPI.so
+(
+%cmake_build --target libMLIRPythonCAPI.so
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 %endif
 %endif
 
+(
 %cmake_build
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 
 # If we don't build the runtimes target here, we'll have to wait for the %%check
 # section until these files are available but they need to be installed.
@@ -1999,24 +2061,15 @@ cd $OLD_CWD
 #   /usr/lib64/libomptarget.devicertl.a
 #   /usr/lib64/libomptarget-amdgpu-*.bc
 #   /usr/lib64/libomptarget-nvptx-*.bc
-%cmake_build runtimes
+(
+%cmake_build --target runtimes
+) 2>&1 | oreon_ninja_filter
+oreon_done ${PIPESTATUS[0]}
 #endregion Final stage
 
 %if %{with lto_build}
-cd %{_vpath_builddir}
-find . -name '*.a' -print0 | while IFS= read -r -d '' archive; do
-  list=$(mktemp)
-  llvm-ar t "$archive" > "$list"
-  first=$(head -n 1 "$list")
-  case $first in
-    */*)
-      tmp=${archive}.thick
-      llvm-ar Dqc "$tmp" @"$list" && mv -f "$tmp" "$archive"
-      ;;
-  esac
-  rm -f "$list"
-done
-cd - >/dev/null
+# The LTO cache is not needed anymore.
+# Remove it in order to free disk space.
 rm -rfv %{_vpath_builddir}/lto.cache
 %endif
 
@@ -2616,13 +2669,13 @@ function adjust_lit_filter_out()
 #region Test LLVM lit
 # It's fine to always run this, even if we're not shipping python-lit.
 reset_test_opts
-%cmake_build check-lit
+%cmake_build --target check-lit
 #endregion Test LLVM lit
 
 #region Test libclc
 %if %{with libclc}
 reset_test_opts
-%cmake_build check-libclc
+%cmake_build --target check-libclc
 %endif
 #endregion Test libclc
 
@@ -2635,14 +2688,14 @@ export LIT_XFAIL="tools/UpdateTestChecks"
 
 adjust_lit_filter_out test_list_filter_out
 
-%cmake_build check-llvm
+%cmake_build --target check-llvm
 #endregion Test LLVM
 
 #region Test CLANG
 reset_test_opts
 export LIT_XFAIL="$LIT_XFAIL;clang/test/CodeGen/profile-filter.c"
 
-%cmake_build check-clang
+%cmake_build --target check-clang
 #endregion Test Clang
 
 #region Test Clang Tools
@@ -2651,7 +2704,7 @@ reset_test_opts
 # Clang Tools :: clang-tidy/checkers/altera/struct-pack-align.cpp
 export LIT_XFAIL="$LIT_XFAIL;clang-tidy/checkers/altera/struct-pack-align.cpp"
 %endif
-%cmake_build check-clang-tools
+%cmake_build --target check-clang-tools
 #endregion Test Clang Tools
 
 #region Test OPENMP
@@ -2835,7 +2888,7 @@ export LIT_OPTS="$LIT_OPTS --max-retries-per-test=4"
 export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}
 %endif
 
-%cmake_build check-openmp
+%cmake_build --target check-openmp
 #endregion Test OPENMP
 
 %if %{with lldb}
@@ -2865,7 +2918,7 @@ export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_tr
 
 #region Test LLD
 reset_test_opts
-%cmake_build check-lld
+%cmake_build --target check-lld
 #endregion Test LLD
 
 #region Test MLIR
@@ -2901,7 +2954,7 @@ test_list_filter_out+=("MLIR :: mlir-pdll-lsp-server/view-output.test")
 adjust_lit_filter_out test_list_filter_out
 
 export PYTHONPATH=%{buildroot}/%{python3_sitearch}
-%cmake_build check-mlir
+%cmake_build --target check-mlir
 %endif
 #endregion Test MLIR
 
@@ -2935,14 +2988,14 @@ fi
 
 adjust_lit_filter_out test_list_filter_out
 
-%cmake_build check-bolt
+%cmake_build --target check-bolt
 %endif
 #endregion BOLT tests
 
 #region polly tests
 %if %{with polly}
 reset_test_opts
-%cmake_build check-polly
+%cmake_build --target check-polly
 %endif
 #endregion polly tests
 
@@ -2966,8 +3019,8 @@ export LIT_XFAIL="$LIT_XFAIL;Integration/debug-complex-1.f90"
 
 adjust_lit_filter_out test_list_filter_out
 
-%cmake_build check-flang
-%cmake_build check-flang-rt
+%cmake_build --target check-flang
+%cmake_build --target check-flang-rt
 
 %endif
 #endregion flang tests
