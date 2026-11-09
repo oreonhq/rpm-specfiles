@@ -1374,6 +1374,9 @@ echo '%{source42_hash}  %{SOURCE42}' | sha256sum -c -
 # automatically apply patches based on LLVM version
 %autopatch -m%{maj_ver}00 -M%{maj_ver}99 -p1
 
+# debuginfo records cxxabi.h under libcxx/include. the header is in libcxxabi.
+ln -s ../../libcxxabi/include/cxxabi.h libcxx/include/cxxabi.h
+ln -s ../../libcxxabi/include/__cxxabi_config.h libcxx/include/__cxxabi_config.h
 
 #region LLVM preparation
 
