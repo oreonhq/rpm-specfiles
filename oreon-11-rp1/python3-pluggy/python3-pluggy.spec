@@ -19,6 +19,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
+BuildRequires: python3-wheel
 BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
 Requires: python3
@@ -39,6 +40,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import pluggy'
+PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import pluggy'
 
 %files -f %{_builddir}/%{name}.files
