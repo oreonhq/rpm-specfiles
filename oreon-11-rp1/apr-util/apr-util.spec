@@ -38,7 +38,7 @@ Headers and libraries for building against apr-util.
 %autosetup -n apr-util-%{version}
 
 %build
-%configure --with-apr=%{_prefix} --with-openssl --with-crypto --with-sqlite3 --with-expat --disable-static
+%configure --with-apr=%{_prefix} --with-openssl --with-crypto --with-sqlite3 --with-expat=%{_prefix} --disable-static
 %make_build
 
 %install
