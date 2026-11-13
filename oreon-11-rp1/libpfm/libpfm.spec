@@ -13,7 +13,7 @@ Summary: Performance monitoring library
 License: MIT
 URL: http://perfmon2.sourceforge.net/
 Source0: https://downloads.sourceforge.net/project/perfmon2/libpfm4/libpfm-%{version}.tar.gz
-Patch0: libpfm-unused-n.patch
+Patch0: libpfm-clang-warnings.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -35,7 +35,7 @@ Headers and the library link for libpfm.
 %autosetup -n libpfm-%{version} -p1
 
 %build
-%make_build PREFIX=%{_prefix} LIBDIR=%{_libdir} CONFIG_PFMLIB_NOPYTHON=y
+%make_build -C lib PREFIX=%{_prefix} LIBDIR=%{_libdir} CONFIG_PFMLIB_NOPYTHON=y
 
 %install
 %make_install -C lib PREFIX=%{_prefix} LIBDIR=%{_libdir} CONFIG_PFMLIB_NOPYTHON=y
