@@ -15,7 +15,7 @@ URL: https://apr.apache.org/
 Source0: https://archive.apache.org/dist/apr/apr-util-%{version}.tar.bz2
 
 BuildRequires: oreon-rpm-macros
-BuildRequires: gcc
+BuildRequires: clang
 BuildRequires: make
 BuildRequires: apr-devel
 BuildRequires: openssl-devel
@@ -38,8 +38,14 @@ Headers and libraries for building against apr-util.
 %autosetup -n apr-util-%{version}
 
 %build
+export CC=clang
 %configure --with-apr=%{_prefix} --with-openssl --with-crypto --with-sqlite3 --with-expat=%{_prefix} --disable-static
-%make_build
+# apr-1-config from base apr still injects gcc + fedora -specs
+sed -i \
+    -e 's/^CC *=.*/CC = clang/' \
+    -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
+    Makefile
+%{make_build} CC=clang CFLAGS="%{optflags}"
 
 %install
 %make_install
@@ -47,7 +53,7 @@ rm -f %{buildroot}%{_libdir}/libaprutil-1.la
 %oreon_filelist_devel
 
 %check
-make check
+make check CC=clang CFLAGS="%{optflags}"
 
 %files -f %{_builddir}/%{name}.files
 %files devel -f %{_builddir}/%{name}-devel.files
