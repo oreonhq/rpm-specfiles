@@ -13,6 +13,7 @@ Summary: The Real First Universal Charset Detector. Open, modern and activel...
 License: MIT
 URL: https://pypi.org/project/charset-normalizer/
 Source0: https://files.pythonhosted.org/packages/33/1c/f41d4e74c28ab327ff3acd36053f7ea506c55872d7a90b0fa71aa3ab0c89/charset_normalizer-3.5.2.tar.gz
+Patch0: charset-normalizer-setuptools-cap.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
@@ -28,7 +29,7 @@ The Real First Universal Charset Detector. Open, modern and activel...
 
 %prep
 %oreon_sha256
-%autosetup -n charset_normalizer-3.5.2
+%autosetup -n charset_normalizer-3.5.2 -p1
 
 %build
 python3 -m build --wheel --no-isolation
