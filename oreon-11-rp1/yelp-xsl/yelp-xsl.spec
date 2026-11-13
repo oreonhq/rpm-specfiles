@@ -20,6 +20,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: meson
 BuildRequires: itstool
 BuildRequires: libxslt
+BuildRequires: gettext
 
 %description
 Stylesheets yelp-build uses to turn Mallard and DocBook into HTML.
