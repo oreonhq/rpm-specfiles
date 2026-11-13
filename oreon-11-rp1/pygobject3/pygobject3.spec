@@ -27,6 +27,7 @@ BuildRequires: pkgconfig(cairo)
 BuildRequires: pkgconfig(cairo-gobject)
 BuildRequires: pkgconfig(py3cairo)
 BuildRequires: gobject-introspection-devel
+BuildRequires: python3-pytest
 
 %description
 Python access to GObject libraries.
