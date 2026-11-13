@@ -1,13 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a
+%global source0_hash 9acfe68419c4d06a45c550321b3212762d92f41465062ca4ea19e632ee5d216e
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%global _lto_cflags -flto -ffat-lto-objects
 %bcond bootstrap 0
 %oreon_bootstrap
 
 Name: libxslt
-Version: 1.1.43
+Version: 1.1.45
 Release: 1%{?dist}
 Summary: Library for transforming XML with XSLT
 License: MIT
@@ -35,7 +36,7 @@ Headers and pkgconfig files for libxslt.
 %autosetup -n libxslt-%{version}
 
 %build
-%configure --disable-static --without-python --without-crypto
+%configure --disable-static --without-python
 %make_build
 
 %install
@@ -51,7 +52,6 @@ find %{buildroot} -name '*.a' -delete
 %{_bindir}/xsltproc
 %{_libdir}/libxslt.so.1*
 %{_libdir}/libexslt.so.0*
-%{_libdir}/libxslt-plugins
 %{_mandir}/man1/xsltproc.1*
 
 %files devel
