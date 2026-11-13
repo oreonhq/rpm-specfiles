@@ -15,6 +15,7 @@
 
 %global xyz_version 3.18.3
 %global xy_version %(sed 's/\\(.*\\)\\..*/\\1/'<<<%{xyz_version})
+%global _lto_cflags -flto -ffat-lto-objects
 
 Name:		fuse3
 Version:        3.18.3
@@ -28,6 +29,7 @@ Source2:        https://raw.githubusercontent.com/libfuse/libfuse/master/signify
 Source3:	fuse.conf
 
 BuildRequires:	which
+BuildRequires:	binutils
 BuildRequires:	libselinux-devel
 BuildRequires:	meson
 BuildRequires:	ninja-build
@@ -83,7 +85,7 @@ echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 %autosetup -p1 -n fuse-%{version}
 
 %build
-export LC_ALL=en_US.UTF-8
+export LC_ALL=C.UTF-8
 %meson -D udevrulesdir=%{_udevrulesdir} -D useroot=false
 %meson_build
 
@@ -106,6 +108,13 @@ install -p -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 
 # Delete pointless udev rules (brc#748204)
 rm -f %{buildroot}%{_udevrulesdir}/99-fuse3.rules
+
+%check
+so=$(find %{_vpath_builddir} -name 'libfuse3.so.%{version}' -type f | head -n1)
+test -n "$so"
+readelf --dyn-syms -W "$so" | grep -F 'fuse_session_loop_mt@@FUSE_3.12'
+readelf --dyn-syms -W "$so" | grep -F 'fuse_loop_mt@@FUSE_3.12'
+readelf --dyn-syms -W "$so" | grep -F 'fuse_parse_cmdline@@FUSE_3.12'
 
 %files
 %license LICENSE GPL2.txt
