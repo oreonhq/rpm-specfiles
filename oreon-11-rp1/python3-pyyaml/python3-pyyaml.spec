@@ -21,7 +21,9 @@ BuildRequires: python3-installer
 BuildRequires: python3-setuptools
 BuildRequires: python3-cython
 BuildRequires: gcc
+BuildRequires: libyaml-devel
 Requires: python3
+Requires: libyaml
 
 %description
 YAML parser and emitter for Python
@@ -38,6 +40,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import yaml'
+PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import yaml'
 
 %files -f %{_builddir}/%{name}.files
