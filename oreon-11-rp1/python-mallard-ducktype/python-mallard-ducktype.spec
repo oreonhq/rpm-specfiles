@@ -35,7 +35,8 @@ python3 setup.py build
 python3 setup.py install --skip-build --root %{buildroot}
 
 %check
-python3 tests/runtests
+cd tests
+bash ./runtests
 
 %files
 %license COPYING
