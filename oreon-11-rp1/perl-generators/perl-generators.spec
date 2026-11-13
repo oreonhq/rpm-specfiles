@@ -29,6 +29,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(warnings)
 BuildRequires:  sed
 # Run-time:
+BuildRequires:  perl-Oreon-VSP
 BuildRequires:  perl(Oreon::VSP)
 BuildRequires:  perl(File::Basename)
 # Optional run-time:
@@ -43,11 +44,8 @@ Requires:       perl-interpreter >= 4:5.22.0-351
 # Per Perl packaging guidelines, build-requiring perl-generators should
 # deliver Perl macros
 Requires:       perl-macros
-%if %{defined perl_bootstrap}
-# Supply run-time dependencies manually when perl-generators is not available
 Requires:       perl(Oreon::VSP)
 Requires:       perl(File::Basename)
-%endif
 Recommends:     perl(version)
 
 # The generators and attribute files were split from rpm-build
@@ -83,6 +81,10 @@ with "%{_libexecdir}/%{name}/test".
 %oreon_sha256
 
 %setup -q -n generators-%{version}
+sed -i \
+    -e 's|Fedora::VSP|Oreon::VSP|g' \
+    -e 's|Fedora-VSP|Oreon-VSP|g' \
+    template/bin/perl.req Makefile.PL META.yml META.json
 # Help generators to recognize Perl scripts
 for F in t/*.t; do
     perl -i -MConfig -ple 'print $Config{startperl} if $. == 1 && !s{\A#!.*perl\b}{$Config{startperl}}' "$F"
