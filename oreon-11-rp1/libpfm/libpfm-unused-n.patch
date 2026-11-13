@@ -9,3 +9,11 @@
  	int ret, retval = PFM_SUCCESS;
  
  	pfmlib_for_each_pmu_event(pmu, i) {
+@@ -1995,7 +1995,6 @@
+ 				continue;
+ 			}
+ 		}
+-		n++;
+ 	}
+ 	free(buf);
+ 
