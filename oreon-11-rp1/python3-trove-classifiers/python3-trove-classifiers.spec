@@ -38,6 +38,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import trove_classifiers'
+PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import trove_classifiers'
 
 %files -f %{_builddir}/%{name}.files
