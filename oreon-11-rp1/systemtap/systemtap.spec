@@ -61,7 +61,7 @@ The dtrace command systemtap ships for static probe generation.
 
 %prep
 %oreon_sha256
-%autosetup -n systemtap-%{version}
+%autosetup -n systemtap-%{version} -p1
 
 %build
 %configure
