@@ -9,11 +9,12 @@
 Name: python3-charset-normalizer
 Version: 3.5.2
 Release: 1%{?dist}
-Summary: The Real First Universal Charset Detector. Open, modern and activel...
+Summary: Real first universal charset detector
 License: MIT
 URL: https://pypi.org/project/charset-normalizer/
 Source0: https://files.pythonhosted.org/packages/33/1c/f41d4e74c28ab327ff3acd36053f7ea506c55872d7a90b0fa71aa3ab0c89/charset_normalizer-3.5.2.tar.gz
-Patch0: charset-normalizer-setuptools-cap.patch
+Patch0: charset-normalizer-setuptools-unbound.patch
+BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
@@ -21,11 +22,10 @@ BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-wheel
 BuildRequires: python3-setuptools
-BuildRequires: gcc
 Requires: python3
 
 %description
-The Real First Universal Charset Detector. Open, modern and activel...
+Detects the encoding of text byte streams.
 
 %prep
 %oreon_sha256
@@ -42,3 +42,4 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import charset_normalizer'
 
 %files -f %{_builddir}/%{name}.files
+%license LICENSE
