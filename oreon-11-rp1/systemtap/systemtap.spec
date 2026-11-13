@@ -22,6 +22,7 @@ BuildRequires: gcc-c++
 BuildRequires: boost-devel
 BuildRequires: elfutils-devel
 BuildRequires: python3-devel
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-setuptools
 BuildRequires: python3-pip
 BuildRequires: python3-wheel
@@ -69,7 +70,19 @@ The dtrace command systemtap ships for static probe generation.
 
 %install
 %make_install
+
+for d in %{buildroot}%{python3_sitearch}/helpersdt-*.dist-info; do
+  [ -d "$d" ] || continue
+  echo rpm > "$d/INSTALLER"
+  rm -f "$d/RECORD"
+done
+
 %oreon_filelist
+
+grep -vE '/site-packages/(HelperSDT(/|$)|helpersdt-[^/]+\.dist-info(/|$))' \
+  %{_builddir}/%{name}.files > %{_builddir}/%{name}.files.tmp
+mv %{_builddir}/%{name}.files.tmp %{_builddir}/%{name}.files
+
 grep -E '/sys/sdt\.h$|/sys/sdt-config\.h$' %{_builddir}/%{name}.files > %{_builddir}/%{name}-sdt-devel.files
 grep -E '/bin/dtrace$' %{_builddir}/%{name}.files > %{_builddir}/%{name}-sdt-dtrace.files
 grep -vxFf %{_builddir}/%{name}-sdt-devel.files %{_builddir}/%{name}.files | grep -vxFf %{_builddir}/%{name}-sdt-dtrace.files > %{_builddir}/%{name}.main
@@ -79,5 +92,7 @@ mv %{_builddir}/%{name}.main %{_builddir}/%{name}.files
 ./stap -V
 
 %files -f %{_builddir}/%{name}.files
+%{python3_sitearch}/HelperSDT/
+%{python3_sitearch}/helpersdt-*.dist-info/
 %files sdt-devel -f %{_builddir}/%{name}-sdt-devel.files
 %files sdt-dtrace -f %{_builddir}/%{name}-sdt-dtrace.files
