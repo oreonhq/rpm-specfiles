@@ -22,6 +22,7 @@ BuildRequires: automake
 BuildRequires: gettext-devel
 BuildRequires: flex
 BuildRequires: pkgconfig(libxml-2.0)
+BuildRequires: libxslt
 BuildRequires: docbook-style-xsl
 BuildRequires: docbook-dtds
 Requires: libxslt
