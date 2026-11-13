@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 6451598a99e77f07571960f6b21d577399d3a30f33e80cbd2e3a4aae6535d265
+%global source0_hash 90dab90b8084eb57c35ae2b1d0b70c8e5138ace6023b22c60a5a400f586f63b2
 %global source2_hash e54b09a439647e006b4831eec9785cbaaf3e07ab371c3a6ee6a68e1bdb9fbc6b
 %global source10_hash 21bc47f96cf0eb535e532697dce4cdfdbc91f59223bdc00d8495d191888c5fe8
 
@@ -9,7 +9,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           rust
-Version:        1.99.1
+Version:        1.100.0
 Release:        1%{?dist}
 Summary:        The Rust Programming Language
 License:        (Apache-2.0 OR MIT) AND (Artistic-2.0 AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0 AND Unicode-3.0)
@@ -25,9 +25,9 @@ URL:            https://www.rust-lang.org
 # To bootstrap from scratch, set the channel and date from src/stage0
 # e.g. 1.89.0 wants rustc: 1.88.0-2025-06-26
 # or nightly wants some beta-YYYY-MM-DD
-%global bootstrap_version 1.98.0
-%global bootstrap_channel 1.98.0
-%global bootstrap_date 2026-08-20
+%global bootstrap_version 1.99.0
+%global bootstrap_channel 1.99.0
+%global bootstrap_date 2026-10-01
 
 # Only the specified arches will use bootstrap binaries.
 # NOTE: Those binaries used to be uploaded with every new release, but that was
@@ -53,7 +53,7 @@ URL:            https://www.rust-lang.org
 # See src/bootstrap/src/core/build_steps/llvm.rs, fn check_llvm_version
 # See src/llvm-project/cmake/Modules/LLVMVersion.cmake for bundled version.
 %global min_llvm_version 21.0.0
-%global bundled_llvm_version 23.1.1
+%global bundled_llvm_version 23.1.5
 #global llvm_compat_version 21
 %global llvm llvm%{?llvm_compat_version}
 %bcond_with bundled_llvm
@@ -117,7 +117,7 @@ end}
 end}
 
 Source0:        https://static.rust-lang.org/dist/rustc-%{version}-src.tar.xz
-Source1:        rustc-1.99.1-src.tar.xz.asc
+Source1:        rustc-1.100.0-src.tar.xz.asc
 Source2:        https://static.rust-lang.org/rust-key.gpg.ascii
 
 Source10:        https://github.com/WebAssembly/wasi-libc/archive/wasi-sdk-34/wasi-libc-wasi-sdk-34.tar.gz
@@ -152,11 +152,6 @@ Patch8:        0001-Enable-SHSTK-by-default-on-x86_64-unknown-linux-gnu.patch
 # Ensure llvm worker threads have sufficient stack space. Backport of #163289.
 Patch9:        0001-Ensure-llvm-worker-threads-have-sufficient-stack-spa.patch
 
-# Add a `-static-pie` fallback when `rcrt1.o` is missing
-# https://github.com/rust-lang/rust/issues/164448
-# https://github.com/rust-lang/rust/pull/164451
-Patch10:        0001-Add-a-fallback-for-static-pie-missing-CRT-objects.patch
-
 
 # Simple rpm macros for rust-toolset (as opposed to full rust-packaging)
 Source100:      macros.rust-toolset
@@ -164,7 +159,7 @@ Source101:      macros.rust-srpm
 Source102:      cargo_vendor.attr
 Source103:      cargo_vendor.prov
 
-Patch100:        rustc-1.99.0-disable-libssh2.patch
+Patch100:        rustc-1.100.0-disable-libssh2.patch
 
 # Get the Rust triple for any architecture and ABI.
 %{lua: function rust_triple(arch, abi)
@@ -692,7 +687,6 @@ test "$(cut -d' ' -f1 ./version)" = "%{lua: print((rpm.expand('%version'):gsub('
 %patch -P7 -p1
 %patch -P8 -p1
 %patch -P9 -p1
-%patch -P10 -p1
 
 %if %with disabled_libssh2
 %patch -P100 -p1
