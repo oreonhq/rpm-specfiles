@@ -13,6 +13,7 @@ Summary: Instrumentation system
 License: GPL-2.0-or-later
 URL: https://sourceware.org/systemtap/
 Source0: https://sourceware.org/systemtap/ftp/releases/systemtap-%{version}.tar.gz
+Patch0: stapbpf-warnings.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make

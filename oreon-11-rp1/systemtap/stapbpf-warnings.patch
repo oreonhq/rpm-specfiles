@@ -1,0 +1,140 @@
+--- a/stapbpf/stapbpf.cxx
++++ b/stapbpf/stapbpf.cxx
+@@ -122,6 +122,17 @@
+ static int target_pid_failed_p = 0;
+ static int warnings = 1;
+ static int exit_phase = 0;
++
++__attribute__ ((format (printf, 1, 2)))
++static void warnf(const char *fmt, ...)
++{
++  if (!warnings)
++    return;
++  va_list va;
++  va_start(va, fmt);
++  vfprintf(stderr, fmt, va);
++  va_end(va);
++}
+ static int interrupt_message = 0;
+ static FILE *output_f = stdout;
+ static FILE *kmsg = NULL;
+@@ -515,9 +526,9 @@
+           long ncpus_ = sysconf(_SC_NPROCESSORS_CONF);
+           unsigned ncpus = ncpus_ > 0 ? ncpus_ : 1;
+           if (ncpus_ < 0)
+-            fprintf(stderr, "WARNING: could not get number of CPUs, falling back to 1: %s\n", strerror(errno));
++            warnf("WARNING: could not get number of CPUs, falling back to 1: %s\n", strerror(errno));
+           else if (ncpus_ == 0)
+-            fprintf(stderr, "WARNING: could not get number of CPUs, falling back to 1\n"); // XXX no errno
++            warnf("WARNING: could not get number of CPUs, falling back to 1\n"); // XXX no errno
+           //unsigned ncpus = get_nprocs_conf();
+           mark_active_cpus((unsigned)ncpus);
+           attrs[i].max_entries = ncpus;
+@@ -1416,7 +1427,7 @@
+             {
+               lsm_list[len] = '\0';
+               if (strstr(lsm_list, "bpf") == NULL)
+-                fprintf(stderr, "Warning: BPF not found in active LSMs (%s)\n"
++                warnf("Warning: BPF not found in active LSMs (%s)\n"
+                                "LSM hooks may not enforce return values.\n", lsm_list);
+             }
+         }
+@@ -1588,7 +1599,7 @@
+           unsigned ifindex = if_nametoindex(names[j].c_str());
+           if (ifindex == 0)
+             {
+-              fprintf(stderr, "Warning: XDP interface '%s' not found (%s)\n",
++              warnf("Warning: XDP interface '%s' not found (%s)\n",
+                       names[j].c_str(), strerror(errno));
+               if (!failed_ifaces.empty())
+                 failed_ifaces += ",";
+@@ -1630,7 +1641,7 @@
+     }
+ 
+   if (!failed_ifaces.empty())
+-    fprintf(stderr, "Warning: some interfaces missing for XDP probes (%s)\n",
++    warnf("Warning: some interfaces missing for XDP probes (%s)\n",
+             failed_ifaces.c_str());
+   return;
+ 
+@@ -2227,12 +2238,12 @@
+         __u64 lost;
+       };
+       struct lost_events *lost = (lost_events *) e;
+-      fprintf(stderr, "WARNING: lost %lld perf_events on cpu %d\n",
++      warnf("WARNING: lost %lld perf_events on cpu %d\n",
+               (long long)lost->lost, ctx->cpu);
+     }
+   else
+     {
+-      fprintf(stderr, "WARNING: unknown perf_event type=%d size=%d on cpu %d\n",
++      warnf("WARNING: unknown perf_event type=%d size=%d on cpu %d\n",
+               e->header.type, e->header.size, ctx->cpu);
+     }
+   return LIBBPF_PERF_EVENT_CONT;
+@@ -2313,7 +2324,7 @@
+           if (ret != LIBBPF_PERF_EVENT_CONT)
+             if (already_warned.count(pmu_fds[i].fd) == 0)
+               {
+-                fprintf(stderr, "WARNING: could not read from perf_event buffer on fd %d\n", pmu_fds[i].fd);
++                warnf("WARNING: could not read from perf_event buffer on fd %d\n", pmu_fds[i].fd);
+                 already_warned.insert(pmu_fds[i].fd);
+               }
+         }
+@@ -2344,7 +2355,7 @@
+           if (errno == ENOENT)
+             fatal("an error occured while opening procfs fifo (%s). %s.\n", path, strerror(errno));
+           
+-          fprintf(stderr, "WARNING: an error occurred while opening procfs fifo (%s). %s.\n", 
++          warnf("WARNING: an error occurred while opening procfs fifo (%s). %s.\n", 
+                   path, strerror(errno));
+           continue;
+         }
+@@ -2361,12 +2372,12 @@
+       procfs_lock.unlock();
+ 
+       if (data->maxsize_val && (msg.size() > data->maxsize_val - 1))
+-          fprintf(stderr, "WARNING: procfs message size (%lu) exceeds specified maximum size (%lu).\n", 
++          warnf("WARNING: procfs message size (%lu) exceeds specified maximum size (%lu).\n", 
+                   (unsigned long) msg.size() + 1, (unsigned long) data->maxsize_val);
+ 
+       if (write(fd, msg.data(), msg.size()) == -1)
+         {
+-          fprintf(stderr, "WARNING: an error occurred while writing to procfs fifo (%s). %s.\n", 
++          warnf("WARNING: an error occurred while writing to procfs fifo (%s). %s.\n", 
+                   path, strerror(errno));
+           (void) close(fd);
+           continue;
+@@ -2405,7 +2416,7 @@
+           if (errno == ENOENT)
+             fatal("an error occured while opening procfs fifo (%s). %s.\n", path, strerror(errno));
+           
+-          fprintf(stderr, "WARNING: an error occurred while opening procfs fifo (%s). %s.\n", 
++          warnf("WARNING: an error occurred while opening procfs fifo (%s). %s.\n", 
+                   path, strerror(errno));
+           continue;
+         }
+@@ -2421,7 +2432,7 @@
+         bytes_read = read(fd, buffer_feed, read_size);
+ 
+         if (bytes_read == -1)
+-          fprintf(stderr, "WARNING: an error occurred while reading from procfs fifo (%s). %s.\n", 
++          warnf("WARNING: an error occurred while reading from procfs fifo (%s). %s.\n", 
+                     path, strerror(errno));
+ 
+         if (bytes_read > 0)
+@@ -2453,12 +2464,12 @@
+       std::string file_s = procfs_dir_prefix + procfsprobes[k].path;
+       const char* file = file_s.c_str();
+       if (remove_file_or_dir(file))
+-        fprintf(stderr, "WARNING: an error occurred while deleting a file (%s). %s.\n", file, strerror(errno));
++        warnf("WARNING: an error occurred while deleting a file (%s). %s.\n", file, strerror(errno));
+     }
+ 
+   const char* dir = procfs_dir_prefix.c_str();
+   if (procfsprobes.size() > 0 && remove_file_or_dir(dir))
+-    fprintf(stderr, "WARNING: an error ocurred while deleting a directory (%s). %s.\n", dir, strerror(errno));
++    warnf("WARNING: an error ocurred while deleting a directory (%s). %s.\n", dir, strerror(errno));
+ 
+   if (verbose)
+     fprintf(stderr, "removed fifo directory %s\n", dir);
