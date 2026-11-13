@@ -35,11 +35,13 @@ python3 setup.py build
 
 %install
 python3 setup.py install --skip-build --root %{buildroot}
-%oreon_filelist
 
 %check
 cd tests
 bash ./runtests
 
-%files -f %{_builddir}/%{name}.files
+%files
 %license COPYING
+%{_bindir}/ducktype
+%{python3_sitelib}/mallard/
+%{python3_sitelib}/mallard_ducktype*
