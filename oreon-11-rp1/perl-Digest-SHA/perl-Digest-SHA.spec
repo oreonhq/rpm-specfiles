@@ -5,7 +5,6 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
 
 Name: perl-Digest-SHA
 Version: 6.04
@@ -14,10 +13,14 @@ Summary: Perl interface to SHA-1/224/256/384/512
 License: GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: https://metacpan.org/release/Digest-SHA
 Source0: https://cpan.metacpan.org/authors/id/M/MS/MSHELOR/Digest-SHA-%{version}.tar.gz
-BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: gcc
+BuildRequires: make
+BuildRequires: perl-devel
+BuildRequires: perl-generators
 BuildRequires: perl-interpreter
+BuildRequires: perl(ExtUtils::MakeMaker)
 Requires: perl-interpreter
 Provides: perl(Digest::SHA) = %{version}
 
@@ -29,14 +32,21 @@ Perl module for SHA digests.
 %autosetup -n Digest-SHA-%{version}
 
 %build
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 OPTIMIZE="$RPM_OPT_FLAGS"
+%make_build
 
 %install
-mkdir -p %{buildroot}%{perl_vendorlib}/Digest
-install -p -m 0644 lib/Digest/SHA.pm %{buildroot}%{perl_vendorlib}/Digest/SHA.pm
+%make_install
+find %{buildroot} -type f -name .packlist -delete
+find %{buildroot} -type f -name '*.bs' -empty -delete
+find %{buildroot} -type d -empty -delete
 
 %check
-perl -Ilib -MDigest::SHA -e 'Digest::SHA->new(256)->add("oreon")->hexdigest'
+make test
 
 %files
 %license LICENSE
-%{perl_vendorlib}/Digest/SHA.pm
+%{_bindir}/shasum
+%{perl_vendorarch}/Digest/
+%{perl_vendorarch}/auto/Digest/
+%{_mandir}/man3/Digest::SHA.3*
