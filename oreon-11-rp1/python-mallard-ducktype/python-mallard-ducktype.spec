@@ -19,6 +19,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-setuptools
 Requires: python3
 
@@ -34,13 +35,11 @@ python3 setup.py build
 
 %install
 python3 setup.py install --skip-build --root %{buildroot}
+%oreon_filelist
 
 %check
 cd tests
 bash ./runtests
 
-%files
+%files -f %{_builddir}/%{name}.files
 %license COPYING
-%{_bindir}/ducktype
-%{python3_sitelib}/mallard/
-%{python3_sitelib}/mallard_ducktype*
