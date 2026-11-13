@@ -291,7 +291,8 @@ BuildRequires: openssl-devel
 BuildRequires: pkgconfig
 BuildRequires: python-rpm-macros
 BuildRequires: readline-devel
-BuildRequires: redhat-rpm-config >= 127
+BuildRequires: oreon-rpm-config
+BuildRequires: oreon-rpm-macros
 BuildRequires: sqlite-devel
 BuildRequires: systemtap-sdt-devel
 BuildRequires: tcl-devel
@@ -309,8 +310,8 @@ BuildRequires: tzdata
 
 %if %{with jit_build_stencils}
 # We need the upstream-specified clang+llvm version to build the JIT stencils.
-BuildRequires: clang(major) = 21
-BuildRequires: llvm(major) = 21
+BuildRequires: clang >= 21
+BuildRequires: llvm >= 21
 %elif %{with jit}
 # We need any clang with __attribute__((preserve_none)) support to build+link the JIT shim.
 # We also use the "primary" clang package here, so we can use the unversioned clang command.
@@ -355,7 +356,7 @@ BuildRequires:  oreon-rpm-macros
 # Source code and patches
 # =======================
 
-Source0:        https://www.python.org/ftp/python/%{version}/Python-%{version}.tar.xz
+Source0:        https://www.python.org/ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built
