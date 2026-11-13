@@ -15,8 +15,10 @@ URL: https://www.oracle.com/database/technologies/related/berkeleydb.html
 Source0: https://download.oracle.com/berkeley-db/db-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-config
 BuildRequires: gcc
 BuildRequires: make
+BuildRequires: patchelf
 
 %description
 The Berkeley DB library used by Perl DB_File.
@@ -31,6 +33,8 @@ Headers and the library link for libdb.
 %prep
 %oreon_sha256
 %autosetup -n db-%{version}
+cp -f /usr/lib/rpm/oreon/config.guess dist/config.guess
+cp -f /usr/lib/rpm/oreon/config.sub dist/config.sub
 
 %build
 cd build_unix
@@ -42,6 +46,14 @@ cd build_unix
 %make_install -C build_unix
 rm -rf %{buildroot}%{_docdir}
 rm -f %{buildroot}%{_libdir}/*.la %{buildroot}%{_libdir}/*.a
+find %{buildroot} -type f | while read -r f; do
+  file -b "$f" | grep -q '^ELF' || continue
+  r=$(patchelf --print-rpath "$f" 2>/dev/null) || continue
+  if [ -n "$r" ]; then
+    chmod u+w "$f"
+    patchelf --remove-rpath "$f"
+  fi
+done
 
 %files
 %license LICENSE
