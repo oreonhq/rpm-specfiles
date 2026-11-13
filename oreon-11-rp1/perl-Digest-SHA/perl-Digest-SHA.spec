@@ -18,6 +18,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires: perl-devel
+BuildRequires: perl-macros
 BuildRequires: perl-generators
 BuildRequires: perl-interpreter
 BuildRequires: perl(ExtUtils::MakeMaker)
@@ -32,7 +33,10 @@ Perl module for SHA digests.
 %autosetup -n Digest-SHA-%{version}
 
 %build
-perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 OPTIMIZE="$RPM_OPT_FLAGS"
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 \
+  CC="%{__cc}" LD="%{__cc}" \
+  OPTIMIZE="%{optflags}" \
+  CCFLAGS="-D_REENTRANT -D_GNU_SOURCE -fwrapv -fno-strict-aliasing %{optflags}"
 %make_build
 
 %install
