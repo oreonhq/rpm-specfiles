@@ -62,14 +62,18 @@ find %{buildroot} -name '*.a' -delete
 %{_mandir}/man1/xsltproc.1*
 
 %files devel
+%{_bindir}/xslt-config
 %{_includedir}/libxslt/
 %{_includedir}/libexslt/
 %{_libdir}/libxslt.so
 %{_libdir}/libexslt.so
 %{_libdir}/pkgconfig/libxslt.pc
 %{_libdir}/pkgconfig/libexslt.pc
+%{_libdir}/cmake/libxslt/
+%{_libdir}/xsltConf.sh
 %{_mandir}/man3/*
 
 %files doc
 %{_datadir}/gtk-doc/html/libxslt/
 %{_datadir}/gtk-doc/html/libexslt/
+%{_docdir}/libxslt/
