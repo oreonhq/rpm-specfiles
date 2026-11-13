@@ -40,6 +40,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import cffi'
+PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import cffi'
 
 %files -f %{_builddir}/%{name}.files
