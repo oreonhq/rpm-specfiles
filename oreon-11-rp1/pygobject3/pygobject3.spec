@@ -38,7 +38,15 @@ Requires: python3
 Requires: glib2%{?_isa}
 
 %description -n python3-gobject
-The gi module dbus tests import.
+The gi module for Python.
+
+%package -n python3-gobject-devel
+Summary: Development files for PyGObject
+Requires: python3-gobject%{?_isa} = %{version}-%{release}
+Requires: pkgconfig(gobject-2.0)
+
+%description -n python3-gobject-devel
+Headers and pkgconfig for PyGObject.
 
 %prep
 %oreon_sha256
@@ -57,5 +65,8 @@ The gi module dbus tests import.
 %files -n python3-gobject
 %license COPYING
 %{python3_sitearch}/gi/
-%{python3_sitearch}/pygobject*
+%{python3_sitearch}/PyGObject-*.dist-info/
+
+%files -n python3-gobject-devel
+%{_includedir}/pygobject-3.0/
 %{_libdir}/pkgconfig/pygobject-3.0.pc
