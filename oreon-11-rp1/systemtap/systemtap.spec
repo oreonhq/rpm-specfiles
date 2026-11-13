@@ -18,6 +18,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gcc-c++
+BuildRequires: boost-devel
 BuildRequires: elfutils-devel
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
