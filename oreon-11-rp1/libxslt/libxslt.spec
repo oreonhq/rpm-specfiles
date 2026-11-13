@@ -31,6 +31,13 @@ Requires: libxml2-devel%{?_isa}
 %description devel
 Headers and pkgconfig files for libxslt.
 
+%package doc
+Summary: API docs for libxslt
+BuildArch: noarch
+
+%description doc
+gtk-doc HTML for libxslt and libexslt.
+
 %prep
 %oreon_sha256
 %autosetup -n libxslt-%{version}
@@ -62,3 +69,7 @@ find %{buildroot} -name '*.a' -delete
 %{_libdir}/pkgconfig/libxslt.pc
 %{_libdir}/pkgconfig/libexslt.pc
 %{_mandir}/man3/*
+
+%files doc
+%{_datadir}/gtk-doc/html/libxslt/
+%{_datadir}/gtk-doc/html/libexslt/
