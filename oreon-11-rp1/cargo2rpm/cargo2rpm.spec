@@ -18,6 +18,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
+BuildRequires: python3-rpm-macros
 Requires: python3
 Provides: python3dist(cargo2rpm) = %{version}
 
@@ -31,16 +32,17 @@ Turns cargo metadata into rpm names and dependencies.
 %build
 
 %install
-sitelib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
-mkdir -p %{buildroot}$sitelib %{buildroot}%{_bindir}
-cp -a cargo2rpm %{buildroot}$sitelib/
+mkdir -p %{buildroot}%{python3_sitelib} %{buildroot}%{_bindir}
+cp -a cargo2rpm %{buildroot}%{python3_sitelib}/
+rm -rf %{buildroot}%{python3_sitelib}/cargo2rpm/tests %{buildroot}%{python3_sitelib}/cargo2rpm/testdata
 cat > %{buildroot}%{_bindir}/cargo2rpm <<'EOF'
 #!/usr/bin/python3
 from cargo2rpm.__main__ import main
 raise SystemExit(main())
 EOF
 chmod 0755 %{buildroot}%{_bindir}/cargo2rpm
-%oreon_filelist
 
-%files -f %{_builddir}/%{name}.files
+%files
 %license LICENSE
+%{_bindir}/cargo2rpm
+%{python3_sitelib}/cargo2rpm/
