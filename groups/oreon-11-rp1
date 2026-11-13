@@ -8,7 +8,7 @@ packages: filesystem, setup, rpm, rpm-sequoia, tree-pkg, chkconfig, oreon-releas
 [srpm-macros]
 summary: macros imported into other specs. a mistake here breaks the whole tree
 maintainer: Brandon Lester
-packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macros, go-srpm-macros, java-srpm-macros, kernel-srpm-macros, lua-srpm-macros, ocaml-srpm-macros, openblas-srpm-macros, package-notes-srpm-macros, perl-srpm-macros, perl-generators, pyproject-rpm-macros, pyproject-srpm-macros, python-srpm-macros, qt6-srpm-macros, rust-srpm-macros, python-rpm-generators, python-rpm-macros, cargo-rpm-macros
+packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macros, go-srpm-macros, java-srpm-macros, kernel-srpm-macros, lua-srpm-macros, ocaml-srpm-macros, openblas-srpm-macros, package-notes-srpm-macros, perl-srpm-macros, perl-Oreon-VSP, perl-generators, pyproject-rpm-macros, pyproject-srpm-macros, python-srpm-macros, qt6-srpm-macros, rust-srpm-macros, python-rpm-generators, python-rpm-macros, cargo-rpm-macros
 
 [toolchain]
 summary: compilers, libc, binutils, debuggers. these are slow and they fill disks
@@ -43,7 +43,7 @@ packages: python3, python3.15, python3-build, python3-installer, python3-jinja2,
 [perl]
 summary: perl and the small modules other specs require by name
 maintainer: Brandon Lester
-packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Oreon-VSP, perl-Digest-SHA, perl-bignum
+packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum
 
 [languages]
 summary: other language runtimes and the generators that wrap them
