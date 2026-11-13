@@ -13,6 +13,7 @@ Summary: Fast scalable distributed SCM
 License: GPL-2.0-or-later
 URL: https://www.mercurial-scm.org/
 Source0: https://www.mercurial-scm.org/release/mercurial-%{version}.tar.gz
+Patch0: mercurial-tls13-setup.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -22,19 +23,24 @@ BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
+BuildRequires: python3-wheel
 BuildRequires: rust
 BuildRequires: cargo
+BuildRequires: openssl-devel
 
 %description
 Mercurial source control.
 
 %prep
 %oreon_sha256
-%autosetup -n mercurial-%{version}
+%autosetup -n mercurial-%{version} -p1
 
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
-python3 -m build --wheel --no-isolation
+export CARGO_HOME=%{_builddir}/cargo-home
+mkdir -p "$CARGO_HOME"
+python3 setup.py build_ext -i
+python3 setup.py bdist_wheel --dist-dir dist
 
 %install
 python3 -m installer --destdir %{buildroot} dist/*.whl
@@ -42,7 +48,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 sed -i '\|/bin/hg$|d' %{_builddir}/%{name}.files
 
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} %{buildroot}%{_bindir}/hg version
+PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} %{buildroot}%{_bindir}/hg version
 
 %files -f %{_builddir}/%{name}.files
 %{_bindir}/hg
