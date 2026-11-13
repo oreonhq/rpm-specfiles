@@ -19,6 +19,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
+BuildRequires: python3-wheel
+BuildRequires: python3-setuptools
 Requires: python3
 
 %description
@@ -36,6 +38,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import poetry.core'
+PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import poetry.core'
 
 %files -f %{_builddir}/%{name}.files
