@@ -23,6 +23,10 @@ BuildRequires: pkgconfig(gobject-2.0)
 BuildRequires: pkgconfig(gio-2.0)
 BuildRequires: pkgconfig(girepository-2.0)
 BuildRequires: pkgconfig(libffi)
+BuildRequires: pkgconfig(cairo)
+BuildRequires: pkgconfig(cairo-gobject)
+BuildRequires: pkgconfig(py3cairo)
+BuildRequires: gobject-introspection-devel
 
 %description
 Python access to GObject libraries.
