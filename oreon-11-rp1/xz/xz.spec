@@ -22,7 +22,7 @@ License:	0BSD AND GPL-2.0-or-later AND LicenseRef-Oreon-Public-Domain
 
 # official upstream release
 Source0:        https://github.com/tukaani-project/xz/releases/download/v%{version}/xz-%{version}.tar.gz
-Source1:        xz-5.8.3.tar.gz.sig
+Source1:        xz-5.8.4.tar.gz.sig
 Source2:        https://tukaani.org/misc/lasse_collin_pubkey.txt
 
 Source100:	colorxzgrep.sh
