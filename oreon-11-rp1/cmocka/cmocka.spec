@@ -5,6 +5,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+%global _lto_cflags %{nil}
 
 Name: cmocka
 Version: 1.1.8
