@@ -45,7 +45,7 @@ autoreconf -fi
 %make_install
 
 %check
-./xmlto --help
+%{buildroot}%{_bindir}/xmlto --help
 
 %files
 %license COPYING
