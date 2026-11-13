@@ -44,9 +44,13 @@ cd build_unix
 
 %install
 %make_install -C build_unix
-rm -rf %{buildroot}%{_docdir}
 rm -f %{buildroot}%{_libdir}/*.la %{buildroot}%{_libdir}/*.a
-find %{buildroot} -type f | while read -r f; do
+if [ -d %{buildroot}%{_prefix}/docs ]; then
+  mkdir -p %{buildroot}%{_docdir}
+  rm -rf %{buildroot}%{_docdir}/%{name}
+  mv %{buildroot}%{_prefix}/docs %{buildroot}%{_docdir}/%{name}
+fi
+find %{buildroot}%{_bindir} %{buildroot}%{_libdir} -type f 2>/dev/null | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f" 2>/dev/null) || continue
   if [ -n "$r" ]; then
@@ -57,10 +61,12 @@ done
 
 %files
 %license LICENSE
+%doc %{_docdir}/%{name}
 %{_bindir}/db_*
 %{_libdir}/libdb-5*.so
 
 %files devel
 %{_includedir}/db.h
 %{_includedir}/db_185.h
+%{_includedir}/db_cxx.h
 %{_libdir}/libdb.so
