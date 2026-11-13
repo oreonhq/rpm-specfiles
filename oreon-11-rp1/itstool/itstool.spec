@@ -18,6 +18,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
+BuildRequires: python3-libxml2
 Requires: python3-libxml2
 
 %description
