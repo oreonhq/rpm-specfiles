@@ -18,7 +18,13 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: perl-interpreter
+BuildRequires: perl(Math::BigInt)
+BuildRequires: perl(Math::BigFloat)
+BuildRequires: perl(Math::BigRat)
 Requires: perl-interpreter
+Requires: perl(Math::BigInt)
+Requires: perl(Math::BigFloat)
+Requires: perl(Math::BigRat)
 Provides: perl(bigint) = %{version}
 Provides: perl(bignum) = %{version}
 Provides: perl(bigrat) = %{version}
@@ -41,7 +47,7 @@ install -p -m 0644 lib/Math/BigFloat/Trace.pm %{buildroot}%{perl_vendorlib}/Math
 install -p -m 0644 lib/Math/BigRat/Trace.pm %{buildroot}%{perl_vendorlib}/Math/BigRat/
 
 %check
-perl -Ilib -Mbigint -e 'print 2**100, "\n"'
+perl -I%{buildroot}%{perl_vendorlib} -Ilib -Mbigint -e 'print 2**100, "\n"'
 
 %files
 %license LICENSE
