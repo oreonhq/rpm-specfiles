@@ -49,7 +49,7 @@ find %{buildroot} -type d -empty -delete
 make test
 
 %files
-%license LICENSE
+%license README
 %{_bindir}/shasum
 %{perl_vendorarch}/Digest/
 %{perl_vendorarch}/auto/Digest/
