@@ -39,13 +39,15 @@ Headers and libraries for building against apr-util.
 
 %build
 export CC=clang
+export CFLAGS="%{optflags}"
+export LDFLAGS="%{build_ldflags}"
 %configure --with-apr=%{_prefix} --with-openssl --with-crypto --with-sqlite3 --with-expat=%{_prefix} --disable-static
-# apr-1-config from base apr still injects gcc + fedora -specs
-sed -i \
+# base apr-1-config still injects gcc + fedora -specs into make vars
+find . -type f \( -name Makefile -o -name '*.mk' \) -exec sed -i \
     -e 's/^CC *=.*/CC = clang/' \
     -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
-    Makefile
-%{make_build} CC=clang CFLAGS="%{optflags}"
+    {} +
+%{make_build} CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}"
 
 %install
 %make_install
@@ -53,7 +55,7 @@ rm -f %{buildroot}%{_libdir}/libaprutil-1.la
 %oreon_filelist_devel
 
 %check
-make check CC=clang CFLAGS="%{optflags}"
+make check CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}"
 
 %files -f %{_builddir}/%{name}.files
 %files devel -f %{_builddir}/%{name}-devel.files
