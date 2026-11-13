@@ -17,6 +17,8 @@ Source0: https://cpan.metacpan.org/authors/id/P/PJ/PJACKLAM/bignum-%{version}.ta
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: perl-macros
+BuildRequires: perl-generators
 BuildRequires: perl-interpreter
 BuildRequires: perl(Math::BigInt)
 BuildRequires: perl(Math::BigFloat)
