@@ -14,6 +14,7 @@ Summary: Convert Ducktype markup to Mallard XML
 License: MIT
 URL: https://github.com/projectmallard/mallard-ducktype
 Source0: https://github.com/projectmallard/mallard-ducktype/archive/refs/tags/%{version}.tar.gz
+Patch0: mallard-no-pkg-resources.patch
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
@@ -26,7 +27,7 @@ ducktype turns Mallard Ducktype files into XML. dbus design docs use it.
 
 %prep
 %oreon_sha256
-%autosetup -n mallard-ducktype-%{version}
+%autosetup -n mallard-ducktype-%{version} -p1
 
 %build
 python3 setup.py build
