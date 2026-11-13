@@ -62,7 +62,7 @@ BuildRequires:  gnupg2
 BuildRequires: gnupg2 xz
 BuildRequires:  oreon-rpm-macros
 
-Patch 0:	0001-remove-local-PATH.patch
+Patch0: 0001-remove-local-PATH.patch
 
 %description
 The e2fsprogs package contains a number of utilities for creating,
