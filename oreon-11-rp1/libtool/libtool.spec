@@ -203,3 +203,6 @@ rm -f %{buildroot}%{_libdir}/libltdl.{a,la}
 %{_libdir}/libltdl.so
 
 
+
+%changelog
+%autochangelog
