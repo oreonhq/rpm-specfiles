@@ -107,7 +107,10 @@ BuildRequires: xz
 BuildRequires: gcc gzip make
 
 # Install Bluetooth headers for AF_BLUETOOTH sockets decoding.
+%bcond_with bluez
+%if %{with bluez}
 BuildRequires: pkgconfig(bluez)
+%endif
 BuildRequires:  oreon-rpm-macros
 
 # Install elfutils-devel or libdw-devel to enable strace -k option.
@@ -196,3 +199,6 @@ fi
 %{_bindir}/strace-log-merge
 %{_mandir}/man1/*
 
+
+%changelog
+%autochangelog
