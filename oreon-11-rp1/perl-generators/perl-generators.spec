@@ -84,7 +84,6 @@ sed -i \
     -e 's|Fedora::VSP|Oreon::VSP|g' \
     -e 's|Fedora-VSP|Oreon-VSP|g' \
     template/bin/perl.req Makefile.PL META.yml META.json
-# build against vendored Oreon::VSP until perl-Oreon-VSP is in the side tag
 mkdir -p _oreon_vsp/Oreon
 tar -xOf %{SOURCE1} Fedora-VSP-%{vsp_version}/lib/Fedora/VSP.pm \
     | sed 's/Fedora::VSP/Oreon::VSP/g' > _oreon_vsp/Oreon/VSP.pm
