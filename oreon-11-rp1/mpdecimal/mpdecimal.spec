@@ -107,3 +107,6 @@ cp -a %{_libdir}/libmpdec.so.2.5.1 %{buildroot}%{_libdir}/libmpdec.so.3
 %{_mandir}/man3/libmpdec++.3*
 %{_mandir}/man3/mpdecimal*.3*
 
+
+%changelog
+%autochangelog
