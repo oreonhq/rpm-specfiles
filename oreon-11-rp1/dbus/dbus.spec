@@ -14,7 +14,7 @@ BuildRequires: oreon-rpm-macros
 
 %global libselinux_version      2.0.86
 
-%global fedora_release_version  30-0.2
+%global oreon_release_min_version  30-0.2
 %global generic_release_version 30-0.1
 
 # Allow extra dependencies required for some tests to be disabled.
@@ -100,7 +100,7 @@ per-user-login-session messaging facility.
 %package common
 Summary:        D-BUS message bus configuration
 BuildArch:      noarch
-Conflicts:      oreon-release < %{fedora_release_version}
+Conflicts:      oreon-release < %{oreon_release_min_version}
 Conflicts:      generic-release < %{generic_release_version}
 
 %description common
@@ -109,7 +109,7 @@ implementations to provide a System and User Message Bus.
 
 %package daemon
 Summary:        D-BUS message bus
-Conflicts:      oreon-release < %{fedora_release_version}
+Conflicts:      oreon-release < %{oreon_release_min_version}
 Conflicts:      generic-release < %{generic_release_version}
 Requires:       libselinux%{?_isa} >= %{libselinux_version}
 Requires:       dbus-common = %{epoch}:%{version}-%{release}
@@ -448,3 +448,6 @@ fi
 %{_includedir}/*
 
 
+
+%changelog
+%autochangelog
