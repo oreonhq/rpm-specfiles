@@ -64,3 +64,6 @@ install -Dpm0755 -t %{buildroot}%{_rpmconfigdir} *.py
 %{_rpmconfigdir}/pythondistdeps.py
 %{_rpmconfigdir}/pythonbundles.py
 
+
+%changelog
+%autochangelog
