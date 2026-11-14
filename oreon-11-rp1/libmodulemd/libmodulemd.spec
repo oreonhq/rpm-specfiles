@@ -160,3 +160,6 @@ export LC_CTYPE=C.utf8
 %endif
 
 
+
+%changelog
+%autochangelog
