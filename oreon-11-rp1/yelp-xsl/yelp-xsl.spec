@@ -40,3 +40,6 @@ Stylesheets yelp-build uses to turn Mallard and DocBook into HTML.
 %license COPYING
 %{_datadir}/yelp-xsl/
 %{_datadir}/pkgconfig/yelp-xsl.pc
+
+%changelog
+%autochangelog
