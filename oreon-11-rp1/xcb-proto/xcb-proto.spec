@@ -62,3 +62,6 @@ autoreconf -fiv
 %{python3_sitelib}/xcbgen
 
 
+
+%changelog
+%autochangelog
