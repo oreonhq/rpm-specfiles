@@ -55,3 +55,6 @@ make check
 # installed in a user runtime.
 %{_datarootdir}/pkgconfig/%{name}.pc
 
+
+%changelog
+%autochangelog
