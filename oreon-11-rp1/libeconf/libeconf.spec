@@ -92,3 +92,6 @@ configuration files from applications that use %{name}.
 %{_bindir}/econftool
 %{_mandir}/man8/econftool.8*
 
+
+%changelog
+%autochangelog
