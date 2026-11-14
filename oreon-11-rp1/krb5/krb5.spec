@@ -92,7 +92,10 @@ BuildRequires: git
 # Enable compilation of optional tests
 BuildRequires: resolv_wrapper
 BuildRequires: libcmocka-devel
+%bcond_with opensc
+%if %{with opensc}
 BuildRequires: opensc
+%endif
 BuildRequires: softhsm
 
 %description
@@ -225,7 +228,7 @@ Requires: libverto-devel
 Requires: lmdb-devel
 Requires: openldap-devel
 Requires: pam-devel
-Requires: redhat-rpm-config
+Requires:       oreon-rpm-config
 Requires: openssl-devel >= 1:3.0.0
 
 # Test dependencies
@@ -243,7 +246,7 @@ Requires: python3-kdcproxy
 Requires: resolv_wrapper
 Requires: /etc/crypto-policies/back-ends/krb5.config
 Requires: words
-Requires: opensc
+Recommends: opensc
 Requires: softhsm
 Recommends: python3-pyrad
 
@@ -717,3 +720,6 @@ exit 0
 %{_libexecdir}/%{name}-tests-%{_arch}
 %{_datarootdir}/%{name}-tests/%{_arch}
 
+
+%changelog
+%autochangelog
