@@ -67,3 +67,6 @@ rm $RPM_BUILD_ROOT/%{_libdir}/libpipeline.la
 %{_includedir}/*.h
 %{_mandir}/man3/*
 
+
+%changelog
+%autochangelog
