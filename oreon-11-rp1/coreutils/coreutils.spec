@@ -293,3 +293,6 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 %doc ABOUT-NLS NEWS README THANKS TODO
 %license COPYING
 
+
+%changelog
+%autochangelog
