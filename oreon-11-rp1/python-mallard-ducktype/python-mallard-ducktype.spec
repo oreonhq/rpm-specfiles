@@ -45,3 +45,6 @@ bash ./runtests
 %{_bindir}/ducktype
 %{python3_sitelib}/mallard/
 %{python3_sitelib}/mallard_ducktype*
+
+%changelog
+%autochangelog
