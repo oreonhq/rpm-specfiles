@@ -47,12 +47,12 @@ find . -type f \( -name Makefile -o -name '*.mk' \) -exec sed -i \
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/libapr-1.la
-sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' \
+sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
+    -e 's|^CC=".*"|CC="clang"|' \
     %{buildroot}%{_bindir}/apr-1-config \
     %{buildroot}%{_libdir}/pkgconfig/apr-1.pc
-sed -i 's|^CC=".*"|CC="clang"|' %{buildroot}%{_bindir}/apr-1-config
 if [ -f %{buildroot}%{_libdir}/apr-1/build/libtool ]; then
-  sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' \
+  sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
       %{buildroot}%{_libdir}/apr-1/build/libtool
 fi
 %oreon_filelist_devel
