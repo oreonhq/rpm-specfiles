@@ -162,3 +162,6 @@ install -Dpm0755 -t %{buildroot}%{_sbindir} contrib/fix-info-dir
 %{_mandir}/man1/texi2pdf.1*
 %{_mandir}/man1/pdftexi2dvi.1*
 
+
+%changelog
+%autochangelog
