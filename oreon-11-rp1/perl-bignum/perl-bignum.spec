@@ -60,3 +60,6 @@ perl -I%{buildroot}%{perl_vendorlib} -Ilib -Mbigint -e 'print 2**100, "\n"'
 %{perl_vendorlib}/Math/BigInt/Trace.pm
 %{perl_vendorlib}/Math/BigFloat/Trace.pm
 %{perl_vendorlib}/Math/BigRat/Trace.pm
+
+%changelog
+%autochangelog
