@@ -85,3 +85,6 @@ cp -p %{_libdir}/libnsl.so.%{old_sover}* %{buildroot}%{_libdir}
 %{_includedir}/*
 %{_libdir}/pkgconfig/libnsl.pc
 
+
+%changelog
+%autochangelog
