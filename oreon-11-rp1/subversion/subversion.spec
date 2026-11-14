@@ -26,6 +26,7 @@ BuildRequires: libuuid-devel
 BuildRequires: expat-devel
 BuildRequires: lz4-devel
 BuildRequires: pkgconfig(liblz4)
+BuildRequires: patchelf
 
 %description
 Subversion version control system.
@@ -40,6 +41,13 @@ Subversion version control system.
 
 %install
 %make_install
+for f in %{buildroot}%{_bindir}/svn*; do
+  r=$(patchelf --print-rpath "$f" 2>/dev/null) || continue
+  if [ -n "$r" ]; then
+    chmod u+w "$f"
+    patchelf --remove-rpath "$f"
+  fi
+done
 %oreon_filelist
 sed -i '\|/bin/svn$|d' %{_builddir}/%{name}.files
 
