@@ -119,3 +119,6 @@ rm -rf ${RPM_BUILD_ROOT}%{_mandir}/ru/man8
 %{_bindir}/sepol_validate_transition
 %{_mandir}/man8/chkcon.8*
 
+
+%changelog
+%autochangelog
