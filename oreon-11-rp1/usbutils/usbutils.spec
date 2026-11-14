@@ -49,3 +49,6 @@ rm -rf %{buildroot}/%{_libdir}/pkgconfig/usbutils.pc
 %{_mandir}/*/*
 %{_bindir}/*
 
+
+%changelog
+%autochangelog
