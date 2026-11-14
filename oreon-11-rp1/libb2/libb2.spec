@@ -68,3 +68,6 @@ rm -f %{buildroot}%{_libdir}/*.la
 %{_libdir}/pkgconfig/libb2.pc
 %{_includedir}/blake2.h
 
+
+%changelog
+%autochangelog
