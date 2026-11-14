@@ -63,3 +63,6 @@ V=1 STRIP=: BINDIR=$RPM_BUILD_ROOT%{_bindir} %make_install
 %{_bindir}/iotop
 %{_mandir}/man8/iotop.8*
 
+
+%changelog
+%autochangelog
