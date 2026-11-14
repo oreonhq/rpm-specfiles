@@ -142,3 +142,6 @@ rm %{buildroot}%{_docdir}/sdbus-c++/COPYING
 %{_libexecdir}/installed-tests/sdbus*
 
 
+
+%changelog
+%autochangelog
