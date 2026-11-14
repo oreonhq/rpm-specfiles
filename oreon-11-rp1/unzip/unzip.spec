@@ -166,3 +166,6 @@ make -f unix/Makefile prefix=$RPM_BUILD_ROOT%{_prefix} MANDIR=$RPM_BUILD_ROOT%{_
 %{_bindir}/*
 %{_mandir}/*/*
 
+
+%changelog
+%autochangelog
