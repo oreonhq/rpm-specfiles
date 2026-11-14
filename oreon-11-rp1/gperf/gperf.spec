@@ -46,3 +46,6 @@ rm -rf $RPM_BUILD_ROOT{%{_mandir}/{dvi,html},%{_datadir}/doc}
 %{_mandir}/man1/gperf.1*
 %{_infodir}/gperf.info*
 
+
+%changelog
+%autochangelog
