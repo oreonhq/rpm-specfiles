@@ -140,3 +140,6 @@ rm -f %{buildroot}%{python3_sitearch}/install_files.txt
 %{_libdir}/libseccomp.a
 
 
+
+%changelog
+%autochangelog
