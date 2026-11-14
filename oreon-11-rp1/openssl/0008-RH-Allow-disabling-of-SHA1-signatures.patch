@@ -1,4 +1,4 @@
-From 5650bf7b9f8c4d88bc4998589c2926eb794d7dd0 Mon Sep 17 00:00:00 2001
+From f0958a83026f14a65dc17cd5d4a57c30236170d1 Mon Sep 17 00:00:00 2001
 From: Dmitry Belyavskiy <dbelyavs@redhat.com>
 Date: Mon, 21 Aug 2023 13:07:07 +0200
 Subject: [PATCH 08/16] RH: Allow disabling of SHA1 signatures
@@ -14,10 +14,10 @@ From-dist-git-commit: 9409bc7044cf4b5773639cce20f51399888c45fd
  crypto/evp/m_sigver.c                         | 14 ++++
  crypto/evp/pmeth_lib.c                        | 15 ++++
  doc/man5/config.pod                           | 13 ++++
- include/crypto/context.h                      |  8 +++
+ include/crypto/context.h                      |  7 ++
  include/internal/cryptlib.h                   | 39 ++++++-----
  include/internal/sslconf.h                    |  4 ++
- providers/common/include/prov/securitycheck.h |  2 +
+ providers/common/include/prov/securitycheck.h |  3 +
  providers/common/securitycheck.c              | 14 ++++
  providers/common/securitycheck_default.c      |  1 +
  providers/implementations/signature/dsa_sig.c |  1 +
@@ -28,7 +28,7 @@ From-dist-git-commit: 9409bc7044cf4b5773639cce20f51399888c45fd
  16 files changed, 201 insertions(+), 25 deletions(-)
 
 diff --git a/crypto/context.c b/crypto/context.c
-index 22b5d72455..16f630b642 100644
+index 34c3a03..c38e53a 100644
 --- a/crypto/context.c
 +++ b/crypto/context.c
 @@ -83,6 +83,8 @@ struct ossl_lib_ctx_st {
@@ -141,7 +141,7 @@ index 22b5d72455..16f630b642 100644
 +    return 1;
 +}
 diff --git a/crypto/evp/evp_cnf.c b/crypto/evp/evp_cnf.c
-index 184bab933c..2ae7ccea15 100644
+index 184bab9..2ae7cce 100644
 --- a/crypto/evp/evp_cnf.c
 +++ b/crypto/evp/evp_cnf.c
 @@ -10,6 +10,7 @@
@@ -172,7 +172,7 @@ index 184bab933c..2ae7ccea15 100644
              ERR_raise_data(ERR_LIB_EVP, EVP_R_UNKNOWN_OPTION,
                  "name=%s, value=%s", oval->name, oval->value);
 diff --git a/crypto/evp/m_sigver.c b/crypto/evp/m_sigver.c
-index a79d656804..c07a1582b0 100644
+index a79d656..c07a158 100644
 --- a/crypto/evp/m_sigver.c
 +++ b/crypto/evp/m_sigver.c
 @@ -16,6 +16,7 @@
@@ -204,7 +204,7 @@ index a79d656804..c07a1582b0 100644
          if (signature->digest_verify_init == NULL) {
              ERR_raise_data(ERR_LIB_EVP, EVP_R_PROVIDER_SIGNATURE_NOT_SUPPORTED,
 diff --git a/crypto/evp/pmeth_lib.c b/crypto/evp/pmeth_lib.c
-index 963e0615c2..2397d57f1f 100644
+index 963e061..2397d57 100644
 --- a/crypto/evp/pmeth_lib.c
 +++ b/crypto/evp/pmeth_lib.c
 @@ -31,6 +31,7 @@
@@ -237,7 +237,7 @@ index 963e0615c2..2397d57f1f 100644
          return EVP_PKEY_CTX_ctrl(ctx, -1, op, ctrl, 0, (void *)(md));
  
 diff --git a/doc/man5/config.pod b/doc/man5/config.pod
-index 44ea23b619..87ece0a93a 100644
+index 95566e0..dc6249b 100644
 --- a/doc/man5/config.pod
 +++ b/doc/man5/config.pod
 @@ -316,6 +316,19 @@ Within the algorithm properties section, the following names have meaning:
@@ -261,14 +261,13 @@ index 44ea23b619..87ece0a93a 100644
  
  The value is a boolean that can be B<yes> or B<no>.  If the value is
 diff --git a/include/crypto/context.h b/include/crypto/context.h
-index 199df30726..7698ad0923 100644
+index 6715f92..9f533d0 100644
 --- a/include/crypto/context.h
 +++ b/include/crypto/context.h
-@@ -48,3 +48,11 @@ void ossl_release_default_drbg_ctx(void);
- #if defined(OPENSSL_THREADS)
+@@ -52,4 +52,11 @@ void ossl_release_default_drbg_ctx(void);
  void ossl_threads_ctx_free(void *);
  #endif
-+
+ 
 +#ifndef OSSL_LEGACY_DIGEST_SIGNATURES_STRUCT
 +#define OSSL_LEGACY_DIGEST_SIGNATURES_STRUCT
 +typedef struct ossl_legacy_digest_signatures_st {
@@ -276,8 +275,9 @@ index 199df30726..7698ad0923 100644
 +} OSSL_LEGACY_DIGEST_SIGNATURES;
 +#endif
 +
+ #endif /* !defined(OSSL_CRYPTO_CONTEXT_H) */
 diff --git a/include/internal/cryptlib.h b/include/internal/cryptlib.h
-index 0dcc6b6acd..e45ca2b3c6 100644
+index 1a367b3..4be4a78 100644
 --- a/include/internal/cryptlib.h
 +++ b/include/internal/cryptlib.h
 @@ -100,25 +100,26 @@ typedef struct ossl_ex_data_global_st {
@@ -327,10 +327,10 @@ index 0dcc6b6acd..e45ca2b3c6 100644
  OSSL_LIB_CTX *ossl_lib_ctx_get_concrete(OSSL_LIB_CTX *ctx);
  int ossl_lib_ctx_is_default(OSSL_LIB_CTX *ctx);
 diff --git a/include/internal/sslconf.h b/include/internal/sslconf.h
-index cfb063088c..568ac02c3b 100644
+index 45a4178..97f1366 100644
 --- a/include/internal/sslconf.h
 +++ b/include/internal/sslconf.h
-@@ -41,4 +41,8 @@ const SSL_CONF_CMD *conf_ssl_get(CONF_IMODULE *m, size_t idx, const char **name,
+@@ -43,4 +43,8 @@ const SSL_CONF_CMD *conf_ssl_get(CONF_IMODULE *m, size_t idx, const char **name,
  int conf_ssl_name_find(CONF_IMODULE *m, const char *name, size_t *idx);
  void conf_ssl_get_cmd(const SSL_CONF_CMD *c, size_t idx, char **cmd, char **arg);
  
@@ -340,17 +340,20 @@ index cfb063088c..568ac02c3b 100644
 +                                                  int loadconfig);
  #endif
 diff --git a/providers/common/include/prov/securitycheck.h b/providers/common/include/prov/securitycheck.h
-index 29a2b7fbf8..a48cbb03d2 100644
+index a4974e9..bbd0610 100644
 --- a/providers/common/include/prov/securitycheck.h
 +++ b/providers/common/include/prov/securitycheck.h
-@@ -37,3 +37,5 @@ int ossl_digest_get_approved_nid(const EVP_MD *md);
+@@ -39,5 +39,8 @@ int ossl_digest_get_approved_nid(const EVP_MD *md);
+ 
  /* Functions that have different implementations for the FIPS_MODULE */
  int ossl_digest_rsa_sign_get_md_nid(const EVP_MD *md);
- int ossl_fips_config_securitycheck_enabled(OSSL_LIB_CTX *libctx);
++int ossl_fips_config_securitycheck_enabled(OSSL_LIB_CTX *libctx);
 +
 +int rh_digest_signatures_allowed(OSSL_LIB_CTX *libctx, int mdnid);
+ 
+ #endif /* !defined(OSSL_PROVIDERS_COMMON_INCLUDE_PROV_SECURITYCHECK_H) */
 diff --git a/providers/common/securitycheck.c b/providers/common/securitycheck.c
-index e883ff4865..6985be0400 100644
+index e883ff4..6985be0 100644
 --- a/providers/common/securitycheck.c
 +++ b/providers/common/securitycheck.c
 @@ -19,6 +19,7 @@
@@ -379,7 +382,7 @@ index e883ff4865..6985be0400 100644
 +     return mdnid;
 +}
 diff --git a/providers/common/securitycheck_default.c b/providers/common/securitycheck_default.c
-index 42823ffe14..4b80f14b40 100644
+index 865f684..85de1b8 100644
 --- a/providers/common/securitycheck_default.c
 +++ b/providers/common/securitycheck_default.c
 @@ -15,6 +15,7 @@
@@ -388,10 +391,10 @@ index 42823ffe14..4b80f14b40 100644
  #include "internal/nelem.h"
 +#include "internal/sslconf.h"
  
- /* Disable the security checks in the default provider */
- int ossl_fips_config_securitycheck_enabled(OSSL_LIB_CTX *libctx)
+ int ossl_digest_rsa_sign_get_md_nid(const EVP_MD *md)
+ {
 diff --git a/providers/implementations/signature/dsa_sig.c b/providers/implementations/signature/dsa_sig.c
-index 71ca00e9d3..3d10bb1e97 100644
+index c68980a..09c8491 100644
 --- a/providers/implementations/signature/dsa_sig.c
 +++ b/providers/implementations/signature/dsa_sig.c
 @@ -170,6 +170,7 @@ static int dsa_setup_md(PROV_DSA_CTX *ctx,
@@ -403,7 +406,7 @@ index 71ca00e9d3..3d10bb1e97 100644
          if (md == NULL) {
              ERR_raise_data(ERR_LIB_PROV, PROV_R_INVALID_DIGEST,
 diff --git a/providers/implementations/signature/ecdsa_sig.c b/providers/implementations/signature/ecdsa_sig.c
-index a16f3adbb5..826138de48 100644
+index d937749..47d5ab0 100644
 --- a/providers/implementations/signature/ecdsa_sig.c
 +++ b/providers/implementations/signature/ecdsa_sig.c
 @@ -224,13 +224,15 @@ static int ecdsa_setup_md(PROV_ECDSA_CTX *ctx,
@@ -426,10 +429,10 @@ index a16f3adbb5..826138de48 100644
      if (EVP_MD_xof(md)) {
          ERR_raise(ERR_LIB_PROV, PROV_R_XOF_DIGESTS_NOT_ALLOWED);
 diff --git a/providers/implementations/signature/rsa_sig.c b/providers/implementations/signature/rsa_sig.c
-index cfecf20702..87e05c95e5 100644
+index ffcaf49..65291bf 100644
 --- a/providers/implementations/signature/rsa_sig.c
 +++ b/providers/implementations/signature/rsa_sig.c
-@@ -26,6 +26,7 @@
+@@ -27,6 +27,7 @@
  #include "internal/cryptlib.h"
  #include "internal/nelem.h"
  #include "internal/sizes.h"
@@ -437,7 +440,7 @@ index cfecf20702..87e05c95e5 100644
  #include "crypto/rsa.h"
  #include "prov/providercommon.h"
  #include "prov/implementations.h"
-@@ -39,6 +40,7 @@
+@@ -40,6 +41,7 @@
  #include "providers/implementations/signature/rsa_sig.inc"
  
  #define RSA_DEFAULT_DIGEST_NAME OSSL_DIGEST_NAME_SHA1
@@ -445,7 +448,7 @@ index cfecf20702..87e05c95e5 100644
  
  static OSSL_FUNC_signature_newctx_fn rsa_newctx;
  static OSSL_FUNC_signature_sign_init_fn rsa_sign_init;
-@@ -398,7 +400,8 @@ static int rsa_setup_md(PROV_RSA_CTX *ctx, const char *mdname,
+@@ -399,7 +401,8 @@ static int rsa_setup_md(PROV_RSA_CTX *ctx, const char *mdname,
              goto err;
          }
          md_nid = ossl_digest_rsa_sign_get_md_nid(md);
@@ -455,7 +458,7 @@ index cfecf20702..87e05c95e5 100644
              ERR_raise_data(ERR_LIB_PROV, PROV_R_DIGEST_NOT_ALLOWED,
                  "digest=%s", mdname);
              goto err;
-@@ -1768,8 +1771,13 @@ static int rsa_set_ctx_params(void *vprsactx, const OSSL_PARAM params[])
+@@ -1772,8 +1775,13 @@ static int rsa_set_ctx_params(void *vprsactx, const OSSL_PARAM params[])
      prsactx->pad_mode = pad_mode;
  
      if (prsactx->md == NULL && pmdname == NULL
@@ -472,7 +475,7 @@ index cfecf20702..87e05c95e5 100644
      if (pmgf1mdname != NULL
          && !rsa_setup_mgf1_md(prsactx, pmgf1mdname, pmgf1mdprops))
 diff --git a/ssl/t1_lib.c b/ssl/t1_lib.c
-index 4bc2748e97..dc91485334 100644
+index e9575fd..74f1d90 100644
 --- a/ssl/t1_lib.c
 +++ b/ssl/t1_lib.c
 @@ -21,6 +21,7 @@
@@ -483,15 +486,15 @@ index 4bc2748e97..dc91485334 100644
  #include "internal/nelem.h"
  #include "internal/sizes.h"
  #include "internal/tlsgroups.h"
-@@ -2318,6 +2319,7 @@ int ssl_setup_sigalgs(SSL_CTX *ctx)
+@@ -2313,6 +2314,7 @@ int ssl_setup_sigalgs(SSL_CTX *ctx)
+     uint16_t *tls12_sigalgs_list = NULL;
      EVP_PKEY *tmpkey = EVP_PKEY_new();
-     int istls;
      int ret = 0;
 +    int ldsigs_allowed;
  
      if (ctx == NULL)
          goto err;
-@@ -2335,6 +2337,7 @@ int ssl_setup_sigalgs(SSL_CTX *ctx)
+@@ -2328,6 +2330,7 @@ int ssl_setup_sigalgs(SSL_CTX *ctx)
          goto err;
  
      ERR_set_mark();
@@ -499,7 +502,7 @@ index 4bc2748e97..dc91485334 100644
      /* First fill cache and tls12_sigalgs list from legacy algorithm list */
      for (i = 0, lu = sigalg_lookup_tbl;
          i < OSSL_NELEM(sigalg_lookup_tbl); lu++, i++) {
-@@ -2355,6 +2358,11 @@ int ssl_setup_sigalgs(SSL_CTX *ctx)
+@@ -2348,6 +2351,11 @@ int ssl_setup_sigalgs(SSL_CTX *ctx)
              cache[i].available = 0;
              continue;
          }
@@ -512,15 +515,12 @@ index 4bc2748e97..dc91485334 100644
          if (!EVP_PKEY_set_type(tmpkey, lu->sig)) {
              cache[i].available = 0;
 diff --git a/util/libcrypto.num b/util/libcrypto.num
-index 2970fb0a09..77efdb982a 100644
+index 557d995..7af224c 100644
 --- a/util/libcrypto.num
 +++ b/util/libcrypto.num
-@@ -5715,3 +5715,5 @@ OPENSSL_sk_set_cmp_thunks               5712	4_0_0	EXIST::FUNCTION:
- ASN1_BIT_STRING_set1                    5713	4_0_0	EXIST::FUNCTION:
- OSSL_ESS_check_signing_certs_ex         5714	4_0_0	EXIST::FUNCTION:
- X509v3_delete_extension                 5715	4_0_0	EXIST::FUNCTION:
+@@ -5733,3 +5733,5 @@ ASN1_STRING_set1_string                 5730	4_1_0	EXIST::FUNCTION:
+ ASN1_STRING_get_length                  5731	4_1_0	EXIST::FUNCTION:
+ CMS_add_standard_smimecap_ex            5732	4_1_0	EXIST::FUNCTION:CMS
+ BIO_socket_ready                        5733	4_1_0	EXIST::FUNCTION:SOCK
 +ossl_ctx_legacy_digest_signatures_allowed ?	4_0_0	EXIST::FUNCTION:
 +ossl_ctx_legacy_digest_signatures_allowed_set ?	4_0_0	EXIST::FUNCTION:
--- 
-2.55.0
-

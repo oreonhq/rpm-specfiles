@@ -1,4 +1,4 @@
-From 45257fce82fd261a83b9c2525e1b616d49eee0e1 Mon Sep 17 00:00:00 2001
+From 5cddec94c07d11aeda2aa99601c52d8f539f2229 Mon Sep 17 00:00:00 2001
 From: Simo Sorce <simo@redhat.com>
 Date: Thu, 13 Feb 2025 18:08:34 -0500
 Subject: [PATCH 12/16] FIPS: CMS: Set default padding to OAEP
@@ -10,7 +10,7 @@ From-dist-git-commit: d508cbed930481c1960d6a6bc1e1a9593252dbbe
  2 files changed, 11 insertions(+)
 
 diff --git a/apps/cms.c b/apps/cms.c
-index dbec80e682..5c0503eb60 100644
+index ee59b9f..03c5883 100644
 --- a/apps/cms.c
 +++ b/apps/cms.c
 @@ -20,6 +20,7 @@
@@ -22,7 +22,7 @@ index dbec80e682..5c0503eb60 100644
  static int save_certs(char *signerfile, STACK_OF(X509) *signers);
  static int cms_cb(int ok, X509_STORE_CTX *ctx);
 diff --git a/crypto/cms/cms_env.c b/crypto/cms/cms_env.c
-index b8d0c96211..9876b5d25a 100644
+index d9ea9bd..49eb662 100644
 --- a/crypto/cms/cms_env.c
 +++ b/crypto/cms/cms_env.c
 @@ -21,6 +21,7 @@
@@ -33,7 +33,7 @@ index b8d0c96211..9876b5d25a 100644
  #include "internal/sizes.h"
  #include "crypto/asn1.h"
  #include "crypto/evp.h"
-@@ -392,6 +393,10 @@ static int cms_RecipientInfo_ktri_init(CMS_RecipientInfo *ri, X509 *recip,
+@@ -397,6 +398,10 @@ static int cms_RecipientInfo_ktri_init(CMS_RecipientInfo *ri, X509 *recip,
              return 0;
          if (EVP_PKEY_encrypt_init(ktri->pctx) <= 0)
              return 0;
@@ -44,7 +44,7 @@ index b8d0c96211..9876b5d25a 100644
      } else if (!ossl_cms_env_asn1_ctrl(ri, 0))
          return 0;
      return 1;
-@@ -560,6 +565,11 @@ static int cms_RecipientInfo_ktri_encrypt(const CMS_ContentInfo *cms,
+@@ -565,6 +570,11 @@ static int cms_RecipientInfo_ktri_encrypt(const CMS_ContentInfo *cms,
  
          if (EVP_PKEY_encrypt_init(pctx) <= 0)
              goto err;
@@ -56,6 +56,3 @@ index b8d0c96211..9876b5d25a 100644
      }
  
      if (EVP_PKEY_encrypt(pctx, NULL, &eklen, ec->key, ec->keylen) <= 0)
--- 
-2.55.0
-
