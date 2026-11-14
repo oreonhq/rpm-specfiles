@@ -308,6 +308,8 @@ BuildRequires: glibc-all-langpacks
 BuildRequires: tzdata
 %endif
 
+BuildRequires: llvm
+BuildRequires: /usr/bin/llvm-ar
 %if %{with jit_build_stencils}
 BuildRequires: clang(major) = 21
 BuildRequires: llvm(major) = 21
