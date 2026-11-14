@@ -129,3 +129,6 @@ echo ".so man1/%{name}.1" > %{buildroot}%{_mandir}/man1/wget.1
 %{_bindir}/wget
 %config(noreplace) %{_sysconfdir}/wgetrc
 
+
+%changelog
+%autochangelog
