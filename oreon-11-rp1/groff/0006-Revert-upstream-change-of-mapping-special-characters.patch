@@ -12,7 +12,6 @@ Adopt Debian decision: https://salsa.debian.org/debian/groff/-/commit/d5394c68d7
  2 files changed, 32 insertions(+)
 
 diff --git a/tmac/man.local b/tmac/man.local
-index d01988c..c87b094 100644
 --- a/tmac/man.local
 +++ b/tmac/man.local
 @@ -2,6 +2,22 @@
@@ -36,10 +35,9 @@ index d01988c..c87b094 100644
 +.  char ~ \[ti]
 +.\}
  .\" Some nroff devices or pager programs may not gracefully handle OSC 8
- .\" hyperlink escape sequences that they don't understand.
- .\" .if n .if !r U .nr U 0
+ .\" hyperlink escape sequences that they don't understand.  You might
+ .\" also un-comment the control line below if the terminal emulators
 diff --git a/tmac/mdoc.local b/tmac/mdoc.local
-index 299c382..02dad55 100644
 --- a/tmac/mdoc.local
 +++ b/tmac/mdoc.local
 @@ -2,6 +2,22 @@
@@ -63,8 +61,8 @@ index 299c382..02dad55 100644
 +.  char ~ \[ti]
 +.\}
  .\" Some nroff devices or pager programs may not gracefully handle OSC 8
- .\" hyperlink escape sequences that they don't understand.
- .\" .if n .if !r U .nr U 0
+ .\" hyperlink escape sequences that they don't understand.  You might
+ .\" also un-comment the control line below if the terminal emulators
 -- 
-2.50.0
+2.51.0
 

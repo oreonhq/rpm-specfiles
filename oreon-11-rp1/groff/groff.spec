@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 74e2819795b6aff431aeac983d63a9c8968eeaba2a2eba7df8ba4c7b41e7cfd8
+%global source0_hash 24d103a07eb79e418963bce206c8771b649871f83bda2fd4c2e65529c1c56921
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 
 Summary: A document formatting system
 Name: groff
-Version:        1.24.1
+Version:        1.25.0
 Release:        1%{?dist}
 # Everything is under GPL-3.0-or-later, except for the following files:
 # MIT license
