@@ -35,7 +35,10 @@ BuildRequires: libzstd-devel
 BuildRequires: libidn2-devel
 BuildRequires: git-core
 BuildRequires: automake
+%bcond_with cmarkgfm
+%if %{with cmarkgfm}
 BuildRequires: python3-cmarkgfm
+%endif
 BuildRequires: xxhash-devel
 BuildRequires:  oreon-rpm-macros
 Provides: bundled(zlib) = 1.2.8
@@ -135,3 +138,6 @@ install -D -m644 %{SOURCE6} $RPM_BUILD_ROOT/%{_unitdir}/rsyncd@.service
 %postun daemon
 %systemd_postun_with_restart rsyncd.service
 
+
+%changelog
+%autochangelog
