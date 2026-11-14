@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a
+%global source0_hash b43b9fe6d5eb7faf6c44f1fdd3ac25248de5733af5d00e7b517a2c8370f9d055
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -15,7 +15,7 @@
 %endif
 
 Name:    ima-evm-utils
-Version:        1.6.2
+Version:        1.7
 Release:        1%{?dist}
 Summary: IMA/EVM support utilities
 License: GPL-2.0-or-later
@@ -143,7 +143,7 @@ install -D %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}/ima-setup
 %files libs
 %license LICENSES.txt COPYING.LGPL
 # if you need to bump the soname version, coordinate with dependent packages
-%{_libdir}/libimaevm.so.5*
+%{_libdir}/libimaevm.so.6*
 %if 0%{bootstrap}
 %{_libdir}/libimaevm.so.%{compat_soversion}*
 %endif
