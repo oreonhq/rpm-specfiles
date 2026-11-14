@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash bb329a0a2cd0274d05519d61c667c062e06990d72e125ee2dfa8de64f0119d16
+%global source0_hash 02dd159783677a749c04adbdd02b55b8a2bcc7e054f51b76b549199a916ad584
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: zlib
-Version: 1.3.2
+Version: 1.4
 Release: 1%{?dist}
 Summary: zlib, a general purpose data compression library
 License: Zlib
