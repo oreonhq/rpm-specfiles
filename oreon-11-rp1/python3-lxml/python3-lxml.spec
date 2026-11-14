@@ -44,3 +44,6 @@ PYTHONPATH=$(echo build/lib.*) python3 -c 'import lxml.etree, lxml.html'
 %license LICENSE.txt
 %{python3_sitearch}/lxml/
 %{python3_sitearch}/lxml-*.egg-info
+
+%changelog
+%autochangelog
