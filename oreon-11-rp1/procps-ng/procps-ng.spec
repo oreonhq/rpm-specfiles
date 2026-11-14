@@ -170,3 +170,6 @@ ln -s %{_bindir}/pidof %{buildroot}%{_sbindir}/pidof
 
 %files i18n -f %{name}.lang
 
+
+%changelog
+%autochangelog
