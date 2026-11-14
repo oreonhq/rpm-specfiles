@@ -44,3 +44,6 @@ install -D -p -m 0644 fileattrs/cargo_vendor.attr %{buildroot}%{_fileattrsdir}/c
 %{_rpmmacrodir}/macros.cargo-buildsys
 %{_fileattrsdir}/cargo.attr
 %{_fileattrsdir}/cargo_vendor.attr
+
+%changelog
+%autochangelog
