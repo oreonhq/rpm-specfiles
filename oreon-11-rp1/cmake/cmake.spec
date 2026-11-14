@@ -590,3 +590,6 @@ popd
 %{python3_sitelib}/%{cmake_distinfo}
 
 
+
+%changelog
+%autochangelog
