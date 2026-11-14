@@ -100,3 +100,6 @@ install -p -m 644 %{SOURCE101} %{buildroot}%{profiledir}
 %{_infodir}/gzip.info*
 %{profiledir}/*
 
+
+%changelog
+%autochangelog
