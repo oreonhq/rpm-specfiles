@@ -65,3 +65,6 @@ rm -rf %{buildroot}/usr/share/doc/%{name}
 %dir %{_datadir}/zsh/site-functions
 %{_datadir}/zsh/site-functions/_patchelf
 
+
+%changelog
+%autochangelog
