@@ -59,3 +59,6 @@ done
 %license COPYING.LIB
 
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%changelog
+%autochangelog
