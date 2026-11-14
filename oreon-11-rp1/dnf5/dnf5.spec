@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 242f0e775bc8e1017a5bfec841c776beafa7ea6b5bd2e4d7bc0ff9d7c57998f3
+%global source0_hash 09f279af798d01073873affb61d7d0ed999f0297e6491b7ffb84c6d755680292
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global project_version_prime 5
 %global project_version_major 4
-%global project_version_minor 6
+%global project_version_minor 8
 %global project_version_micro 0
 
 # ========== build options ==========
@@ -67,7 +67,7 @@
 %endif
 
 Name:           dnf5
-Version:        5.4.6.0
+Version:        5.4.8.0
 Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
@@ -146,7 +146,7 @@ Provides:       dnf5-command(versionlock) = %{version}-%{release}
 # ========== build requires ==========
 
 BuildRequires:  bash-completion-devel
-BuildRequires:  cmake >= 3.22
+BuildRequires:  cmake >= 3.24
 BuildRequires:  doxygen
 BuildRequires:  gettext
 BuildRequires:  pkgconfig(fmt)
@@ -212,7 +212,7 @@ BuildRequires:  pkgconfig(smartcols)
 %if %{with dnf5_plugins}
 BuildRequires:  libcurl-devel >= 7.62.0
 %if %{with plugin_manifest}
-BuildRequires:  pkgconfig(libpkgmanifest)
+BuildRequires:  pkgconfig(libpkgmanifest) >= 0.5.10
 %endif
 %endif
 
