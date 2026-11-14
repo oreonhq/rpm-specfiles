@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995
+%global source0_hash 188e9c96b8fc032b2a0bdd24d4f0b692480c1854511c2fcc3034946f14fdf49a
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 
 Summary: A tool for generating scanners (text pattern recognizers)
 Name: flex
-Version:        2.6.4
+Version:        2.6.11
 Release:        1%{?dist}
 
 # An SPDX license string check done against flex-2.6.4 using fossology
@@ -20,8 +20,6 @@ License: BSD-3-Clause-flex AND GPL-3.0-or-later WITH Autoconf-exception-generic-
 
 URL: https://github.com/westes/flex
 Source0:        https://github.com/westes/flex/releases/download/v%{version}/flex-%{version}.tar.gz
-
-Patch0:        flex-rh1389575.patch
 
 Requires: m4
 BuildRequires: gettext gettext-devel bison m4 help2man gcc gcc-c++ automake libtool
