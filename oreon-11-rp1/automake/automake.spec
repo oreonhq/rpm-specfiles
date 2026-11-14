@@ -1,12 +1,12 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 168aa363278351b89af56684448f525a5bce5079d0b6842bd910fdd3f1646887
+%global source0_hash f6f34dad4cbe395715762b0710f7c511e39bd5cf777e6b95818ccbecf7714248
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global api_version 1.18
+%global api_version 1.20
 
 # redhat-rpm-config sets CFLAGS, CXXFLAGS and LDFLAGS, but not
 # OBJCFLAGS. This means that Obj-C tests will be compiled without hardening
@@ -27,7 +27,7 @@
 Summary:    A GNU tool for automatically creating Makefiles
 Name:       automake
 # Any bump here requires libtool rebuild, rhbz#1813010
-Version:        1.18.1
+Version:        1.20
 Release:        1%{?dist}
 
 # To help future rebase, the following licenses were seen in the following files/folders:
