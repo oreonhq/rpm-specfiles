@@ -1,0 +1,6 @@
+[Unit]
+Description=CUPS LPD Per-Connection Server
+
+[Service]
+ExecStart=/usr/lib/cups/daemon/cups-lpd -o document-format=application/octet-stream
+StandardInput=socket
