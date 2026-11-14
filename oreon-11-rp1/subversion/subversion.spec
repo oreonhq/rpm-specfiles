@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash e78a29e7766b8b7b354497d08f71a55641abc53675ce1875584781aae35644a1
+%global source0_hash dfb7b1e5270c7def971ccbd5938b0c03b1b5bd60b6674a2d8a74a9560839fb8c
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 
 Name: subversion
-Version: 1.14.5
+Version: 1.15.0
 Release: 1%{?dist}
 Summary: Version control system
 License: Apache-2.0

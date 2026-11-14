@@ -1,19 +1,19 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 58435b558766d7f4c729ba163bdf3aec38bed3bc766dab684e3526ed0aa7c780
+%global source0_hash 39f92f366bdf3f1a02af4da75b4a5c52df6c9f7e736c7d65de13283f9f0ef416
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global _lto_cflags %{nil}
 
 Name: cmocka
-Version: 1.1.8
+Version: 2.0.2
 Release: 1%{?dist}
 Summary: Unit testing framework for C
 License: Apache-2.0
 URL: https://cmocka.org/
-Source0: https://cmocka.org/files/1.1/cmocka-%{version}.tar.xz
+Source0: https://cmocka.org/files/2.0/cmocka-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: cmake

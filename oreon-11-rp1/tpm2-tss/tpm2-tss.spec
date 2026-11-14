@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d4aadbc1610876385a370494bbfd7d994356f446dff60cd09eea5933befb1471
+%global source0_hash bd4efc89ee01aca8ff771cae268d84333b7594c2d4afee50bb13b859f1113c3f
 
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
@@ -12,7 +12,7 @@
 %endif
 
 Name:          tpm2-tss
-Version:        4.2.1
+Version:        4.2.2
 Release:        1%{?dist}
 Summary:       TPM2.0 Software Stack
 

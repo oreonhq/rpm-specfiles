@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 45068697de3ffe46840ca369705f23118b34db4f7deb63f6eff079a6734ddcca
+%global source0_hash 4c80598ade17fbaa7798e01a25d0bf29ce109740786026a074c5c62bb3e79d23
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 
 Name: pygobject3
-Version: 3.58.0
+Version: 3.58.1
 Release: 1%{?dist}
 Summary: Python bindings for GObject
 License: LGPL-2.1-or-later

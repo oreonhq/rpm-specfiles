@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 193a7030ac78282beba6a95a3512241a71c2025fe5a05308d0e827a679f99847
+%global source0_hash fb51108c23d88269d37da5813d97b5b27395c824b751ba1141a5cf408bcdd658
 %global source1_hash e147c0549f27767ba362f9da434eab9c5dc0045d5304feb602a0af001089fc51
 %global source3_hash e7a0304069ea895172e3c7bb703292e992c5d1555dd1233ab7b5621b5b69e62c
 
@@ -14,12 +14,12 @@
 %bcond man 1
 
 %global srcname pip
-%global base_version 26.1.2
+%global base_version 26.3
 %global upstream_version %{base_version}%{?prerel}
 %global python_wheel_name %{srcname}-%{upstream_version}-py3-none-any.whl
 
 Name:           python-%{srcname}
-Version:        26.1.2
+Version:        26.3
 Release:        1%{?dist}
 Summary:        A tool for installing and managing Python packages
 
@@ -100,25 +100,6 @@ Patch1:        dummy-certifi.patch
 # We don't need a layer to check that, as we're by default in an offline environment
 Patch2:        downstream-remove-pytest-subket.patch
 
-# Fix sitecustomize.py used for build isolation on Python 3.15+
-Patch3:        https://github.com/pypa/pip/commit/6099a54ddd.patch
-
-# Fix user-site path ordering in the test suite on Python 3.15+
-# The same CPython gh-149819 change that broke build env isolation also broke
-# _customize_site() in tests/lib/venv.py: site.addsitedir() no longer
-# re-appends paths already in sys.path, so the detection of system-site paths
-# produces an empty list and user site ends up after venv site-packages instead
-# of before it, causing user-site install/uninstall tests to operate on the
-# wrong installation.
-Patch4:        https://github.com/pypa/pip/commit/4c6d7471de.patch
-
-# Allow flit-core 4 to build pip
-# https://github.com/pypa/pip/commit/09a03f6cfa (non-existing files removed)
-Patch5:        09a03f6cfa.patch
-
-# CVE-2026-13346: Link.filename double URL decode allows path traversal
-Patch6:        https://github.com/pypa/pip/commit/10dfb6b900.patch
-
 # Remove -s from Python shebang - ensure that packages installed with pip
 # to user locations are seen by pip itself
 %undefine _py3_shebang_s
@@ -136,23 +117,23 @@ Packages" or "Pip Installs Python".
 # %%{_rpmconfigdir}/pythonbundles.py --namespace 'python%%{1}dist' src/pip/_vendor/vendor.txt
 %global bundled() %{expand:
 Provides: bundled(python%{1}dist(cachecontrol)) = 0.14.4
-Provides: bundled(python%{1}dist(certifi)) = 2026.2.25
-Provides: bundled(python%{1}dist(distlib)) = 0.4
+Provides: bundled(python%{1}dist(certifi)) = 2026.10.23
+Provides: bundled(python%{1}dist(distlib)) = 0.4.4
 Provides: bundled(python%{1}dist(distro)) = 1.9
-Provides: bundled(python%{1}dist(idna)) = 3.11
-Provides: bundled(python%{1}dist(msgpack)) = 1.1.2
-Provides: bundled(python%{1}dist(packaging)) = 26.2
-Provides: bundled(python%{1}dist(platformdirs)) = 4.5.1
-Provides: bundled(python%{1}dist(pygments)) = 2.19.2
-Provides: bundled(python%{1}dist(pyproject-hooks)) = 1.2
-Provides: bundled(python%{1}dist(requests)) = 2.33.1
+Provides: bundled(python%{1}dist(idna)) = 3.20
+Provides: bundled(python%{1}dist(msgpack)) = 1.2.4
+Provides: bundled(python%{1}dist(packaging)) = 26.3
+Provides: bundled(python%{1}dist(platformdirs)) = 4.12.4
+Provides: bundled(python%{1}dist(pygments)) = 2.21
+Provides: bundled(python%{1}dist(pyproject-hooks)) = 1.3.3
+Provides: bundled(python%{1}dist(requests)) = 2.34.2
 Provides: bundled(python%{1}dist(resolvelib)) = 1.2.1
-Provides: bundled(python%{1}dist(rich)) = 14.2
+Provides: bundled(python%{1}dist(rich)) = 15
 Provides: bundled(python%{1}dist(setuptools)) = 70.3
-Provides: bundled(python%{1}dist(tomli)) = 2.3.1
+Provides: bundled(python%{1}dist(tomli)) = 2.3.2
 Provides: bundled(python%{1}dist(tomli-w)) = 1.2
-Provides: bundled(python%{1}dist(truststore)) = 0.10.4
-Provides: bundled(python%{1}dist(urllib3)) = 2.6.3
+Provides: bundled(python%{1}dist(truststore)) = 0.10.5
+Provides: bundled(python%{1}dist(urllib3)) = 2.8
 }
 
 # Some manylinux1 wheels need libcrypt.so.1.
@@ -186,6 +167,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python3-rpm-generators >= 11-8
 BuildRequires:  pyproject-rpm-macros
 BuildRequires:  python%{python3_pkgversion}-flit-core
+BuildRequires:  python%{python3_pkgversion}-packaging
 BuildRequires:  bash-completion
 BuildRequires:  ca-certificates
 BuildRequires:  oreon-rpm-macros
@@ -344,6 +326,11 @@ pytest_k="$pytest_k and not (functional and bazaar)"
 pytest_k="$pytest_k and not test_all_fields and not test_report_mixed_not_found and not test_basic_show"  # "Editable project location" missing
 pytest_k="$pytest_k and not test_basic_install_from_wheel"
 pytest_k="$pytest_k and not test_check_unsupported"
+# these require cmake/keyring wheels not available locally
+pytest_k="$pytest_k and not test_build_env_can_still_access_python_tools_on_system_path"
+pytest_k="$pytest_k and not test_build_dependency_install_uses_same_keyring_as_root"
+# this requires the rich wheel (added to test-common-wheels in 26.3) not available locally
+pytest_k="$pytest_k and not debundled"
 
 %pytest -n auto -m 'not network' -k "$(echo $pytest_k)" \
     --ignore tests/functional/test_proxy.py
