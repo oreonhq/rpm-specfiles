@@ -114,3 +114,6 @@ make check || {
 %{_mandir}/man*/*
 %{_infodir}/*.info*
 
+
+%changelog
+%autochangelog
