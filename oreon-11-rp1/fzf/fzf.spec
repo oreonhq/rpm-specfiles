@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 5529d08897b85ae773695787c811ff9c9eeee32419c8a297fa1dbe586ed0a27e
+%global source0_hash 165f6e0c1b9ba082346233681e3f1d1374e37f9fd3c1d7b6dfe09659ab893faa
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -12,7 +12,7 @@
 %global goipath         github.com/junegunn/fzf
 %global gourl           https://github.com/junegunn/fzf
 %global gobuilddir      %{_builddir}/fzf-%{version}/_build
-Version:        0.74.5
+Version:        0.75.0
 
 Name:           fzf
 Release:        1%{?dist}
