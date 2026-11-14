@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 296b9db9095749f2aa104202d7ab7fd09ad10710e00780a709c9754b1a1d9292
+%global source0_hash c2f84393011827219ae117131dba8e7684c2bed0961eed11b0642c2acba440b5
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 
 Summary: CMS and X.509 library
 Name:    libksba
-Version:        1.8.0
+Version:        1.8.1
 Release:        1%{?dist}
 
 # The library is licensed under LGPLv3+ or GPLv2+,
@@ -18,7 +18,7 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.1-or-later AND (LGPL-3.0-or-later OR GPL-2.0-or-later)
 URL:     https://www.gnupg.org/
 Source0:        https://www.gnupg.org/ftp/gcrypt/libksba/libksba-%{version}.tar.bz2
-Source1:        libksba-1.8.0.tar.bz2.sig
+Source1:        libksba-1.8.1.tar.bz2.sig
 Source2:        signature_key.asc
 
 Patch1:        libksba-1.3.0-multilib.patch
