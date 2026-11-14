@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash b26882805f26aac59d5b222978e6580484b834ccdc98be89df2f05a6dc53a652
-%global source1_hash cc3d27ca2a0d8399504551b920970d80af83bfb9c216e8082a15491921935d54
+%global source0_hash 01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d
+%global source1_hash 5a18da01393679ef2559214dc687563f7f3d05691f6f58b7fbc0166f3e796cd6
 %global source3_hash 4809b438f61e404dec1c857d56c8d60724312c19bd8b8cf720a1fbedf4f0766f
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -10,9 +10,9 @@
 %oreon_bootstrap
 Summary: Timezone data
 Name: tzdata
-Version:        2026e
-%define tzdata_version 2026e
-%define tzcode_version 2026e
+Version:        2026f
+%define tzdata_version 2026f
+%define tzcode_version 2026f
 Release:        1%{?dist}
 License: LicenseRef-Oreon-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
 URL: https://www.iana.org/time-zones
