@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2
+%global source0_hash 84e4e4d8fdd45ba2613800a3ebc6834de26d47ec9746efc3719f94181137b460
 
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
@@ -15,7 +15,7 @@
 %bcond tests %{without bootstrap}
 
 Name:           python-flit-core
-Version:        3.12.0
+Version:        4.2.0
 Release:        1%{?dist}
 Summary:        PEP 517 build backend for packages using Flit
 
