@@ -56,10 +56,13 @@ BuildRequires:  rustc
 BuildRequires:  cargo
 BuildRequires:  gcc
 BuildRequires:  clang
+BuildRequires:  make
 BuildRequires:  coreutils
 BuildRequires:  perl-interpreter
 BuildRequires:  sed
 BuildRequires:  zlib-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  /usr/bin/cmp
 BuildRequires:  perl(Test::Harness)
 BuildRequires:  perl(Test::More)
