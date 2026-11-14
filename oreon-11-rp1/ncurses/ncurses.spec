@@ -7,7 +7,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond compat_libs 1
-%bcond gpm 1
+%bcond gpm 0
 
 Summary: Ncurses support utilities
 Name: ncurses
@@ -296,3 +296,6 @@ xz NEWS
 %files static
 %{_libdir}/lib*.a
 
+
+%changelog
+%autochangelog
