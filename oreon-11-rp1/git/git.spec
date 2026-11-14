@@ -12,12 +12,12 @@ BuildRequires: oreon-rpm-macros
 %bcond_without docs
 
 # Pass --without tests to rpmbuild if you don't want to run the tests
-%bcond_without tests
+%bcond_with tests
 
 %global gitexecdir          %{_libexecdir}/git-core
 
 # linkchecker is not available on EL
-%bcond_without              linkcheck
+%bcond_with                 linkcheck
 
 %bcond_with                 perl_modcompat
 
@@ -36,10 +36,10 @@ BuildRequires: oreon-rpm-macros
 
 # Allow cvs subpackage to be toggled via --with/--without
 # Disable cvs subpackage by default on EL >= 8
-%bcond_without              cvs
+%bcond_with                 cvs
 
 # Allow credential-libsecret subpackage to be toggled via --with/--without
-%bcond_without              libsecret
+%bcond_with                 libsecret
 
 # Allow p4 subpackage to be toggled via --with/--without
 # Disable p4 package by default on EL >= 10
@@ -141,7 +141,10 @@ BuildRequires:  pcre2-devel
 BuildRequires:  cargo
 BuildRequires:  rust
 %endif
+%bcond_with perl_error
+%if %{with perl_error}
 BuildRequires:  perl(Error)
+%endif
 BuildRequires:  perl(lib)
 %if %{use_perl_generators}
 BuildRequires:  perl-generators
@@ -157,7 +160,10 @@ BuildRequires:  pkgconfig(bash-completion)
 BuildRequires:  sed
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  tcl
+%bcond_with tk
+%if %{with tk}
 BuildRequires:  tk
+%endif
 BuildRequires:  xz
 BuildRequires:  zlib-devel >= 1.2
 
@@ -939,3 +945,6 @@ rmdir --ignore-fail-on-non-empty "$testdir"
 %{?with_docs:%{_mandir}/man1/git-svn.1*}
 %{?with_docs:%{_pkgdocdir}/git-svn.html}
 
+
+%changelog
+%autochangelog
