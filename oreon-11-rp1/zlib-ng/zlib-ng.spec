@@ -37,7 +37,10 @@ Patch:        pr2152.patch
 BuildRequires:	cmake >= 3.1
 BuildRequires:	gcc-c++
 BuildRequires:	cmake(GTest)
+%bcond_with abigail
+%if %{with abigail}
 BuildRequires:	libabigail
+%endif
 BuildRequires:  oreon-rpm-macros
 
 %description
@@ -233,3 +236,6 @@ CHOST=%{target_cpu}-%{cpu_vendor}-linux-gnu sh test/abicheck.sh --zlib-compat
 %endif
 
 
+
+%changelog
+%autochangelog
