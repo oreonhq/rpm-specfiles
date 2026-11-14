@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 5a5d5073070cc7e0c7a7a3c6ec2a0e1780850c8b47b3e3892226b93ffcb9cb54
+%global source0_hash 985554de49c21a58abd68c6cda2251384e1e5bb08b3b14c7f02b51f4c90c2958
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -16,7 +16,7 @@
 %bcond_without zstd
 
 Name:		kmod
-Version:        34.2
+Version:        34.3
 Release:        1%{?dist}
 Summary:	Linux kernel module management utilities
 
