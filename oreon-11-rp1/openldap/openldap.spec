@@ -565,3 +565,6 @@ exit 0
 %{_libdir}/libslapi-2.4*.so.*
 %endif
 
+
+%changelog
+%autochangelog
