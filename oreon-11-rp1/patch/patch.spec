@@ -21,7 +21,12 @@ BuildRequires: gcc
 BuildRequires: libselinux-devel
 BuildRequires: libattr-devel
 BuildRequires: ed
-BuildRequires: autoconf automake
+BuildRequires: oreon-rpm-macros
+%bcond_with autoreconf
+%if %{with autoreconf}
+BuildRequires: autoconf
+BuildRequires: automake
+%endif
 Requires: ed
 
 Provides: bundled(gnulib) = %{gnulib_ver}
@@ -42,7 +47,9 @@ echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
 %autosetup -p1
 
 %build
+%if %{with autoreconf}
 autoreconf
+%endif
 %configure --disable-silent-rules
 %make_build
 
