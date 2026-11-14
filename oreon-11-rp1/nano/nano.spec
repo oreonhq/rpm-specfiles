@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 05ecb99247b782e8a5b3a25ed4101dd034b0236902f7449bc9795b717642f7e9
+%global source0_hash a9affc52c9596ee0682bcdd4ceb3c0b235eb221d83d733dfd9b0dff45897cb0d
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,13 +10,13 @@
 
 Summary:         A small text editor
 Name:            nano
-Version:        9.2
+Version:        9.3
 Release:        1%{?dist}
 License:         GPL-3.0-or-later
 URL:             https://www.nano-editor.org
 
 Source0:        https://www.nano-editor.org/dist/latest/nano-%{version}.tar.xz
-Source1:        nano-9.2.tar.xz.asc
+Source1:        nano-9.3.tar.xz.asc
 # gpg --keyserver keyserver.ubuntu.com --recv-key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
 # gpg --output bensberg.pgp --armor --export bensberg@telfort.nl
 Source2:         bensberg.pgp
