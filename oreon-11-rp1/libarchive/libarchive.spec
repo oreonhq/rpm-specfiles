@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash f5a6539059cf5e597dbeda37bfa4874b1e8dea063c8d93bf85a2b44af90a5bd4
+%global source0_hash 900fe9fc7237c2b04f090f3c3648de8fe597525771f5035016537ce2d667d12b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -9,7 +9,7 @@
 %bcond_without check
 
 Name:           libarchive
-Version:        3.8.9
+Version:        3.8.11
 Release:        1%{?dist}
 Summary:        A library for handling streaming archive formats
 
