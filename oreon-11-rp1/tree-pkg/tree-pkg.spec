@@ -73,3 +73,6 @@ sed -e 's/LINUX/__linux__/' -i tree.c
 %license LICENSE
 %doc README
 
+
+%changelog
+%autochangelog
