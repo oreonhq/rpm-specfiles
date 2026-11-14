@@ -41,6 +41,7 @@ cat > %{buildroot}/etc/xml/catalog <<'EOF'
   <rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl/1.79.2" rewritePrefix="file:///usr/share/sgml/docbook/xsl-stylesheets"/>
   <rewriteSystem systemIdStartString="http://docbook.sourceforge.net/release/xsl/1.79.2" rewritePrefix="file:///usr/share/sgml/docbook/xsl-stylesheets"/>
   <nextCatalog catalog="file:///usr/share/sgml/docbook/xsl-stylesheets/catalog.xml"/>
+  <nextCatalog catalog="file:///usr/share/sgml/docbook/xsl-ns-stylesheets/catalog.xml"/>
   <nextCatalog catalog="file:///usr/share/xml/docbook/xml-dtd-4.4/catalog.xml"/>
   <nextCatalog catalog="file:///usr/share/xml/docbook/xml-dtd-4.5/catalog.xml"/>
 </catalog>
@@ -49,3 +50,6 @@ EOF
 %files
 /etc/xml/catalog
 %{_datadir}/sgml/docbook/xsl-stylesheets/
+
+%changelog
+%autochangelog
