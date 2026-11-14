@@ -46,3 +46,6 @@ chmod 0755 %{buildroot}%{_bindir}/cargo2rpm
 %license LICENSE
 %{_bindir}/cargo2rpm
 %{python3_sitelib}/cargo2rpm/
+
+%changelog
+%autochangelog
