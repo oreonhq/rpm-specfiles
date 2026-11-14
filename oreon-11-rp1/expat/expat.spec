@@ -93,3 +93,6 @@ make check
 %files static
 %{_libdir}/libexpat.a
 
+
+%changelog
+%autochangelog
