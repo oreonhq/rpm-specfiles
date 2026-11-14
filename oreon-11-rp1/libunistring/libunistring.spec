@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 827c1eb9cb6e7c738b171745dac0888aa58c5924df2e59239318383de0729b98
+%global source0_hash fe89007a8a414ae4790b816b86859e877d3ab135db3c37f06541ff7e85ac344b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 # This spec file has been automatically updated
-Version:        1.1
+Version:        1.5
 Release:        1%{?dist}
 Name: libunistring
 Summary: GNU Unicode string library
