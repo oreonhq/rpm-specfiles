@@ -134,3 +134,6 @@ env UV_TEST_TIMEOUT_MULTIPLIER=10 ./%{__cmake_builddir}/uv_run_tests_a
 %{_libdir}/%{name}.a
 %{_libdir}/pkgconfig/%{name}-static.pc
 
+
+%changelog
+%autochangelog
