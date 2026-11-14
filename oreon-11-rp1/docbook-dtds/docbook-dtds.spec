@@ -38,3 +38,6 @@ python3 -m zipfile -e %{SOURCE1} %{buildroot}%{_datadir}/xml/docbook/xml-dtd-4.5
 
 %files
 %{_datadir}/xml/docbook/
+
+%changelog
+%autochangelog
