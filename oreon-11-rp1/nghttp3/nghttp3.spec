@@ -87,3 +87,6 @@ rm -f %{buildroot}%{_docdir}/nghttp3/README.rst
 %{_libdir}/pkgconfig/libnghttp3.pc
 
 
+
+%changelog
+%autochangelog
