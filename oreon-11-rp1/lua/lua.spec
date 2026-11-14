@@ -234,3 +234,6 @@ popd
 %files static
 %{_libdir}/*.a
 
+
+%changelog
+%autochangelog
