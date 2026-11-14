@@ -96,3 +96,6 @@ mv %{_builddir}/%{name}.main %{_builddir}/%{name}.files
 %{python3_sitearch}/helpersdt-*.dist-info/
 %files sdt-devel -f %{_builddir}/%{name}-sdt-devel.files
 %files sdt-dtrace -f %{_builddir}/%{name}-sdt-dtrace.files
+
+%changelog
+%autochangelog
