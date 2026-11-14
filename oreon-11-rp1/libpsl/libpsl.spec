@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 8fbb03054556498ba9c4cc48fcaa36a4483748c6504a65bdb9ba348f555b0e56
+%global source0_hash 93941f85a1e7bd593fa94f299233cb5dfc91cd144fd9a78a6ceb75001c5b03be
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           libpsl
-Version:        0.23.1
+Version:        0.23.3
 Release:        1%{?dist}
 Summary:        C library for the Publix Suffix List
 License:        MIT
