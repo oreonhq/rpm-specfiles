@@ -1533,6 +1533,9 @@ CheckPython() {
     --timeout=2700 \
 %endif
     -i test_check_probes \
+    %ifarch aarch64
+    -i test_c_stack_unwind \
+%endif
     %ifarch %{ix86}
     -i test_sendfile \
     -i test_array_alignment \
