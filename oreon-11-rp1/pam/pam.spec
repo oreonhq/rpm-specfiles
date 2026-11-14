@@ -8,13 +8,8 @@
 %global debug_package %{nil}
 
 Name: pam
-<<<<<<< HEAD
-Version: 1.7.1
-Release: 5%{?dist}
-=======
 Version: 1.7.3
 Release: 3%{?dist}
->>>>>>> pr-440
 Summary: Pluggable authentication modules
 License: BSD-3-Clause
 URL: https://github.com/linux-pam/linux-pam
@@ -77,3 +72,6 @@ done
 %license COPYING
 
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%changelog
+%autochangelog
