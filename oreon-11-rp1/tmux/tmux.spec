@@ -88,3 +88,6 @@ fi
 %{_mandir}/man1/tmux.1.*
 %{_unitdir}/tmux@.service
 
+
+%changelog
+%autochangelog
