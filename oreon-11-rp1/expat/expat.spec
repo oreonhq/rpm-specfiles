@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 16afbb9cefead2aa278105cf27d9f597bde7fbf3dbb85015857ca7ca6a4e89ba
+%global source0_hash 5466a341f9c692ef7a958a6881311be597f8e1ce345984cf78414f54793dea4c
 %global source2_hash dd0ffdf7d4262e887208af17617c7b84781969b832ebfd4ac24e9fcfddf93241
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -9,10 +9,10 @@
 %oreon_bootstrap
 Summary: An XML parser library
 Name: expat
-Version:        2.9.0
+Version:        2.10.0
 Release:        1%{?dist}
-Source0:        https://github.com/libexpat/libexpat/releases/download/R_2_9_0/expat-%{version}.tar.gz
-Source1:        expat-2.9.0.tar.gz.asc
+Source0:        https://github.com/libexpat/libexpat/releases/download/R_2_10_0/expat-%{version}.tar.gz
+Source1:        expat-2.10.0.tar.gz.asc
 # Sebastian Pipping's PGP public key
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/3176EF7DB2367F1FCA4F306B1F9B0E909AF37285
 
