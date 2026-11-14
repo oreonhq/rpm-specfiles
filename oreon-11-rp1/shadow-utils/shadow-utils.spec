@@ -280,3 +280,6 @@ rm -f $RPM_BUILD_ROOT/%{_libdir}/libsubid.a
 %{includesubiddir}/subid.h
 %{_libdir}/libsubid.so
 
+
+%changelog
+%autochangelog
