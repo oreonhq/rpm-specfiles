@@ -153,3 +153,6 @@ install -D %{SOURCE4} $RPM_BUILD_ROOT%{_bindir}/ima-setup
 %{_includedir}/imaevm.h
 %{_libdir}/libimaevm.so
 
+
+%changelog
+%autochangelog
