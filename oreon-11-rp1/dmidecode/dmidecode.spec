@@ -62,3 +62,6 @@ I/O ports (e.g. serial, parallel, USB).
 %{_mandir}/man8/*
 %{bash_completions_dir}/%{name}
 
+
+%changelog
+%autochangelog
