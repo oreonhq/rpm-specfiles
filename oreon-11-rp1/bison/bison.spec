@@ -142,3 +142,6 @@ gzip -9nf ${RPM_BUILD_ROOT}%{_infodir}/bison.info*
 %license COPYING
 %{_libdir}/liby.a
 
+
+%changelog
+%autochangelog
