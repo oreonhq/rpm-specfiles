@@ -131,3 +131,6 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}*
 %{_libdir}/libattr.so.*
 %config(noreplace) %{_sysconfdir}/xattr.conf
 
+
+%changelog
+%autochangelog
