@@ -86,3 +86,6 @@ cp -p README.md NEWS %{buildroot}%{_pkgdocdir}/
 %files doc
 %doc %{_pkgdocdir}/html
 
+
+%changelog
+%autochangelog
