@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 1fb324b6ec2c56f6bde0658f4139ffd8209fa9e77ce98fd7a5f63af8d0e508ad
+%global source0_hash c0f55121d88650e4b9227aec28cebaf664d2417ca60fe70be0f8d38829f52116
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -16,7 +16,7 @@
 
 Summary: Experimental HTTP/2 client, server and proxy
 Name: nghttp2
-Version:        1.69.0
+Version:        1.71.0
 Release:        1%{?dist}
 
 # Parts of ruby bindings are additionally under GPL-2.0-or-later, MIT and
@@ -25,11 +25,10 @@ License: MIT
 
 URL: https://nghttp2.org/
 Source0:        https://github.com/tatsuhiro-t/nghttp2/releases/download/v%{version}/nghttp2-%{version}.tar.xz
-Source1:        nghttp2-1.69.0.tar.xz.asc
+Source1:        nghttp2-1.71.0.tar.xz.asc
 Source2: tatsuhiro-t.pgp
 
 # fix HTTP Request/Response Smuggling and Response-Queue Poisoning via ambiguous HTTP/1.1 Upgrade requests (CVE-2026-58055)
-Patch001:        0001-nghttp2-1.69.0-CVE-2026-58055.patch
 
 BuildRequires: CUnit-devel
 BuildRequires: c-ares-devel
