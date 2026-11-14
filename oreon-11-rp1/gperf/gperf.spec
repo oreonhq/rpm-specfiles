@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash ed5ad317858e0a9badbbada70df40194002e16e8834ac24491307c88f96f9702
+%global source0_hash fd87e0aba7e43ae054837afd6cd4db03a3f2693deb3619085e6ed9d8d9604ad8
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A perfect hash function generator
 Name: gperf
-Version:        3.2.1
+Version:        3.3
 Release:        1%{?dist}
 License: GPL-3.0-or-later
 Source0:        https://mirror.cs.odu.edu/gnu/gperf/gperf-%{version}.tar.gz
