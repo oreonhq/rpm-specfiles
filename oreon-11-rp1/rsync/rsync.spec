@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash c55f9c9dc10fb8bec397b399a0fdded53cc9a2d8e30891bb0d63724d25c37bef
+%global source0_hash a10d591825251e070f74c98df3daad195def4ed81b4a2de16169026aea33f6c8
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 
 Summary: A program for synchronizing files over a network
 Name: rsync
-Version:        3.5.1
+Version:        3.5.2
 Release:        1%{?dist}
 URL: https://rsync.samba.org/
 
