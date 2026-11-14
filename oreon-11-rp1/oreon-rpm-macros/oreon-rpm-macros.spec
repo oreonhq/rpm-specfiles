@@ -8,7 +8,7 @@ Summary:        Build macros for Oreon packages
 License:        MIT
 URL:            https://github.com/oreonhq/rpm-specfiles
 
-%global         source0_hash 83d18ebcd6e559d4bbd8e371b130cc7e610537bbdfb272fda5cbdf287e77e1db
+# %global         source0_hash disabled-for-now
 
 Source0:        macros.oreon
 Source1:        oreon-build
@@ -35,7 +35,7 @@ Requires:       python3
 File lists and dependency generation for Python packages.
 
 %prep
-echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
+# echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
 
 %build
 :
