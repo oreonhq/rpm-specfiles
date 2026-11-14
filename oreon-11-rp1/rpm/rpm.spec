@@ -51,7 +51,7 @@ Requires: popt%{_isa} >= 1.10.2.1
 Requires: curl
 Conflicts: systemd < 253.5-6
 
-# RPM used to require an %%install hack (shipped by redhat-rpm-config) in order
+# RPM used to require an %%install hack (shipped by oreon-rpm-config) in order
 # to enable debuginfo.  Version 4.19.91 implements this functionality properly
 # so this hack is no longer necessary and, in fact, is no longer supported.
 # More details: https://github.com/rpm-software-management/rpm/issues/2204
@@ -207,7 +207,7 @@ Suggests: gdb-minimal
 # Technically rpmbuild doesn't require any external configuration, but
 # creating distro-compatible packages does. To make the common case
 # "just work" while allowing for alternatives, depend on a virtual
-# provide, typically coming from redhat-rpm-config.
+# provide, typically coming from oreon-rpm-config.
 Requires: system-rpm-config
 
 %description build
@@ -639,3 +639,6 @@ fi
 %license COPYING
 %doc %{_defaultdocdir}/rpm/API/
 
+
+%changelog
+%autochangelog
