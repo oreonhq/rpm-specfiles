@@ -71,3 +71,6 @@ This package contains the header file for using %{name}.
 %{_libdir}/cmake/%{name}
 %{_libdir}/pkgconfig/%{name}.pc
 
+
+%changelog
+%autochangelog
