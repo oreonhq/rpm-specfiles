@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash a5479f2f8a6b0b2516767d2f7189c386c1dc858d997167d7ec5cfc798c7571a1
+%global source0_hash 270e55f04915bfcecb5db8feb959d4c5ba86a48c094520a4f1c07571e1c79c59
 %global source2_hash 8cb20c4ea91db0e27b247e813a98a5dfe4d4548084abecab7ca9db51a49be8ba
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -9,7 +9,7 @@
 %oreon_bootstrap
 Name: nmap
 Epoch: 4
-Version:        7.92
+Version:        7.993
 #global prerelease TEST5
 Release:        1%{?dist}
 Summary: Network exploration tool and security scanner
@@ -17,7 +17,7 @@ URL: http://nmap.org/
 License: LicenseRef-Nmap
 
 Source0:        http://nmap.org/dist/nmap-%{version}.tar.bz2
-Source1:        nmap-7.92.tar.bz2.asc
+Source1:        nmap-7.993.tar.bz2.asc
 Source2:        https://svn.nmap.org/nmap/docs/nmap_gpgkeys.txt
 
 #prevent possible race condition for shtool, rhbz#158996
@@ -30,16 +30,10 @@ Patch3:        ncat_reg_stdin.diff
 #Patch4: nmap-6.25-displayerror.patch
 # https://github.com/nmap/nmap/pull/2247
 Patch7:        nmap_resolve_config.patch
-# backport of upstream pcre2 migration, rhbz#2128336
-Patch8:        nmap-pcre2.patch
 # https://github.com/nmap/nmap/pull/2724
 Patch9:        nmap-ems-ssl-enum-ciphers.patch
 # Fix build with libpcap 1.10.5
 Patch10:        nmap-libpcap.patch
-# Fix OpenSSL 4.0 compatibility
-Patch11:        nmap-openssl4.patch
-# https://github.com/nmap/nmap/commit/bb6754e
-Patch12:        nmap-CVE-2026-58058.patch
 
 BuildRequires: automake make
 BuildRequires: autoconf
