@@ -49,7 +49,7 @@ Version:        2026.2.92_v9.0.319
 Release:        1%{?dist}
 License: MIT AND GPL-2.0-or-later
 
-URL: https://fedoraproject.org/wiki/CA-Certificates
+URL: https://www.mozilla.org/en-US/about/governance/policies/security-group/certs/
 
 #Please always update both certdata.txt and nssckbi.h
 Source0: certdata.txt
@@ -462,3 +462,6 @@ fi
 %ghost %{catrustdir}/extracted/%{java_bundle}
 %ghost %{catrustdir}/extracted/edk2/cacerts.bin
 
+
+%changelog
+%autochangelog
