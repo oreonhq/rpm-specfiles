@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d18fa15aec74d8c17e1463f861095adc01b5ad190256acb4f91d22f0368d232b
-%global source1_hash a1d0f5de57485d062796ed7e67daff0758b50d00001a0f233a2c15aaf40bbdc8
+%global source0_hash 387e7f6cad4797b17848c07d453dc6606917bb356a6cfe5a3abafd38c240c71b
+%global source1_hash e9f634ac28a4c7b48f5c389e4b08c039654ec1487512092b330ccfcfdc0816e0
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -14,24 +14,23 @@
 %bcond_without check
 
 %define majorver 3
-%define realver 3530400
-%define docver 3530400
-%define rpmver 3.53.4
+%define realver 3540100
+%define docver 3540100
+%define rpmver 3.54.1
 %define year 2026
 
 Summary: Library that implements an embeddable SQL database engine
 Name: sqlite
-Version:        3.53.4
+Version:        3.54.1
 Release:        1%{?dist}
 License: blessing
 URL: http://www.sqlite.org/
 
-Source0:        http://www.sqlite.org/2026/sqlite-src-3530400.zip
-Source1:        http://www.sqlite.org/2026/sqlite-doc-3530400.zip
+Source0:        http://www.sqlite.org/2026/sqlite-src-3540100.zip
+Source1:        http://www.sqlite.org/2026/sqlite-doc-3540100.zip
 # Support a system-wide lemon template
 Patch1:        sqlite-3.6.23-lemon-system-template.patch
 Patch2:        sqlite-3.49.0-fix-lemon-missing-cflags.patch
-Patch3:        sqlite-3.53.0-fix-testrunner-exiting-0.patch
 Patch4:        sqlite-3.53.3-fix-fts3corrupt4-test.patch
 
 BuildRequires: make
@@ -187,7 +186,6 @@ echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 %setup -q -a1 -n %{name}-src-%{realver}
 %patch -P 1 -p1
 %patch -P 2 -p1
-%patch -P 3 -p1
 %patch -P 4 -p1
 
 # The atof test is failing on the i686 architecture, when binary configured with
