@@ -64,3 +64,6 @@ mv $RPM_BUILD_ROOT%{_datadir}/doc/%{name} __doc
 
 %ldconfig_scriptlets
 
+
+%changelog
+%autochangelog
