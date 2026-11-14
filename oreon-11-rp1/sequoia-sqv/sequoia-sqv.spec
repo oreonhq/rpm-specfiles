@@ -57,3 +57,6 @@ install -D -p -m 644 assets/shell-completions/sqv.fish %{buildroot}%{_datadir}/f
 %{_datadir}/bash-completion/completions/sqv
 %{_datadir}/zsh/site-functions/_sqv
 %{_datadir}/fish/vendor_completions.d/sqv.fish
+
+%changelog
+%autochangelog
