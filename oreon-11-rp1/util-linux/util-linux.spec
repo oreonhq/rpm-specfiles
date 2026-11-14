@@ -1057,3 +1057,6 @@ fi
 %{compldir}/scriptlive
 %{compldir}/scriptreplay
 
+
+%changelog
+%autochangelog
