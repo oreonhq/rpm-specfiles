@@ -37,7 +37,10 @@ Source2:        %{name}.csh.in
 BuildRequires:  /usr/bin/asciidoctor
 BuildRequires:  cmake
 #BuildRequires:  blake3-devel
+%bcond_with httplib
+%if %{with httplib}
 BuildRequires:  cpp-httplib-devel
+%endif
 BuildRequires:  doctest-devel
 BuildRequires:  expected-devel
 BuildRequires:  fmt-devel
@@ -249,3 +252,6 @@ done\
 %{_sysusersdir}/ccache.conf
 
 
+
+%changelog
+%autochangelog
