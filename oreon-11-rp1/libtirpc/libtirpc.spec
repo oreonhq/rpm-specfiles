@@ -124,3 +124,6 @@ mv %{buildroot}%{_mandir}/man3 %{buildroot}%{_mandir}/man3t
 %{_includedir}/tirpc/rpcsvc/crypt.x
 %{_mandir}/*/*
 
+
+%changelog
+%autochangelog
