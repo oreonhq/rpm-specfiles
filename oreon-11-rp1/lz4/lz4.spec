@@ -92,3 +92,6 @@ contains static libraries for static linking of applications.
 %doc lib/LICENSE
 %{_libdir}/liblz4.a
 
+
+%changelog
+%autochangelog
