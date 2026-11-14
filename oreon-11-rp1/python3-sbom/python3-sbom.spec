@@ -20,6 +20,8 @@ BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-hatchling
+BuildRequires: python3-hatch-vcs
+BuildRequires: python3-hatch-fancy-pypi-readme
 BuildRequires: python3-setuptools
 BuildRequires: python3-packageurl
 BuildRequires: python3-packaging
@@ -45,6 +47,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import python_sbom'
+cd %{_builddir}
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import python_sbom'
 
 %files -f %{_builddir}/%{name}.files
