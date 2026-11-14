@@ -45,6 +45,7 @@ Source2:        simo_oreon.asc
 Source3:        https://github.com/openssl/openssl/releases/download/openssl-4.0.2/openssl-4.0.2.tar.gz
 Source4:        fips-hmacify.sh
 Source5:        kryoptic-%{version}-vendor.tar.xz
+Source6:        kryoptic-%{version}-Cargo.lock
 
 Patch105:        0001-Remove-bundled-rusqlite-from-fips-feature.patch
 Patch106:        548.patch
@@ -105,6 +106,7 @@ echo '%{source5_hash}  %{SOURCE5}' | sha256sum -c -
 
 %setup -n kryoptic-%{version} -q
 %autopatch -p1 -M 199
+cp -a %{SOURCE6} Cargo.lock
 tar -xf %{SOURCE5}
 %oreon_cargo_prep vendor
 %setup -n kryoptic-%{version} -q -T -D -a 3
