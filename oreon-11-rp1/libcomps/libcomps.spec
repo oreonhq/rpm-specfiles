@@ -126,3 +126,6 @@ popd
 %{python3_sitearch}/%{name}/
 %{python3_sitearch}/%{name}-%{version}.dist-info
 
+
+%changelog
+%autochangelog
