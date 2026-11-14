@@ -1,0 +1,2 @@
+#!/usr/bin/sh
+exec /usr/bin/ruby /usr/lib/rpm/rubygemsdeps.rb requires

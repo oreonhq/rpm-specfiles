@@ -1,0 +1,21 @@
+%gem_dir %{_datadir}/gems
+%gem_extdir_mri %{_libdir}/gems/ruby
+
+%gem_instdir %{gem_dir}/gems/%{gem_name}-%{version}
+%gem_extdir_mri_inst %{gem_extdir_mri}/%{gem_name}-%{version}
+%gem_libdir %{gem_instdir}/lib
+%gem_cache %{gem_dir}/cache/%{gem_name}-%{version}.gem
+%gem_spec %{gem_dir}/specifications/%{gem_name}-%{version}.gemspec
+%gem_docdir %{gem_dir}/doc/%{gem_name}-%{version}
+
+%gem_install(d:n:) \
+mkdir -p %{-d*}%{!?-d:.%{gem_dir}}\
+\
+CONFIGURE_ARGS="--with-cflags='%{optflags}' --with-ldflags='%{build_ldflags}' $CONFIGURE_ARGS" \\\
+gem install \\\
+        -V \\\
+        --local \\\
+        --build-root %{-d*}%{!?-d:.} \\\
+        --force \\\
+        --document=ri,rdoc \\\
+        %{-n*}%{!?-n:%{gem_name}-%{version}.gem}
