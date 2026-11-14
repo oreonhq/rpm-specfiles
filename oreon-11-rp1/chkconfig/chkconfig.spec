@@ -114,3 +114,6 @@ mkdir -p $RPM_BUILD_ROOT/etc/chkconfig.d
 %{_mandir}/*/update-alternatives*
 %{_mandir}/*/alternatives*
 
+
+%changelog
+%autochangelog
