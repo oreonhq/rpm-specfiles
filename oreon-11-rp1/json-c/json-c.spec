@@ -203,3 +203,6 @@ unset USE_VALGRIND
 %{mingw64_libdir}/pkgconfig/%{name}.pc
 %endif
 
+
+%changelog
+%autochangelog
