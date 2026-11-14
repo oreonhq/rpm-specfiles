@@ -63,3 +63,6 @@ PY
 
 %files -f %{oreon_py_files}
 %license LICENSE licenses/LICENSE_APACHE
+
+%changelog
+%autochangelog
