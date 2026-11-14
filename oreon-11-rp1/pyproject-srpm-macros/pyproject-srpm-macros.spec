@@ -34,3 +34,6 @@ install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.aaa-pyproject-srpm
 %files
 %license LICENSE
 %{_rpmmacrodir}/macros.aaa-pyproject-srpm
+
+%changelog
+%autochangelog

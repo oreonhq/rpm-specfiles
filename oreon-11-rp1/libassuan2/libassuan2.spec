@@ -49,3 +49,6 @@ done
 %license COPYING.LIB
 %{_libdir}/libassuan.so.0
 %{_libdir}/libassuan.so.0.*
+
+%changelog
+%autochangelog

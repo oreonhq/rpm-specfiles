@@ -1,16 +1,16 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d87ec0dac9061f1fa58ebced5c6b1360c87d4c5cd7b455dc0ebe1d3f036920d7
+%global source0_hash 42f829927d2d459f5733fcdb38a5bf2455a8b84072193092450a9c69d6596eca
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global device_mapper_version 1.02.217
+%global device_mapper_version 1.02.218
 
 %global enable_cache 1
 %global enable_lvmdbusd 1
-%global enable_lvmlockd 1
+%global enable_lvmlockd 0
 %global enable_lvmpolld 1
 %global enable_thin 1
 %global enable_dmfilemapd 1
@@ -41,12 +41,11 @@
 
 Summary: Userland logical volume management tools
 Name: lvm2
-Version:        2.03.43
+Version:        2.03.44
 Release:        1%{?dist}
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
 Source0:        https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
-Patch1:        0001-pvscan-preserve-preferred-device-name-when-importing.patch
 
 BuildRequires: make
 BuildRequires: gcc
@@ -55,13 +54,22 @@ BuildRequires: gcc-c++
 %endif
 BuildRequires: libselinux-devel >= %{libselinux_version}, libsepol-devel
 BuildRequires: libblkid-devel >= %{util_linux_version}
+%bcond_with xfs
+%if %{with xfs}
 BuildRequires: xfsprogs-devel
+%endif
 BuildRequires: ncurses-devel
 BuildRequires: libedit-devel
 BuildRequires: libaio-devel
+%bcond_with nvme
+%if %{with nvme}
 BuildRequires: libnvme-devel
+%endif
 %if %{enable_lockd_dlm}
+%bcond_with dlm
+%if %{with dlm}
 BuildRequires: dlm-devel >= %{dlm_version}
+%endif
 %endif
 BuildRequires: module-init-tools
 BuildRequires: pkgconfig
@@ -71,10 +79,16 @@ BuildRequires: systemd-units
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: python3-dbus
+%bcond_with pyudev
+%if %{with pyudev}
 BuildRequires: python3-pyudev
 %endif
+%endif
 %if %{enable_thin} || %{enable_cache}
+%bcond_with persistent_data
+%if %{with persistent_data}
 BuildRequires: device-mapper-persistent-data >= %{persistent_data_version}
+%endif
 %endif
 %if %{enable_lockd_sanlock}
 BuildRequires: sanlock-devel >= %{sanlock_version}
@@ -674,3 +688,6 @@ An extensive functional testsuite for LVM2.
 %{_bindir}/lvm2-testsuite
 %endif
 
+
+%changelog
+%autochangelog

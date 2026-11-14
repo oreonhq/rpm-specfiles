@@ -7,7 +7,7 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%bcond mingw 1
+%bcond mingw 0
 
 Summary:        Library for accessing USB devices
 Name:           libusb1
@@ -18,11 +18,17 @@ Source1:        libusb-1.0.30.tar.bz2.asc
 Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xc68187379b23de9efc46651e2c80ff56c6830a0e#/libusb1.keyring
 License:        LGPL-2.1-or-later
 URL:            http://libusb.info
-BuildRequires:  systemd-devel doxygen libtool
-BuildRequires:  umockdev-devel
+BuildRequires:  systemd-devel
+BuildRequires:  doxygen
+BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  gnupg2
+BuildRequires:  oreon-rpm-macros
+%bcond_with umockdev
+%if %{with umockdev}
+BuildRequires:  umockdev-devel
+%endif
 # libusbx was removed in F34
 Provides:       libusbx = %{version}-%{release}
 Obsoletes:      libusbx < %{version}-%{release}
@@ -32,8 +38,6 @@ BuildRequires:  mingw32-filesystem >= 95
 BuildRequires:  mingw32-gcc-c++
 BuildRequires:  mingw64-filesystem >= 95
 BuildRequires:  mingw64-gcc-c++
-BuildRequires:  oreon-rpm-macros
-# mingw-libusbx was removed in F42
 Provides:       mingw-libusbx = %{version}-%{release}
 Obsoletes:      mingw-libusbx < %{version}-%{release}
 %endif
@@ -210,3 +214,6 @@ popd
 %{mingw64_libdir}/pkgconfig/libusb-1.0.pc
 %endif
 
+
+%changelog
+%autochangelog

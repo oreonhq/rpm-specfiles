@@ -93,3 +93,6 @@ make check || (cat tests/*.log; exit 1)
 %{_libdir}/libpopt.a
 %endif
 
+
+%changelog
+%autochangelog

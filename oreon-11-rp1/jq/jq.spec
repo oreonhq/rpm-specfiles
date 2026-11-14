@@ -103,3 +103,6 @@ make check
 %{_libdir}/libjq.so
 %{_libdir}/pkgconfig/libjq.pc
 
+
+%changelog
+%autochangelog

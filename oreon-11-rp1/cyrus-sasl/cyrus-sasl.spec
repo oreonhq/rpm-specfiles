@@ -60,13 +60,21 @@ Patch600:        cyrus-sasl-2.1.28-gcc15.patch
 
 BuildRequires: autoconf, automake, libtool, gdbm-devel, groff
 BuildRequires: krb5-devel >= 1.2.2, openssl-devel, pam-devel, pkgconfig
-BuildRequires: mariadb-connector-c-devel, libpq-devel, zlib-devel
+BuildRequires: zlib-devel
+%bcond_with sql_backends
+%if %{with sql_backends}
+BuildRequires: mariadb-connector-c-devel
+BuildRequires: libpq-devel
+%endif
 %if ! %{bootstrap_cyrus_sasl}
 BuildRequires: openldap-devel
 %endif
 %if %{bdb_migration}
 #build reqs for migration from BerkeleyDB
+%bcond_with libdb_static
+%if %{with libdb_static}
 BuildRequires: libdb-devel-static
+%endif
 %endif
 #build reqs for make check
 BuildRequires: python3 nss_wrapper socket_wrapper krb5-server
@@ -407,3 +415,6 @@ make check %{?_smp_mflags}
 %{_mandir}/man3/*
 %{_sbindir}/sasl2-shared-mechlist
 
+
+%changelog
+%autochangelog

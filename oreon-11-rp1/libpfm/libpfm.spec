@@ -55,3 +55,6 @@ rm -f %{buildroot}%{_libdir}/libpfm.a
 %{_includedir}/perfmon/
 %{_libdir}/libpfm.so
 %{_mandir}/man3/*
+
+%changelog
+%autochangelog

@@ -46,3 +46,6 @@ install -m 755 brp-boot-efi-times %{buildroot}%{_rpmconfigdir}/brp-boot-efi-time
 %license LICENSE
 %{_rpmmacrodir}/macros.efi-srpm
 %{_rpmconfigdir}/brp-boot-efi-times
+
+%changelog
+%autochangelog

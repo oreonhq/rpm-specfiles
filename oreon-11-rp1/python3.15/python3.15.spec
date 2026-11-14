@@ -91,7 +91,7 @@ License: Python-2.0.1
 # Only possible on certain architectures: https://peps.python.org/pep-0744/#support
 # The freethreading build (when enabled) does not support JIT yet:
 # https://github.com/python/cpython/issues/133171
-%bcond jit %[("%{_arch}" == "x86_64" || "%{_arch}" == "aarch64") && %{without bootstrap}]
+%bcond jit 0
 # Whether to build the JIT stencils (or else use the prebuilt ones)
 # On F43 it should be possible to build stencils, but the pregenerated stencils
 # for aarch64 debug build don't match the built ones
@@ -272,7 +272,10 @@ Obsoletes: python%{pybasever}%{?1:-%{1}}\
 # (keep this list alphabetized within the %%if blocks)
 
 BuildRequires: autoconf
+%bcond_with bluez
+%if %{with bluez}
 BuildRequires: bluez-libs-devel
+%endif
 BuildRequires: bzip2-devel
 BuildRequires: expat-devel >= 2.5.0-2
 BuildRequires: findutils
@@ -296,7 +299,10 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: sqlite-devel
 BuildRequires: systemtap-sdt-devel
 BuildRequires: tcl-devel
+%bcond_with tk
+%if %{with tk}
 BuildRequires: tk-devel
+%endif
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: /usr/bin/dtrace
@@ -324,7 +330,10 @@ BuildRequires: valgrind-devel
 
 %if %{with main_python}
 BuildRequires: desktop-file-utils
+%bcond_with appstream_glib
+%if %{with appstream_glib}
 BuildRequires: libappstream-glib
+%endif
 %endif
 
 %if %{with rpmwheels}
@@ -376,10 +385,8 @@ Source11: idle3.appdata.xml
 #  1. scratch build Python on platform with required LLVM version (usually rawhide)
 #  2. download the files from Koji:
 #    $ bash download-jit-stencils-from-koji.sh KOJI_TASK_URL|KOJI_TASK_ID
-#  3. add the files to lookaside cache with fedpkg new-sources
 Source30: download-jit-stencils-from-koji.sh
 # This %%if-hack makes it easier to do step 1. from the above.
-# Use `fedpkg sources --force` to get the conditionally defined sources from the lookaside cache.
 # Macro %%exists is not present in the rpm version available in EL9,
 # hence to prevent parsing errors, we add additional check for its existence.
 %if (%{with jit} && %{without jit_build_stencils}) || 0%{?exists:%{exists:%{_sourcedir}/Python-%{upstream_version}-x86_64-optimized-jit_stencils.h}}
@@ -2032,3 +2039,6 @@ CheckPython freethreading
 # Finally, the changelog:
 # ======================================================
 
+
+%changelog
+%autochangelog

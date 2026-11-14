@@ -51,3 +51,6 @@ CFLAGS="" LDFLAGS="" srcdir=$(pwd) make check
 %{_bindir}/dwz
 %{_mandir}/man1/dwz.1*
 
+
+%changelog
+%autochangelog

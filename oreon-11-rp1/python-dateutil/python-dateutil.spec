@@ -135,3 +135,6 @@ make -C docs html
 %doc docs/_build/html
 
 
+
+%changelog
+%autochangelog

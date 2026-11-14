@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 3243ffbc8ea4d4ac22ddc7dd2a1dc54c57874c40648b60ff97009763554eaf13
+%global source0_hash fe90af8441ad9fa9b064b8e53077cefb782a96f8a68276b031dc54af1789ff0b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -40,12 +40,12 @@
 
 Summary: The Kerberos network authentication system
 Name: krb5
-Version:        1.22.2
+Version:        1.22.3
 Release:        1%{?dist}
 
 # rharwood has trust path to signing key and verifies on check-in
 Source0:        https://web.mit.edu/kerberos/dist/krb5/1.22/krb5-%{version}.tar.gz
-Source1:        krb5-1.22.2.tar.gz.asc
+Source1:        krb5-1.22.3.tar.gz.asc
 
 Source2: kprop.service
 Source3: kadmin.service
@@ -92,7 +92,10 @@ BuildRequires: git
 # Enable compilation of optional tests
 BuildRequires: resolv_wrapper
 BuildRequires: libcmocka-devel
+%bcond_with opensc
+%if %{with opensc}
 BuildRequires: opensc
+%endif
 BuildRequires: softhsm
 
 %description
@@ -225,7 +228,7 @@ Requires: libverto-devel
 Requires: lmdb-devel
 Requires: openldap-devel
 Requires: pam-devel
-Requires: redhat-rpm-config
+Requires:       oreon-rpm-config
 Requires: openssl-devel >= 1:3.0.0
 
 # Test dependencies
@@ -243,7 +246,7 @@ Requires: python3-kdcproxy
 Requires: resolv_wrapper
 Requires: /etc/crypto-policies/back-ends/krb5.config
 Requires: words
-Requires: opensc
+Recommends: opensc
 Requires: softhsm
 Recommends: python3-pyrad
 
@@ -717,3 +720,6 @@ exit 0
 %{_libexecdir}/%{name}-tests-%{_arch}
 %{_datarootdir}/%{name}-tests/%{_arch}
 
+
+%changelog
+%autochangelog

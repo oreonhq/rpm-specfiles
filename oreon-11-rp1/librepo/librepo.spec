@@ -84,10 +84,13 @@ Development files for librepo.
 Summary:        Python 3 bindings for the librepo library
 %{?python_provide:%python_provide python3-%{name}}
 BuildRequires:  python3-devel
-BuildRequires:  python3-gpg
-BuildRequires:  python3-pyxattr
 BuildRequires:  python3-requests
 BuildRequires:  oreon-rpm-macros
+%bcond_with python_gpg
+%if %{with python_gpg}
+BuildRequires:  python3-gpg
+BuildRequires:  python3-pyxattr
+%endif
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Obsoletes:      platform-python-%{name} < %{version}-%{release}
 Conflicts:      python3-dnf < %{dnf_conflict}
@@ -134,3 +137,6 @@ Python 3 bindings for the librepo library.
 %files -n python3-%{name}
 %{python3_sitearch}/%{name}/
 
+
+%changelog
+%autochangelog

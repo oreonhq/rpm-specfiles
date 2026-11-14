@@ -1,13 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash c268cfcd230cc7ed5447fb34ed21bf4977315c7104356a39388b6ba784ad11b0
+%global source0_hash e71d93de41e8e4b2554c36d2ae51758112a21ecf3a8c98605a2c689251e62987
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+%bcond_with extras
 Name:           fastfetch
-Version:        2.68.1
+Version:        2.71.0
 Release:        1%{?dist}
 Summary:        Fast neofetch-like system information tool
 
@@ -19,34 +20,34 @@ BuildRequires:  cmake
 BuildRequires:  python3
 BuildRequires:  gcc
 BuildRequires:  hwdata-devel
+BuildRequires:  dbus-devel
+BuildRequires:  sqlite-devel
+BuildRequires:  zlib-devel
+BuildRequires:  glib2-devel
+BuildRequires:  rpm-devel
+BuildRequires:  elfutils-libelf-devel
+BuildRequires:  lua-devel
+BuildRequires:  oreon-rpm-macros
+%if %{with extras}
 BuildRequires:  wayland-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  dconf-devel
-BuildRequires:  dbus-devel
-BuildRequires:  sqlite-devel
 BuildRequires:  ImageMagick-devel
-BuildRequires:  zlib-devel
 BuildRequires:  libglvnd-devel
 BuildRequires:  mesa-libGL-devel
-BuildRequires:  glib2-devel
 BuildRequires:  ocl-icd-devel
-BuildRequires:  rpm-devel
 BuildRequires:  libdrm-devel
 BuildRequires:  pulseaudio-libs-devel
-BuildRequires:  elfutils-libelf-devel
-# not available on s390x
 %if "%{_arch}" != "s390x"
 BuildRequires:  libddcutil-devel
 %endif
-# vulkan-loader not available in el8 on some arches
 BuildRequires:  vulkan-loader-devel
 BuildRequires:  chafa-devel
 BuildRequires:  yyjson-devel
 BuildRequires:  efl-devel
 BuildRequires:  libva-devel
 BuildRequires:  libvdpau-devel
-BuildRequires:  lua-devel
-BuildRequires:  oreon-rpm-macros
+%endif
 
 Recommends:     hwdata
 Suggests:       libXrandr
@@ -91,7 +92,10 @@ mechanisms like multithreading and caching to finish as fast as possible.
 
 
 %build
-%cmake -DBUILD_TESTS=ON -DENABLE_SYSTEM_YYJSON=ON -DBUILD_FLASHFETCH=OFF
+%cmake \
+  -DBUILD_TESTS=ON \
+  -DENABLE_SYSTEM_YYJSON=%{?with_extras:ON}%{!?with_extras:OFF} \
+  -DBUILD_FLASHFETCH=OFF
 %cmake_build
 
 
@@ -114,3 +118,6 @@ mechanisms like multithreading and caching to finish as fast as possible.
 %{_datadir}/zsh/site-functions/_%{name}
 
 
+
+%changelog
+%autochangelog

@@ -163,3 +163,6 @@ use tpm2-tss.
 %{_mandir}/man5/*.5.gz
 %{_mandir}/man7/tss2*.7.gz
 
+
+%changelog
+%autochangelog

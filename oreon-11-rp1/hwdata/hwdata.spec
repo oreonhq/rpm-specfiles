@@ -52,3 +52,6 @@ The %{name}-devel package contains files for developing applications that use
 %files devel
 %{_datadir}/pkgconfig/%{name}.pc
 
+
+%changelog
+%autochangelog

@@ -105,3 +105,6 @@ make check
 %{_mandir}/man3/*asn1*
 
 
+
+%changelog
+%autochangelog

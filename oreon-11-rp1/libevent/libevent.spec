@@ -152,3 +152,6 @@ mkdir -p $RPM_BUILD_ROOT/%{develdocdir}/sample
 %files doc
 %doc %{develdocdir}/
 
+
+%changelog
+%autochangelog

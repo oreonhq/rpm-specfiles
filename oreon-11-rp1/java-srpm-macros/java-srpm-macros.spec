@@ -30,3 +30,6 @@ install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.java-srpm
 
 %files
 %{_rpmmacrodir}/macros.java-srpm
+
+%changelog
+%autochangelog

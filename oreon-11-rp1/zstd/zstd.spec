@@ -49,7 +49,10 @@ BuildRequires:  gcc-c++
 %if %{with zlib}
 BuildRequires:  zlib-devel
 %endif
+%bcond_with execstack
+%if %{with execstack}
 BuildRequires:  execstack
+%endif
 BuildRequires:  oreon-rpm-macros
 
 %description
@@ -155,3 +158,6 @@ make PZSTD_CXX_STD=-std=c++17 -C contrib/pzstd tests check
 
 %ldconfig_scriptlets -n lib%{name}
 
+
+%changelog
+%autochangelog

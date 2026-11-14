@@ -51,3 +51,6 @@ The localizations for the GNU portability library.
 %doc ABOUT-NLS README
 %license COPYING
 
+
+%changelog
+%autochangelog

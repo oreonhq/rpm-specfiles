@@ -54,3 +54,6 @@ autoreconf -fi
 %{_datadir}/xmlto/
 %{_mandir}/man1/xmlto.1*
 %{_mandir}/man1/xmlif.1*
+
+%changelog
+%autochangelog

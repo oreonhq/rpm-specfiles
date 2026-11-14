@@ -394,3 +394,6 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %files -n python3-%{libname} -f python3-solv.files
 %endif
 
+
+%changelog
+%autochangelog

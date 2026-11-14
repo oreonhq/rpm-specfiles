@@ -852,3 +852,6 @@ ln -sf %{yum_utils_subpackage_name}.1.gz %{buildroot}%{_mandir}/man1/repotrack.1
 %{_mandir}/man8/dnf*-modulesync.*
 %endif
 
+
+%changelog
+%autochangelog

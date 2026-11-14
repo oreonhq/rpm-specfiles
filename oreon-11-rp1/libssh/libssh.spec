@@ -26,7 +26,10 @@ BuildRequires:  gnupg2
 BuildRequires:  openssl-devel
 BuildRequires:  pkgconfig
 BuildRequires:  zlib-devel
+%bcond_with pkcs11
+%if %{with pkcs11}
 BuildRequires:  pkcs11-provider
+%endif
 BuildRequires:  libfido2-devel
 # for testing
 BuildRequires:  krb5-devel
@@ -43,7 +46,10 @@ BuildRequires:  openssh-server
 BuildRequires:  openssh-sk-dummy
 BuildRequires:  nmap-ncat
 BuildRequires:  p11-kit-devel
+%bcond_with opensc
+%if %{with opensc}
 BuildRequires:  opensc
+%endif
 BuildRequires:  softhsm
 BuildRequires:  gnutls-utils
 BuildRequires:  hostname
@@ -153,3 +159,6 @@ popd
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/libssh/libssh_client.config
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/libssh/libssh_server.config
 
+
+%changelog
+%autochangelog

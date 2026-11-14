@@ -102,3 +102,6 @@ make -C completions check
 %{_datadir}/cmake/
 %{_datadir}/pkgconfig/bash-completion.pc
 
+
+%changelog
+%autochangelog

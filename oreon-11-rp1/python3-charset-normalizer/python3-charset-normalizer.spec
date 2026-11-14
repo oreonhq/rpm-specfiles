@@ -43,3 +43,6 @@ PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python
 
 %files -f %{_builddir}/%{name}.files
 %license LICENSE
+
+%changelog
+%autochangelog

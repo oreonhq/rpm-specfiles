@@ -70,3 +70,6 @@ rm -vrf %{buildroot}%{_infodir}/dir
 %{_mandir}/man1/red.1*
 %{_infodir}/ed.info*
 
+
+%changelog
+%autochangelog

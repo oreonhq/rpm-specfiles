@@ -1,0 +1,17 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 4ec2f74..d0f706e 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -21,12 +21,7 @@ unset(QT_GENERATE_SBOM)
+ 
+ option(QT_INSTALL_XDG_DESKTOP_ENTRIES "Enable XDG desktop entries installation" OFF)
+ 
+-if(TARGET Qt::Widgets)
+-    add_subdirectory(uiplugin)
+-    add_subdirectory(uitools)
+-endif()
+-
+ add_subdirectory(global) # special case add as first directory
+ if(QT_FEATURE_linguist)
+     add_subdirectory(linguist)
+ endif()

@@ -1,0 +1,24 @@
+diff -rupN --no-dereference mingw-w64-v14.0.0/mingw-w64-headers/configure mingw-w64-v14.0.0-new/mingw-w64-headers/configure
+--- mingw-w64-v14.0.0/mingw-w64-headers/configure	2026-03-24 12:26:20.000000000 +0100
++++ mingw-w64-v14.0.0-new/mingw-w64-headers/configure	2026-04-14 11:57:36.491985997 +0200
+@@ -2674,7 +2674,7 @@ printf "%s\n" "$with_widl" >&6; }
+ 
+ if test "x$with_widl" = xno
+ then :
+-
++unset WIDL
+ else case e in #(
+   e)
+   if test "x$srcdir" = x.
+diff -rupN --no-dereference mingw-w64-v14.0.0/mingw-w64-headers/configure.ac mingw-w64-v14.0.0-new/mingw-w64-headers/configure.ac
+--- mingw-w64-v14.0.0/mingw-w64-headers/configure.ac	2026-03-24 12:26:20.000000000 +0100
++++ mingw-w64-v14.0.0-new/mingw-w64-headers/configure.ac	2026-04-14 11:57:36.492532072 +0200
+@@ -24,7 +24,7 @@ AC_ARG_WITH([widl],
+   [AS_VAR_SET([with_widl],[no])])
+ AC_MSG_RESULT([$with_widl])
+ 
+-AS_VAR_IF([with_widl],[no],[],[
++AS_VAR_IF([with_widl],[no],[unset WIDL],[
+   AS_VAR_IF([srcdir],[.],[],
+     [AC_MSG_WARN([--with-widl used in out of the tree compilation.  Existing generated files will not be modified.])])
+   AC_PATH_PROGS([WIDL], [$host-widl widl], [], [$with_widl])

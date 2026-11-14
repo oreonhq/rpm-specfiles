@@ -1,0 +1,52 @@
+diff -rupN --no-dereference binutils-2.46.0/bfd/elflink.c binutils-2.46.0-new/bfd/elflink.c
+--- binutils-2.46.0/bfd/elflink.c	2026-02-08 01:00:00.000000000 +0100
++++ binutils-2.46.0-new/bfd/elflink.c	2026-03-21 22:42:49.433687978 +0100
+@@ -13788,7 +13788,7 @@ _bfd_elf_final_link (bfd *abfd, struct b
+ 		{
+ 		  if (info->textrel_check == textrel_check_error)
+ 		    info->callbacks->einfo
+-		      (_("%P%X: read-only segment has dynamic relocations\n"));
++		      (_("%P%X: error: read-only segment has dynamic relocations\n"));
+ 		  else if (bfd_link_dll (info))
+ 		    info->callbacks->einfo
+ 		      (_("%P: warning: creating DT_TEXTREL in a shared object\n"));
+diff -rupN --no-dereference binutils-2.46.0/ld/testsuite/ld-aarch64/dt-memtag-mode.d binutils-2.46.0-new/ld/testsuite/ld-aarch64/dt-memtag-mode.d
+--- binutils-2.46.0/ld/testsuite/ld-aarch64/dt-memtag-mode.d	2026-02-08 01:00:00.000000000 +0100
++++ binutils-2.46.0-new/ld/testsuite/ld-aarch64/dt-memtag-mode.d	2026-03-21 22:42:49.435165825 +0100
+@@ -1,5 +1,5 @@
+ #source: dt-memtag.s
+-#ld: -shared -z memtag-mode=async
++#ld: -shared -z memtag-mode=async -z notext
+ #readelf: -d
+ 
+ #...
+diff -rupN --no-dereference binutils-2.46.0/ld/testsuite/ld-aarch64/dt-memtag-stack.d binutils-2.46.0-new/ld/testsuite/ld-aarch64/dt-memtag-stack.d
+--- binutils-2.46.0/ld/testsuite/ld-aarch64/dt-memtag-stack.d	2026-02-08 01:00:00.000000000 +0100
++++ binutils-2.46.0-new/ld/testsuite/ld-aarch64/dt-memtag-stack.d	2026-03-21 22:42:49.435369246 +0100
+@@ -1,5 +1,5 @@
+ #source: dt-memtag.s
+-#ld: -shared -z memtag-stack
++#ld: -shared -z memtag-stack -z notext
+ #readelf: -d
+ 
+ #...
+diff -rupN --no-dereference binutils-2.46.0/ld/testsuite/ld-aarch64/relr-text-pie.d binutils-2.46.0-new/ld/testsuite/ld-aarch64/relr-text-pie.d
+--- binutils-2.46.0/ld/testsuite/ld-aarch64/relr-text-pie.d	2026-02-08 01:00:00.000000000 +0100
++++ binutils-2.46.0-new/ld/testsuite/ld-aarch64/relr-text-pie.d	2026-03-21 22:42:49.435533506 +0100
+@@ -1,5 +1,5 @@
+ #source: relr-text.s
+-#ld: -pie -z pack-relative-relocs -T relocs.ld
++#ld: -pie -z pack-relative-relocs -T relocs.ld -z notext
+ #readelf: -drW
+ 
+ #...
+diff -rupN --no-dereference binutils-2.46.0/ld/testsuite/ld-aarch64/relr-text-shared.d binutils-2.46.0-new/ld/testsuite/ld-aarch64/relr-text-shared.d
+--- binutils-2.46.0/ld/testsuite/ld-aarch64/relr-text-shared.d	2026-02-08 01:00:00.000000000 +0100
++++ binutils-2.46.0-new/ld/testsuite/ld-aarch64/relr-text-shared.d	2026-03-21 22:42:49.435688399 +0100
+@@ -1,5 +1,5 @@
+ #source: relr-text.s
+-#ld: -shared -z pack-relative-relocs -T relocs.ld
++#ld: -shared -z pack-relative-relocs -T relocs.ld -z notext
+ #readelf: -drW
+ 
+ #...

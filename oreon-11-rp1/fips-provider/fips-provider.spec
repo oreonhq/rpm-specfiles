@@ -196,3 +196,6 @@ mkdir -p -m755 $RPM_BUILD_ROOT%{_libdir}/ossl-modules
 install -m755 target/release/libkryoptic_pkcs11.so $RPM_BUILD_ROOT/%{_libdir}/ossl-modules/fips.so
 mkdir -p -m755 $RPM_BUILD_ROOT%{_libdir}/pkcs11
 ln -s ../ossl-modules/fips.so $RPM_BUILD_ROOT%{_libdir}/pkcs11/fipstokn.so
+
+%changelog
+%autochangelog

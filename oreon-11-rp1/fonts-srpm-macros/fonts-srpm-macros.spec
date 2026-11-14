@@ -38,3 +38,6 @@ install -m 644 %{SOURCE1} %{buildroot}%{_rpmluadir}/oreon/srpm/fonts.lua
 %license LICENSE.txt
 %{_rpmmacrodir}/macros.fonts-srpm
 %{_rpmluadir}/oreon/srpm/fonts.lua
+
+%changelog
+%autochangelog

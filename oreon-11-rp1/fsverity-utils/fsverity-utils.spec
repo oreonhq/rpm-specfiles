@@ -74,3 +74,6 @@ find %{buildroot} -type f -name "*.a" -delete
 %{_libdir}/libfsverity.so
 %{_libdir}/pkgconfig/libfsverity.pc
 
+
+%changelog
+%autochangelog

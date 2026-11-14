@@ -39,7 +39,7 @@ BuildRequires: perl-interpreter, perl-open
 BuildRequires: texlive-bibtex
 BuildRequires: web-assets-devel
 # Building an RPM package typically needs unbundling of Javascript assets.
-Requires: (js-doxygen if redhat-rpm-config)
+Requires: (js-doxygen if oreon-rpm-config)
 
 %if ! 0%{?_module_build} && "%{build_doc}" == "ON"
 BuildRequires: tex(dvips)
@@ -112,7 +112,7 @@ BuildRequires: ghostscript
 BuildRequires: gettext
 BuildRequires: graphviz
 # fonts
-BuildRequires: texlive-collection-fontsrecommended
+BuildRequires: texlive-base
 %endif
 
 %if "%{build_wizard}" == "ON"
@@ -260,7 +260,7 @@ Requires: texlive-bibtex
 Requires: texlive-makeindex
 Requires: texlive-epstopdf
 # fonts
-Requires: texlive-collection-fontsrecommended
+Requires: texlive-base
 BuildArch: noarch
 
 %description latex
@@ -377,3 +377,6 @@ install -m755 -D --target-directory=%{buildroot}%{_rpmconfigdir}/oreon %{SOURCE4
 # intentionally left blank
 %endif
 
+
+%changelog
+%autochangelog

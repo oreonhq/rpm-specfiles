@@ -69,3 +69,6 @@ Suggests:       /usr/bin/lsb_release
 %check
 %pytest
 
+
+%changelog
+%autochangelog

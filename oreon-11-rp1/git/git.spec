@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3
-%global source1_hash bee7d2f96844063557b07b43811d81e1fc54563e0da2c36a975dfd432b196a5c
+%global source0_hash f0b0bf89264b9bd2e1c640363e7529643989da76281600473c50745cd34a607f
+%global source1_hash b5aeebc4779030742cfb2f599572fc7adb38041a20b6048df4f6b0272be58ab0
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -12,12 +12,12 @@ BuildRequires: oreon-rpm-macros
 %bcond_without docs
 
 # Pass --without tests to rpmbuild if you don't want to run the tests
-%bcond_without tests
+%bcond_with tests
 
 %global gitexecdir          %{_libexecdir}/git-core
 
 # linkchecker is not available on EL
-%bcond_without              linkcheck
+%bcond_with                 linkcheck
 
 %bcond_with                 perl_modcompat
 
@@ -36,10 +36,10 @@ BuildRequires: oreon-rpm-macros
 
 # Allow cvs subpackage to be toggled via --with/--without
 # Disable cvs subpackage by default on EL >= 8
-%bcond_without              cvs
+%bcond_with                 cvs
 
 # Allow credential-libsecret subpackage to be toggled via --with/--without
-%bcond_without              libsecret
+%bcond_with                 libsecret
 
 # Allow p4 subpackage to be toggled via --with/--without
 # Disable p4 package by default on EL >= 10
@@ -54,7 +54,7 @@ BuildRequires: oreon-rpm-macros
 %global _package_note_file  %{_builddir}/%{name}-%{real_version}/.package_note-%{name}-%{version}-%{release}.%{_arch}.ld
 
 Name:           git
-Version:        2.56.0
+Version:        2.56.1
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
@@ -141,7 +141,10 @@ BuildRequires:  pcre2-devel
 BuildRequires:  cargo
 BuildRequires:  rust
 %endif
+%bcond_with perl_error
+%if %{with perl_error}
 BuildRequires:  perl(Error)
+%endif
 BuildRequires:  perl(lib)
 %if %{use_perl_generators}
 BuildRequires:  perl-generators
@@ -157,7 +160,10 @@ BuildRequires:  pkgconfig(bash-completion)
 BuildRequires:  sed
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  tcl
+%bcond_with tk
+%if %{with tk}
 BuildRequires:  tk
+%endif
 BuildRequires:  xz
 BuildRequires:  zlib-devel >= 1.2
 
@@ -939,3 +945,6 @@ rmdir --ignore-fail-on-non-empty "$testdir"
 %{?with_docs:%{_mandir}/man1/git-svn.1*}
 %{?with_docs:%{_pkgdocdir}/git-svn.html}
 
+
+%changelog
+%autochangelog

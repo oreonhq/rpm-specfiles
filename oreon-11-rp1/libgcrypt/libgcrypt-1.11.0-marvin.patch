@@ -841,7 +841,7 @@ index c77d0212..8e6c847f 100644
 +	           alen = buflen;
 +	         }
  
-               if (alen < 0)
+               if (alen < 0 || alen > 65535)
                  {
 @@ -1578,9 +1596,18 @@ do_vsexp_sscan (gcry_sexp_t *retsexp, size_t *erroff,
  		}

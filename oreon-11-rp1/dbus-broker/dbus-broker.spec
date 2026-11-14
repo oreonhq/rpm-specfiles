@@ -116,3 +116,6 @@ fi
 %files tests
 %{_prefix}/lib/dbus-broker/tests/
 
+
+%changelog
+%autochangelog

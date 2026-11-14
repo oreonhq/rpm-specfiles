@@ -129,3 +129,6 @@ rm -f %{buildroot}%{_pkgdocdir}/COPYING
 %license COPYING
 %{_pkgdocdir}
 
+
+%changelog
+%autochangelog

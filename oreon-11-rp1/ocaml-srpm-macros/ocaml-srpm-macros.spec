@@ -52,3 +52,6 @@ install -p -m 0644 %{SOURCE0} $RPM_BUILD_ROOT%{rpmmacrodir}/macros.ocaml-srpm
 %{rpmmacrodir}/macros.ocaml-srpm
 
 
+
+%changelog
+%autochangelog

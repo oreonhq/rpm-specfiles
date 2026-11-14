@@ -35,3 +35,6 @@ install -m 644 %{SOURCE1} %{buildroot}%{_rpmmacrodir}/macros.rust
 %license LICENSE
 %{_rpmmacrodir}/macros.rust-srpm
 %{_rpmmacrodir}/macros.rust
+
+%changelog
+%autochangelog

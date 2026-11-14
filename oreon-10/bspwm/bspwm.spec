@@ -4,7 +4,7 @@
 %define _legacy_common_support 1
 
 Name:		bspwm
-Version:	0.9.9
+Version:	0.9.12
 Release:	1%{?dist}
 Summary:	A tiling window manager based on binary space partitioning
 

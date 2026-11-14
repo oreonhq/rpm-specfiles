@@ -52,3 +52,6 @@ cd %{_builddir}
 PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import vcsgraph'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

@@ -59,3 +59,6 @@ make check
 %{_mandir}/man1/lzip.1*
 
 
+
+%changelog
+%autochangelog

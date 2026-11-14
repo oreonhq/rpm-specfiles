@@ -78,3 +78,6 @@ PY
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
+
+%changelog
+%autochangelog

@@ -195,3 +195,6 @@ done
 %{_rpmconfigdir}/redhat/redhat-hardened-clang.cfg
 %{_rpmconfigdir}/redhat/redhat-hardened-clang-ld.cfg
 %{_rpmconfigdir}/redhat/redhat-annobin-cc1
+
+%changelog
+%autochangelog

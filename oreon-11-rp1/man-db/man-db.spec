@@ -244,3 +244,6 @@ fi
 %files cron
 %config(noreplace) %{_sysconfdir}/cron.daily/man-db.cron
 
+
+%changelog
+%autochangelog

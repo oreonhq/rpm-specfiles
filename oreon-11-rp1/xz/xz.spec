@@ -191,3 +191,6 @@ LD_LIBRARY_PATH=$PWD/src/liblzma/.libs make check
 %lang(uk) %{_mandir}/uk/man1/*lz*
 
 
+
+%changelog
+%autochangelog

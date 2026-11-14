@@ -17,8 +17,11 @@ Source0:        https://github.com/sysstat/sysstat/archive/v%{version}.tar.gz
 Source1: sysstat-tmpfiles.conf
 
 # PCP is no longer available for %%{ix86} on F40
+%bcond_with pcp
+%if %{with pcp}
 %ifnarch %{ix86}
 BuildRequires: pcp-libs-devel
+%endif
 %endif
 
 BuildRequires: gcc
@@ -122,3 +125,6 @@ fi
 %{_localstatedir}/log/sa
 %{_tmpfilesdir}/%{name}.conf
 
+
+%changelog
+%autochangelog

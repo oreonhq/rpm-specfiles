@@ -13,12 +13,12 @@ packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macr
 [toolchain]
 summary: compilers, libc, binutils, debuggers. these are slow and they fill disks
 maintainer: Brandon Lester
-packages: gcc, binutils, glibc, gdb, llvm, elfutils, libtool, ccache, dwz, debugedit, patchelf, kernel-headers
+packages: gcc, binutils, glibc, gdb, llvm, elfutils, annobin, libtool, ccache, dwz, debugedit, patchelf, kernel-headers, mingw-filesystem, mingw-binutils, mingw-headers, mingw-gcc, mingw-crt, mingw-winpthreads, nasm, spirv-headers, spirv-tools, glslang, spirv-llvm-translator
 
 [build-tools]
 summary: the tools that turn a tarball into a package
 maintainer: Brandon Lester
-packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy
+packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, teckit, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, docbook-style-dsssl, openjade, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy, expect, dejagnu, asciidoc, po4a, docbook-utils, chrpath, check, desktop-file-utils, gtk-doc, beakerlib, tcl, sharutils, cscope, imake, byacc, re2c, ncompress, emacs, emacs-filesystem, rust-bindgen-cli, vim-filesystem, docbook5-style-xsl, rust-cbindgen, xmltoman, source-highlight, web-assets, gi-docgen, qt6-linguist
 
 [shell-and-users]
 summary: login, shells, core unix tools
@@ -28,42 +28,47 @@ packages: bash, bash-completion, coreutils, util-linux, shadow-utils, pam, sudo,
 [compression]
 summary: archives and the libraries that implement them
 maintainer: Brandon Lester
-packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarchive, zchunk, gzip, tar, cpio
+packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarchive, zchunk, gzip, tar, cpio, mingw-zlib
 
 [crypto]
 summary: tls, gpg, and the policy that tells the rest what to use
 maintainer: Brandon Lester
-packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, crypto-policies, libsodium, keyutils, krb5, libxcrypt, fips-provider, tpm2-tss
+packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, sequoia-policy-config, crypto-policies, libsodium, keyutils, krb5, libxcrypt, fips-provider, fipscheck, tpm2-tss, nss
 
 [python]
 summary: interpreters and the python modules the build root needs
 maintainer: Brandon Lester
-packages: python3.15, python3-build, python3-installer, python3-jinja2, python3-markupsafe, python3-packaging, python3-pefile, python3-pyelftools, python3-pyproject-hooks, python3-setuptools, python3-setuptools_scm, python3-vcs-versioning, python3-wheel, python-dateutil, python-dbus, python-distro, python-six, python-systemd, python-tzdata, swig, python-flit-core, python-pip, python-mallard-ducktype, python3-lxml, pygobject3, python3-iniconfig, python3-pluggy, python3-pygments, python3-pytest, python3-testpath, python3-execnet, python3-pytest-xdist, python3-alabaster, python3-babel, python3-docutils, python3-imagesize, python3-snowballstemmer, python3-roman-numerals, python3-sphinxcontrib-applehelp, python3-sphinxcontrib-devhelp, python3-sphinxcontrib-htmlhelp, python3-sphinxcontrib-jsmath, python3-sphinxcontrib-qthelp, python3-sphinxcontrib-serializinghtml, python3-sphinx, python3-sphinxcontrib-jquery, python3-sphinx_rtd_theme, python3-breathe, python3-cython, python3-charset-normalizer, python3-idna, python3-urllib3, python3-certifi, python3-requests, python3-pyparsing, python3-calver, python3-pathspec, python3-trove-classifiers, python3-hatchling, python3-configobj, python3-fastbencode, python3-patiencediff, python3-merge3, python3-dulwich, python3-pyyaml, python3-catalogus, python3-vcsgraph, python3-poetry-core, python3-tomlkit, python3-hatch-vcs, python3-semantic-version, python3-setuptools-rust, python3-setuptools-gettext, python3-pycparser, python3-cffi, python3-maturin, python3-cryptography, python3-freezegun, python3-scripttest, python3-tomli-w, python3-werkzeug, python3-distlib, python3-hatch-fancy-pypi-readme, python3-zipremove, python3-packageurl, python3-sbom, python3-filelock, python3-platformdirs, python3-python-discovery, python3-virtualenv
+packages: python3.15, python3-build, python3-installer, python3-jinja2, python3-markupsafe, python3-packaging, python3-pefile, python3-pyelftools, python3-pyproject-hooks, python3-setuptools, python3-setuptools_scm, python3-vcs-versioning, python3-wheel, python-dateutil, python-dbus, python-distro, python-six, python-systemd, python-tzdata, swig, python-flit-core, python-pip, python-mallard-ducktype, python3-lxml, pygobject3, python3-iniconfig, python3-pluggy, python3-pygments, python3-pytest, python3-testpath, python3-execnet, python3-pytest-xdist, python3-alabaster, python3-babel, python3-docutils, python3-imagesize, python3-snowballstemmer, python3-roman-numerals, python3-sphinxcontrib-applehelp, python3-sphinxcontrib-devhelp, python3-sphinxcontrib-htmlhelp, python3-sphinxcontrib-jsmath, python3-sphinxcontrib-qthelp, python3-sphinxcontrib-serializinghtml, python3-sphinx, python3-sphinxcontrib-jquery, python3-sphinx_rtd_theme, python3-sphinx-autoapi, python3-breathe, python3-cython, python3-charset-normalizer, python3-idna, python3-urllib3, python3-certifi, python3-requests, python3-pyparsing, python3-calver, python3-pathspec, python3-trove-classifiers, python3-hatchling, python3-configobj, python3-fastbencode, python3-patiencediff, python3-merge3, python3-dulwich, python3-pyyaml, python3-catalogus, python3-vcsgraph, python3-poetry-core, python3-tomlkit, python3-hatch-vcs, python3-semantic-version, python3-setuptools-rust, python3-setuptools-gettext, python3-pycparser, python3-cffi, python3-maturin, python3-cryptography, python3-freezegun, python3-scripttest, python3-tomli-w, python3-werkzeug, python3-distlib, python3-hatch-fancy-pypi-readme, python3-zipremove, python3-packageurl, python3-sbom, python3-filelock, python3-platformdirs, python3-python-discovery, python3-virtualenv, python3-mako, python3-markdown, python3-pytest-mock, python3-inotify, python3-astroid, python3-pycairo, python3-pyproject-metadata, python3-meson-python, python3-smartypants, python3-typogrify, python3-dns, python3-decorator, python3-gssapi, python3-hyperframe, python3-hpack, python3-h2, python3-sortedcontainers, python3-hypothesis, python3-pyasn1
 
 [perl]
 summary: perl and the small modules other specs require by name
 maintainer: Brandon Lester
-packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum
+packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum, perl-IO-Tty, perl-Expect, perl-XML-Parser, perl-SGMLSpm
 
 [languages]
 summary: other language runtimes and the generators that wrap them
 maintainer: Brandon Lester
-packages: lua, rust, mpdecimal, fmt, toml11, cargo2rpm
+packages: lua, rust, mpdecimal, fmt, toml11, cargo2rpm, vala, erlang, java-25-openjdk-portable, javapackages-tools, ruby, rubygem-asciidoctor, rubygem-test-unit, java-25-openjdk
+
+[texlive]
+summary: tex live base and the collections other specs build against
+maintainer: Brandon Lester
+packages: texlive-base, texlive
 
 [networking]
 summary: http, ssh, dns names, and the libraries under them
 maintainer: Brandon Lester
-packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2, openldap, cyrus-sasl, libpsl, publicsuffix-list, libidn2, libunistring, rsync, libmicrohttpd
+packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2, openldap, cyrus-sasl, libpsl, publicsuffix-list, libidn2, libunistring, rsync, libmicrohttpd, stunnel, bind, userspace-rcu
 
 [services]
 summary: pid 1, dbus, cron, logging
 maintainer: Brandon Lester
-packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate, dbus-broker
+packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate, dbus-broker, avahi, cups
 
 [packaging-stack]
 summary: dnf and the libraries it links
 maintainer: Brandon Lester
-packages: dnf, dnf5, dnf-plugins-core, libdnf, libsolv, librepo, libcomps, libmodulemd
+packages: dnf, dnf5, dnf-plugins-core, libdnf, libsolv, librepo, libcomps, libmodulemd, librhsm, libpkgmanifest
 
 [selinux-and-caps]
 summary: policy, audit, capabilities
@@ -73,19 +78,24 @@ packages: libselinux, libsepol, libsemanage, audit, ima-evm-utils, libcap, libca
 [libraries]
 summary: shared libraries that are not big enough to be their own group
 maintainer: Brandon Lester
-packages: glib2, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, json-c, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm, fuse3, libcbor, libfido2, libpfm, cmocka, libdb, libxslt, apr, apr-util, systemtap
+packages: glib2, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, yaml-cpp, json-c, json-glib, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm, fuse3, libcbor, libfido2, libpfm, cmocka, libdb, libxslt, apr, apr-util, systemtap, libev, c-ares, CUnit, nss_wrapper, socket_wrapper, uid_wrapper, pam_wrapper, resolv_wrapper, priv_wrapper, softhsm, newt, cppunit, rhash, jsoncpp, libgit2, valgrind, boost, gtest, appstream, gobject-introspection, createrepo_c, icu, slang, libxmlb, libfyaml, opensp, libpng, graphviz, iso-codes, libjpeg-turbo, vulkan-headers, vulkan-loader, qt6, qt6-qtbase, qt6-qtsvg, lzo, lksctp-tools, sgml-common, alsa-lib, shared-mime-info, libutempter, libdaemon, libunwind, flatbuffers, xtl, xtensor, doctest, lmdb, libipt, libtiff, lcms2, jbig2dec, openjpeg, libpaper, urw-base35-fonts, libblake3, spdlog, xapian-core, libstemmer, expected, nlohmann-json, catch2, libmpdclient, libaio, libbpf, libmnl, libmpc
 
 [x11]
 summary: the x11 client libraries we actually build
 maintainer: Brandon Lester
-packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans
+packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans, pixman, cairo, fontconfig, freetype, xcb-util, xcb-util-cursor, xcb-util-image, xcb-util-keysyms, xcb-util-renderutil, xcb-util-wm, libxkbcommon, xkeyboard-config, mesa, libXext, libXrender, libICE, libSM, libXfixes, libXi, libXrandr, libXinerama, libXt, libXtst, libXdamage, libxshmfence, libXxf86vm, libpciaccess, libdrm, libglvnd, wayland, wayland-protocols, libdisplay-info, DirectX-Headers, libva, xorg-x11-util-macros
+
+[graphics]
+summary: text layout and image loading libraries
+maintainer: Brandon Lester
+packages: fribidi, harfbuzz, pango, gdk-pixbuf2, libgd, ghostscript
 
 [admin-tools]
 summary: things a person runs on a booted system
 maintainer: Brandon Lester
-packages: procps-ng, man-db, nano, htop, iotop-c, fastfetch, tmux, git, fzf, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot, e2fsprogs
+packages: procps-ng, iproute, socat, man-db, nano, htop, iotop-c, fastfetch, tmux, git, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot, e2fsprogs, hostname, bc, words, less, time, psmisc
 
 [desktop]
 summary: the graphical session and apps on it
 maintainer: sk1lld
-packages: oreonvr-shell
+packages: 

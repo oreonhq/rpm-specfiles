@@ -252,3 +252,6 @@ odbcinst-generate || :
 %{_libdir}/pkgconfig/*.pc
 
 
+
+%changelog
+%autochangelog

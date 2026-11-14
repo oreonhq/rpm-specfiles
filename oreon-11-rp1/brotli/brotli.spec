@@ -120,3 +120,6 @@ cd python
 %{_mandir}/man3/encode.h.3brotli*
 %{_mandir}/man3/types.h.3brotli*
 
+
+%changelog
+%autochangelog

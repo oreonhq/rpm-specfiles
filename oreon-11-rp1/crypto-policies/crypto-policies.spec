@@ -35,7 +35,7 @@ BuildRequires: openssl
 BuildRequires: nss-tools
 BuildRequires: gnutls-utils
 BuildRequires: openssh-clients
-BuildRequires: java-25-devel
+BuildRequires: java-25-openjdk-portable-devel
 BuildRequires: bind
 BuildRequires: python3-devel >= 3.12
 BuildRequires: python3-pytest
@@ -296,3 +296,6 @@ exit 0
 %{_mandir}/man8/update-crypto-policies.8*
 %{_datarootdir}/crypto-policies/python
 
+
+%changelog
+%autochangelog

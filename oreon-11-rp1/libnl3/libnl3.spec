@@ -163,3 +163,6 @@ popd
 %{python3_sitearch}/netlink-*.dist-info
 %endif
 
+
+%changelog
+%autochangelog

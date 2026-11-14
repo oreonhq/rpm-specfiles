@@ -17,7 +17,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -77,6 +77,7 @@ The GNU C preprocessor. It is used by the C compiler to transform programs befor
 Summary: GNU C++ compiler
 Requires: gcc%{?_isa} = %{version}-%{release}
 Requires: libstdc++-devel%{?_isa} = %{version}-%{release}
+Provides: g++%{?_isa} = %{version}-%{release}
 %description -n gcc-c++
 C++ support for the GNU Compiler Collection.
 
@@ -853,6 +854,14 @@ rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
 rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %endif
 
+target=$(%{_builddir}/gcc-%{version}/config.guess)
+clang_gcc=%{_target_cpu}-redhat-linux
+for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
+  if [ -d "$dir/$target" ] && [ "$target" != "$clang_gcc" ]; then
+    ln -sfn "$target" "$dir/$clang_gcc"
+  fi
+done
+
 out=%{_builddir}/gcc-split
 rm -rf "$out"
 mkdir -p "$out"
@@ -1015,7 +1024,7 @@ set +x
 find "$ROOT" -print | sort | while read p; do
   rel=${p#"$ROOT"}
   [ -n "$rel" ] || continue
-  if [ -d "$p" ]; then
+  if [ -d "$p" ] && [ ! -L "$p" ]; then
     continue
   fi
   entry=$rel
@@ -1227,3 +1236,6 @@ done
 %license COPYING3
 %endif
 %endif
+
+%changelog
+%autochangelog

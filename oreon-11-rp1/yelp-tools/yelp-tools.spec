@@ -49,3 +49,6 @@ yelp-build turns Ducktype and Mallard documents into HTML. dbus design docs use 
 %{_bindir}/yelp-new
 %{_datadir}/yelp-tools/
 %{_datadir}/aclocal/yelp.m4
+
+%changelog
+%autochangelog

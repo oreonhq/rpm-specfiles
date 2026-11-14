@@ -54,3 +54,6 @@ touch -r aclocal.m4 configure*
 %{_sbindir}/%{name}
 %{_mandir}/man8/%{name}.*
 
+
+%changelog
+%autochangelog

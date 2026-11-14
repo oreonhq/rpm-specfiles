@@ -125,3 +125,6 @@ fi
 %ghost %verify(not size md5 mtime) %attr(0640, root, root) %{_localstatedir}/lib/logrotate/logrotate.status
 %config(noreplace) %{_sysconfdir}/rwtab.d/logrotate
 
+
+%changelog
+%autochangelog

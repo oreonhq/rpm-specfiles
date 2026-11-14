@@ -71,3 +71,6 @@ make check
 %{_mandir}/man1/%{name}-config.1*
 %{_datadir}/aclocal/%{name}.m4
 
+
+%changelog
+%autochangelog

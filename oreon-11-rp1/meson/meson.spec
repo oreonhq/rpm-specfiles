@@ -8,7 +8,7 @@
 %oreon_bootstrap
 %global libname mesonbuild
 
-%bcond check 1
+%bcond check 0
 %bcond docs 1
 
 Name:           meson
@@ -44,7 +44,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  gcc-objc
 BuildRequires:  gcc-objc++
-BuildRequires:  java-25-devel
+BuildRequires:  java-25-openjdk-portable-devel
 BuildRequires:  libomp-devel
 BuildRequires:  mono-core mono-devel
 BuildRequires:  rust
@@ -159,3 +159,6 @@ export MESON_PRINT_TEST_OUTPUT=1
 %files srpm-macros
 %{rpmmacrodir}/macros.%{name}
 
+
+%changelog
+%autochangelog

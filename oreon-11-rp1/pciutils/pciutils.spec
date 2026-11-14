@@ -122,3 +122,6 @@ diff -u %{SOURCE2} libpci_symbols_new.lst
 %{_includedir}/pci
 %{_mandir}/man7/*
 
+
+%changelog
+%autochangelog

@@ -1,4 +1,4 @@
-From 825aba9ff7c7f4b27ffbbbd5caa3fdfca903c8a9 Mon Sep 17 00:00:00 2001
+From f1e3e2cf6fd0042ca21a0a73d795095c488a380a Mon Sep 17 00:00:00 2001
 From: Simo Sorce <simo@redhat.com>
 Date: Thu, 6 Mar 2025 08:40:29 -0500
 Subject: [PATCH 02/16] Add a separate config file to use for rpm installs
@@ -24,7 +24,7 @@ Signed-off-by: Simo Sorce <simo@redhat.com>
  create mode 100644 rh-openssl.cnf
 
 diff --git a/doc/man5/config.pod b/doc/man5/config.pod
-index 2e455ea78c..44ea23b619 100644
+index 3da360b..95566e0 100644
 --- a/doc/man5/config.pod
 +++ b/doc/man5/config.pod
 @@ -285,6 +285,14 @@ Note this setting defaults to off if not provided
@@ -44,7 +44,7 @@ index 2e455ea78c..44ea23b619 100644
  If no providers are activated explicitly, the default one is activated implicitly.
 diff --git a/rh-openssl.cnf b/rh-openssl.cnf
 new file mode 100644
-index 0000000000..92e5be8837
+index 0000000..92e5be8
 --- /dev/null
 +++ b/rh-openssl.cnf
 @@ -0,0 +1,408 @@
@@ -456,6 +456,3 @@ index 0000000000..92e5be8837
 +# Certificate revocation
 +cmd = rr
 +oldcert = $insta::certout # insta.cert.pem
--- 
-2.55.0
-

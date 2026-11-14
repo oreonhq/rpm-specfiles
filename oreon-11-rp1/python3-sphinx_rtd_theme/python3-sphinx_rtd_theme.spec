@@ -46,3 +46,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 python3 -c 'import sphinx_rtd_theme'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

@@ -56,3 +56,6 @@ rm -f %{buildroot}%{_pkgdocdir}/html/.buildinfo
 %{_pkgdocdir}
 
 
+
+%changelog
+%autochangelog

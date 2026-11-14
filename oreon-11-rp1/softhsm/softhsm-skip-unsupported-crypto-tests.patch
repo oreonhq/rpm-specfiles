@@ -1,0 +1,1045 @@
+diff --git a/m4/acx_crypto_backend.m4 b/m4/acx_crypto_backend.m4
+index fe59ca9..b4e75b7 100644
+--- a/m4/acx_crypto_backend.m4
++++ b/m4/acx_crypto_backend.m4
+@@ -131,6 +131,10 @@ AC_DEFUN([ACX_CRYPTO_BACKEND],[
+ 				[Compile without OpenSSL engines support as it is disabled])
+ 		fi
+ 
++		ACX_OPENSSL_SHA1_SIGN
++		ACX_OPENSSL_DSA
++		ACX_OPENSSL_DES
++
+ 		AC_DEFINE_UNQUOTED(
+ 			[WITH_RAW_PSS],
+ 			[1],
+diff --git a/m4/acx_openssl_des.m4 b/m4/acx_openssl_des.m4
+new file mode 100644
+index 0000000..2732bff
+--- /dev/null
++++ b/m4/acx_openssl_des.m4
+@@ -0,0 +1,57 @@
++AC_DEFUN([ACX_OPENSSL_DES],[
++	AC_MSG_CHECKING(for OpenSSL single DES support)
++
++	tmp_CPPFLAGS=$CPPFLAGS
++	tmp_LIBS=$LIBS
++
++	CPPFLAGS="$CPPFLAGS $CRYPTO_INCLUDES"
++	LIBS="$CRYPTO_LIBS $LIBS"
++
++	AC_LANG_PUSH([C])
++	AC_CACHE_VAL([acx_cv_lib_openssl_des],[
++		acx_cv_lib_openssl_des=no
++		AC_RUN_IFELSE([
++			AC_LANG_SOURCE([[
++				#include <openssl/evp.h>
++				int main()
++				{
++					EVP_CIPHER_CTX *ctx;
++					const EVP_CIPHER *cipher;
++					unsigned char key[8] = {1,2,3,4,5,6,7,8};
++					unsigned char iv[8] = {0};
++
++					cipher = EVP_des_cbc();
++					if (cipher == NULL) return 1;
++
++					ctx = EVP_CIPHER_CTX_new();
++					if (ctx == NULL) return 1;
++					if (EVP_EncryptInit_ex(ctx, cipher,
++						NULL, key, iv) != 1) {
++						EVP_CIPHER_CTX_free(ctx);
++						return 1;
++					}
++					EVP_CIPHER_CTX_free(ctx);
++					return 0;
++				}
++			]])
++		],[
++			AC_MSG_RESULT([Found single DES support])
++			acx_cv_lib_openssl_des=yes
++		],[
++			AC_MSG_RESULT([single DES disabled])
++			acx_cv_lib_openssl_des=no
++		],[
++			AC_MSG_WARN([Cannot test single DES support, assuming supported])
++			acx_cv_lib_openssl_des=yes
++		])
++	])
++	AC_LANG_POP([C])
++
++	if test "x$acx_cv_lib_openssl_des" = xyes; then
++		AC_DEFINE([WITH_DES], [1],
++			[Single DES is supported by the crypto library])
++	fi
++
++	CPPFLAGS=$tmp_CPPFLAGS
++	LIBS=$tmp_LIBS
++])
+diff --git a/m4/acx_openssl_dsa.m4 b/m4/acx_openssl_dsa.m4
+new file mode 100644
+index 0000000..13328ce
+--- /dev/null
++++ b/m4/acx_openssl_dsa.m4
+@@ -0,0 +1,72 @@
++AC_DEFUN([ACX_OPENSSL_DSA],[
++	AC_MSG_CHECKING(for OpenSSL DSA support)
++
++	tmp_CPPFLAGS=$CPPFLAGS
++	tmp_LIBS=$LIBS
++
++	CPPFLAGS="$CPPFLAGS $CRYPTO_INCLUDES"
++	LIBS="$CRYPTO_LIBS $LIBS"
++
++	AC_LANG_PUSH([C])
++	AC_CACHE_VAL([acx_cv_lib_openssl_dsa],[
++		acx_cv_lib_openssl_dsa=no
++		AC_RUN_IFELSE([
++			AC_LANG_SOURCE([[
++				#include <openssl/evp.h>
++				#include <openssl/dsa.h>
++				int main()
++				{
++					EVP_PKEY_CTX *pctx;
++					EVP_PKEY *params = NULL;
++					EVP_PKEY_CTX *gctx;
++					EVP_PKEY *key = NULL;
++
++					pctx = EVP_PKEY_CTX_new_id(EVP_PKEY_DSA, NULL);
++					if (pctx == NULL) return 1;
++					if (EVP_PKEY_paramgen_init(pctx) <= 0)
++						return 1;
++					if (EVP_PKEY_CTX_set_dsa_paramgen_bits(pctx,
++						1024) <= 0)
++						return 1;
++					if (EVP_PKEY_paramgen(pctx, &params) <= 0)
++						return 1;
++					EVP_PKEY_CTX_free(pctx);
++
++					gctx = EVP_PKEY_CTX_new(params, NULL);
++					if (gctx == NULL) {
++						EVP_PKEY_free(params);
++						return 1;
++					}
++					if (EVP_PKEY_keygen_init(gctx) <= 0 ||
++					    EVP_PKEY_keygen(gctx, &key) <= 0) {
++						EVP_PKEY_CTX_free(gctx);
++						EVP_PKEY_free(params);
++						return 1;
++					}
++					EVP_PKEY_CTX_free(gctx);
++					EVP_PKEY_free(key);
++					EVP_PKEY_free(params);
++					return 0;
++				}
++			]])
++		],[
++			AC_MSG_RESULT([Found DSA support])
++			acx_cv_lib_openssl_dsa=yes
++		],[
++			AC_MSG_RESULT([DSA disabled])
++			acx_cv_lib_openssl_dsa=no
++		],[
++			AC_MSG_WARN([Cannot test DSA support, assuming supported])
++			acx_cv_lib_openssl_dsa=yes
++		])
++	])
++	AC_LANG_POP([C])
++
++	if test "x$acx_cv_lib_openssl_dsa" = xyes; then
++		AC_DEFINE([WITH_DSA], [1],
++			[DSA is supported by the crypto library])
++	fi
++
++	CPPFLAGS=$tmp_CPPFLAGS
++	LIBS=$tmp_LIBS
++])
+diff --git a/m4/acx_openssl_sha1_sign.m4 b/m4/acx_openssl_sha1_sign.m4
+new file mode 100644
+index 0000000..09eb643
+--- /dev/null
++++ b/m4/acx_openssl_sha1_sign.m4
+@@ -0,0 +1,70 @@
++AC_DEFUN([ACX_OPENSSL_SHA1_SIGN],[
++	AC_MSG_CHECKING(for OpenSSL SHA-1 signing support)
++
++	tmp_CPPFLAGS=$CPPFLAGS
++	tmp_LIBS=$LIBS
++
++	CPPFLAGS="$CPPFLAGS $CRYPTO_INCLUDES"
++	LIBS="$CRYPTO_LIBS $LIBS"
++
++	AC_LANG_PUSH([C])
++	AC_CACHE_VAL([acx_cv_lib_openssl_sha1_sign],[
++		acx_cv_lib_openssl_sha1_sign=no
++		AC_RUN_IFELSE([
++			AC_LANG_SOURCE([[
++				#include <openssl/evp.h>
++				#include <openssl/rsa.h>
++				int main()
++				{
++					EVP_PKEY_CTX *gctx;
++					EVP_PKEY *key = NULL;
++					EVP_PKEY_CTX *ctx;
++
++					gctx = EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL);
++					if (gctx == NULL) return 1;
++					if (EVP_PKEY_keygen_init(gctx) <= 0) return 1;
++					if (EVP_PKEY_CTX_set_rsa_keygen_bits(gctx, 2048) <= 0)
++						return 1;
++					if (EVP_PKEY_keygen(gctx, &key) <= 0) return 1;
++					EVP_PKEY_CTX_free(gctx);
++
++					ctx = EVP_PKEY_CTX_new(key, NULL);
++					if (ctx == NULL) {
++						EVP_PKEY_free(key);
++						return 1;
++					}
++					if (EVP_PKEY_sign_init(ctx) <= 0 ||
++					    EVP_PKEY_CTX_set_rsa_padding(ctx,
++						RSA_PKCS1_PADDING) <= 0 ||
++					    EVP_PKEY_CTX_set_signature_md(ctx,
++						EVP_sha1()) <= 0) {
++						EVP_PKEY_CTX_free(ctx);
++						EVP_PKEY_free(key);
++						return 1;
++					}
++					EVP_PKEY_CTX_free(ctx);
++					EVP_PKEY_free(key);
++					return 0;
++				}
++			]])
++		],[
++			AC_MSG_RESULT([Found SHA-1 signing support])
++			acx_cv_lib_openssl_sha1_sign=yes
++		],[
++			AC_MSG_RESULT([SHA-1 signing disabled])
++			acx_cv_lib_openssl_sha1_sign=no
++		],[
++			AC_MSG_WARN([Cannot test SHA-1 signing, assuming supported])
++			acx_cv_lib_openssl_sha1_sign=yes
++		])
++	])
++	AC_LANG_POP([C])
++
++	if test "x$acx_cv_lib_openssl_sha1_sign" = xyes; then
++		AC_DEFINE([WITH_SHA1_SIGN], [1],
++			[SHA-1 signing is supported by the crypto library])
++	fi
++
++	CPPFLAGS=$tmp_CPPFLAGS
++	LIBS=$tmp_LIBS
++])
+diff --git a/src/lib/crypto/test/DESTests.cpp b/src/lib/crypto/test/DESTests.cpp
+index bcb1c6b..0de54a2 100644
+--- a/src/lib/crypto/test/DESTests.cpp
++++ b/src/lib/crypto/test/DESTests.cpp
+@@ -35,6 +35,7 @@
+ #include "DESTests.h"
+ #include "CryptoFactory.h"
+ #include "DESKey.h"
++#include "config.h"
+ #include <stdio.h>
+ 
+ CPPUNIT_TEST_SUITE_REGISTRATION(DESTests);
+@@ -66,7 +67,7 @@ void DESTests::testBlockSize()
+ 
+ void DESTests::testCBC()
+ {
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	char testKeys56[][17] =
+ 	{
+ 		"0000000000000000",
+@@ -75,7 +76,9 @@ void DESTests::testCBC()
+ 		"4698436794236871",
+ 		"0940278947239572"
+ 	};
++#endif
+ 
++#ifndef WITH_FIPS
+ 	char testKeys112[][33] =
+ 	{
+ 		"00000000000000000000000000000000",
+@@ -227,18 +230,22 @@ void DESTests::testCBC()
+ 
+ 	for (int i = 0; i < 5; i++)
+ 	{
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		ByteString keyData56(testKeys56[i]);
+ 		CPPUNIT_ASSERT(keyData56.size() == 8);
++#endif
++#ifndef WITH_FIPS
+ 		ByteString keyData112(testKeys112[i]);
+ 		CPPUNIT_ASSERT(keyData112.size() == 16);
+ #endif
+ 		ByteString keyData168(testKeys168[i]);
+ 		CPPUNIT_ASSERT(keyData168.size() == 24);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		DESKey desKey56(56);
+ 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
++#endif
++#ifndef WITH_FIPS
+ 		DESKey desKey112(112);
+ 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+ #endif
+@@ -253,7 +260,7 @@ void DESTests::testCBC()
+ 			ByteString cipherText;
+ 			ByteString shsmCipherText, OB;
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 			// Test 56-bit key
+ 			cipherText = ByteString(testResult[i][j][0]);
+ 
+@@ -280,7 +287,9 @@ void DESTests::testCBC()
+ 			shsmPlainText += OB;
+ 
+ 			CPPUNIT_ASSERT(shsmPlainText == plainText);
++#endif
+ 
++#ifndef WITH_FIPS
+ 			// Test 112-bit key
+ 			cipherText = ByteString(testResult[i][j][1]);
+ 
+@@ -341,7 +350,7 @@ void DESTests::testCBC()
+ 
+ void DESTests::testECB()
+ {
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	char testKeys56[][17] =
+ 	{
+ 		"0000000000000000",
+@@ -350,7 +359,9 @@ void DESTests::testECB()
+ 		"4698436794236871",
+ 		"0940278947239572"
+ 	};
++#endif
+ 
++#ifndef WITH_FIPS
+ 	char testKeys112[][33] =
+ 	{
+ 		"00000000000000000000000000000000",
+@@ -502,18 +513,22 @@ void DESTests::testECB()
+ 
+ 	for (int i = 0; i < 5; i++)
+ 	{
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		ByteString keyData56(testKeys56[i]);
+ 		CPPUNIT_ASSERT(keyData56.size() == 8);
++#endif
++#ifndef WITH_FIPS
+ 		ByteString keyData112(testKeys112[i]);
+ 		CPPUNIT_ASSERT(keyData112.size() == 16);
+ #endif
+ 		ByteString keyData168(testKeys168[i]);
+ 		CPPUNIT_ASSERT(keyData168.size() == 24);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		DESKey desKey56(56);
+ 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
++#endif
++#ifndef WITH_FIPS
+ 		DESKey desKey112(112);
+ 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+ #endif
+@@ -528,7 +543,7 @@ void DESTests::testECB()
+ 			ByteString cipherText;
+ 			ByteString shsmCipherText, OB;
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 			// Test 56-bit key
+ 			cipherText = ByteString(testResult[i][j][0]);
+ 
+@@ -555,7 +570,9 @@ void DESTests::testECB()
+ 			shsmPlainText += OB;
+ 
+ 			CPPUNIT_ASSERT(shsmPlainText == plainText);
++#endif
+ 
++#ifndef WITH_FIPS
+ 			// Test 112-bit key
+ 			cipherText = ByteString(testResult[i][j][1]);
+ 
+@@ -616,7 +633,7 @@ void DESTests::testECB()
+ 
+ void DESTests::testOFB()
+ {
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	char testKeys56[][17] =
+ 	{
+ 		"0000000000000000",
+@@ -625,7 +642,9 @@ void DESTests::testOFB()
+ 		"4698436794236871",
+ 		"0940278947239572"
+ 	};
++#endif
+ 
++#ifndef WITH_FIPS
+ 	char testKeys112[][33] =
+ 	{
+ 		"00000000000000000000000000000000",
+@@ -777,18 +796,22 @@ void DESTests::testOFB()
+ 
+ 	for (int i = 0; i < 5; i++)
+ 	{
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		ByteString keyData56(testKeys56[i]);
+ 		CPPUNIT_ASSERT(keyData56.size() == 8);
++#endif
++#ifndef WITH_FIPS
+ 		ByteString keyData112(testKeys112[i]);
+ 		CPPUNIT_ASSERT(keyData112.size() == 16);
+ #endif
+ 		ByteString keyData168(testKeys168[i]);
+ 		CPPUNIT_ASSERT(keyData168.size() == 24);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		DESKey desKey56(56);
+ 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
++#endif
++#ifndef WITH_FIPS
+ 		DESKey desKey112(112);
+ 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+ #endif
+@@ -803,7 +826,7 @@ void DESTests::testOFB()
+ 			ByteString cipherText;
+ 			ByteString shsmCipherText, OB;
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 			// Test 56-bit key
+ 			cipherText = ByteString(testResult[i][j][0]);
+ 
+@@ -830,7 +853,9 @@ void DESTests::testOFB()
+ 			shsmPlainText += OB;
+ 
+ 			CPPUNIT_ASSERT(shsmPlainText == plainText);
++#endif
+ 
++#ifndef WITH_FIPS
+ 			// Test 112-bit key
+ 			cipherText = ByteString(testResult[i][j][1]);
+ 
+@@ -891,7 +916,7 @@ void DESTests::testOFB()
+ 
+ void DESTests::testCFB()
+ {
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	char testKeys56[][17] =
+ 	{
+ 		"0000000000000000",
+@@ -900,7 +925,9 @@ void DESTests::testCFB()
+ 		"4698436794236871",
+ 		"0940278947239572"
+ 	};
++#endif
+ 
++#ifndef WITH_FIPS
+ 	char testKeys112[][33] =
+ 	{
+ 		"00000000000000000000000000000000",
+@@ -1051,18 +1078,22 @@ void DESTests::testCFB()
+ 
+ 	for (int i = 0; i < 5; i++)
+ 	{
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		ByteString keyData56(testKeys56[i]);
+ 		CPPUNIT_ASSERT(keyData56.size() == 8);
++#endif
++#ifndef WITH_FIPS
+ 		ByteString keyData112(testKeys112[i]);
+ 		CPPUNIT_ASSERT(keyData112.size() == 16);
+ #endif
+ 		ByteString keyData168(testKeys168[i]);
+ 		CPPUNIT_ASSERT(keyData168.size() == 24);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 		DESKey desKey56(56);
+ 		CPPUNIT_ASSERT(desKey56.setKeyBits(keyData56));
++#endif
++#ifndef WITH_FIPS
+ 		DESKey desKey112(112);
+ 		CPPUNIT_ASSERT(desKey112.setKeyBits(keyData112));
+ #endif
+@@ -1077,7 +1108,7 @@ void DESTests::testCFB()
+ 			ByteString cipherText;
+ 			ByteString shsmCipherText, OB;
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 			// Test 56-bit key
+ 			cipherText = ByteString(testResult[i][j][0]);
+ 
+@@ -1104,7 +1135,9 @@ void DESTests::testCFB()
+ 			shsmPlainText += OB;
+ 
+ 			CPPUNIT_ASSERT(shsmPlainText == plainText);
++#endif
+ 
++#ifndef WITH_FIPS
+ 			// Test 112-bit key
+ 			cipherText = ByteString(testResult[i][j][1]);
+ 
+diff --git a/src/lib/crypto/test/DSATests.cpp b/src/lib/crypto/test/DSATests.cpp
+index 80f2514..35b2466 100644
+--- a/src/lib/crypto/test/DSATests.cpp
++++ b/src/lib/crypto/test/DSATests.cpp
+@@ -38,6 +38,8 @@
+ #include "RNG.h"
+ #include "AsymmetricKeyPair.h"
+ #include "AsymmetricAlgorithm.h"
++#include "config.h"
++#ifdef WITH_DSA
+ #include "DSAParameters.h"
+ #include "DSAPublicKey.h"
+ #include "DSAPrivateKey.h"
+@@ -215,7 +217,9 @@ void DSATests::testSigningVerifying()
+ 
+ 	// Mechanisms to test
+ 	std::vector<AsymMech::Type> mechanisms;
++#ifdef WITH_SHA1_SIGN
+ 	mechanisms.push_back(AsymMech::DSA_SHA1);
++#endif
+ 	mechanisms.push_back(AsymMech::DSA_SHA224);
+ 	mechanisms.push_back(AsymMech::DSA_SHA256);
+ 
+@@ -326,8 +330,10 @@ void DSATests::testSignVerifyKnownVector()
+ 	ByteString goodSignature2 = "315c875dcd4850e948b8ac42824e9483a32d5ba5abe0681b9b9448d444f2be3c89718d12e54a8d9ed066e4a55f7ed5a2229cd23b9a3cee78f83ed6aa61f6bcb9";
+ 	ByteString badSignature2 = "315c875dcd4850e948b8ac42824e9483a32d5ba5abe0681b9b9448d444f2be3c89718d12e54a8d9ed066e4a55f7ed5a2229cd23b9a3cee78f83ed6aa61f6bcb8";
+ 
++#ifdef WITH_SHA1_SIGN
+ 	CPPUNIT_ASSERT(dsa->verify(pubKey1, data1, goodSignature1, AsymMech::DSA_SHA1));
+ 	CPPUNIT_ASSERT(!dsa->verify(pubKey1, data1, badSignature1, AsymMech::DSA_SHA1));
++#endif
+ 	CPPUNIT_ASSERT(dsa->verify(pubKey2, data2, goodSignature2, AsymMech::DSA_SHA256));
+ 	CPPUNIT_ASSERT(!dsa->verify(pubKey2, data2, badSignature2, AsymMech::DSA_SHA256));
+ 
+@@ -336,3 +342,4 @@ void DSATests::testSignVerifyKnownVector()
+ 	dsa->recyclePrivateKey(privKey1);
+ 	dsa->recyclePrivateKey(privKey2);
+ }
++#endif
+diff --git a/src/lib/crypto/test/RSATests.cpp b/src/lib/crypto/test/RSATests.cpp
+index 6af1e19..fa02319 100644
+--- a/src/lib/crypto/test/RSATests.cpp
++++ b/src/lib/crypto/test/RSATests.cpp
+@@ -33,6 +33,7 @@
+ #include <stdlib.h>
+ #include <vector>
+ #include <cppunit/extensions/HelperMacros.h>
++#include "config.h"
+ #include "RSATests.h"
+ #include "CryptoFactory.h"
+ #include "RNG.h"
+@@ -263,17 +264,21 @@ void RSATests::testSigningVerifying()
+ #ifndef WITH_FIPS
+ 	mechanisms.push_back(AsymMech::RSA_MD5_PKCS);
+ #endif
++#ifdef WITH_SHA1_SIGN
+ 	mechanisms.push_back(AsymMech::RSA_SHA1_PKCS);
++#endif
+ 	mechanisms.push_back(AsymMech::RSA_SHA224_PKCS);
+ 	mechanisms.push_back(AsymMech::RSA_SHA256_PKCS);
+ 	mechanisms.push_back(AsymMech::RSA_SHA384_PKCS);
+ 	mechanisms.push_back(AsymMech::RSA_SHA512_PKCS);
++#ifdef WITH_SHA1_SIGN
+ 	mechanisms.push_back(AsymMech::RSA_SHA1_PKCS_PSS);
++#endif
+ 	mechanisms.push_back(AsymMech::RSA_SHA224_PKCS_PSS);
+ 	mechanisms.push_back(AsymMech::RSA_SHA256_PKCS_PSS);
+ 	mechanisms.push_back(AsymMech::RSA_SHA384_PKCS_PSS);
+ 	mechanisms.push_back(AsymMech::RSA_SHA512_PKCS_PSS);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_SHA1_SIGN)
+ 	mechanisms.push_back(AsymMech::RSA_SSL);
+ #endif
+ 
+@@ -397,10 +402,12 @@ void RSATests::testSigningVerifying()
+ 			CPPUNIT_ASSERT(rsa->verify(kp->getPublicKey(), dataToSign, signature, AsymMech::RSA));
+ 
+ #ifdef WITH_RAW_PSS
++#ifdef WITH_SHA1_SIGN
+ 			// Test raw (SHA1) PKCS PSS signing
+ 			CPPUNIT_ASSERT(rng->generateRandom(dataToSign, 20));
+ 			CPPUNIT_ASSERT(rsa->sign(kp->getPrivateKey(), dataToSign, signature, AsymMech::RSA_PKCS_PSS, &pssParams[0], sizeof(pssParams[0])));
+ 			CPPUNIT_ASSERT(rsa->verify(kp->getPublicKey(), dataToSign, signature, AsymMech::RSA_PKCS_PSS, &pssParams[0], sizeof(pssParams[0])));
++#endif
+ 
+ 			// Test raw (SHA224) PKCS PSS signing
+ 			CPPUNIT_ASSERT(rng->generateRandom(dataToSign, 28));
+@@ -514,7 +521,7 @@ void RSATests::testSignVerifyKnownVector()
+ 	privKey3->setP(p3);
+ 	privKey3->setQ(q3);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_SHA1_SIGN)
+ 	// Test with key #1
+ 	const char* testValue1 = "Everyone gets Friday off.";
+ 
+@@ -568,6 +575,7 @@ void RSATests::testSignVerifyKnownVector()
+ 	CPPUNIT_ASSERT(rsa->verifyFinal(expectedSignature2));
+ #endif
+ 
++#ifdef WITH_SHA1_SIGN
+ 	// Test with key #3
+ 	ByteString dataToSign3 = "D73829497CDDBE41B705FAAC50E7899FDB5A38BF3A459E536357029E64F8796BA47F4FE96BA5A8B9A4396746E2164F55A25368DDD0B9A5188C7AC3DA2D1F742286C3BDEE697F9D546A25EFCFE53191D743FCC6B47833D993D08804DAECA78FB9076C3C017F53E33A90305AF06220974D46BF19ED3C9B84EDBAE98B45A8771258";
+ 	ByteString expectedSignature3 = "175015BDA50ABE0FA7D39A8353885CA01BE3A7E7FCC55045744111362EE1914473A48DC537D956294B9E20A1EF661D58537ACDC8DE908FA050630FCC272E6D001045E6FDEED2D10531C8603334C2E8DB39E73E6D9665EE1343F9E4198302D2201B44E8E8D06B3EF49CEE6197582163A8490089CA654C0012FCE1BA6511089750";
+@@ -582,6 +590,7 @@ void RSATests::testSignVerifyKnownVector()
+ 	CPPUNIT_ASSERT(rsa->verifyInit(pubKey3, AsymMech::RSA_SHA1_PKCS));
+ 	CPPUNIT_ASSERT(rsa->verifyUpdate(dataToSign3));
+ 	CPPUNIT_ASSERT(rsa->verifyFinal(expectedSignature3));
++#endif
+ 
+ #ifndef WITH_FIPS
+ 	rsa->recyclePublicKey(pubKey1);
+diff --git a/src/lib/test/DeriveTests.cpp b/src/lib/test/DeriveTests.cpp
+index 9438ac2..09ff46c 100644
+--- a/src/lib/test/DeriveTests.cpp
++++ b/src/lib/test/DeriveTests.cpp
+@@ -238,7 +238,7 @@ CK_RV DeriveTests::createAesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_
+ 	return CRYPTOKI_F_PTR(C_CreateObject(hSession, keyAttribs, sizeof(keyAttribs) / sizeof(CK_ATTRIBUTE), &hKey));
+ }
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ CK_RV DeriveTests::generateDesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey)
+ {
+ 	CK_MECHANISM mechanism = { CKM_DES_KEY_GEN, NULL_PTR, 0 };
+@@ -811,13 +811,13 @@ void DeriveTests::testSymDerive()
+ 	CPPUNIT_ASSERT(rv == CKR_OK);
+ 
+ 	// Generate base key
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+         CK_OBJECT_HANDLE hKeyDes = CK_INVALID_HANDLE;
+ #endif
+         CK_OBJECT_HANDLE hKeyDes2 = CK_INVALID_HANDLE;
+         CK_OBJECT_HANDLE hKeyDes3 = CK_INVALID_HANDLE;
+         CK_OBJECT_HANDLE hKeyAes = CK_INVALID_HANDLE;
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+         rv = generateDesKey(hSessionRW,IN_SESSION,IS_PUBLIC,hKeyDes);
+         CPPUNIT_ASSERT(rv == CKR_OK);
+ #endif
+@@ -830,7 +830,7 @@ void DeriveTests::testSymDerive()
+ 
+ 	// Derive keys
+ 	CK_OBJECT_HANDLE hDerive = CK_INVALID_HANDLE;
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_ECB_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_ECB_ENCRYPT_DATA,CKK_DES);
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_ECB_ENCRYPT_DATA,CKK_DES2);
+@@ -838,27 +838,27 @@ void DeriveTests::testSymDerive()
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_ECB_ENCRYPT_DATA,CKK_AES);
+ #endif
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_DES);
+ #endif
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_DES2);
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_DES3);
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_AES);
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_DES);
+ #endif
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_DES2);
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_DES3);
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_ECB_ENCRYPT_DATA,CKK_AES);
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_ECB_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_ECB_ENCRYPT_DATA,CKK_DES);
+ #endif
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_ECB_ENCRYPT_DATA,CKK_DES2);
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_ECB_ENCRYPT_DATA,CKK_DES3);
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_ECB_ENCRYPT_DATA,CKK_AES);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_CBC_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_CBC_ENCRYPT_DATA,CKK_DES);
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_CBC_ENCRYPT_DATA,CKK_DES2);
+@@ -866,21 +866,21 @@ void DeriveTests::testSymDerive()
+ 	symDerive(hSessionRW,hKeyDes,hDerive,CKM_DES_CBC_ENCRYPT_DATA,CKK_AES);
+ #endif
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_DES);
+ #endif
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_DES2);
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_DES3);
+ 	symDerive(hSessionRW,hKeyDes2,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_AES);
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_DES);
+ #endif
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_DES2);
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_DES3);
+ 	symDerive(hSessionRW,hKeyDes3,hDerive,CKM_DES3_CBC_ENCRYPT_DATA,CKK_AES);
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_CBC_ENCRYPT_DATA,CKK_GENERIC_SECRET);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_CBC_ENCRYPT_DATA,CKK_DES);
+ #endif
+ 	symDerive(hSessionRW,hKeyAes,hDerive,CKM_AES_CBC_ENCRYPT_DATA,CKK_DES2);
+diff --git a/src/lib/test/DeriveTests.h b/src/lib/test/DeriveTests.h
+index 2514d30..72447ac 100644
+--- a/src/lib/test/DeriveTests.h
++++ b/src/lib/test/DeriveTests.h
+@@ -65,7 +65,7 @@ protected:
+ 	CK_RV generateDhKeyPair(CK_SESSION_HANDLE hSession, CK_BBOOL bTokenPuk, CK_BBOOL bPrivatePuk, CK_BBOOL bTokenPrk, CK_BBOOL bPrivatePrk, CK_OBJECT_HANDLE &hPuk, CK_OBJECT_HANDLE &hPrk);
+ 	CK_RV createAesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_BBOOL bSensitive, CK_BBOOL bExtractable, CK_BBOOL bDerive, CK_OBJECT_HANDLE &hKey);
+ 	CK_RV generateAesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	CK_RV generateDesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+ #endif
+ 	CK_RV generateDes2Key(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+diff --git a/src/lib/test/ForkTests.cpp b/src/lib/test/ForkTests.cpp
+index 0c85c84..17193da 100644
+--- a/src/lib/test/ForkTests.cpp
++++ b/src/lib/test/ForkTests.cpp
+@@ -65,7 +65,6 @@ void ForkTests::testFork()
+ {
+ 	CK_RV rv;
+ 	pid_t pid;
+-	int status;
+ 
+ 	// Just make sure that we finalize any previous failed tests
+ 	CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
+@@ -82,19 +81,19 @@ void ForkTests::testFork()
+ 		case 0:
+ 			/* For the child, the token is expected to still be initialized. */
+ 			rv = CRYPTOKI_F_PTR( C_Initialize(NULL_PTR) );
+-			CPPUNIT_ASSERT(rv == CKR_CRYPTOKI_ALREADY_INITIALIZED);
+-			rv = CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
+-			CPPUNIT_ASSERT(rv == CKR_OK);
+-			_exit(EXIT_SUCCESS);
++			CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
++			_exit(rv == CKR_CRYPTOKI_ALREADY_INITIALIZED ? 0 : 1);
+ 			break;
+ 		default:
+-			/* For the parent, the token is expected to still be initialized. */
++		{
+ 			rv = CRYPTOKI_F_PTR( C_Initialize(NULL_PTR) );
+ 			CPPUNIT_ASSERT(rv == CKR_CRYPTOKI_ALREADY_INITIALIZED);
+-			/* Wait for the child process to finish and check its status. */
+-			CPPUNIT_ASSERT(waitpid(pid, &status, 0) == pid);
+-			CPPUNIT_ASSERT(WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS);
++			int status;
++			waitpid(pid, &status, 0);
++			CPPUNIT_ASSERT(WIFEXITED(status));
++			CPPUNIT_ASSERT(WEXITSTATUS(status) == 0);
+ 			break;
++		}
+ 	}
+ 
+ 	rv = CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
+@@ -105,7 +104,6 @@ void ForkTests::testResetOnFork()
+ {
+ 	CK_RV rv;
+ 	pid_t pid;
+-	int status;
+ 
+ 	// Just make sure that we finalize any previous failed tests
+ 	CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
+@@ -128,19 +126,20 @@ void ForkTests::testResetOnFork()
+ 		case 0:
+ 			/* For the child, the token is expected to be reset on fork */
+ 			rv = CRYPTOKI_F_PTR( C_Initialize(NULL_PTR) );
+-			CPPUNIT_ASSERT(rv == CKR_OK);
+-			rv = CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
+-			CPPUNIT_ASSERT(rv == CKR_OK);
+-			_exit(EXIT_SUCCESS);
++			CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
++			_exit(rv == CKR_OK ? 0 : 1);
+ 			break;
+ 		default:
++		{
+ 			/* For the parent, the token is expected to be still initialized */
+ 			rv = CRYPTOKI_F_PTR( C_Initialize(NULL_PTR) );
+ 			CPPUNIT_ASSERT(rv == CKR_CRYPTOKI_ALREADY_INITIALIZED);
+-			/* Wait for the child process to finish and check its status. */
+-			CPPUNIT_ASSERT(waitpid(pid, &status, 0) == pid);
+-			CPPUNIT_ASSERT(WIFEXITED(status) && WEXITSTATUS(status) == EXIT_SUCCESS);
++			int status;
++			waitpid(pid, &status, 0);
++			CPPUNIT_ASSERT(WIFEXITED(status));
++			CPPUNIT_ASSERT(WEXITSTATUS(status) == 0);
+ 			break;
++		}
+ 	}
+ 
+ 	rv = CRYPTOKI_F_PTR( C_Finalize(NULL_PTR) );
+diff --git a/src/lib/test/ObjectTests.cpp b/src/lib/test/ObjectTests.cpp
+index c4248b2..6ed0406 100644
+--- a/src/lib/test/ObjectTests.cpp
++++ b/src/lib/test/ObjectTests.cpp
+@@ -2397,6 +2397,7 @@ void ObjectTests::testCreateSecretKey()
+ 	rv = CRYPTOKI_F_PTR( C_DestroyObject(hSession,hObject) );
+ 	CPPUNIT_ASSERT_EQUAL(CKR_OK, rv);
+ 
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	keyType = CKK_DES;
+ 	attribs[0].pValue = desKey;
+ 	attribs[0].ulValueLen = sizeof(desKey);
+@@ -2408,6 +2409,7 @@ void ObjectTests::testCreateSecretKey()
+ 	CPPUNIT_ASSERT(memcmp(pCheckValue, desKCV, 3) == 0);
+ 	rv = CRYPTOKI_F_PTR( C_DestroyObject(hSession,hObject) );
+ 	CPPUNIT_ASSERT_EQUAL(CKR_OK, rv);
++#endif
+ 
+ 	keyType = CKK_DES2;
+ 	attribs[0].pValue = des2Key;
+diff --git a/src/lib/test/SignVerifyTests.cpp b/src/lib/test/SignVerifyTests.cpp
+index ac9d465..63bb7fd 100644
+--- a/src/lib/test/SignVerifyTests.cpp
++++ b/src/lib/test/SignVerifyTests.cpp
+@@ -383,21 +383,27 @@ void SignVerifyTests::testRsaSignVerify()
+ #ifndef WITH_FIPS
+ 	signVerifyMulti(CKM_MD5_RSA_PKCS, hSessionRO, hPuk,hPrk);
+ #endif
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS, hSessionRO, hPuk,hPrk);
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS, hSessionRO, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS, hSessionRO, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS, hSessionRO, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA512_RSA_PKCS, hSessionRO, hPuk,hPrk);
+ 
+ #ifdef WITH_RAW_PSS
++#ifdef WITH_SHA1_SIGN
+ 	signVerifySingleData(20, CKM_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[0], sizeof(params[0]));
++#endif
+ 	signVerifySingleData(28, CKM_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[1], sizeof(params[1]));
+ 	signVerifySingleData(32, CKM_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[2], sizeof(params[2]));
+ 	signVerifySingleData(48, CKM_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[3], sizeof(params[3]));
+ 	signVerifySingleData(64, CKM_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[4], sizeof(params[4]));
+ #endif
+ 
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[0], sizeof(params[0]));
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[1], sizeof(params[1]));
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[2], sizeof(params[2]));
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS_PSS, hSessionRO, hPuk,hPrk, &params[3], sizeof(params[3]));
+@@ -412,12 +418,16 @@ void SignVerifyTests::testRsaSignVerify()
+ #ifndef WITH_FIPS
+ 	signVerifyMulti(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ #endif
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA512_RSA_PKCS, hSessionRW, hPuk,hPrk);
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[0], sizeof(params[0]));
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[1], sizeof(params[1]));
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[2], sizeof(params[2]));
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[3], sizeof(params[3]));
+@@ -432,12 +442,16 @@ void SignVerifyTests::testRsaSignVerify()
+ #ifndef WITH_FIPS
+ 	signVerifyMulti(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ #endif
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA512_RSA_PKCS, hSessionRW, hPuk,hPrk);
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[0], sizeof(params[0]));
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[1], sizeof(params[1]));
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[2], sizeof(params[2]));
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[3], sizeof(params[3]));
+@@ -452,12 +466,16 @@ void SignVerifyTests::testRsaSignVerify()
+ #ifndef WITH_FIPS
+ 	signVerifyMulti(CKM_MD5_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ #endif
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS, hSessionRW, hPuk,hPrk);
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS, hSessionRW, hPuk,hPrk);
+ 	signVerifyMulti(CKM_SHA512_RSA_PKCS, hSessionRW, hPuk,hPrk);
++#ifdef WITH_SHA1_SIGN
+ 	signVerifyMulti(CKM_SHA1_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[0], sizeof(params[0]));
++#endif
+ 	signVerifyMulti(CKM_SHA224_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[1], sizeof(params[1]));
+ 	signVerifyMulti(CKM_SHA256_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[2], sizeof(params[2]));
+ 	signVerifyMulti(CKM_SHA384_RSA_PKCS_PSS, hSessionRW, hPuk,hPrk, &params[3], sizeof(params[3]));
+diff --git a/src/lib/test/SymmetricAlgorithmTests.cpp b/src/lib/test/SymmetricAlgorithmTests.cpp
+index 4e95717..aa5753f 100644
+--- a/src/lib/test/SymmetricAlgorithmTests.cpp
++++ b/src/lib/test/SymmetricAlgorithmTests.cpp
+@@ -55,6 +55,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(SymmetricAlgorithmTests);
+ 
+ #ifndef WITH_FIPS
+ 
++#ifdef WITH_DES
+ WrappedMaterial rsa2048underdes56
+ {
+ 	"RSA2048 wrapped under DES56 using CKM_DES_CBC_PAD",
+@@ -150,6 +151,7 @@ WrappedMaterial rsa2048underdes56
+ 		},
+ 	},
+ };
++#endif // WITH_DES
+ 
+ 
+ WrappedMaterial rsa2048underdes112
+@@ -647,8 +649,10 @@ std::vector<WrappedMaterial> aesCBCWrappedKeys {
+ };
+ 
+ std::vector<WrappedMaterial> desCBCWrappedKeys {
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	rsa2048underdes56,
++#endif
++#ifndef WITH_FIPS
+ 	rsa2048underdes112,
+ #endif
+ 	rsa2048underdes168,
+@@ -743,7 +747,7 @@ CK_RV SymmetricAlgorithmTests::importKey(CK_SESSION_HANDLE hSession, CK_BBOOL bT
+ }
+ 
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ CK_RV SymmetricAlgorithmTests::generateDesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey)
+ {
+ 	CK_MECHANISM mechanism = { CKM_DES_KEY_GEN, NULL_PTR, 0 };
+@@ -761,7 +765,9 @@ CK_RV SymmetricAlgorithmTests::generateDesKey(CK_SESSION_HANDLE hSession, CK_BBO
+ 			     keyAttribs, sizeof(keyAttribs)/sizeof(CK_ATTRIBUTE),
+ 			     &hKey) );
+ }
++#endif
+ 
++#ifndef WITH_FIPS
+ CK_RV SymmetricAlgorithmTests::generateDes2Key(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey)
+ {
+ 	CK_MECHANISM mechanism = { CKM_DES2_KEY_GEN, NULL_PTR, 0 };
+@@ -1817,7 +1823,7 @@ void SymmetricAlgorithmTests::testDesEncryptDecrypt()
+ 	// without padding the message size must be a multiple of the block size.
+ 	const int blockSize(0x8);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	CK_OBJECT_HANDLE hKey = CK_INVALID_HANDLE;
+ 
+ 	// Generate all combinations of session/token keys.
+@@ -1831,7 +1837,9 @@ void SymmetricAlgorithmTests::testDesEncryptDecrypt()
+ 	encryptDecrypt({CKM_DES_CBC,NULL_PTR,0},blockSize,hSessionRO,hKey,blockSize*NR_OF_BLOCKS_IN_TEST+1, false);
+ 	encryptDecrypt({CKM_DES_ECB,NULL_PTR,0},blockSize,hSessionRO,hKey,blockSize*NR_OF_BLOCKS_IN_TEST);
+ 	encryptDecrypt({CKM_DES_ECB,NULL_PTR,0},blockSize,hSessionRO,hKey,blockSize*NR_OF_BLOCKS_IN_TEST+1, false);
++#endif
+ 
++#ifndef WITH_FIPS
+ 	CK_OBJECT_HANDLE hKey2 = CK_INVALID_HANDLE;
+ 
+ 	// Generate all combinations of session/token keys.
+@@ -1886,17 +1894,21 @@ void SymmetricAlgorithmTests::testDesWrapUnwrap()
+ 
+ 	std::array<CK_OBJECT_HANDLE,3> hKey { CK_INVALID_HANDLE, CK_INVALID_HANDLE, CK_INVALID_HANDLE };
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	rv = generateDesKey(hSession,IN_SESSION,IS_PUBLIC,hKey[0]);
+ 	CPPUNIT_ASSERT(rv == CKR_OK);
++#endif
++#ifndef WITH_FIPS
+ 	rv = generateDes2Key(hSession,IN_SESSION,IS_PUBLIC,hKey[1]);
+ 	CPPUNIT_ASSERT(rv == CKR_OK);
+ #endif
+ 	rv = generateDes3Key(hSession,IN_SESSION,IS_PUBLIC,hKey[2]);
+ 	CPPUNIT_ASSERT(rv == CKR_OK);
+ 
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	desWrapUnwrapRsa(CKM_DES_CBC_PAD, hSession, hKey[0]);
++#endif
++#ifndef WITH_FIPS
+ 	desWrapUnwrapRsa(CKM_DES3_CBC_PAD, hSession, hKey[1]);
+ #endif
+ 	desWrapUnwrapRsa(CKM_DES3_CBC_PAD, hSession, hKey[2]);
+diff --git a/src/lib/test/SymmetricAlgorithmTests.h b/src/lib/test/SymmetricAlgorithmTests.h
+index 7d60fb5..877785b 100644
+--- a/src/lib/test/SymmetricAlgorithmTests.h
++++ b/src/lib/test/SymmetricAlgorithmTests.h
+@@ -75,8 +75,10 @@ public:
+ protected:
+ 	CK_RV generateGenericKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+ 	CK_RV generateAesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+-#ifndef WITH_FIPS
++#if !defined(WITH_FIPS) && defined(WITH_DES)
+ 	CK_RV generateDesKey(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
++#endif
++#ifndef WITH_FIPS
+ 	CK_RV generateDes2Key(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+ #endif
+ 	CK_RV generateDes3Key(CK_SESSION_HANDLE hSession, CK_BBOOL bToken, CK_BBOOL bPrivate, CK_OBJECT_HANDLE &hKey);
+diff --git a/src/lib/test/p11test.cpp b/src/lib/test/p11test.cpp
+index bcecd59..b00eb56 100644
+--- a/src/lib/test/p11test.cpp
++++ b/src/lib/test/p11test.cpp
+@@ -68,7 +68,7 @@ class MyListener : public CPPUNIT_NS::TestListener {
+ 	}
+ };
+ 
+-int main(int /*argc*/, char**const /*argv*/)
++int main(int argc, char** argv)
+ {
+ #ifndef P11_SHARED_LIBRARY
+ #ifndef _WIN32
+@@ -87,14 +87,6 @@ int main(int /*argc*/, char**const /*argv*/)
+ 
+ 	CPPUNIT_NS::TextTestRunner runner;
+ 	runner.addTest(registry.makeTest());
+-/*
+-if ( argc<2 ) {
+-		return runner.run() ? 0 : 1;
+-	}
+-	if ( std::string("direct").find(*(argv+1))==std::string::npos ) {
+-		return runner.run(*(argv+1)) ? 0 : 1;
+-	}
+-*/
+ 
+ 	CPPUNIT_NS::TestResult controller;
+ 	CPPUNIT_NS::TestResultCollector result;
+@@ -103,7 +95,10 @@ if ( argc<2 ) {
+ 	CPPUNIT_NS::BriefTestProgressListener progressListener;
+ 	controller.addListener(&progressListener);
+ 
+-	runner.run(controller);
++	if (argc > 1)
++		runner.run(controller, argv[1]);
++	else
++		runner.run(controller);
+ 
+ 	std::ofstream xmlFileOut("test-results.xml");
+ 	CppUnit::XmlOutputter xmlOut(&result, xmlFileOut);

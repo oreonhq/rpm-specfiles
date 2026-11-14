@@ -84,3 +84,6 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %files doc
 %doc AUTHORS
 %{_infodir}/*.info*
+
+%changelog
+%autochangelog

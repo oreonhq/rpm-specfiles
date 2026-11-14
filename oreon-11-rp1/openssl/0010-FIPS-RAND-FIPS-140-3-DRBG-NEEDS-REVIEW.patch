@@ -1,4 +1,4 @@
-From 76dc9149b8c9766511b289b73c3636b7dd7321f0 Mon Sep 17 00:00:00 2001
+From d63f3e0a9a7d08bcc6d316162fb57382b6549905 Mon Sep 17 00:00:00 2001
 From: rpm-build <rpm-build>
 Date: Wed, 6 Mar 2024 19:17:16 +0100
 Subject: [PATCH 10/16] FIPS: RAND: FIPS-140-3 DRBG - NEEDS REVIEW
@@ -18,7 +18,7 @@ From-dist-git-commit: 4334bc837fbc64d14890fdc51679a80770d498ce
  3 files changed, 22 insertions(+), 66 deletions(-)
 
 diff --git a/crypto/rand/prov_seed.c b/crypto/rand/prov_seed.c
-index 8466ded8ab..24feab20e5 100644
+index d0c7c63..3f8ae44 100644
 --- a/crypto/rand/prov_seed.c
 +++ b/crypto/rand/prov_seed.c
 @@ -23,7 +23,14 @@ size_t ossl_rand_get_entropy(ossl_unused OSSL_LIB_CTX *ctx,
@@ -38,7 +38,7 @@ index 8466ded8ab..24feab20e5 100644
          ERR_raise(ERR_LIB_RAND, ERR_R_RAND_LIB);
          return 0;
 diff --git a/providers/implementations/rands/drbg.c b/providers/implementations/rands/drbg.c
-index 9e80ef5b1f..ab6c263198 100644
+index 000b4a2..c3861db 100644
 --- a/providers/implementations/rands/drbg.c
 +++ b/providers/implementations/rands/drbg.c
 @@ -557,6 +557,9 @@ static int ossl_prov_drbg_reseed_unlocked(PROV_DRBG *drbg,
@@ -68,7 +68,7 @@ index 9e80ef5b1f..ab6c263198 100644
      if (reseed_required || prediction_resistance) {
          if (!ossl_prov_drbg_reseed_unlocked(drbg, prediction_resistance, NULL,
 diff --git a/providers/implementations/rands/seeding/rand_unix.c b/providers/implementations/rands/seeding/rand_unix.c
-index a26519aa3e..815476dc24 100644
+index 95c4ff8..5ef9f6c 100644
 --- a/providers/implementations/rands/seeding/rand_unix.c
 +++ b/providers/implementations/rands/seeding/rand_unix.c
 @@ -53,6 +53,8 @@
@@ -98,7 +98,7 @@ index a26519aa3e..815476dc24 100644
 -     * internally. So we need to check errno for ENOSYS
 -     */
 -#if !defined(__DragonFly__) && !defined(__NetBSD__) && !defined(__FreeBSD__)
--#if defined(__GNUC__) && __GNUC__ >= 2 && defined(__ELF__) && !defined(__hpux)
+-#if defined(__GNUC__) && defined(__ELF__) && !defined(__hpux)
 -    extern int getentropy(void *buffer, size_t length) __attribute__((weak));
 -
 -    if (getentropy != NULL) {
@@ -153,6 +153,3 @@ index a26519aa3e..815476dc24 100644
  }
  #endif /* defined(OPENSSL_RAND_SEED_GETRANDOM) */
  
--- 
-2.55.0
-

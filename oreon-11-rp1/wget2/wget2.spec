@@ -43,7 +43,10 @@ BuildRequires:  make
 # Documentation build requirements
 BuildRequires:  doxygen
 BuildRequires:  git-core
+%bcond_with pandoc
+%if %{with pandoc}
 BuildRequires:  pandoc
+%endif
 
 # Wget2 build requirements
 BuildRequires:  bzip2-devel
@@ -68,7 +71,10 @@ BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig(zlib)
 
 # Test suite
+%bcond_with lcov
+%if %{with lcov}
 BuildRequires:  lcov
+%endif
 BuildRequires:  lzip
 
 # For gpg signature verification
@@ -182,3 +188,6 @@ echo ".so man1/%{name}.1" > %{buildroot}%{_mandir}/man1/wget.1
 %endif
 
 
+
+%changelog
+%autochangelog

@@ -275,3 +275,6 @@ popd
 %{python3_sitearch}/hawkey/
 %endif
 
+
+%changelog
+%autochangelog

@@ -51,3 +51,6 @@ cd %{_builddir}
 PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import python_sbom'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

@@ -1,4 +1,4 @@
-From d2854454ef026cd9ef247fd7214cf7f221e05aee Mon Sep 17 00:00:00 2001
+From a981cdd23b3afaa67caedd47450e29fedc7b7529 Mon Sep 17 00:00:00 2001
 From: rpm-build <rpm-build>
 Date: Wed, 6 Mar 2024 19:17:17 +0100
 Subject: [PATCH 11/16] FIPS: TLS: Enforce EMS in TLS 1.2 - NOTE
@@ -16,18 +16,18 @@ From-dist-git-commit: 4334bc837fbc64d14890fdc51679a80770d498ce
  doc/man3/SSL_CONF_cmd.pod                          |  3 +++
  doc/man5/fips_config.pod                           | 13 +++++++++++++
  include/openssl/ssl.h.in                           |  1 +
- providers/fips/include/fips_indicator_params.inc   |  2 +-
+ providers/fips/fipsparams.inc.in                   |  2 +-
  ssl/ssl_conf.c                                     |  1 +
  ssl/statem/extensions_srvr.c                       |  8 +++++++-
- ssl/t1_enc.c                                       | 13 ++++++++++---
+ ssl/t1_enc.c                                       | 11 +++++++++--
  test/recipes/30-test_evp_data/evpkdf_tls12_prf.txt | 10 ++++++++++
- 8 files changed, 46 insertions(+), 5 deletions(-)
+ 8 files changed, 45 insertions(+), 4 deletions(-)
 
 diff --git a/doc/man3/SSL_CONF_cmd.pod b/doc/man3/SSL_CONF_cmd.pod
-index ed15a784fa..0cc41957fb 100644
+index 4fb06ed..c4851ac 100644
 --- a/doc/man3/SSL_CONF_cmd.pod
 +++ b/doc/man3/SSL_CONF_cmd.pod
-@@ -625,6 +625,9 @@ B<ExtendedMasterSecret>: use extended master secret extension, enabled by
+@@ -661,6 +661,9 @@ B<ExtendedMasterSecret>: use extended master secret extension, enabled by
  default. Inverse of B<SSL_OP_NO_EXTENDED_MASTER_SECRET>: that is,
  B<-ExtendedMasterSecret> is the same as setting B<SSL_OP_NO_EXTENDED_MASTER_SECRET>.
  
@@ -38,7 +38,7 @@ index ed15a784fa..0cc41957fb 100644
  default. Inverse of B<SSL_OP_DISABLE_TLSEXT_CA_NAMES>: that is,
  B<-CANames> is the same as setting B<SSL_OP_DISABLE_TLSEXT_CA_NAMES>.
 diff --git a/doc/man5/fips_config.pod b/doc/man5/fips_config.pod
-index 2e5a789b44..1832f9cf20 100644
+index 2e5a789..1832f9c 100644
 --- a/doc/man5/fips_config.pod
 +++ b/doc/man5/fips_config.pod
 @@ -232,6 +232,19 @@ L<openssl-fipsinstall(1)>
@@ -62,33 +62,35 @@ index 2e5a789b44..1832f9cf20 100644
  
  Copyright 2019-2026 The OpenSSL Project Authors. All Rights Reserved.
 diff --git a/include/openssl/ssl.h.in b/include/openssl/ssl.h.in
-index fb912579b7..60be2e8216 100644
+index 3650836..614bbd4 100644
 --- a/include/openssl/ssl.h.in
 +++ b/include/openssl/ssl.h.in
-@@ -457,6 +457,7 @@ typedef int (*SSL_async_callback_fn)(SSL *s, void *arg);
+@@ -458,6 +458,7 @@ typedef int (*SSL_async_callback_fn)(SSL *s, void *arg);
   */
  #define SSL_OP_ECH_GREASE_RETRY_CONFIG SSL_OP_BIT(40)
  #endif
 +#define SSL_OP_RH_PERMIT_NOEMS_FIPS SSL_OP_BIT(48)
  
- /*
-  * Option "collections."
-diff --git a/providers/fips/include/fips_indicator_params.inc b/providers/fips/include/fips_indicator_params.inc
-index 78f9fc0655..2ed86cf3ed 100644
---- a/providers/fips/include/fips_indicator_params.inc
-+++ b/providers/fips/include/fips_indicator_params.inc
-@@ -1,5 +1,5 @@
- OSSL_FIPS_PARAM(security_checks, SECURITY_CHECKS, 1)
--OSSL_FIPS_PARAM(tls1_prf_ems_check, TLS1_PRF_EMS_CHECK, 0)
-+OSSL_FIPS_PARAM(tls1_prf_ems_check, TLS1_PRF_EMS_CHECK, 1)
- OSSL_FIPS_PARAM(no_short_mac, NO_SHORT_MAC, 1)
- OSSL_FIPS_PARAM(hmac_key_check, HMAC_KEY_CHECK, 0)
- OSSL_FIPS_PARAM(kmac_key_check, KMAC_KEY_CHECK, 0)
+ /* RFC 8701: Send GREASE values in ClientHello */
+ #define SSL_OP_GREASE SSL_OP_BIT(41)
+diff --git a/providers/fips/fipsparams.inc.in b/providers/fips/fipsparams.inc.in
+index e898c93..d9b78f5 100644
+--- a/providers/fips/fipsparams.inc.in
++++ b/providers/fips/fipsparams.inc.in
+@@ -30,7 +30,7 @@
+ {- use OpenSSL::fipsparams qw(produce_fips_params); -}
+ {- produce_fips_params(
+         [ 'security_checks', 'SECURITY_CHECKS', 'unsigned char', '1', 'indicator' ],
+-        [ 'tls1_prf_ems_check', 'TLS1_PRF_EMS_CHECK', 'unsigned char', '0', 'indicator' ],
++        [ 'tls1_prf_ems_check', 'TLS1_PRF_EMS_CHECK', 'unsigned char', '1', 'indicator' ],
+         [ 'no_short_mac', 'NO_SHORT_MAC', 'unsigned char', '1', 'indicator' ],
+         [ 'hmac_key_check', 'HMAC_KEY_CHECK', 'unsigned char', '0', 'indicator' ],
+         [ 'kmac_key_check', 'KMAC_KEY_CHECK', 'unsigned char', '0', 'indicator' ],
 diff --git a/ssl/ssl_conf.c b/ssl/ssl_conf.c
-index a7293512b9..0581ac3ef7 100644
+index a7ba0fd..16af831 100644
 --- a/ssl/ssl_conf.c
 +++ b/ssl/ssl_conf.c
-@@ -392,6 +392,7 @@ static int cmd_Options(SSL_CONF_CTX *cctx, const char *value)
+@@ -395,6 +395,7 @@ static int cmd_Options(SSL_CONF_CTX *cctx, const char *value)
          SSL_FLAG_TBL("ClientRenegotiation",
              SSL_OP_ALLOW_CLIENT_RENEGOTIATION),
          SSL_FLAG_TBL_INV("EncryptThenMac", SSL_OP_NO_ENCRYPT_THEN_MAC),
@@ -97,7 +99,7 @@ index a7293512b9..0581ac3ef7 100644
          SSL_FLAG_TBL("AllowNoDHEKEX", SSL_OP_ALLOW_NO_DHE_KEX),
          SSL_FLAG_TBL("PreferNoDHEKEX", SSL_OP_PREFER_NO_DHE_KEX),
 diff --git a/ssl/statem/extensions_srvr.c b/ssl/statem/extensions_srvr.c
-index 1ed33888af..139e4ecb16 100644
+index 8b0ed79..5272fb4 100644
 --- a/ssl/statem/extensions_srvr.c
 +++ b/ssl/statem/extensions_srvr.c
 @@ -16,6 +16,7 @@
@@ -108,7 +110,7 @@ index 1ed33888af..139e4ecb16 100644
  
  #define COOKIE_STATE_FORMAT_VERSION 1
  
-@@ -1906,8 +1907,13 @@ EXT_RETURN tls_construct_stoc_ems(SSL_CONNECTION *s, WPACKET *pkt,
+@@ -2019,8 +2020,13 @@ EXT_RETURN tls_construct_stoc_ems(SSL_CONNECTION *s, WPACKET *pkt,
      unsigned int context,
      X509 *x, size_t chainidx)
  {
@@ -124,7 +126,7 @@ index 1ed33888af..139e4ecb16 100644
      if (!WPACKET_put_bytes_u16(pkt, TLSEXT_TYPE_extended_master_secret)
          || !WPACKET_put_bytes_u16(pkt, 0)) {
 diff --git a/ssl/t1_enc.c b/ssl/t1_enc.c
-index fe5c0d8be3..1b12d9875b 100644
+index 417c586..25cbbe4 100644
 --- a/ssl/t1_enc.c
 +++ b/ssl/t1_enc.c
 @@ -21,6 +21,7 @@
@@ -135,27 +137,25 @@ index fe5c0d8be3..1b12d9875b 100644
  
  /* seed1 through seed5 are concatenated */
  static int tls1_PRF(SSL_CONNECTION *s,
-@@ -84,9 +85,15 @@ static int tls1_PRF(SSL_CONNECTION *s,
-         return 1;
-     }
+@@ -80,8 +81,14 @@ static int tls1_PRF(SSL_CONNECTION *s,
  
--err:
+ err:
+ #endif
 -    if (fatal)
 -        SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
-+ err:
 +    if (fatal) {
 +        /* The calls to this function are local so it's safe to implement the check */
 +        if (FIPS_mode() && seed1_len >= TLS_MD_MASTER_SECRET_CONST_SIZE
 +            && memcmp(seed1, TLS_MD_MASTER_SECRET_CONST, TLS_MD_MASTER_SECRET_CONST_SIZE) == 0)
 +            SSLfatal(s, SSL_AD_HANDSHAKE_FAILURE, ERR_R_UNSUPPORTED);
-+	else
++        else
 +            SSLfatal(s, SSL_AD_INTERNAL_ERROR, ERR_R_INTERNAL_ERROR);
 +    }
      else
          ERR_raise(ERR_LIB_SSL, ERR_R_INTERNAL_ERROR);
      EVP_KDF_CTX_free(kctx);
 diff --git a/test/recipes/30-test_evp_data/evpkdf_tls12_prf.txt b/test/recipes/30-test_evp_data/evpkdf_tls12_prf.txt
-index 50944328cb..edb2e81273 100644
+index 5094432..edb2e81 100644
 --- a/test/recipes/30-test_evp_data/evpkdf_tls12_prf.txt
 +++ b/test/recipes/30-test_evp_data/evpkdf_tls12_prf.txt
 @@ -22,6 +22,16 @@ Ctrl.client_random = hexseed:36c129d01a3200894b9179faac589d9835d58775f9b5ea3587c
@@ -175,6 +175,3 @@ index 50944328cb..edb2e81273 100644
  FIPSversion = <=3.1.0
  KDF = TLS1-PRF
  Ctrl.digest = digest:SHA256
--- 
-2.55.0
-

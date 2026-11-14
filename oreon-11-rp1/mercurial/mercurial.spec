@@ -52,3 +52,6 @@ PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} %{buil
 
 %files -f %{_builddir}/%{name}.files
 %{_bindir}/hg
+
+%changelog
+%autochangelog

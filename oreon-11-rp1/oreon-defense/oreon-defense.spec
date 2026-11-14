@@ -16,7 +16,10 @@ BuildRequires:  qt6-qtbase-devel
 BuildRequires:  openssl-devel
 BuildRequires:  yaml-cpp-devel
 BuildRequires:  json-devel
+%bcond_with clamav
+%if %{with clamav}
 BuildRequires:  clamav-devel
+%endif
 BuildRequires:  libcurl-devel
 BuildRequires:  systemd-rpm-macros
 
@@ -24,8 +27,10 @@ Requires:       qt6-qtbase
 Requires:       qt6-qtbase-gui
 Requires:       openssl-libs
 Requires:       yaml-cpp
+%if %{with clamav}
 Requires:       clamav-lib
 Requires:       (clamav-update or clamav-data)
+%endif
 Requires:       libcurl
 Requires:       nftables
 Requires:       polkit

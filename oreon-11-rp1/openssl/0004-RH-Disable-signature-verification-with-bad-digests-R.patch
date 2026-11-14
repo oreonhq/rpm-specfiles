@@ -1,4 +1,4 @@
-From 14a044ba43a09db9cd0e1b6bc454c80c0c31a7a8 Mon Sep 17 00:00:00 2001
+From 8c73bb9fb4e20ad41395015b1ade3d0992ce012d Mon Sep 17 00:00:00 2001
 From: rpm-build <rpm-build>
 Date: Wed, 6 Mar 2024 19:17:14 +0100
 Subject: [PATCH 04/16] RH: Disable signature verification with bad digests -
@@ -14,10 +14,10 @@ From-dist-git-commit: 4334bc837fbc64d14890fdc51679a80770d498ce
  1 file changed, 5 insertions(+)
 
 diff --git a/crypto/asn1/a_verify.c b/crypto/asn1/a_verify.c
-index 188c6c93fc..a75e0e11da 100644
+index 5dae9e9..8dae704 100644
 --- a/crypto/asn1/a_verify.c
 +++ b/crypto/asn1/a_verify.c
-@@ -153,6 +153,11 @@ int ASN1_item_verify_ctx(const ASN1_ITEM *it, const X509_ALGOR *alg,
+@@ -139,6 +139,11 @@ static int item_verify(const ASN1_ITEM *it, const X509_ALGOR *alg,
              ERR_raise(ERR_LIB_ASN1, ERR_R_EVP_LIB);
          if (ret <= 1)
              goto err;
@@ -27,8 +27,5 @@ index 188c6c93fc..a75e0e11da 100644
 +        ERR_raise(ERR_LIB_ASN1, ASN1_R_UNKNOWN_MESSAGE_DIGEST_ALGORITHM);
 +        goto err;
      } else {
-         const EVP_MD *type = NULL;
- 
--- 
-2.55.0
-
+         /*
+          * We don't yet have the ability for providers to be able to handle

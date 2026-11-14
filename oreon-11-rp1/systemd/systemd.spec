@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 100fc873b848b9b0297d8a705e8e2ed326256c8483d9960ee1ffe264c8a5c3e3
+%global source0_hash 116432ee9dce9bfef4c7da7963c6de41899ab44197f2876ee99545707a5c7c1f
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -91,7 +91,7 @@ Url:            https://systemd.io
 # But don't do that on OBS, otherwise the version subst fails, and will be
 # like 257-123-gabcd257.1 instead of 257-123-gabcd
 %if %{without obs}
-Version:        262.1
+Version:        262.2
 %else
 Version:        %{?version_override}%{!?version_override:%(cat meson.version)}
 %endif
@@ -171,7 +171,6 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  clang
 BuildRequires:  coreutils
-BuildRequires:  rpmdevtools
 BuildRequires:  libmount-devel
 BuildRequires:  libfdisk-devel
 BuildRequires:  libpwquality-devel
@@ -179,16 +178,15 @@ BuildRequires:  libxcrypt-devel
 BuildRequires:  pam-devel
 BuildRequires:  libselinux-devel
 BuildRequires:  audit-libs-devel
-%if %{without bootstrap}
+%bcond_with full_features
+%if %{with full_features}
+BuildRequires:  rpmdevtools
+BuildRequires:  package-notes >= 0.20
+%endif
+%if %{with full_features}
 BuildRequires:  cryptsetup-devel
-# Require (previous version) of our macros package.
-# We use the %%systemd_{post,preun,…} macros for various services.
 BuildRequires:  systemd-rpm-macros
 %endif
-
-# Use dlopen-notes to generate Requires/Recommends from embedded metadata.
-# Currently, package-notes are not available on Centos Stream 9 or 10.
-BuildRequires:  package-notes >= 0.20
 
 BuildRequires:  dbus-devel
 BuildRequires:  util-linux
@@ -219,10 +217,8 @@ BuildRequires:  openssl-devel
 %if %{with gnutls}
 BuildRequires:  gnutls-devel
 %endif
-BuildRequires:  qrencode-devel
 BuildRequires:  libmicrohttpd-devel
 BuildRequires:  libxkbcommon-devel
-BuildRequires:  iptables-devel
 BuildRequires:  pkgconfig(bash-completion)
 BuildRequires:  pkgconfig(libarchive)
 BuildRequires:  pkgconfig(libfido2)
@@ -244,32 +240,30 @@ BuildRequires:  python3-devel
 BuildRequires:  python3dist(jinja2)
 BuildRequires:  python3dist(lxml)
 BuildRequires:  python3dist(pefile)
-BuildRequires:  python3dist(pillow)
 BuildRequires:  python3dist(pytest)
 %if 0%{?want_bootloader}
 BuildRequires:  python3dist(pyelftools)
 %endif
-# gzip and lzma are provided by the stdlib
-BuildRequires:  firewalld-filesystem
 BuildRequires:  libseccomp-devel
 BuildRequires:  meson >= 0.43
 BuildRequires:  gettext
-# We use RUNNING_ON_VALGRIND in tests, so the headers need to be available
 %ifarch %{valgrind_arches}
 BuildRequires:  valgrind-devel
 %endif
-
+%if %{with full_features}
+BuildRequires:  qrencode-devel
+BuildRequires:  iptables-devel
+BuildRequires:  python3dist(pillow)
+BuildRequires:  firewalld-filesystem
 %ifnarch %ix86
-# bpftool is not built for i368
 BuildRequires:  bpftool
 BuildRequires:  kernel-devel
 %global have_bpf 1
 %endif
-
 %ifarch x86_64 aarch64
 %global have_xen 1
-# That package is only built for those two architectures
 BuildRequires:  xen-devel
+%endif
 %endif
 
 %if %{with obs}
@@ -416,7 +410,7 @@ BuildArch:      noarch
 Just the definitions of rpm macros.
 
 See
-https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/#_systemd
+https://docs.oreonhq.com/packaging/scriptlets/#systemd
 for information how to use those macros.
 
 %package sysusers
@@ -1532,3 +1526,6 @@ rm -rf \
     debugsources.list \
     elfbins.list
 
+
+%changelog
+%autochangelog

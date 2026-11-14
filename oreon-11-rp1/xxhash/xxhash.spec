@@ -124,3 +124,6 @@ make test-xxhsum-c \
 %files doc
 %doc doxygen/html
 
+
+%changelog
+%autochangelog

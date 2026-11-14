@@ -13,6 +13,8 @@ Summary: The Cython compiler for writing C extensions in the Python language.
 License: Apache-2.0
 URL: https://pypi.org/project/cython/
 Source0: https://files.pythonhosted.org/packages/99/ca/18e324972e5cac914816fdd7bb03e19a455b90039c277a538f7781b50c85/cython-3.3.1.tar.gz
+Provides: python3-Cython = %{version}-%{release}
+Provides: python3dist(cython) = %{version}
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
@@ -41,3 +43,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import Cython'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

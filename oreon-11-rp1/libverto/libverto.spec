@@ -168,3 +168,6 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %{_libdir}/%{name}-libev.so
 %{_libdir}/pkgconfig/%{name}-libev.pc
 
+
+%changelog
+%autochangelog

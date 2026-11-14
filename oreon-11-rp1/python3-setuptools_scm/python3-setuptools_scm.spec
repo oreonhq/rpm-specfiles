@@ -83,3 +83,6 @@ done < %{_builddir}/%{name}.files | sort -u >> %{_builddir}/%{name}.files
 
 %files -f %{_builddir}/%{name}.files
 %license LICENSE
+
+%changelog
+%autochangelog

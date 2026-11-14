@@ -13,7 +13,7 @@ Version:        3.18
 Release:        1%{?dist}
 License: LicenseRef-Oreon-Public-Domain
 # This package is a downstream-only project
-URL: https://src.fedoraproject.org/rpms/filesystem
+URL: https://github.com/oreonhq/rpm-specfiles
 Source1: lang-exceptions
 Source2: glibc-SUPPORTED.locales
 Source3: iso_639-2.locales
@@ -560,3 +560,6 @@ end
 %attr(1777,root,root) /var/tmp
 /var/yp
 
+
+%changelog
+%autochangelog

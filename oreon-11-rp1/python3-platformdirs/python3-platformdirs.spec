@@ -43,3 +43,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 python3 -c 'import platformdirs'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

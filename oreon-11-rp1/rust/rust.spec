@@ -31,7 +31,7 @@ URL:            https://www.rust-lang.org
 
 # Only the specified arches will use bootstrap binaries.
 # NOTE: Those binaries used to be uploaded with every new release, but that was
-# a waste of lookaside cache space when they're most often unused.
+# unused most of the time so keep them optional.
 # Run "spectool -g rust.spec" after changing this and then "fedpkg upload" to
 # add them to sources. Remember to remove them again after the bootstrap build!
 #global bootstrap_arches x86_64 i686 aarch64 ppc64le s390x
@@ -43,7 +43,7 @@ URL:            https://www.rust-lang.org
 %global wasi_libc_name wasi-libc-%{wasi_libc_ref}
 %global wasi_libc_source %{wasi_libc_url}/archive/%{wasi_libc_ref}/%{wasi_libc_name}.tar.gz
 %global wasi_libc_dir %{_builddir}/%{wasi_libc_name}
-%bcond_with bundled_wasi_libc
+%bcond_without bundled_wasi_libc
 
 # Using llvm-static may be helpful as an opt-in, e.g. to aid LLVM rebases.
 %bcond_with llvm_static
@@ -1230,3 +1230,6 @@ rm -rf "./build/%{rust_triple}/stage2-tools/%{rust_triple}/cit/"
 
 
 
+
+%changelog
+%autochangelog

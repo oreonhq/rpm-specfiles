@@ -33,3 +33,6 @@ install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.lua-srpm
 %files
 %license LICENSE
 %{_rpmmacrodir}/macros.lua-srpm
+
+%changelog
+%autochangelog

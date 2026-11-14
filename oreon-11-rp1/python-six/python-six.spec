@@ -76,3 +76,6 @@ Summary:        %{summary}
 %doc README.rst documentation/index.rst
 
 
+
+%changelog
+%autochangelog

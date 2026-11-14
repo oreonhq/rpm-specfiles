@@ -69,12 +69,13 @@ BuildRequires: pkgconfig(json-c) >= 0.11
 BuildRequires: bzip2
 BuildRequires: zstd
 # For the run-debuginfod-find.sh test case in %%check for /usr/sbin/ss etc.
+%if %{without bootstrap}
 BuildRequires: iproute
+BuildRequires: socat
+%endif
 BuildRequires: procps
 BuildRequires: bsdtar
 BuildRequires: curl
-# For run-debuginfod-response-headers.sh test case
-BuildRequires: socat
 # For run-debuginfod-find-metadata.sh
 BuildRequires: jq
 
@@ -522,3 +523,6 @@ exit 0
 %postun debuginfod
 %systemd_postun_with_restart debuginfod.service
 
+
+%changelog
+%autochangelog

@@ -36,6 +36,8 @@ Python access to GObject libraries.
 Summary: Python bindings for GObject
 Requires: python3
 Requires: glib2%{?_isa}
+Provides: python3-gobject-base = %{version}-%{release}
+Provides: python3-gobject-base%{?_isa} = %{version}-%{release}
 
 %description -n python3-gobject
 The gi module for Python.
@@ -70,3 +72,6 @@ Headers and pkgconfig for PyGObject.
 %files -n python3-gobject-devel
 %{_includedir}/pygobject-3.0/
 %{_libdir}/pkgconfig/pygobject-3.0.pc
+
+%changelog
+%autochangelog

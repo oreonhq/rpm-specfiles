@@ -14,7 +14,7 @@ License:        MIT
 
 %bcond tests 1
 %bcond pytest_xdist 1
-%bcond tox_tests 1
+%bcond tox_tests 0
 
 # The idea is to follow the spirit of semver
 # Given version X.Y.Z:
@@ -64,7 +64,7 @@ Source24:        test_RECORD
 Source25:        README.md
 Source26:        LICENSE
 
-URL:            https://src.fedoraproject.org/rpms/pyproject-rpm-macros
+URL:            https://github.com/fedora-python/pyproject-rpm-macros
 
 BuildArch:      noarch
 
@@ -194,3 +194,6 @@ export HOSTNAME="rpmbuild"  # to speedup tox in network-less mock, see rhbz#1856
 %license LICENSE
 
 
+
+%changelog
+%autochangelog

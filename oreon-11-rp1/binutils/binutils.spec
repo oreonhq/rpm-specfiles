@@ -55,7 +55,7 @@ URL: https://sourceware.org/binutils
 
 # Turn the above warnings into errors.
 # Only effective if the warnings are enabled.
-# Disabled by default because this is now handled by a macro in redhat-rpm-config.
+# Disabled by default because this is now handled by a macro in oreon-rpm-config.
 %define error_for_executable_stacks 0
 %define error_for_rwx_segments 0
 
@@ -850,7 +850,7 @@ run_target_configuration()
     # Note set here as -std=gnu11 is not a valid G++ command line option.
     export CFLAGS="$CFLAGS -std=gnu11"
 
-    # BZ 1541027 - include the linker flags from redhat-rpm-config as well.
+    # include the linker flags from oreon-rpm-config as well.
     export LDFLAGS=$RPM_LD_FLAGS
 
 %if %{enable_new_dtags}
@@ -1489,3 +1489,6 @@ exit 0
 %endif
 
 #----------------------------------------------------------------------------
+
+%changelog
+%autochangelog

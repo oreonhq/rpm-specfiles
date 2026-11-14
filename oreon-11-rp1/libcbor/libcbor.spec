@@ -71,3 +71,6 @@ cp doc/build/man/libcbor.3 %{buildroot}%{_mandir}/man3/
 %{_libdir}/cmake/libcbor
 %{_mandir}/man3/libcbor.3{,.*}
 
+
+%changelog
+%autochangelog

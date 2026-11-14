@@ -1,4 +1,4 @@
-From 67fd54f6ccf14e5ce594bf38af2f9f569dd06d2c Mon Sep 17 00:00:00 2001
+From c931037382c9ce10d62a95e0526173aa766da07a Mon Sep 17 00:00:00 2001
 From: Simo Sorce <simo@redhat.com>
 Date: Thu, 13 Feb 2025 18:16:29 -0500
 Subject: [PATCH 13/16] FIPS: PKCS12: PBMAC1 defaults
@@ -9,7 +9,7 @@ From-dist-git-commit: 8fc2d4842385584094d57f6f66fcbc2a07865708
  1 file changed, 4 insertions(+)
 
 diff --git a/apps/pkcs12.c b/apps/pkcs12.c
-index 09ed684472..45c7caf3e3 100644
+index 2deb87a..4f75526 100644
 --- a/apps/pkcs12.c
 +++ b/apps/pkcs12.c
 @@ -17,6 +17,7 @@
@@ -30,6 +30,3 @@ index 09ed684472..45c7caf3e3 100644
              if (pbmac1_pbkdf2 == 1) {
                  if (!PKCS12_set_pbmac1_pbkdf2(p12, mpass, -1, NULL,
                          macsaltlen, maciter,
--- 
-2.55.0
-

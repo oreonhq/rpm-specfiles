@@ -76,3 +76,6 @@ make check
 %{_libdir}/pkgconfig/xau.pc
 %{_mandir}/man3/*.3*
 
+
+%changelog
+%autochangelog

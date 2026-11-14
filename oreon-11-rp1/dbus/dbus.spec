@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2
+%global source0_hash d08b05526c2cb7966a5fb79210d6112b1aca3d135f315c1b302e14b4b0297dac
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -14,7 +14,7 @@ BuildRequires: oreon-rpm-macros
 
 %global libselinux_version      2.0.86
 
-%global fedora_release_version  30-0.2
+%global oreon_release_min_version  30-0.2
 %global generic_release_version 30-0.1
 
 # Allow extra dependencies required for some tests to be disabled.
@@ -29,8 +29,8 @@ BuildRequires: oreon-rpm-macros
 
 Name:    dbus
 Epoch:   1
-Version:        1.16.2
-Release:        2%{?dist}
+Version:        1.16.4
+Release:        1%{?dist}
 Summary: D-BUS message bus
 
 # The effective license of the majority of the package, including the shared
@@ -38,7 +38,7 @@ Summary: D-BUS message bus
 License: (AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
 URL:     https://www.freedesktop.org/wiki/Software/dbus/
 Source0:        https://dbus.freedesktop.org/releases/dbus/dbus-%{version}.tar.xz
-Source1:        dbus-1.16.2.tar.xz.asc
+Source1:        dbus-1.16.4.tar.xz.asc
 # gpg --keyserver keyring.debian.org --recv-keys DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90
 # gpg --export --export-options export-minimal > gpgkey-DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90.gpg
 Source2: gpgkey-DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90.gpg
@@ -100,7 +100,7 @@ per-user-login-session messaging facility.
 %package common
 Summary:        D-BUS message bus configuration
 BuildArch:      noarch
-Conflicts:      oreon-release < %{fedora_release_version}
+Conflicts:      oreon-release < %{oreon_release_min_version}
 Conflicts:      generic-release < %{generic_release_version}
 
 %description common
@@ -109,7 +109,7 @@ implementations to provide a System and User Message Bus.
 
 %package daemon
 Summary:        D-BUS message bus
-Conflicts:      oreon-release < %{fedora_release_version}
+Conflicts:      oreon-release < %{oreon_release_min_version}
 Conflicts:      generic-release < %{generic_release_version}
 Requires:       libselinux%{?_isa} >= %{libselinux_version}
 Requires:       dbus-common = %{epoch}:%{version}-%{release}
@@ -148,6 +148,8 @@ other supporting documentation such as the introspect dtd file.
 %package devel
 Summary: Development files for D-BUS
 Requires: dbus-libs%{?_isa} = %{epoch}:%{version}-%{release}
+# For xml directory ownership.
+Requires: xml-common
 
 %description devel
 This package contains libraries and header files needed for
@@ -435,7 +437,6 @@ fi
 %{_datadir}/gtk-doc
 
 %files devel
-%dir %{_datadir}/xml
 %{_datadir}/xml/dbus-1
 %{_libdir}/lib*.so
 %dir %{_libdir}/dbus-1.0
@@ -447,3 +448,6 @@ fi
 %{_includedir}/*
 
 
+
+%changelog
+%autochangelog

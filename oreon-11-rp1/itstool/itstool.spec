@@ -43,3 +43,6 @@ python3 -c 'import libxml2'
 %license COPYING
 %{_bindir}/itstool
 %{_datadir}/itstool/
+
+%changelog
+%autochangelog

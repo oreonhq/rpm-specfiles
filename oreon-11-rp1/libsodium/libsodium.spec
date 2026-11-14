@@ -18,7 +18,7 @@
 # Uncomment to update to final version
 #global versuf  -stable
 
-%bcond_without  mingw
+%bcond_with  mingw
 
 
 Name:           libsodium
@@ -42,7 +42,10 @@ URL:            https://libsodium.org/
 Source0:        https://download.libsodium.org/libsodium/releases/libsodium-%{version}.tar.gz
 Source1:        https://download.libsodium.org/libsodium/releases/libsodium-%{version}.tar.gz.minisig
 
+%bcond_with minisign
+%if %{with minisign}
 BuildRequires: minisign
+%endif
 BuildRequires: gcc
 BuildRequires: make
 
@@ -204,3 +207,6 @@ make -C build_native check
 %endif
 
 
+
+%changelog
+%autochangelog

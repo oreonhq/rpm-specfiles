@@ -127,3 +127,6 @@ rm -rf %{buildroot}%{_libdir}/%{name}/*.la
 %{_mandir}/man8/cryptsetup-ssh.8.gz
 %{_sbindir}/cryptsetup-ssh
 
+
+%changelog
+%autochangelog

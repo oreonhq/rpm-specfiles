@@ -73,6 +73,7 @@ pgk-config) to develop FUSE v3 based applications/filesystems.
 %package -n fuse-common
 Summary:	Common files for File System in Userspace (FUSE) v2 and v3
 License:	GPL-1.0-or-later
+Provides:	fuse = %{version}-%{release}
 
 %description -n fuse-common
 Common files for FUSE v2 and FUSE v3.
@@ -136,3 +137,6 @@ readelf --dyn-syms -W "$so" | grep -F 'fuse_parse_cmdline@@FUSE_3.12'
 %files -n fuse-common
 %config(noreplace) %{_sysconfdir}/fuse.conf
 
+
+%changelog
+%autochangelog

@@ -9,7 +9,7 @@
 
 Name: xorgproto
 Version: 2025.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: X.Org protocol headers
 License: MIT
 URL: https://www.x.org/
@@ -23,6 +23,33 @@ BuildRequires: ninja-build
 
 Obsoletes: xorg-x11-proto-devel < 2025.2
 Provides: xorg-x11-proto-devel = %{version}-%{release}
+Provides: pkgconfig(xproto) = %{version}
+Provides: pkgconfig(xextproto) = %{version}
+Provides: pkgconfig(renderproto) = %{version}
+Provides: pkgconfig(randrproto) = %{version}
+Provides: pkgconfig(damageproto) = %{version}
+Provides: pkgconfig(compositeproto) = %{version}
+Provides: pkgconfig(fixesproto) = %{version}
+Provides: pkgconfig(damageproto) = %{version}
+Provides: pkgconfig(presentproto) = %{version}
+Provides: pkgconfig(inputproto) = %{version}
+Provides: pkgconfig(kbproto) = %{version}
+Provides: pkgconfig(fontsproto) = %{version}
+Provides: pkgconfig(xf86vidmodeproto) = %{version}
+Provides: pkgconfig(xf86driproto) = %{version}
+Provides: pkgconfig(xf86bigfontproto) = %{version}
+Provides: pkgconfig(xf86dgaproto) = %{version}
+Provides: pkgconfig(xineramaproto) = %{version}
+Provides: pkgconfig(recordproto) = %{version}
+Provides: pkgconfig(scrnsaverproto) = %{version}
+Provides: pkgconfig(videoproto) = %{version}
+Provides: pkgconfig(resourceproto) = %{version}
+Provides: pkgconfig(dri2proto) = %{version}
+Provides: pkgconfig(dri3proto) = %{version}
+Provides: pkgconfig(glproto) = %{version}
+Provides: pkgconfig(bigreqsproto) = %{version}
+Provides: pkgconfig(xcmiscproto) = %{version}
+Provides: pkgconfig(xwaylandproto) = %{version}
 
 %description
 X.Org protocol headers.
@@ -41,3 +68,6 @@ X.Org protocol headers.
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING-x11proto
+
+%changelog
+%autochangelog

@@ -1,4 +1,4 @@
-From 66cff6d71999acacd371594fce7463c114576623 Mon Sep 17 00:00:00 2001
+From 5a5b4c6728942c18ec57c072b45d671e07a810c4 Mon Sep 17 00:00:00 2001
 From: rpm-build <rpm-build>
 Date: Wed, 6 Mar 2024 19:17:15 +0100
 Subject: [PATCH 09/16] FIPS: Force fips provider on
@@ -13,7 +13,7 @@ From-dist-git-commit: 4334bc837fbc64d14890fdc51679a80770d498ce
  1 file changed, 31 insertions(+), 1 deletion(-)
 
 diff --git a/crypto/provider_conf.c b/crypto/provider_conf.c
-index f2e76ac402..60f9fbceed 100644
+index 021b654..ee7a9dc 100644
 --- a/crypto/provider_conf.c
 +++ b/crypto/provider_conf.c
 @@ -10,6 +10,8 @@
@@ -25,7 +25,7 @@ index f2e76ac402..60f9fbceed 100644
  #include <openssl/conf.h>
  #include <openssl/safestack.h>
  #include <openssl/provider.h>
-@@ -237,7 +239,7 @@ static int provider_conf_activate(OSSL_LIB_CTX *libctx, const char *name,
+@@ -238,7 +240,7 @@ static int provider_conf_activate(OSSL_LIB_CTX *libctx, const char *name,
          if (path != NULL)
              ossl_provider_set_module_path(prov, path);
  
@@ -34,7 +34,7 @@ index f2e76ac402..60f9fbceed 100644
  
          if (ok == 1) {
              if (!ossl_provider_activate(prov, 1, 0)) {
-@@ -266,6 +268,8 @@ static int provider_conf_activate(OSSL_LIB_CTX *libctx, const char *name,
+@@ -267,6 +269,8 @@ static int provider_conf_activate(OSSL_LIB_CTX *libctx, const char *name,
  
          if (ok <= 0)
              ossl_provider_free(prov);
@@ -43,7 +43,7 @@ index f2e76ac402..60f9fbceed 100644
      }
      CRYPTO_THREAD_unlock(pcgbl->lock);
  
-@@ -420,6 +424,32 @@ static int provider_conf_init(CONF_IMODULE *md, const CONF *cnf)
+@@ -398,6 +402,32 @@ static int provider_conf_init(CONF_IMODULE *md, const CONF *cnf)
              return 0;
      }
  
@@ -76,6 +76,3 @@ index f2e76ac402..60f9fbceed 100644
      return 1;
  }
  
--- 
-2.55.0
-

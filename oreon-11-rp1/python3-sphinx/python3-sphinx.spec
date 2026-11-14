@@ -8,12 +8,14 @@
 
 Name: python3-sphinx
 Version: 9.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Python documentation generator
 License: MIT
 URL: https://pypi.org/project/sphinx/
 Source0: https://files.pythonhosted.org/packages/64/d4/413466f0be8b1cb0e3e43893a148b96d7462d0923d82b4166b21afc5f30c/sphinx-9.2.0.tar.gz
 BuildArch: noarch
+Provides: /usr/bin/sphinx-build
+Provides: /usr/bin/sphinx-build-3
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
@@ -72,3 +74,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 python3 -c 'import sphinx'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

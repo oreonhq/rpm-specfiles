@@ -50,3 +50,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import patiencediff'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

@@ -40,3 +40,6 @@ X11 network transport code
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
+
+%changelog
+%autochangelog

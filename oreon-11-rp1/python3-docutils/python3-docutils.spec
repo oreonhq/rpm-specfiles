@@ -21,6 +21,7 @@ BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-flit-core
 Requires: python3
+Provides: /usr/bin/rst2man
 
 %description
 Docutils -- Python Documentation Utilities
@@ -40,3 +41,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 python3 -c 'import docutils'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog

@@ -67,3 +67,6 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 %{_libdir}/libXdmcp.so
 %{_libdir}/pkgconfig/xdmcp.pc
 
+
+%changelog
+%autochangelog

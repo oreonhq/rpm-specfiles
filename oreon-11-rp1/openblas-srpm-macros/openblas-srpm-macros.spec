@@ -38,3 +38,6 @@ install -m0644 %SOURCE0 %{buildroot}%{macrosdir}/macros.openblas-srpm
 %{macrosdir}/macros.openblas-srpm
 
 
+
+%changelog
+%autochangelog

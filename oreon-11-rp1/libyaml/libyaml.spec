@@ -149,3 +149,6 @@ popd
 %endif
 
 
+
+%changelog
+%autochangelog

@@ -186,3 +186,6 @@ export LD_LIBRARY_PATH=`pwd`/.libs
 %{_libdir}/libgmp.a
 %{_libdir}/libgmpxx.a
 
+
+%changelog
+%autochangelog

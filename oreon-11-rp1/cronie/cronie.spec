@@ -218,3 +218,6 @@ exit 0
 %files noanacron
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/dailyjobs
 
+
+%changelog
+%autochangelog

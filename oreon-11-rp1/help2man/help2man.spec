@@ -68,3 +68,6 @@ still providing some useful information.
 %{_libdir}/help2man
 %endif
 
+
+%changelog
+%autochangelog

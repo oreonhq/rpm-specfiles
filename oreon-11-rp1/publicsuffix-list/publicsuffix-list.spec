@@ -96,3 +96,6 @@ ln -s public_suffix_list.dat $RPM_BUILD_ROOT/%{_datadir}/publicsuffix/effective_
 %endif
 
 
+
+%changelog
+%autochangelog

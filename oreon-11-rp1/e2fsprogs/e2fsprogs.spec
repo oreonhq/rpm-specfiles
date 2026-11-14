@@ -363,3 +363,6 @@ make PRINT_FAILED=yes fullcheck
 %{_unitdir}/e2scrub_reap.service
 %{_udevdir}/96-e2scrub.rules
 
+
+%changelog
+%autochangelog

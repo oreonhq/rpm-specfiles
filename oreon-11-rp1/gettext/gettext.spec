@@ -469,3 +469,6 @@ make check LIBUNISTRING=-lunistring
 %{_bindir}/msghack
 %{_mandir}/man1/msghack.1*
 
+
+%changelog
+%autochangelog

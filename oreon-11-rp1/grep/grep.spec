@@ -98,3 +98,6 @@ make check
 %{_mandir}/*/*
 %{_libexecdir}/grepconf.sh
 
+
+%changelog
+%autochangelog

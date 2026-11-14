@@ -107,3 +107,6 @@ rm %{buildroot}%{python3_sitelib}/flit_core-%{version}.dist-info/RECORD
 %{python3_sitelib}/flit_core/
 
 
+
+%changelog
+%autochangelog

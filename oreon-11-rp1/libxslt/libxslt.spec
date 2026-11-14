@@ -77,3 +77,6 @@ find %{buildroot} -name '*.a' -delete
 %{_datadir}/gtk-doc/html/libxslt/
 %{_datadir}/gtk-doc/html/libexslt/
 %{_docdir}/libxslt/
+
+%changelog
+%autochangelog

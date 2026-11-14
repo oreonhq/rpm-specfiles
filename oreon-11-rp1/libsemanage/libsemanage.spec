@@ -170,3 +170,6 @@ cp %{SOURCE3} ${RPM_BUILD_ROOT}%{_sysconfdir}/selinux/semanage.conf
 %{python3_sitearch}/__pycache__/semanage*
 %{_libexecdir}/selinux/semanage_migrate_store
 
+
+%changelog
+%autochangelog

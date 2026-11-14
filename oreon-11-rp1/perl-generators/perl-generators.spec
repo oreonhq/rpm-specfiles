@@ -127,3 +127,6 @@ make test
 
 %files tests
 %{_libexecdir}/%{name}
+
+%changelog
+%autochangelog

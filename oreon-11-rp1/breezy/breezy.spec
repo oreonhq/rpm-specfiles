@@ -67,3 +67,6 @@ python3 -c 'import breezy'
 %files -f %{_builddir}/%{name}.files
 %{_bindir}/brz
 %{_bindir}/bzr
+
+%changelog
+%autochangelog

@@ -1,4 +1,4 @@
-From fd2cc499498ba5d0f3e9ae72245ae298db2a5d53 Mon Sep 17 00:00:00 2001
+From 3f90acd4ae57339933b4a3ce1d1f05a050c5e6ed Mon Sep 17 00:00:00 2001
 From: rpm-build <rpm-build>
 Date: Wed, 6 Mar 2024 19:17:15 +0100
 Subject: [PATCH 06/16] RH: Add FIPS_mode compatibility macro
@@ -16,7 +16,7 @@ From-dist-git-commit: 4334bc837fbc64d14890fdc51679a80770d498ce
 
 diff --git a/include/openssl/fips.h b/include/openssl/fips.h
 new file mode 100644
-index 0000000000..4162cbf88e
+index 0000000..4162cbf
 --- /dev/null
 +++ b/include/openssl/fips.h
 @@ -0,0 +1,26 @@
@@ -47,10 +47,10 @@ index 0000000000..4162cbf88e
 +# endif
 +#endif
 diff --git a/test/property_test.c b/test/property_test.c
-index eea1f28a19..521cf019f5 100644
+index 58bc92f..e748571 100644
 --- a/test/property_test.c
 +++ b/test/property_test.c
-@@ -703,6 +703,19 @@ err:
+@@ -971,6 +971,19 @@ err:
      return ret;
  }
  
@@ -70,14 +70,11 @@ index eea1f28a19..521cf019f5 100644
  int setup_tests(void)
  {
      ADD_TEST(test_property_string);
-@@ -716,6 +729,7 @@ int setup_tests(void)
-     ADD_TEST(test_property);
-     ADD_TEST(test_query_cache_stochastic);
+@@ -990,6 +1003,7 @@ int setup_tests(void)
+     ADD_MFAIL_TEST(test_query_store_add_mfail);
+     ADD_MFAIL_TEST(test_query_cache_set_mfail);
      ADD_TEST(test_fips_mode);
 +    ADD_TEST(test_downstream_FIPS_mode);
      ADD_ALL_TESTS(test_property_list_to_string, OSSL_NELEM(to_string_tests));
      ADD_TEST(test_property_list_to_string_bounds);
      return 1;
--- 
-2.55.0
-

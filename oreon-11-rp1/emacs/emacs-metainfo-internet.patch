@@ -1,0 +1,10 @@
+--- a/etc/emacs.metainfo.xml	2026-11-13 22:31:48.126937757 -0800
++++ b/etc/emacs.metainfo.xml	2026-11-13 22:31:48.128686222 -0800
+@@ -48,7 +48,6 @@
+    <control>console</control>
+    <control>pointing</control>
+    <control>touch</control>
+-   <internet/>
+  </supports>
+  <project_group>GNU</project_group>
+  <project_license>GPL-3.0+ and GFDL-1.3+</project_license>

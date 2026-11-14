@@ -332,3 +332,6 @@ end
 %{_includedir}/%{name}
 %{_libdir}/pkgconfig/%{name}.pc
 
+
+%changelog
+%autochangelog

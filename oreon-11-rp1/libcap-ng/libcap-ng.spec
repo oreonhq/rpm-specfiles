@@ -21,9 +21,16 @@ BuildRequires: libattr-devel
 %ifarch %{bpf_supported_arches}
 # These next ones are needed by cap-audit
 BuildRequires: clang, llvm
-BuildRequires: bpftool libbpf-devel
+%bcond_with bpf
+%if %{with bpf}
+BuildRequires: bpftool
+BuildRequires: libbpf-devel
+%endif
 BuildRequires: audit-libs-devel
+%bcond_with kernel_devel
+%if %{with kernel_devel}
 BuildRequires: kernel-devel
+%endif
 %endif
 
 %description
@@ -140,3 +147,6 @@ make check
 %attr(0644,root,root) %{_mandir}/man8/cap-audit.8.gz
 %endif
 
+
+%changelog
+%autochangelog

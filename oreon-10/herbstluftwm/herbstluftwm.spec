@@ -2,13 +2,12 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 Name:           herbstluftwm
-Version:        0.9.5
+Version:        0.9.6
 Release:        1%{?dist}
 Summary:        A manual tiling window manager
 License:        BSD-2-Clause
 URL:            https://herbstluftwm.org
 Source0:        https://herbstluftwm.org/tarballs/%{name}-%{version}.tar.gz
-Patch0:         0.9.5-cstdint-gcc15.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

@@ -83,8 +83,11 @@ BuildRequires:    readline-devel
 
 # Documentation (gawk-doc):
 BuildRequires:    texinfo-tex
+%bcond_with tex_fonts
+%if %{with tex_fonts}
 BuildRequires:    texlive-ec
 BuildRequires:    texlive-cm-super
+%endif
 
 # Make check
 BuildRequires:    glibc-all-langpacks
@@ -292,3 +295,6 @@ install -m 0644 -p awklib/eg/data/* %{buildroot}%{_docdir}/%{name}/eg/data/
 
 # =============================================================================
 
+
+%changelog
+%autochangelog

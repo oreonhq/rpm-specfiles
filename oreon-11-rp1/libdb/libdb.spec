@@ -70,3 +70,6 @@ done
 %{_includedir}/db_185.h
 %{_includedir}/db_cxx.h
 %{_libdir}/libdb.so
+
+%changelog
+%autochangelog

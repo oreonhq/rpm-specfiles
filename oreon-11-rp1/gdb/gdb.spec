@@ -146,7 +146,7 @@ BuildRequires: zlib-devel%{buildisa} libselinux-devel%{buildisa}
 BuildRequires: python3-devel%{buildisa}
 %endif
 BuildRequires: texinfo-tex
-BuildRequires: texlive-collection-latexrecommended
+BuildRequires: texlive-base
 # Permit rebuilding *.[0-9] files even if they are distributed in gdb-*.tar:
 BuildRequires: /usr/bin/pod2man
 %if %{defined use_guile}
@@ -863,3 +863,6 @@ fi
 %endif
 # endif scl
 
+
+%changelog
+%autochangelog

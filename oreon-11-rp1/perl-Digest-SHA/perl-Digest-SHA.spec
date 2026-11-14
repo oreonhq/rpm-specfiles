@@ -55,3 +55,6 @@ make test
 %{perl_vendorarch}/auto/Digest/
 %{_mandir}/man1/shasum.1*
 %{_mandir}/man3/Digest::SHA.3*
+
+%changelog
+%autochangelog

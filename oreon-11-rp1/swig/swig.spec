@@ -34,33 +34,16 @@
 %ifarch %{ix86}
 %global phplang 0
 %endif
-%{!?phplang:%global phplang 1}
-
-%ifarch %{ix86}
+%{!?phplang:%global phplang 0}
 %{!?ocamllang:%global ocamllang 0}
-%else
-%{!?ocamllang:%global ocamllang 1}
-%endif
-
-%{!?guile:%global guile 1}
-%{!?octave:%global octave 1}
-%{!?Rlang:%global Rlang 1}
+%{!?guile:%global guile 0}
+%{!?octave:%global octave 0}
+%{!?Rlang:%global Rlang 0}
 %bcond_without build_ccache_swig
 
-%ifarch %{ix86}
 %{!?javalang:%global javalang 0}
-%else
-# Temporary disable java tests, because they doesn't pass with java-21-openjdk
-# https://github.com/swig/swig/issues/2767
-%{!?javalang:%global javalang 1}
-%endif
 
-# Do not run Go tests, they failed with 4.0.0 on ppc64le, s390
-%ifarch x86_64 %{arm} aarch64
-%{!?golang:%global golang 1}
-%else
 %{!?golang:%global golang 0}
-%endif
 
 Summary: Connects C/C++/Objective C to some high-level programming languages
 Name:    swig
@@ -82,7 +65,13 @@ BuildRequires: findutils
 BuildRequires: make
 BuildRequires: perl-interpreter, pcre2-devel
 BuildRequires: python%{python3_pkgversion}-devel
-BuildRequires: autoconf, automake, gawk, dos2unix
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: gawk
+%bcond_with dos2unix
+%if %{with dos2unix}
+BuildRequires: dos2unix
+%endif
 BuildRequires: gcc-c++
 BuildRequires: gdb
 BuildRequires: help2man
@@ -458,3 +447,6 @@ _EOF
 %{python3_sitelib}/swig-%{version}.dist-info/
 %endif
 
+
+%changelog
+%autochangelog

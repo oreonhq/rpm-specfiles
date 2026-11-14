@@ -102,3 +102,6 @@ EOT
 %config(noreplace) %{_sysconfdir}/issue.net
 %dir %{_sysconfdir}/issue.d
 %{_rpmmacrodir}/macros.dist
+
+%changelog
+%autochangelog

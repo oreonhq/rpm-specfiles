@@ -134,3 +134,6 @@ autoreconf -fi
 %{_includedir}/onig*.h
 %{_libdir}/pkgconfig/%{name}.pc
 
+
+%changelog
+%autochangelog

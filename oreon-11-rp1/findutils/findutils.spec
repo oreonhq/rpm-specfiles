@@ -123,3 +123,6 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_infodir}/find.info*
 %{_infodir}/find-maint.info.*
 
+
+%changelog
+%autochangelog

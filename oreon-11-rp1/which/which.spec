@@ -56,3 +56,6 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 %{_infodir}/which.info*
 %{_mandir}/man1/which.1*
 
+
+%changelog
+%autochangelog

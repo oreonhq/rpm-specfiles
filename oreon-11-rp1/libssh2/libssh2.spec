@@ -144,3 +144,6 @@ LC_ALL=en_US.UTF-8 make -C tests check
 %{_libdir}/libssh2.so
 %{_libdir}/pkgconfig/libssh2.pc
 
+
+%changelog
+%autochangelog

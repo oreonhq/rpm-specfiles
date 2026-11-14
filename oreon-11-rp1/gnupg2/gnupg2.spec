@@ -74,22 +74,27 @@ BuildRequires: libgcrypt-devel >= 1.9.1
 BuildRequires: libgpg-error-devel >= 1.46
 BuildRequires: libksba-devel >= 1.6.3
 BuildRequires: openldap-devel
-BuildRequires: pcsc-lite-libs
 BuildRequires: ncurses-devel
 BuildRequires: npth-devel
 BuildRequires: readline-devel
 BuildRequires: zlib-devel
 BuildRequires: gnutls-devel
 BuildRequires: sqlite-devel
-BuildRequires: fuse
 BuildRequires: make
 BuildRequires: systemd-rpm-macros
 BuildRequires: texinfo
 BuildRequires: tpm2-tss-devel
-# for tests
+BuildRequires:  oreon-rpm-macros
+%bcond_with smartcard
+%bcond_with tpm_tests
+%if %{with smartcard}
+BuildRequires: pcsc-lite-libs
+BuildRequires: fuse
+%endif
+%if %{with tpm_tests}
 BuildRequires: openssh-clients
 BuildRequires: swtpm
-BuildRequires:  oreon-rpm-macros
+%endif
 
 Requires: libgcrypt >= 1.9.1
 Requires: libgpg-error >= 1.46
@@ -445,3 +450,6 @@ make -k check
 %{_mandir}/man?/gpg-wks-server.*
 
 
+
+%changelog
+%autochangelog

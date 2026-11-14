@@ -501,7 +501,7 @@ Suggests: glibc-minimal-langpack = %{version}-%{release}
 # Suggest extra gconv modules so that they are installed by default but can be
 # removed if needed to build a minimal OS image.
 Recommends: glibc-gconv-extra%{_isa} = %{version}-%{release}
-# Use redhat-rpm-config as a marker for a buildroot configuration, and
+# Use redhat-rpm-config (provided by oreon-rpm-config) as a marker for a buildroot configuration, and
 # unconditionally pull in glibc-gconv-extra in that case.
 Requires: (glibc-gconv-extra%{_isa} = %{version}-%{release} if redhat-rpm-config)
 
@@ -1236,9 +1236,9 @@ cat /proc/sysinfo 2>/dev/null || true
 cat /proc/meminfo
 df
 
-# Propgate select compiler flags from redhat-rpm-config.  These flags
+# Propagate select compiler flags from oreon-rpm-config.  These flags
 # are target-dependent, so we use only those which are specified in
-# redhat-rpm-config.  We keep the -m32/-m32/-m64 flags to support
+# oreon-rpm-config.  We keep the -m32/-m32/-m64 flags to support
 # multilib builds.
 
 %{lua:
@@ -2404,3 +2404,6 @@ update_gconv_modules_cache ()
 %{_prefix}/lib/audit/*
 %endif
 
+
+%changelog
+%autochangelog

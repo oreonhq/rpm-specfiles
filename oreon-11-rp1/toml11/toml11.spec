@@ -89,3 +89,6 @@ Development files for %{name}.
 %{_libdir}/cmake/%{name}/
 
 
+
+%changelog
+%autochangelog

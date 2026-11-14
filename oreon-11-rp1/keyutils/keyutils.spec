@@ -107,3 +107,6 @@ make \
 %{_libdir}/pkgconfig/libkeyutils.pc
 %{_mandir}/man3/*
 
+
+%changelog
+%autochangelog

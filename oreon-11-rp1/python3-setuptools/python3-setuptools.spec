@@ -130,3 +130,6 @@ A Python wheel of setuptools to use with venv.
 %files -n python-setuptools-wheel
 %dir %{python_wheel_dir}/
 %{python_wheel_dir}/setuptools-%{version}-py3-none-any.whl
+
+%changelog
+%autochangelog

@@ -99,3 +99,6 @@ rm -f $RPM_BUILD_ROOT%{_datadir}/info/dir
 %{_mandir}/man1/idn2.1*
 %{_infodir}/%{name}.info*
 
+
+%changelog
+%autochangelog
