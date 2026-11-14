@@ -1195,3 +1195,6 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %ldconfig_scriptlets -n libdnf5
 %ldconfig_scriptlets -n libdnf5-cli
 
+
+%changelog
+%autochangelog
