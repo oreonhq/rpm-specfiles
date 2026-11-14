@@ -385,3 +385,6 @@ ln -s /etc/crypto-policies/back-ends/openssl_fips.config $RPM_BUILD_ROOT%{_sysco
 
 %ldconfig_scriptlets libs
 
+
+%changelog
+%autochangelog
