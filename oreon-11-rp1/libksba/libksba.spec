@@ -97,3 +97,6 @@ make check
 %{_infodir}/ksba.info*
 
 
+
+%changelog
+%autochangelog
