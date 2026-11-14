@@ -40,3 +40,6 @@ install -m 644 oreon-package-notes %{buildroot}%{_rpmconfigdir}/oreon/oreon-pack
 %files
 %{_rpmmacrodir}/macros.package-notes-srpm
 %{_rpmconfigdir}/oreon/oreon-package-notes
+
+%changelog
+%autochangelog
