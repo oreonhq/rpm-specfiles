@@ -98,3 +98,6 @@ sed -i 's/\(\.TH[a-zA-Z ]*\)[1-9]\(.*\)/\18\2/' \
 %{_mandir}/man8/tcpslice.8*
 %{_mandir}/man8/tcpdump.8*
 
+
+%changelog
+%autochangelog
