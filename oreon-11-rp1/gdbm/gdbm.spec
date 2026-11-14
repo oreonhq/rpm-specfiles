@@ -125,3 +125,6 @@ make check
 %{_infodir}/*.info*
 %{_mandir}/man3/*
 
+
+%changelog
+%autochangelog
