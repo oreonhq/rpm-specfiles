@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash ea7de4299689e12b6dddd392f9896f08fb0777ac7168897a244a6d6085043fea
+%global source0_hash 449374d74f31b67796dece454d59b93e6f1538efcce0e9ac78000c98142c139e
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           fmt
-Version:        12.1.0
+Version:        12.2.1
 Release:        1%{?dist}
 
 License:        MIT
