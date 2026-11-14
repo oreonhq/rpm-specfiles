@@ -65,3 +65,6 @@ make %{?_smp_mflags} check
 %{_infodir}/*
 %{_mandir}/man1/m4.1*
 
+
+%changelog
+%autochangelog
