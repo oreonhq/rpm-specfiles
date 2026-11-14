@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash f87cee69eec2b4fcbf60a396b030ad6aa3415f192aa5f7ee84cad5e11f7f5ae3
+%global source0_hash 3240c7959c5347c8ed347e3c4201c0337bf4240d5cf09d68889e58eeaba30e17
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,19 +10,11 @@
 
 Summary: Utility for modifying/upgrading files
 Name: patch
-Version:        2.8
+Version:        2.8.1
 Release:        1%{?dist}
 License: GPL-3.0-or-later
 URL: https://savannah.gnu.org/projects/patch/
 Source0:        https://mirror.cs.odu.edu/gnu/patch/patch-%{version}.tar.xz
-Patch:        0001-patch:Add-some-missing-filename-quoting.patch
-Patch:        0002-patch:Reject-empty-filenames.patch
-Patch:        0003-patch:Skip-read-only-check-when-output-file-specified.patch
-Patch:        0004-patch:Avoid-null-pointer-derefence-with-bad-hunks.patch
-Patch:        0005-patch:Port-to-POSIX-ed.patch
-Patch:        0006-patch:Dont-infloop-on-null-ranges.patch
-Patch:        0007-patch:Remove-symlink-caching.patch
-Patch:        0008-patch:Absolute-in-tree-symlink-target-resolved-relative-to-symlink-parent.patch
 
 BuildRequires: make
 BuildRequires: gcc
