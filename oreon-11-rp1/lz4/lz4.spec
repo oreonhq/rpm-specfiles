@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b
+%global source0_hash 683fed08a844ad012196381e40badf80c0bbe4962959761416d41c9e67d77ec7
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -9,7 +9,7 @@
 %global _vpath_srcdir build/meson
 
 Name:           lz4
-Version:        1.10.0
+Version:        1.11.1
 Release:        1%{?dist}
 Summary:        Extremely fast compression algorithm
 
