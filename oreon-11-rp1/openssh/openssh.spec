@@ -16,13 +16,13 @@
 %global _hardened_build 1
 
 # Do we want to disable building of gnome-askpass? (1=yes 0=no)
-%global no_gnome_askpass 0
+%global no_gnome_askpass 1
 
 # Do we want to link against a static libcrypto? (1=yes 0=no)
 %global static_libcrypto 0
 
 # Use GTK3 instead of GTK2 in gnome-ssh-askpass
-%global gtk3 1
+%global gtk3 0
 
 # Build position-independent executables (requires toolchain support)?
 %global pie 1
@@ -168,18 +168,19 @@ Requires: audit-libs >= 1.0.8
 BuildRequires: audit-libs >= 1.0.8
 %endif
 
-BuildRequires: xauth
 # for tarball signature verification
 BuildRequires: openpgpverify
-
-# for regress tests
+BuildRequires:  oreon-rpm-macros
+%bcond_with regress_extra
+%if %{with regress_extra}
+BuildRequires: xauth
 BuildRequires: tmux
 BuildRequires: gdb
 BuildRequires: softhsm
 BuildRequires: putty
 BuildRequires: openssl
 BuildRequires: dropbear
-BuildRequires:  oreon-rpm-macros
+%endif
 
 %package clients
 Summary: An open source SSH client applications
@@ -526,3 +527,6 @@ test -f %{sysconfig_anaconda} && \
 %files sk-dummy
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so
 
+
+%changelog
+%autochangelog
