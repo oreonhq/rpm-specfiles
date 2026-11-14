@@ -126,6 +126,11 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/oreon common.lua
 install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 mkdir -p %{buildroot}%{_rpmconfigdir}/redhat
 install -p -m 644 oreon-hardened-cc1 %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-cc1
+install -p -m 644 oreon-hardened-ld %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-ld
+install -p -m 644 oreon-hardened-ld-errors %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-ld-errors
+install -p -m 644 oreon-hardened-clang.cfg %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-clang.cfg
+install -p -m 644 oreon-hardened-clang-ld.cfg %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-clang-ld.cfg
+install -p -m 644 oreon-annobin-cc1 %{buildroot}%{_rpmconfigdir}/redhat/redhat-annobin-cc1
 
 install -p -m 644 %{SOURCE35} .
 
@@ -183,4 +188,10 @@ done
 %dir %{_rpmluadir}/oreon/rpm
 %{_rpmluadir}/oreon/common.lua
 %{_rpmluadir}/fedora/common.lua
+%dir %{_rpmconfigdir}/redhat
 %{_rpmconfigdir}/redhat/redhat-hardened-cc1
+%{_rpmconfigdir}/redhat/redhat-hardened-ld
+%{_rpmconfigdir}/redhat/redhat-hardened-ld-errors
+%{_rpmconfigdir}/redhat/redhat-hardened-clang.cfg
+%{_rpmconfigdir}/redhat/redhat-hardened-clang-ld.cfg
+%{_rpmconfigdir}/redhat/redhat-annobin-cc1
