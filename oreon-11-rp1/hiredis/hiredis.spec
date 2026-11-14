@@ -18,7 +18,10 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  openssl-devel
 %ifnarch %{ix86}
+%bcond_with valkey
+%if %{with valkey}
 BuildRequires:  valkey
+%endif
 BuildRequires:  oreon-rpm-macros
 %endif
 
@@ -67,3 +70,6 @@ make check REDIS_SERVER=valkey-server
 %{_libdir}/pkgconfig/hiredis.pc
 %{_libdir}/pkgconfig/hiredis_ssl.pc
 
+
+%changelog
+%autochangelog
