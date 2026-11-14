@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc
+%global source0_hash 64f9e7825d3f560d382869fdc46f9bfb033f2e765597db0df4d79fcc374ed10d
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -9,7 +9,7 @@
 %define __cmake_in_source_build 1
 
 Name:           libcomps
-Version:        0.1.24
+Version:        0.1.25
 Release:        1%{?dist}
 Summary:        Comps XML file manipulation library
 
@@ -124,5 +124,5 @@ popd
 
 %files -n python3-%{name}
 %{python3_sitearch}/%{name}/
-%{python3_sitearch}/%{name}-%{version}-py%{python3_version}.egg-info
+%{python3_sitearch}/%{name}-%{version}.dist-info
 
