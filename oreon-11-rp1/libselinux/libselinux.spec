@@ -233,3 +233,6 @@ rm -f %{buildroot}%{_mandir}/man8/togglesebool*
 %files ruby
 %{ruby_vendorarchdir}/selinux.so
 
+
+%changelog
+%autochangelog
