@@ -24,6 +24,8 @@ BuildRequires: zlib-devel
 BuildRequires: openssl-devel
 BuildRequires: libuuid-devel
 BuildRequires: expat-devel
+BuildRequires: lz4-devel
+BuildRequires: pkgconfig(liblz4)
 
 %description
 Subversion version control system.
@@ -33,7 +35,7 @@ Subversion version control system.
 %autosetup -n subversion-%{version}
 
 %build
-%configure --with-apr=%{_prefix} --with-apr-util=%{_prefix} --with-sqlite=/usr --with-zlib=/usr
+%configure --with-apr=%{_prefix} --with-apr-util=%{_prefix} --with-sqlite=/usr --with-zlib=/usr --with-lz4=%{_prefix}
 %make_build
 
 %install
