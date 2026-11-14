@@ -64,3 +64,6 @@ make check CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFL
 
 %files -f %{_builddir}/%{name}.files
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%changelog
+%autochangelog
