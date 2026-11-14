@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7
-%global source1_hash 9264d3673cc1c633f77ab1469627864836e6500cb9b3823c571dcb1c10ba13cb
+%global source0_hash cb0d6dd2128d5a95bd242c6cc982a24fe608fa93da57b6b4ec763b0018c53e64
+%global source1_hash 65ca5d646db151e403d9271202c609ff72c41781285bae310e635a90f7e28d08
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -12,7 +12,7 @@
 
 Name:           libuv
 Epoch:          1
-Version:        1.52.1
+Version:        1.53.0
 Release:        1%{?dist}
 Summary:        Platform layer for node.js
 
