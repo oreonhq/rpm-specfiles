@@ -8,7 +8,7 @@
 %oreon_bootstrap
 %global api_version 1.20
 
-# redhat-rpm-config sets CFLAGS, CXXFLAGS and LDFLAGS, but not
+# oreon-rpm-config sets CFLAGS, CXXFLAGS and LDFLAGS, but not
 # OBJCFLAGS. This means that Obj-C tests will be compiled without hardening
 # flags, and then fail when linked with the hardened linker flags.
 # We therefore need to disable build flags to be able to test automake itself.
@@ -129,7 +129,7 @@ autoreconf -iv
 
 
 %build
-# redhat-rpm-config package, which provides this configure macro, will overwrite
+# oreon-rpm-config package, which provides this configure macro, will overwrite
 # the config.sub and config.guess files intentionally. The automake maintainer
 # needs to check that those files are provided up to date.
 %configure
@@ -163,3 +163,6 @@ make -k %{?_smp_mflags} check %{?TESTS_FLAGS: TESTS="%{TESTS_FLAGS}"} \
 %{_mandir}/man1/*
 
 
+
+%changelog
+%autochangelog
