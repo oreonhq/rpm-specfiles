@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash c268cfcd230cc7ed5447fb34ed21bf4977315c7104356a39388b6ba784ad11b0
+%global source0_hash e71d93de41e8e4b2554c36d2ae51758112a21ecf3a8c98605a2c689251e62987
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:           fastfetch
-Version:        2.68.1
+Version:        2.71.0
 Release:        1%{?dist}
 Summary:        Fast neofetch-like system information tool
 
