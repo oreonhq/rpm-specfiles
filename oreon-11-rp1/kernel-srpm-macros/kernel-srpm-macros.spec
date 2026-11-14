@@ -15,7 +15,7 @@ Summary:        RPM macros that list arches the full kernel is built on
 # The license is the standard (MIT) specified in
 # and as URL we provide dist-git URL
 License:        MIT
-URL:            https://src.fedoraproject.org/rpms/kernel-srpm-macros
+URL:            https://oreonhq.com
 BuildArch:      noarch
 BuildRequires:  oreon-rpm-macros
 # We are now the ones shipping kmod.attr
@@ -66,7 +66,7 @@ Version: 205
 Summary: Macros and scripts for building kernel module packages
 # rpmsort is GPL-2.0-or-later
 License:        MIT AND GPL-2.0-or-later
-Requires: redhat-rpm-config >= 205
+Requires:       oreon-rpm-config >= 205
 
 # for kmodtool
 Requires: %{_bindir}/envsubst
@@ -143,3 +143,6 @@ install -p -m 644 -t "%{buildroot}%{_fileattrsdir}" modalias.attr
 %{rrcdir}/kmodtool
 %{rrcdir}/rpmsort
 
+
+%changelog
+%autochangelog
