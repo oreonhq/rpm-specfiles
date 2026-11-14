@@ -94,3 +94,6 @@ install contrib/gen_xml_dictionary %{buildroot}%{_libexecdir}/zck_gen_xml_dictio
 %{_libdir}/pkgconfig/zck.pc
 %{_includedir}/zck.h
 
+
+%changelog
+%autochangelog
