@@ -29,7 +29,7 @@ Patch:        gnutls-3.2.7-rpath.patch
 Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_without bootstrap
-%bcond_without dane
+%bcond_with dane
 %bcond_without fips
 %bcond_with tpm12
 %bcond_without tpm2
@@ -41,7 +41,7 @@ Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_with srp
 
-%bcond_without mingw
+%bcond_with mingw
 
 %bcond_with bundled_gmp
 
@@ -77,7 +77,13 @@ BuildRequires: tpm2-tss-devel >= 3.0.3
 %endif
 BuildRequires: libidn2-devel
 BuildRequires: libunistring-devel
-BuildRequires: net-tools, softhsm, gcc, gcc-c++
+BuildRequires: softhsm
+BuildRequires: gcc
+BuildRequires: gcc-c++
+%bcond_with net_tools
+%if %{with net_tools}
+BuildRequires: net-tools
+%endif
 BuildRequires: gnupg2
 BuildRequires: git-core
 %if %{with crypto_auditing}
@@ -594,3 +600,6 @@ popd
 %{mingw64_includedir}/gnutls/
 %endif
 
+
+%changelog
+%autochangelog
