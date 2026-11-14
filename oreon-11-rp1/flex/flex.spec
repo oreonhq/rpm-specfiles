@@ -140,3 +140,6 @@ echo ============END TESTING===========
 %license COPYING
 %{_libdir}/*.a
 
+
+%changelog
+%autochangelog
