@@ -189,3 +189,6 @@ rm -f ${RPM_BUILD_ROOT}%{_libdir}/lib%{name}*.la
 %doc doc/build/html/
 
 
+
+%changelog
+%autochangelog
