@@ -32,10 +32,10 @@ BuildRequires:  python3-rpm-macros
 BuildRequires:  oreon-rpm-macros
 %endif
 
-# We require macros and lua defined in redhat-rpm-config
+# We require macros and lua defined in oreon-rpm-config
 # We constrain this to the version released after the code was split out that
 # doesn't contain the same files.
-Requires:       redhat-rpm-config >= 266-1
+Requires:       oreon-rpm-config >= 266-1
 
 
 %description
@@ -82,3 +82,6 @@ export MACRO_LUA_DIR="%{buildroot}%{_rpmluadir}"
 %{_rpmluadir}/oreon/srpm/_forge_util.lua
 
 
+
+%changelog
+%autochangelog
