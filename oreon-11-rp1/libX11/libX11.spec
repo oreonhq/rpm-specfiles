@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 69606f485c2c07c14ef64f75b7bb326d48587af33795d9ab3e607c0b5f94f11c
+%global source0_hash bbc78c46217174655c2b32b138ad119f3ac15f50808b4d0b3a2677a4b1afc950
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -12,7 +12,7 @@
 
 Summary: Core X11 protocol client library
 Name: libX11
-Version:        1.8.13
+Version:        1.8.14
 Release:        1%{?dist}
 License: MIT AND X11
 URL: http://www.x.org
@@ -27,7 +27,6 @@ Source0:        https://xorg.freedesktop.org/archive/individual/lib/libX11-%{ver
 
 
 Patch2:        dont-forward-keycode-0.patch
-Patch0001:        0001-xkb-Check-the-keysym-range-in-_XkbReadKeyActions-CVE.patch
 
 BuildRequires: libtool
 BuildRequires: make
