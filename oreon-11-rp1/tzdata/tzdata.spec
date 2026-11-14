@@ -24,7 +24,7 @@ Patch002:        0002-Fix-have-snprintf-error.patch
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gawk, glibc, perl-interpreter
-BuildRequires: java-25-devel
+BuildRequires: java-25-openjdk-portable-devel
 BuildRequires: glibc-common >= 2.5.90-7
 BuildRequires:  oreon-rpm-macros
 Conflicts: glibc-common <= 2.3.2-63
@@ -152,3 +152,6 @@ echo ============END TESTING===========
 %files java
 %{_datadir}/javazi-1.8
 
+
+%changelog
+%autochangelog
