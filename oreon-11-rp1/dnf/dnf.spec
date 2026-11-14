@@ -29,7 +29,7 @@
 # *release 505 renamed /usr/bin/yum to /usr/bin/yum-deprecated
 %global yum_compat_level full
 %global yum_subpackage_name yum
-    # Avoid file conflict with yum < 4 in all Fedoras
+    # Avoid file conflict with yum < 4
     %global yum_compat_level minimal
 
 # paths
@@ -383,3 +383,6 @@ fi
 %files bootc
 # bootc subpackage does not include any files
 
+
+%changelog
+%autochangelog
