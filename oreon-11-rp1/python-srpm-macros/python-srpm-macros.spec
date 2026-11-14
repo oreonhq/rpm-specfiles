@@ -54,3 +54,6 @@ install -m 644 %{SOURCE7} %{buildroot}%{_rpmluadir}/oreon/srpm/python.lua
 %{_rpmconfigdir}/oreon/brp-python-rpm-in-distinfo
 %{_rpmconfigdir}/oreon/brp-fix-pyc-reproducibility
 %{_rpmluadir}/oreon/srpm/python.lua
+
+%changelog
+%autochangelog
