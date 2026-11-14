@@ -4,7 +4,7 @@
 %global _legacy_common_support 1
 
 Name:		sxhkd
-Version:	0.6.1
+Version:	0.6.3
 Release:	1%{?dist}
 Summary:	Simple X hotkey daemon
 
