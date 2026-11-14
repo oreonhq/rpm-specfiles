@@ -108,3 +108,6 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
 %{_pkgdocdir}/examples
 %{_infodir}/mpfr.info*
 
+
+%changelog
+%autochangelog
