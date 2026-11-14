@@ -100,3 +100,6 @@ rm -vf %{buildroot}%{_infodir}/dir*
 %{_libdir}/libreadline.a
 %{_libdir}/libhistory.a
 
+
+%changelog
+%autochangelog
