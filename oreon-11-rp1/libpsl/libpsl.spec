@@ -154,3 +154,6 @@ make check || cat tests/test-suite.log
 %{_bindir}/psl-make-dafsa
 %{_mandir}/man1/psl-make-dafsa.1*
 
+
+%changelog
+%autochangelog
