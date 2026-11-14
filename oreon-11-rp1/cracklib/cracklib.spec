@@ -164,3 +164,6 @@ make test DESTDIR=%{buildroot}
 %{_libdir}/cracklib_dict.*
 %{_sbindir}/mkdict
 
+
+%changelog
+%autochangelog
