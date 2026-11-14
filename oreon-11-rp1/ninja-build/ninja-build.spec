@@ -139,3 +139,6 @@ cp -a %{ninja_distinfo} %{buildroot}%{python3_sitelib}
 %endif
 
 
+
+%changelog
+%autochangelog
