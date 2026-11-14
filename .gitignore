@@ -24,6 +24,10 @@ __pycache__/
 
 !oreon-11-rp1/rpm-sequoia/rpm-sequoia-*-vendor.tar.xz
 !oreon-11-rp1/sequoia-sqv/sequoia-sqv-*-vendor.tar.xz
+!oreon-11-rp1/python3-maturin/maturin-*-vendor.tar.xz
+!oreon-11-rp1/python3-fastbencode/fastbencode-*-vendor.tar.xz
+!oreon-11-rp1/python3-patiencediff/patiencediff-*-vendor.tar.xz
+!oreon-11-rp1/python3-vcsgraph/vcsgraph-*-vendor.tar.xz
 !oreon-11-rp1/doxygen/doxywizard-icons.tar.bz2
 !oreon-11-rp1/tzdata/javazic-1.8-37392f2f5d59.tar.xz
 
