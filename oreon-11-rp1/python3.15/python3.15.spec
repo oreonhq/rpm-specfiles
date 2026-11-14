@@ -309,12 +309,9 @@ BuildRequires: tzdata
 %endif
 
 %if %{with jit_build_stencils}
-# We need the upstream-specified clang+llvm version to build the JIT stencils.
-BuildRequires: clang >= 21
-BuildRequires: llvm >= 21
+BuildRequires: clang(major) = 21
+BuildRequires: llvm(major) = 21
 %elif %{with jit}
-# We need any clang with __attribute__((preserve_none)) support to build+link the JIT shim.
-# We also use the "primary" clang package here, so we can use the unversioned clang command.
 BuildRequires: clang >= 19
 BuildRequires: llvm >= 19
 %endif
