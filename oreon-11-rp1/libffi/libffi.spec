@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash f3a3082a23b37c293a4fcd1053147b371f2ff91fa7ea1b2a52e335676bac82dc
+%global source0_hash 7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -11,7 +11,7 @@
 %global multilib_arches %{ix86} x86_64
 
 Name:		libffi
-Version:        3.5.2
+Version:        3.8.0
 Release:        1%{?dist}
 Summary:	A portable foreign function interface library
 # No license change for 3.5.2
@@ -144,7 +144,7 @@ install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/ffitarget.h
 %license LICENSE
 %doc README.md
 %{_libdir}/libffi.so.8
-%{_libdir}/libffi.so.8.2.0
+%{_libdir}/libffi.so.8.5.0
 
 %files devel
 %{_libdir}/pkgconfig/*.pc
