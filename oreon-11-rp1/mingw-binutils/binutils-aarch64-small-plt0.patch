@@ -1,0 +1,13 @@
+diff -rupN --no-dereference binutils-2.46.0/bfd/elfnn-aarch64.c binutils-2.46.0-new/bfd/elfnn-aarch64.c
+--- binutils-2.46.0/bfd/elfnn-aarch64.c	2026-03-21 22:42:41.601628489 +0100
++++ binutils-2.46.0-new/bfd/elfnn-aarch64.c	2026-03-21 22:42:48.389098464 +0100
+@@ -10255,7 +10255,8 @@ elfNN_aarch64_init_small_plt0_entry (bfd
+   /* PR 26312: Explicitly set the sh_entsize to 0 so that
+      consumers do not think that the section contains fixed
+      sized objects.  */
+-  elf_section_data (htab->root.splt->output_section)->this_hdr.sh_entsize = 0;
++  if (elf_section_data (htab->root.splt->output_section) != NULL)
++    elf_section_data (htab->root.splt->output_section)->this_hdr.sh_entsize = 0;
+ 
+   plt_got_2nd_ent = (htab->root.sgotplt->output_section->vma
+ 		  + htab->root.sgotplt->output_offset

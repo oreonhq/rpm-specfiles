@@ -1,0 +1,14 @@
+diff -rupN --no-dereference binutils-2.46.0/ld/testsuite/ld-elf/linux-x86.exp binutils-2.46.0-new/ld/testsuite/ld-elf/linux-x86.exp
+--- binutils-2.46.0/ld/testsuite/ld-elf/linux-x86.exp	2026-03-21 22:42:46.213414456 +0100
++++ binutils-2.46.0-new/ld/testsuite/ld-elf/linux-x86.exp	2026-03-21 22:42:51.566704016 +0100
+@@ -225,6 +225,10 @@ if { [check_ifunc_attribute_available] }
+ # Old gcc silently ignores __attribute__ ((aligned())) with too big alignment.
+ proc compiler_honours_aligned { } {
+     global CC_FOR_TARGET READELF srcdir subdir
++
++    # Temporary fix for CentOS-10 kernel issue.  (RHEL-22466)
++    return 0 
++    
+     ld_compile $CC_FOR_TARGET $srcdir/$subdir/p_align-1.c tmpdir/p_align-1.o
+     set output [run_host_cmd "$READELF" "-SW tmpdir/p_align-1.o"]
+     if { [regexp { [.]data *PROGBITS .* 8388608[\n]} $output] } {
