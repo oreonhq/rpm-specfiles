@@ -30,12 +30,7 @@ BuildRequires: oreon-rpm-macros
 # however, some of its tests do use gold, which is packaged separately
 # Since LLVM 24, most tests use ld.bfd instead, and gold is no longer needed.
 %if %{maj_ver} < 24
-%define gold_arches %{ix86} x86_64 aarch64 %{power64} s390x
-%ifarch %{gold_arches}
-  %bcond_without gold
-%else
-  %bcond_with gold
-%endif
+%bcond_with gold
 %endif
 
 # Enable this in order to disable a lot of features and get to clang as fast
@@ -95,16 +90,8 @@ BuildRequires: oreon-rpm-macros
 %endif
 %endif
 
-# MLIR version 22 started to require nanobind >= 2.9, which is only available
-%if %{without compat_build}
-%ifarch %{ix86}
+# MLIR needs nanobind/numpy/pybind11 which are not in the tree yet
 %bcond_with mlir
-%else
-%bcond_without mlir
-%endif
-%else
-%bcond_with mlir
-%endif
 
 %ifarch riscv64
 # MLIR Execution Engine doesn't quite work on riscv64, see:
@@ -115,19 +102,8 @@ BuildRequires: oreon-rpm-macros
 %endif
 
 #region flang
-%if %{without compat_build}
-%if %{maj_ver} >= 24
-# Flang is not supported on i686
-%ifnarch i686
-%bcond_without flang
-%endif
-%else
-# Flang is not supported on s390x either prior to LLVM 24
-%ifnarch i686 s390x
-%bcond_without flang
-%endif
-%endif
-%endif
+# flang needs mlir which is gated off until its python deps land
+%bcond_with flang
 
 %if %{with flang}
 
@@ -606,7 +582,10 @@ BuildRequires:	lld
 # python3.12-sphinx, and we are only using it as a binary anyway.
 BuildRequires:	python3-sphinx
 %endif
+%bcond_with psutil
+%if %{with psutil}
 BuildRequires: python%{python3_pkgversion}-psutil
+%endif
 # Needed for %%multilib_fix_c_header
 %if %{with multilib}
 BuildRequires:	multilib-rpm-config
@@ -3968,3 +3947,6 @@ fi
 
 #endregion files
 
+
+%changelog
+%autochangelog
