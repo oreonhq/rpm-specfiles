@@ -11,7 +11,7 @@ Version:        2.15.1
 Release:        1%{?dist}
 License: LicenseRef-Oreon-Public-Domain
 # This package is a downstream-only project
-URL: https://src.fedoraproject.org/rpms/setup
+URL: https://github.com/oreonhq/rpm-specfiles
 
 Source0001: aliases
 Source0002: bashrc
@@ -40,7 +40,10 @@ Source0035: serviceslint
 
 BuildArch: noarch
 BuildRequires: bash
+%bcond_with tcsh
+%if %{with tcsh}
 BuildRequires: tcsh
+%endif
 BuildRequires: perl-interpreter
 BuildRequires: /usr/bin/systemd-sysusers
 #systemd-rpm-macros: required to use _sysusersdir and _tmpfilesdir macro
@@ -190,3 +193,6 @@ end
 %dir /usr/share/dnf5/libdnf.conf.d
 /usr/share/dnf5/libdnf.conf.d/protect-setup.conf
 
+
+%changelog
+%autochangelog
