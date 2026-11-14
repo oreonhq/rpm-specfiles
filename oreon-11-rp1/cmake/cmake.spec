@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash f51b3c729f85d8dde46a92c071d2826ea6afb77d850f46894125de7cc51baa77
+%global source0_hash 424352d6133e8455e020da787008e8dc67abb18820af3532572ab35657e49213
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -65,7 +65,7 @@
 %{!?_vpath_builddir:%global _vpath_builddir %{_target_platform}}
 
 %global major_version 4
-%global minor_version 3
+%global minor_version 5
 %global patch_version 0
 
 # For handling bump release by rpmdev-bumpspec and mass rebuild
@@ -87,7 +87,7 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
-Version:        4.3.0
+Version:        4.5.0
 Release:        1%{?dist}
 Summary:        Cross-platform make system
 
@@ -98,7 +98,7 @@ Summary:        Cross-platform make system
 # exception granting redistribution under terms of your choice
 License:        BSD-3-Clause AND MIT-open-group AND Zlib%{?with_bundled_cppdap: AND Apache-2.0}
 URL:            http://www.cmake.org
-Source0:        http://www.cmake.org/files/v4.3/cmake-%{version}.tar.gz
+Source0:        http://www.cmake.org/files/v4.5/cmake-%{version}.tar.gz
 Source1:        %{name}-init.el
 Source2:        macros.%{name}.in
 Source3:        macros.aaa-%{name}-srpm
