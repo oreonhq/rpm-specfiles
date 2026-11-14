@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298
+%global source0_hash f17a6d7d265cf840dfd8f0f46a606d98c6b5b26dc7cfe27275d1546a213086c8
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -29,23 +29,22 @@
 %global so_ver 5
 
 # Releases are tagged with a date stamp.
-%global reldate 20240915
+%global reldate 20260627
 
 %bcond_without mingw
 
 
 Name:           json-c
-Version:        0.18
+Version:        0.19
 Release:        1%{?dist}
 Summary:        JSON implementation in C
 
 License:        MIT
 URL:            https://github.com/%{name}/%{name}
-Source0:        https://github.com/json-c/json-c/archive/json-c-%{version}-20240915.tar.gz
+Source0:        https://github.com/json-c/json-c/archive/json-c-%{version}-%{reldate}.tar.gz
 
 # Add libver to mingw dll
 Patch0:        json-c_mingw-libver.patch
-Patch1:        json-c-0.18-utf8-validation.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc
