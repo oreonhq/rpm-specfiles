@@ -85,3 +85,6 @@ make check
 %{_infodir}/assuan.info*
 
 
+
+%changelog
+%autochangelog
