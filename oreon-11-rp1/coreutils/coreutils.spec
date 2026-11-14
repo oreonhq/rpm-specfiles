@@ -1,20 +1,20 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 394024eda0a5955217ceda9cd1201e65dc8fa3aa29c2951135a49521d57c3cc3
+%global source0_hash a480198559733e9b3da999e90543ac6f888a2caa544d8d664c5a1f17e528e210
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: A set of basic GNU tools commonly used in shell scripts
 Name:    coreutils
-Version:        9.11
+Version:        9.12
 Release:        1%{?dist}
 # some used parts of gnulib are under various variants of LGPL
 License: GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 Url:     https://www.gnu.org/software/coreutils/
 Source0:        https://mirror.cs.odu.edu/gnu/coreutils/coreutils-%{version}.tar.xz
-Source1:        coreutils-9.11.tar.xz.sig
+Source1:        coreutils-9.12.tar.xz.sig
 # From https://savannah.gnu.org/project/release-gpgkeys.php?group=coreutils&download=1
 # which is linked as project keyring on https://savannah.gnu.org/projects/coreutils
 Source2: coreutils-keyring.gpg
@@ -42,18 +42,13 @@ Patch103:        coreutils-python3.patch
 # df --direct
 Patch104:        coreutils-df-direct.patch
 
-# unexpand: fix heap overflows
-# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=b60a159fdc5bfcf9988d3a4cb6f53abe8ad5d35d
-# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=4ade9cf77f6c7b39e3fdc5ce97a778f8e294694c
-Patch200:        coreutils-9.11-unexpand-heap-overflows.patch
+# env,printenv: only quote when outputting to terminals
+# https://github.com/coreutils/coreutils/commit/782a1e5b
+Patch200:        coreutils-9.12-env-quote-fix.patch
 
-# CVE-2026-56391 - uniq: fix read overrun with -w
-# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=d64e35a8a4c0e4608321433e0d84d917e4e36371
-Patch201:        coreutils-9.11-CVE-2026-56391.patch
-
-# tee: fix infinite loop when write returns EAGAIN and short write errors
-# https://cgit.git.savannah.gnu.org/cgit/coreutils.git/commit/?id=0d6fcb99d691d920961938e61c43478566ef626e
-Patch202:        coreutils-9.11-tee-infinite-loop.patch
+# regex: check for glibc greek locale bug 20381
+# https://github.com/coreutils/gnulib/commit/acc1d91810
+Patch201:        coreutils-9.12-gnulib-regex-greek.patch
 
 # (sb) lin18nux/lsb compliance - multibyte functionality patch
 Patch800:        coreutils-i18n.patch
