@@ -134,3 +134,6 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}/%{name}*
 %files -n libacl
 %{_libdir}/libacl.so.*
 
+
+%changelog
+%autochangelog
