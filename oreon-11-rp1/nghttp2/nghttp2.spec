@@ -6,13 +6,8 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global with_http3 0
-%global with_mingw 0
-
-# Enable HTTP/3 support in nghttpx and h2load
 %global with_http3 1
-
-%global with_mingw 1
+%global with_mingw 0
 
 Summary: Experimental HTTP/2 client, server and proxy
 Name: nghttp2
@@ -235,3 +230,6 @@ popd
 %endif
 
 
+
+%changelog
+%autochangelog
