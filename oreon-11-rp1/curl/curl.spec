@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash aa1b66a70eace83dc624508745646c08ae561de512ab403adffb93ac87fc72e6
+%global source0_hash 8dadd7d2536a314f982ad05a651b713f426bf7d02cc2c76cffb9796f2218e6c5
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -17,27 +17,19 @@
 
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
-Version:        8.21.0
+Version:        8.23.0
 Release:        1%{?dist}
 License: curl
 Source0:        https://curl.se/download/curl-%{version}.tar.xz
-Source1:        curl-8.21.0.tar.xz.asc
+Source1:        curl-8.23.0.tar.xz.asc
 # The curl download page ( https://curl.se/download.html ) links
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
 # which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc
 Source2: mykey.asc
 
 Patch0001:        0001-prevent-multilib-conflicts-on-the-curl-config-script.patch
-Patch0002:        0002-lib-add-multi_wakeup_internal.patch
-Patch0003:        0003-http2-make-server-push-transfers-inherit-share-from-.patch
-Patch0004:        0004-connections-use-admin-handles-only-for-maintenance.patch
-Patch0005:        0005-tests-remove-test1701.patch
-Patch0006:        0006-cookie-improve-TAB-handling.patch
-Patch0007:        0007-openssl-avoid-conn-reuse-if-provider-is-used.patch
-Patch0008:        0008-openldap-handle-Curl_sasl_continue-returns-better.patch
-Patch0009:        0009-openssl-no-server-cert-is-only-okay-if-also-not-pinn.patch
+Patch0003:        0003-conncache-poll-an-idle-connection-for-pending-input-.patch
 Patch0010:        0010-ci-setup-packit.patch
-Patch0011:        0011-multi-adjust-the-cleanup-order-in-multi_done.patch
 
 Provides: curl-full = %{version}-%{release}
 # do not fail when trying to install curl-minimal after drop
@@ -284,9 +276,6 @@ sed -e 's|NUM_THREADS 1000$|NUM_THREADS 256|' \
     -i tests/libtest/lib3026.c
 %endif
 
-# adapt test 323 for updated OpenSSL
-sed -e 's|^35$|35,52|' -i tests/data/test323
-
 # use localhost6 instead of ip6-localhost in the curl test-suite
 (
     # avoid glob expansion in the trace output of `bash -x`
@@ -405,7 +394,7 @@ for size in minimal full; do (
     export LD_LIBRARY_PATH="${PWD}/lib/.libs"
 
     # tests that must run in serial to avoid intermittent failures under parallel execution
-    serial_tests="766 1399 2402 2404 2500 2502 3300 3301"
+    serial_tests="766 1399 1451 2402 2404 2500 2502 3300 3301 3231 3232"
     serial_excludes=$(for t in $serial_tests; do printf ' !%s' "$t"; done)
     # run the bulk of tests in parallel, excluding serial ones
     # cap at 64 jobs to avoid overwhelming system resources on high-CPU machines
@@ -469,7 +458,7 @@ rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 %{_libdir}/libcurl.so.4.[0-9].[0-9]
 
 %files -n libcurl-devel
-%doc docs/examples/*.c docs/examples/Makefile.example docs/INTERNALS.md
+%doc docs/examples/*.c docs/examples/Makefile.example docs/DEPENDENCIES.md
 %doc docs/CONTRIBUTE.md docs/libcurl/ABI.md
 %{_bindir}/curl-config*
 %{_includedir}/curl
