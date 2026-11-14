@@ -135,3 +135,6 @@ find doc -type f -executable -print -exec chmod 0644 {} ';'
 %{python3_sitelib}/drv_libxml2.py
 %{python3_sitelib}/__pycache__/drv_libxml2.*
 
+
+%changelog
+%autochangelog
