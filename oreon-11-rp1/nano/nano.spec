@@ -136,3 +136,6 @@ install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basen
 %endif
 
 
+
+%changelog
+%autochangelog
