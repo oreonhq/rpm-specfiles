@@ -250,3 +250,6 @@ run_testsuite
 %{_mandir}/*/bsdunzip*
 
 
+
+%changelog
+%autochangelog
