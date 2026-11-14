@@ -133,3 +133,6 @@ make %{?_smp_mflags} check
 %{_mandir}/man3/*.3*
 %{_mandir}/man5/*.5*
 
+
+%changelog
+%autochangelog
