@@ -8,11 +8,7 @@
 %oreon_bootstrap
 %bcond_without selinux
 # Don't run check on 32-bit arches, seems to be issues with some tests
-%ifarch %{ix86} %{arm}
 %bcond_with check
-%else
-%bcond_without check
-%endif
 
 Summary: GNU file archiving program
 Name: tar
@@ -195,3 +191,6 @@ make check || (
 %{_infodir}/tar.info*
 
 
+
+%changelog
+%autochangelog
