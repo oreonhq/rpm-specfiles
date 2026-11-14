@@ -160,3 +160,6 @@ make check
 %{_infodir}/%{name}.info*
 %{_libdir}/pkgconfig/%{name}*.pc
 
+
+%changelog
+%autochangelog
