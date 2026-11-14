@@ -1,12 +1,12 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash c739578bf6b764aa0752db9a2fdadcfe921c78f1228c7ec0bb47fa804c55d17b
+%global source0_hash dbf95cb0af903f4fb8b61507d96b45b67db7d1479688ede352e1d571394d06f7
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-Version:        2.14
+Version:        2.15.1
 
 Name:		jansson
 Release:        1%{?dist}
@@ -17,9 +17,6 @@ URL:		https://github.com/akheron/jansson
 Source0:        https://github.com/akheron/jansson/archive/v%{version}/jansson-%{version}.tar.gz
 Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.4.tar.gz
 
-# Fix the tests.
-# Upstream commit 0677666f65b988b2dd44d02966a08fea490d5883
-Patch:        0001-Fix-the-check-exports-tests-for-versioned-symbols.patch
 
 BuildRequires:	gcc
 BuildRequires:	python3-sphinx
