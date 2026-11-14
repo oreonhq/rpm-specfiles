@@ -156,3 +156,6 @@ fi
 %ghost %{_mandir}/man1/nc.1.gz
 %{_mandir}/man1/ncat.1.gz
 
+
+%changelog
+%autochangelog
