@@ -110,3 +110,6 @@ rm -rf %{buildroot}%{_docdir}/pkgconf
 %{_includedir}/pkgconf/
 %{_libdir}/libpkgconf.so
 %{_libdir}/pkgconfig/libpkgconf.pc
+
+%changelog
+%autochangelog
