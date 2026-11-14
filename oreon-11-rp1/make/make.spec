@@ -135,3 +135,6 @@ echo ============END TESTING===========
 %files -n %{make}-devel
 %{_includedir}/gnumake.h
 
+
+%changelog
+%autochangelog
