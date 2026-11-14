@@ -41,11 +41,20 @@ Headers and libraries for building against apr-util.
 export CC=clang
 export CFLAGS="%{optflags}"
 export LDFLAGS="%{build_ldflags}"
+for f in \
+    %{_libdir}/libapr-1.la \
+    %{_libdir}/apr-1/build/libtool \
+    %{_bindir}/apr-1-config \
+    %{_libdir}/pkgconfig/apr-1.pc
+do
+  [ -e "$f" ] || continue
+  sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' "$f"
+done
 %configure --with-apr=%{_prefix} --with-openssl --with-crypto --with-sqlite3 --with-expat=%{_prefix} --disable-static
-# base apr-1-config still injects gcc + fedora -specs into make vars
-find . -type f \( -name Makefile -o -name '*.mk' \) -exec sed -i \
+find . -type f \( -name Makefile -o -name '*.mk' -o -name 'libtool' -o -name '*.la' \) -exec sed -i \
     -e 's/^CC *=.*/CC = clang/' \
-    -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
+    -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' \
+    -e 's|%{_libdir}/libapr-1\.la|-lapr-1|g' \
     {} +
 %{make_build} CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}"
 
