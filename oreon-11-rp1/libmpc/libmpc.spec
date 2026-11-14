@@ -3,10 +3,6 @@
 
 %global source0_hash 91204cd32f164bd3b7c992d4a6a8ce6519511aadab30f78b6982d0bf8d73e931
 
-%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
-%bcond bootstrap 0
-%oreon_bootstrap
-
 Summary: C library for multiple precision complex arithmetic
 Name: libmpc
 Version: 1.4.1
@@ -17,7 +13,7 @@ Source0: https://ftp.gnu.org/gnu/mpc/mpc-%{version}.tar.xz
 Source1: mpc-1.4.1.tar.xz.sig
 Source2: enge.gpg
 
-# BuildRequires: oreon-rpm-macros
+BuildRequires: gpgverify
 BuildRequires: gcc
 BuildRequires: gmp-devel >= 5.0.0
 BuildRequires: mpfr-devel >= 4.1.0
@@ -50,8 +46,8 @@ BuildArch: noarch
 Documentation for the MPC library.
 
 %prep
-%oreon_sha256
-%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
+echo '%{source0_hash}  %{SOURCE0}' | sha256sum -c -
+%{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
 %autosetup -n mpc-%{version}
 
 %build
