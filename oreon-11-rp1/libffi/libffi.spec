@@ -153,3 +153,6 @@ install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/ffitarget.h
 %{_mandir}/man3/*.gz
 %{_infodir}/libffi.info.*
 
+
+%changelog
+%autochangelog
