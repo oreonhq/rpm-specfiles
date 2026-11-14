@@ -47,12 +47,13 @@ find . -type f \( -name Makefile -o -name '*.mk' \) -exec sed -i \
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/libapr-1.la
-# apr-1-config must not ship fedora -specs into reverse deps
-sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
+sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' \
     %{buildroot}%{_bindir}/apr-1-config \
     %{buildroot}%{_libdir}/pkgconfig/apr-1.pc
-if grep -q '^CC="' %{buildroot}%{_bindir}/apr-1-config; then
-  sed -i 's|^CC=".*"|CC="clang"|' %{buildroot}%{_bindir}/apr-1-config
+sed -i 's|^CC=".*"|CC="clang"|' %{buildroot}%{_bindir}/apr-1-config
+if [ -f %{buildroot}%{_libdir}/apr-1/build/libtool ]; then
+  sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' \
+      %{buildroot}%{_libdir}/apr-1/build/libtool
 fi
 %oreon_filelist_devel
 
