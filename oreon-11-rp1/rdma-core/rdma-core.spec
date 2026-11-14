@@ -68,8 +68,10 @@ BuildRequires: ninja-build
 %define make_jobs ninja-build -C %{_vpath_builddir} -v %{?_smp_mflags}
 %define cmake_install DESTDIR=%{buildroot} ninja-build -C %{_vpath_builddir} install
 
-# pandoc was introduced in FC25, Centos8
+%bcond_with pandoc
+%if %{with pandoc}
 BuildRequires: pandoc
+%endif
 
 # self obsoletes to remove i686 multilib package when updating to F34
 Obsoletes: rdma-core < %{version}-%{release}
@@ -699,3 +701,6 @@ fi
 %{_pkgdocdir}/tests/*.py
 %endif
 
+
+%changelog
+%autochangelog
