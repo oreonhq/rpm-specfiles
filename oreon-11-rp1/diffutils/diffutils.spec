@@ -72,3 +72,6 @@ make check
 %{_mandir}/*/*
 %{_infodir}/diffutils.info*
 
+
+%changelog
+%autochangelog
