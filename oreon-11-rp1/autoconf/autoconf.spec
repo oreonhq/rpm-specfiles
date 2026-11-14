@@ -228,3 +228,6 @@ install -p -m 755 enable.scl ${RPM_BUILD_ROOT}/%{_prefix}/enable
 %endif
 
 
+
+%changelog
+%autochangelog
