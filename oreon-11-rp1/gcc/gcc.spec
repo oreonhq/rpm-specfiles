@@ -17,7 +17,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -77,6 +77,7 @@ The GNU C preprocessor. It is used by the C compiler to transform programs befor
 Summary: GNU C++ compiler
 Requires: gcc%{?_isa} = %{version}-%{release}
 Requires: libstdc++-devel%{?_isa} = %{version}-%{release}
+Provides: g++%{?_isa} = %{version}-%{release}
 %description -n gcc-c++
 C++ support for the GNU Compiler Collection.
 
@@ -1227,3 +1228,6 @@ done
 %license COPYING3
 %endif
 %endif
+
+%changelog
+%autochangelog
