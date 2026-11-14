@@ -30,3 +30,6 @@ install -m 644 -D "%{SOURCE0}" \
 %files
 %{_rpmconfigdir}/macros.d/macros.perl-srpm
 
+
+%changelog
+%autochangelog
