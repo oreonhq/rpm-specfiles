@@ -24,7 +24,10 @@ BuildRequires: glibc-static
 BuildRequires: gnupg2
 
 %ifarch %{golang_arches}
+%bcond_with golang
+%if %{with golang}
 BuildRequires: golang >= 1.22
+%endif
 BuildRequires:  oreon-rpm-macros
 %endif
 
@@ -135,3 +138,6 @@ chmod +x %{buildroot}/%{_libdir}/*.so.*
 %{_mandir}/man8/captree.8*
 %endif
 
+
+%changelog
+%autochangelog
