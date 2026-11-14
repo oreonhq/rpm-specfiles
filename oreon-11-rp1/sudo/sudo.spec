@@ -241,3 +241,6 @@ EOF
 %{_mandir}/man5/sudo_plugin_python.5.gz
 %attr(0644,root,root) %{_libexecdir}/sudo/python_plugin.so
 
+
+%changelog
+%autochangelog
