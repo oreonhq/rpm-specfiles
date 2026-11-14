@@ -61,3 +61,6 @@ install -p -m 644 target/release/rpm-sequoia.pc %{buildroot}%{_libdir}/pkgconfig
 %license LICENSE.txt
 
 %files devel -f %{_builddir}/%{name}-devel.files
+
+%changelog
+%autochangelog
