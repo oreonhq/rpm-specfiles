@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d170d0265e1e5030c574c8613a1fecc047413282b94c2bc4cf2e99477d82ee93
+%global source0_hash a03fadbb2b523505743ff00f4e0f86d3bfd6e0beacf330357b1dfa8fbd9d246b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 BuildRequires: oreon-rpm-macros
 Name: rdma-core
-Version:        64.0
+Version:        66.0
 Release:        1%{?dist}
 Summary: RDMA core userspace libraries and daemons
 
@@ -421,6 +421,8 @@ fi
 %config(noreplace) %{_sysconfdir}/modprobe.d/truescale.conf
 %{_unitdir}/rdma-hw.target
 %{_unitdir}/rdma-load-modules@.service
+%dir %{_unitdir}/rdma-load-modules@.service.d
+%{_unitdir}/rdma-load-modules@.service.d/10-network-pre.conf
 %dir %{dracutlibdir}
 %dir %{dracutlibdir}/modules.d
 %dir %{dracutlibdir}/modules.d/50rdma
@@ -460,6 +462,7 @@ fi
 %endif
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/*.pc
+%{_mandir}/man3/bnxt_re_dv*
 %{_mandir}/man3/efadv*
 %{_mandir}/man3/hnsdv*
 %{_mandir}/man3/ibv_*
@@ -471,6 +474,7 @@ fi
 %{_mandir}/man3/manadv*
 %{_mandir}/man3/mlx5dv*
 %{_mandir}/man3/mlx4dv*
+%{_mandir}/man7/bnxt_re_dv*
 %{_mandir}/man7/efadv*
 %{_mandir}/man7/hnsdv*
 %{_mandir}/man7/ionicdv*
@@ -478,6 +482,7 @@ fi
 %{_mandir}/man7/mlx5dv*
 %{_mandir}/man7/mlx4dv*
 %{_mandir}/man3/ibnd_*
+%{_mandir}/man3/sa_key_*
 
 %files -n infiniband-diags-compat
 %{_sbindir}/ibcheckerrs
@@ -592,6 +597,7 @@ fi
 %files -n libibverbs
 %dir %{_sysconfdir}/libibverbs.d
 %dir %{_libdir}/libibverbs
+%{_libdir}/libbnxt_re.so.*
 %{_libdir}/libefa.so.*
 %{_libdir}/libhns.so.*
 %{_libdir}/libibverbs*.so.*
