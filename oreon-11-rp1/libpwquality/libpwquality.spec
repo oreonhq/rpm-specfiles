@@ -117,3 +117,6 @@ mkdir %{buildroot}%{_secconfdir}/pwquality.conf.d
 %{python3_sitearch}/*.so
 %{python3_sitearch}/*.egg-info
 
+
+%changelog
+%autochangelog
