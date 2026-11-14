@@ -17,7 +17,7 @@ Source0: https://ftp.gnu.org/gnu/mpc/mpc-%{version}.tar.xz
 Source1: mpc-1.4.1.tar.xz.sig
 Source2: enge.gpg
 
-BuildRequires: oreon-rpm-macros
+# BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: gmp-devel >= 5.0.0
 BuildRequires: mpfr-devel >= 4.1.0
