@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash a9dc9565dffe8640f64d863cd29a32bc4a3dbdec0566a7fc44c5d6ee767d5f39
+%global source0_hash 9ae44872090cf2f06b3cf9ff147e7f16f309671340763ed2f99248398ae29d5b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -41,15 +41,15 @@
 # rpm -ba|--rebuild --define 'no_gtk3 1'
 %{?no_gtk3:%global gtk3 0}
 
-%global openssh_ver 10.6p1
+%global openssh_ver 10.6p2
 
 Summary: An open source implementation of SSH protocol version 2
 Name: openssh
-Version:        10.6p1
+Version:        10.6p2
 Release:        1%{?dist}
 URL: http://www.openssh.com/portable.html
 Source0:        https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
-Source1:        openssh-10.6p1.tar.gz.asc
+Source1:        openssh-10.6p2.tar.gz.asc
 Source2: sshd.pam
 Source3: gpgkey-736060BA.gpg
 Source6: ssh-keycat.pam
