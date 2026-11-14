@@ -308,3 +308,6 @@ fi
 %config(noreplace) %attr(640,root,root) /etc/audit/zos-remote.conf
 %attr(750,root,root) %{_sbindir}/audispd-zos-remote
 
+
+%changelog
+%autochangelog
