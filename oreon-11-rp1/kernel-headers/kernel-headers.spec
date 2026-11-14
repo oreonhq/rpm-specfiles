@@ -133,3 +133,6 @@ done
 %defattr(-,root,root)
 %{_prefix}/*-linux-gnu/*
 
+
+%changelog
+%autochangelog
