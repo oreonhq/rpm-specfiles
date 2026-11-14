@@ -59,3 +59,6 @@ rm -f %{buildroot}%{_libdir}/*.a
 %{_includedir}/zconf.h
 %{_libdir}/libz.so
 %{_libdir}/pkgconfig/zlib.pc
+
+%changelog
+%autochangelog
