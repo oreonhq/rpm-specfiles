@@ -58,3 +58,6 @@ make check
 %{_bindir}/*
 %{_mandir}/*/*
 
+
+%changelog
+%autochangelog
