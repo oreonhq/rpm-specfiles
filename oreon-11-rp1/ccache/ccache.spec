@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d42ace95dec14583fb8af19ed117919995bd910376f52d9b6f546046b792dfb7
+%global source0_hash d50587abd5b787a7ba48cb1d76f7a4f09036e0181e742fc7383a8b154d73f0ba
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -20,7 +20,7 @@
 %global relccache %(%abs2rel %{_bindir}/ccache %{_libdir}/ccache)
 
 Name:           ccache
-Version:        4.13.6
+Version:        4.14.3
 Release:        1%{?dist}
 Summary:        C/C++ compiler cache
 
