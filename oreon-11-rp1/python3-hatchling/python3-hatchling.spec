@@ -30,7 +30,6 @@ Requires: python3-pathspec
 Requires: python3-pluggy
 Requires: python3-trove-classifiers
 Requires: python3-tomlkit
-Requires: python3-tomlkit
 
 %description
 Modern, extensible Python build backend
@@ -47,6 +46,6 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import hatchling'
+PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import hatchling'
 
 %files -f %{_builddir}/%{name}.files
