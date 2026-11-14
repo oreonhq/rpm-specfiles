@@ -102,3 +102,6 @@ make check %{?_smp_mflags}
 %{_mandir}/man1/debugedit-classify-ar.1*
 %{_mandir}/man1/find-debuginfo.1*
 
+
+%changelog
+%autochangelog
