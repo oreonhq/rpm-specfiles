@@ -29,3 +29,6 @@ install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.qt6-srpm
 
 %files
 %{_rpmmacrodir}/macros.qt6-srpm
+
+%changelog
+%autochangelog
