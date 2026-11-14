@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 0591f9fa0339f0d15e75326d0365871c2d4e2ed8aa1ff759b3a55d3734b7d197
+%global source0_hash c6a0587e565778a40d88891928bf8943f27d353f382d5b745a997d635978a8f0
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: lm_sensors
-Version:        3.6.0
+Version:        3.6.2
 Release:        1%{?dist}
 Summary: Hardware monitoring tools
 
@@ -21,7 +21,7 @@ License: GPL-2.0-or-later AND Linux-man-pages-copyleft-var AND Linux-man-pages-c
 
 URL: http://github.com/lm-sensors/lm-sensors/
 
-Source0:        https://github.com/lm-sensors/lm-sensors/archive/V3-6-0/lm-sensors-3-6-0.tar.gz
+Source0:        https://github.com/lm-sensors/lm-sensors/archive/V%{upstream_version}/lm-sensors-%{upstream_version}.tar.gz
 Source1: lm_sensors.sysconfig
 # This one was taken from PLD-linux, Thanks!
 Source2: sensord.sysconfig
@@ -35,13 +35,8 @@ Source8: lm_sensors-wrapper
 # Downstream-only:
 Patch0:        0001-Revert-unnecessary-soname-bump.patch
 
-# Upstream patch:
-Patch1:        0001-Change-PIDFile-path-from-var-run-to-run.patch
-Patch2:        lm_sensors-3.6.0-allow_no_sensors.patch
 # Upstream commit 5deee7d0c301df779:
 Patch3:        lm_sensors-3.6.0-sensors-detect-Add-support-for-AMD-CPU-Family-19h.patch
-# rrdtool has constified all argv
-Patch4:        lm_sensors-3.6.0-rrd-const-argv.patch
 
 Requires: /usr/sbin/modprobe
 %ifarch %{ix86} x86_64
@@ -99,10 +94,7 @@ database, and warns of sensor alarms.
 
 %setup -q -n lm-sensors-%{upstream_version}
 %patch -P0 -p1
-%patch -P1 -p1
-%patch -P2 -p1
 %patch -P3 -p1
-%patch -P4 -p1
 
 # Remove currently unused files to make sure we've got the license right
 rm -f prog/init/sysconfig-lm_sensors-convert prog/hotplug/unhide_ICH_SMBus
