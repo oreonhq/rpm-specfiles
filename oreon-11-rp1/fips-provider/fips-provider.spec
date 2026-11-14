@@ -3,17 +3,15 @@
 
 %global source0_hash 6b027b396cfdea32343515ada5ea08a18b7c2366de3ac1a105b2e37d83c938ab
 %global source3_hash 736b467530f916737b7031310ccb21d8218c6229e61e8e160cd1d3458cd543a8
+%global source5_hash 2f04c5619fc27480558a8369cbe208b4aca1e5ae4131955a9e72a8208e1adb3e
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond check 1
-
-# Enable gpg signature verification by default
 %bcond gpgcheck 1
 
 %global osslver 4.0.2
-
 %global features fips,nssdb,ossl400
 
 %global srpmhash() %{lua:
@@ -36,38 +34,25 @@ Release:        1%{?dist}
 Summary:        A FIPS provider built from the Kryoptic project
 
 SourceLicense:        GPL-3.0-or-later and Apache-2.0
-# Apache-2.0
-# Apache-2.0 OR MIT
-# BSD-3-Clause
-# GPL-3.0-or-later
-# ISC
-# MIT
-# MIT OR Apache-2.0
-# MIT-0 OR Apache-2.0
-# Unlicense OR MIT
-# Zlib
 License: Apache-2.0 AND (Apache-2.0 OR MIT) AND BSD-3-Clause AND GPL-3.0-or-later AND ISC AND MIT AND (MIT-0 OR Apache-2.0) AND (Unlicense OR MIT) AND Zlib
-# LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/latchset/kryoptic
 Source0:        https://github.com/latchset/kryoptic/releases/download/v%{version}/kryoptic-%{version}.tar.gz
 %if %{with gpgcheck}
 Source1:        kryoptic-1.5.3.tar.gz.asc
-Source2:        simo_redhat.asc
+Source2:        simo_oreon.asc
 %endif
 Source3:        https://github.com/openssl/openssl/releases/download/openssl-4.0.2/openssl-4.0.2.tar.gz
 Source4:        fips-hmacify.sh
+Source5:        kryoptic-%{version}-vendor.tar.xz
 
 Patch105:        0001-Remove-bundled-rusqlite-from-fips-feature.patch
-# Allow constant_time_eq versions through 0.6.x
-# https://github.com/latchset/kryoptic/pull/548
 Patch106:        548.patch
 Patch200:        openssl-4.0.2-kryoptic.patch
 
-BuildRequires:  cargo-rpm-macros >= 26
-%if %{with gpgcheck}
-BuildRequires: gnupg2
-%endif
+BuildRequires:  oreon-rpm-macros
+BuildRequires:  rustc
+BuildRequires:  cargo
 BuildRequires:  gcc
 BuildRequires:  clang
 BuildRequires:  coreutils
@@ -90,7 +75,9 @@ BuildRequires:  perl(lib)
 BuildRequires:  perl(File::Compare)
 BuildRequires:  perl(File::Copy)
 BuildRequires:  perl(bigint)
-BuildRequires:  oreon-rpm-macros
+%if %{with gpgcheck}
+BuildRequires:  gnupg2
+%endif
 
 Provides:       fips-provider-so
 Provides:       bundled(openssl) = %{osslver}
@@ -102,7 +89,6 @@ as well as a PKCS#11 software token.
 %files
 %attr(0755,root,root) %{_libdir}/pkcs11
 %attr(0755,root,root) %{_libdir}/ossl-modules
-# These so-files are plugins, not libraries, and need not be versioned
 %{_libdir}/ossl-modules/fips.so
 %{_libdir}/pkcs11/fipstokn.so
 %license LICENSE.txt
@@ -111,27 +97,23 @@ as well as a PKCS#11 software token.
 %prep
 %oreon_sha256
 echo '%{source3_hash}  %{SOURCE3}' | sha256sum -c -
+echo '%{source5_hash}  %{SOURCE5}' | sha256sum -c -
 
 %if %{with gpgcheck}
 %oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %endif
 
-# Preps kryoptic
 %setup -n kryoptic-%{version} -q
 %autopatch -p1 -M 199
-%cargo_prep
+tar -xf %{SOURCE5}
+%oreon_cargo_prep vendor
 %setup -n kryoptic-%{version} -q -T -D -a 3
 
-# Preps openssl
 pushd openssl-%{osslver}
 %autopatch -p1 -m 200
-
-%generate_buildrequires
-%cargo_generate_buildrequires -n -f %{features}
+popd
 
 %build
-# Figure out which flags we want to use.
-# default
 sslarch=%{_os}-%{_target_cpu}
 %ifarch x86_64
 sslflags=enable-ec_nistp_64_gcc_128
@@ -152,10 +134,6 @@ sslflags=enable-ec_nistp_64_gcc_128
 sslarch=linux-elf
 %endif
 
-# Add -Wa,--noexecstack here so that libcrypto's assembler modules will be
-# marked as not requiring an executable stack.
-# Also add -DPURIFY to make using valgrind with openssl easier as we do not
-# want to depend on the uninitialized memory as a source of entropy anyway.
 RPM_OPT_FLAGS="$RPM_OPT_FLAGS -Wa,--noexecstack -Wa,--generate-missing-build-notes=yes -DPURIFY $RPM_LD_FLAGS -Wl,--allow-multiple-definition"
 
 pushd openssl-%{osslver}
@@ -178,22 +156,26 @@ pushd openssl-%{osslver}
     -DKRYOPTIC_FIPS_VERSION='"\"%{version}\""' \
     -DKRYOPTIC_FIPS_BUILD='"\"%{srpmhash}\""'
 
-#Log selection in build logs
 perl configdata.pm --dump
 
 make -s %{?_smp_mflags} all
 
 popd
 
+export CARGO_HOME=%{_builddir}/cargo-home
+mkdir -p "$CARGO_HOME"
 export KRYOPTIC_OPENSSL_SOURCES=${PWD}/openssl-%{osslver}
-%cargo_build -n -f %{features}
-%{cargo_license_summary}
-%{cargo_license -n -f %{features}} > LICENSE.dependencies
+%oreon_cargo_build --no-default-features --features %{features}
+(
+  printf 'Vendored crate list\n\n'
+  ls -1 vendor | sort
+) > LICENSE.dependencies
 
 %if %{with check}
 %check
+export CARGO_HOME=%{_builddir}/cargo-home
 export KRYOPTIC_OPENSSL_SOURCES=${PWD}/openssl-%{osslver}
-%cargo_test -n -f %{features}
+%oreon_cargo_test --no-default-features --features %{features}
 %endif
 
 %define __spec_install_post \
@@ -209,4 +191,3 @@ mkdir -p -m755 $RPM_BUILD_ROOT%{_libdir}/ossl-modules
 install -m755 target/release/libkryoptic_pkcs11.so $RPM_BUILD_ROOT/%{_libdir}/ossl-modules/fips.so
 mkdir -p -m755 $RPM_BUILD_ROOT%{_libdir}/pkcs11
 ln -s ../ossl-modules/fips.so $RPM_BUILD_ROOT%{_libdir}/pkcs11/fipstokn.so
-
