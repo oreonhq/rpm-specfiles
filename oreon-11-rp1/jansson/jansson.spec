@@ -77,3 +77,6 @@ rm "$RPM_BUILD_ROOT%{_libdir}"/*.la
 %files devel-doc
 %doc doc/_build/html/*
 
+
+%changelog
+%autochangelog
