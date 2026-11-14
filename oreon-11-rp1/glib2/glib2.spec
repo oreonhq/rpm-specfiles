@@ -35,7 +35,10 @@ BuildRequires:  pkgconfig(libelf)
 BuildRequires:  pkgconfig(libffi)
 BuildRequires:  pkgconfig(libpcre2-8)
 BuildRequires:  pkgconfig(mount)
+%bcond_with sysprof
+%if %{with sysprof}
 BuildRequires:  pkgconfig(sysprof-capture-4)
+%endif
 BuildRequires:  pkgconfig(zlib)
 BuildRequires:  python3-devel
 BuildRequires:  /usr/bin/g-ir-scanner
@@ -267,3 +270,6 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_libexecdir}/installed-tests
 %{_datadir}/installed-tests
 
+
+%changelog
+%autochangelog
