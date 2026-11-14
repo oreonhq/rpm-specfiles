@@ -1,17 +1,17 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 7ce33c2492221a0436f96a8500215e9f3e3dcb5fd26a757cd415e7a843babd5e
+%global source0_hash d77f68f48879510e79a2f65977ccc68981781ea0923e5bdffac2a193ea3d660e
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name: libgcrypt
-Version:        1.12.2
+Version:        1.12.4
 Release:        1%{?dist}
 URL: https://www.gnupg.org/
 Source0:        https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-%{version}.tar.bz2
-Source1:        libgcrypt-1.12.2.tar.bz2.sig
+Source1:        libgcrypt-1.12.4.tar.bz2.sig
 Source2:        signature_key.asc
 # Pass the annobin flags to the libgcrypt.so (#2016349)
 Patch1:        libgcrypt-1.10.1-annobin.patch
