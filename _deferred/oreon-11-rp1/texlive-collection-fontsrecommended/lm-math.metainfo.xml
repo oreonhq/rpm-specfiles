@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2026 Oreon HQ -->
+<component type="font">
+  <id>org.ctan.lm-math</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Latin Modern Math Fonts</name>
+  <summary>OpenType maths fonts for Latin Modern</summary>
+  <description>
+    <p>
+      Latin Modern Math is a maths companion for the Latin Modern family of
+      fonts, in OpenType format.
+    </p>
+  </description>
+  <developer id="org.ctan">
+    <name>CTAN</name>
+  </developer>
+  <url type="homepage">https://ctan.org/pkg/lm-math</url>
+  <provides>
+    <font>Latin Modern Math</font>
+  </provides>
+</component>

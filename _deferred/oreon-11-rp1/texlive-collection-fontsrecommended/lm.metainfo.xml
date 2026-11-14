@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2026 Oreon HQ -->
+<component type="font">
+  <id>org.ctan.lm</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Latin Modern</name>
+  <summary>Latin modern fonts in outline formats</summary>
+  <description>
+    <p>
+      The Latin Modern family of fonts consists of 72 text fonts and 20
+      mathematics fonts, and is based on the Computer Modern fonts released into
+      public domain by AMS (copyright © 1997 AMS). The lm font set contains a
+      lot of additional characters, mainly accented ones, but not exclusively.
+    </p>
+  </description>
+  <developer id="org.ctan">
+    <name>CTAN</name>
+  </developer>
+  <url type="homepage">https://ctan.org/pkg/lm</url>
+  <provides>
+    <font>Latin Modern Roman</font>
+    <font>Latin Modern Sans</font>
+    <font>Latin Modern Mono</font>
+  </provides>
+</component>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (C) 2026 Oreon HQ -->
+<component type="font">
+  <id>org.ctan.tex-gyre-math</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>TEX-Gyre-Math fonts</name>
+  <summary>Maths fonts to match tex-gyre text fonts</summary>
+  <description>
+    <p>
+      TEX-Gyre-Math is a collection of maths fonts to match the text fonts of
+      the TEX-Gyre collection. The collection is available in OpenType format
+      only; fonts conform to the developing standards for OpenType maths fonts.
+      TEX-Gyre-Math-Bonum (to match TEX-Gyre-Bonum), TEX-Gyre-Math-Pagella (to
+      match TEX-Gyre-Pagella), TEX-Gyre-Math-Schola (to match TEX-Gyre-Schola)
+      and TEX-Gyre-Math-Termes (to match TEX-Gyre-Termes) fonts are provided.
+    </p>
+  </description>
+  <developer id="org.ctan">
+    <name>CTAN</name>
+  </developer>
+  <url type="homepage">https://ctan.org/pkg/tex-gyre-math</url>
+  <provides>
+    <font>TeX Gyre Bonum Math</font>
+    <font>TeX Gyre Pagella Math</font>
+    <font>TeX Gyre Schola Math</font>
+    <font>TeX Gyre Termes Math</font>
+  </provides>
+</component>
