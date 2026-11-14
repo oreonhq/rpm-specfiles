@@ -546,3 +546,6 @@ done
 %endif
 
 
+
+%changelog
+%autochangelog
