@@ -176,3 +176,6 @@ fi
 %{_libdir}/libfakeroot/libfakeroot-tcp.so
 %ghost %{_libdir}/libfakeroot/libfakeroot-0.so
 
+
+%changelog
+%autochangelog
