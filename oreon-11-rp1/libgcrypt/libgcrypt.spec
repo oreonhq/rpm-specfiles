@@ -215,3 +215,6 @@ mkdir -p -m 755 $RPM_BUILD_ROOT/etc/gcrypt
 %{_infodir}/gcrypt.info*
 %license COPYING
 
+
+%changelog
+%autochangelog
