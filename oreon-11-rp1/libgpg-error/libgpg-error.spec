@@ -98,3 +98,6 @@ make check
 %{_mandir}/man1/gpg-error-config.*
 %{_mandir}/man1/gpgrt-config.*
 
+
+%changelog
+%autochangelog
