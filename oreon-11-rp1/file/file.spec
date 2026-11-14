@@ -201,3 +201,6 @@ make -C tests check
 %doc python/README.md python/example.py
 %endif
 
+
+%changelog
+%autochangelog
