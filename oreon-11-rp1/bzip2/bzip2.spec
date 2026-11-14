@@ -138,3 +138,6 @@ ln -s bzgrep.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzfgrep.1
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/bzip2.pc
 
+
+%changelog
+%autochangelog
