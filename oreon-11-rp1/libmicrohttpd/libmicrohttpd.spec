@@ -115,3 +115,6 @@ fi
 %doc examples
 %doc html
 
+
+%changelog
+%autochangelog
