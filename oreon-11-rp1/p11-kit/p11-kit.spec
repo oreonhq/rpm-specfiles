@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash f2cc09111e44bf3fea58f023180b33acea90aa82d042d6fbb623fbc5ba033bb7
+%global source0_hash 5fda95dc89964af32dbd8e01b139c166717cf96c4fee3d601bcd60bdb23d23c6
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 %bcond_without mingw
 
 
-Version:        0.26.5
+Version:        0.26.6
 Release:        1%{?dist}
 Name:           p11-kit
 Summary:        Library for loading and sharing PKCS#11 modules
@@ -18,7 +18,7 @@ Summary:        Library for loading and sharing PKCS#11 modules
 License:        BSD-3-Clause
 URL:            http://p11-glue.freedesktop.org/p11-kit.html
 Source0:        https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.xz
-Source1:        p11-kit-0.26.5.tar.xz.sig
+Source1:        p11-kit-0.26.6.tar.xz.sig
 Source2:        p11-kit-release-keyring.gpg
 Source3:        trust-extract-compat
 Source4:        p11-kit-client.service
