@@ -18,7 +18,7 @@
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
 Version:        8.23.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 License: curl
 Source0:        https://curl.se/download/curl-%{version}.tar.xz
 Source1:        curl-8.23.0.tar.xz.asc
@@ -120,8 +120,11 @@ BuildRequires: perl(Time::HiRes)
 BuildRequires: perl(Time::Local)
 BuildRequires: perl(vars)
 
-# needed for upstream test 1451
+# optional until python3-impacket is in tree (test 1451 skips without it)
+%bcond_with curl_impacket
+%if %{with curl_impacket}
 BuildRequires: python3-impacket
+%endif
 
 # The test-suite runs automatically through valgrind if valgrind is available
 # on the system.  By not installing valgrind into mock's chroot, we disable
@@ -136,8 +139,11 @@ BuildRequires: valgrind
 # stunnel is used by upstream tests but it does not seem to work reliably
 # on aarch64/s390x and occasionally breaks some tests (mainly 1561 and 1562)
 BuildRequires:  oreon-rpm-macros
+%bcond_with curl_stunnel
+%if %{with curl_stunnel}
 %ifnarch aarch64 s390x
 BuildRequires: stunnel
+%endif
 %endif
 
 # using an older version of libcurl could result in CURLE_UNKNOWN_OPTION
@@ -473,3 +479,6 @@ rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 %{_libdir}/libcurl.so.4.minimal
 %{_libdir}/libcurl.so.4.[0-9].[0-9].minimal
 
+
+%changelog
+%autochangelog
