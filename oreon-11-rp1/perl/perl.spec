@@ -1066,6 +1066,7 @@ Summary:        Stringify perl data structures, suitable for printing and eval
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          0
 Version:        2.192
+Provides:       perl(Data::Dumper) = %{version}
 Requires:       perl(B::Deparse)
 Requires:       perl(bytes)
 Requires:       perl(Scalar::Util)
@@ -1964,6 +1965,7 @@ Summary:        Create or remove directory trees
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          0
 Version:        2.18
+Provides:       perl(File::Path) = %{version}
 Requires:       perl(Carp)
 %if %{defined perl_bootstrap}
 Requires:       %perl_compat
@@ -2002,6 +2004,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          1
 # Normalized version
 Version:        0.231.200
+Provides:       perl(File::Temp) = %{version}
 BuildArch:      noarch
 Requires:       perl(File::Path) >= 2.06
 Requires:       perl(POSIX)
@@ -2152,6 +2155,7 @@ Summary:        Extended processing of command line options
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 Epoch:          1
 Version:        2.58
+Provides:       perl(Getopt::Long) = %{version}
 Requires:       perl(overload)
 Requires:       perl(Text::ParseWords)
 # Recommended:
@@ -3074,6 +3078,9 @@ Summary:        PathTools Perl module (Cwd, File::Spec)
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND BSD-3-Clause
 Epoch:          0
 Version:        3.95
+Provides:       perl(Cwd) = %{version}
+Provides:       perl(File::Spec) = %{version}
+Provides:       perl(File::Spec::Unix) = %{version}
 Requires:       perl(Carp)
 Requires:       perl(Errno)
 Requires:       perl(Scalar::Util)
@@ -3778,6 +3785,7 @@ Summary:        Parse text into an array of tokens or array of arrays
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          0
 Version:        3.31
+Provides:       perl(Text::ParseWords) = %{version}
 Requires:       perl(Carp)
 %if %{defined perl_bootstrap}
 Requires:       %perl_compat
@@ -3842,6 +3850,7 @@ Summary:        Thread-safe queues
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          0
 Version:        3.14
+Provides:       perl(Thread::Queue) = %{version}
 Requires:       perl(Carp)
 %if %{defined perl_bootstrap}
 Requires:       %perl_compat
@@ -4037,6 +4046,7 @@ Summary:        Perl interpreter-based threads
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          1
 Version:        2.45
+Provides:       perl(threads) = %{version}
 %if %{defined perl_bootstrap}
 Requires:       %perl_compat
 %gendep_perl_threads
