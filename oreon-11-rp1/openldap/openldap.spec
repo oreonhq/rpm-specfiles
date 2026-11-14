@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 8d8452bc3f56aa7a392c62dd377733f83d1314eed6c52fe44028439a3bb4df18
+%global source0_hash aad731aa22118ff327b9b4ddfc4b6f18ef9476586205da88a532e90940b523d2
 %global source10_hash 45188b404eb71c3ba47e9eb5d77bfda53e636571bb1db70e9da8e88d48b17400
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -22,13 +22,13 @@
 %bcond argon2 1
 
 # When you change "Version: " to the new major version, remember to change this value too
-%global major_version 2.6
+%global major_version 2.7
 
 # Disable automatic .la file removal
 %global __brp_remove_la_files %nil
 
 Name: openldap
-Version:        2.6.16
+Version:        2.7.2
 Release:        1%{?dist}
 Summary: LDAP support libraries
 License: OLDAP-2.8
@@ -60,9 +60,7 @@ Patch6:        openldap-switch-to-lt_dlopenadvise-to-get-RTLD_GLOBAL-set.patch
 
 # System-wide default for CA certs
 Patch7:        openldap-openssl-manpage-defaultCA.patch
-Patch8:        openldap-add-export-symbols-LDAP_CONNECTIONLESS.patch
 Patch9:        openldap-libldap-avoid-SSL-context-cleanup-during-library-des.patch
-Patch10:        openldap-ITS-10297-Defer-hostname-resolution-til-first-use.patch
 
 # check-password module specific patches
 Patch90:        check-password-makefile.patch
@@ -78,8 +76,6 @@ BuildRequires: libevent-devel
 BuildRequires: libxcrypt-devel
 BuildRequires: make
 BuildRequires: openssl-devel
-BuildRequires: perl(ExtUtils::Embed)
-BuildRequires: perl-devel
 BuildRequires: perl-generators
 BuildRequires: perl-interpreter
 BuildRequires: unixODBC-devel
@@ -188,9 +184,7 @@ pushd openldap-%{version}
 %patch -P5 -p1
 %patch -P6 -p1
 %patch -P7 -p1
-%patch -P8 -p1
 %patch -P9 -p1
-%patch -P10 -p1
 
 # build smbk5pwd with other overlays
 ln -s ../../../contrib/slapd-modules/smbk5pwd/smbk5pwd.c servers/slapd/overlays
@@ -199,8 +193,6 @@ mv contrib/slapd-modules/smbk5pwd/README contrib/slapd-modules/smbk5pwd/README.s
 ln -s ../../../contrib/slapd-modules/allop/allop.c servers/slapd/overlays
 mv contrib/slapd-modules/allop/README contrib/slapd-modules/allop/README.allop
 mv contrib/slapd-modules/allop/slapo-allop.5 doc/man/man5/slapo-allop.5
-
-mv servers/slapd/back-perl/README{,.back_perl}
 
 # fix documentation encoding
 for filename in doc/drafts/draft-ietf-ldapext-acl-model-xx.txt; do
@@ -234,7 +226,6 @@ pushd openldap-%{version}
         --enable-crypt \
         --enable-spasswd \
         --enable-modules \
-        --enable-perl \
         --enable-rlookups \
 %if %{with servers}
         --enable-slapi \
@@ -246,7 +237,6 @@ pushd openldap-%{version}
         \
         --enable-backends=mod \
         --enable-mdb=yes \
-        --disable-sql \
         --disable-wt \
         \
         --enable-overlays=mod \
@@ -468,8 +458,6 @@ exit 0
 %doc openldap-%{version}/contrib/slapd-modules/smbk5pwd/README.smbk5pwd
 %doc openldap-%{version}/doc/guide/admin/*.html
 %doc openldap-%{version}/doc/guide/admin/*.png
-%doc openldap-%{version}/servers/slapd/back-perl/SampleLDAP.pm
-%doc openldap-%{version}/servers/slapd/back-perl/README.back_perl
 %doc openldap-ppolicy-check-password-%{check_password_version}/README.check_pwd
 %doc README.schema
 %config(noreplace) %dir %attr(0750,ldap,ldap) %{_sysconfdir}/openldap/slapd.d
