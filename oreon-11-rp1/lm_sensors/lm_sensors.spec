@@ -46,7 +46,10 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires(post): systemd-units
 BuildRequires: kernel-headers >= 2.2.16, bison, flex, gawk
 BuildRequires: perl-generators
+%bcond_with rrdtool
+%if %{with rrdtool}
 BuildRequires: rrdtool-devel
+%endif
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires:  oreon-rpm-macros
@@ -219,3 +222,6 @@ fi
 %{_libexecdir}/%{name}/sensord-service-wrapper
 
 
+
+%changelog
+%autochangelog
