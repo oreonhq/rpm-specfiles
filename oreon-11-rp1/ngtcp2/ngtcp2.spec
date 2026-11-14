@@ -1,10 +1,10 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 2a34d2484ba17847a5d11965704e9dd0fac4c6d8efc75ffe1ec7de66d8c6b6fb
+%global source0_hash 7804aa0fa1c39942ba322a90805824c37231f7675b08d0c3cc4332858a7b085e
 %global source3_hash daa20426ead1f0061c74a967ac566787c723411a7d726f5dec75faa2e2ee926e
 %global source4_hash 7b399eee49aea00d96c0dda004de62eb2b5e9058097da08474f66c3efae951cb
-%global source5_hash 06a15976b2a76a4e507580540881d6a89df6de79ba38f533586c3f68bdcea314
+%global source5_hash 2986a52218eea0a2268437e35895aebb448c380478655144c2b9a135582da14b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -15,7 +15,7 @@
 %bcond CHECK 1
 
 Name:           ngtcp2
-Version:        1.25.0
+Version:        1.26.0
 Release:        1%{?dist}
 Summary:        Implementation of RFC 9000 QUIC protocol
 
@@ -24,7 +24,7 @@ URL:            https://github.com/ngtcp2/ngtcp2
 VCS:            git:%{url}.git
 Source0:        https://github.com/ngtcp2/ngtcp2/releases/download/v%{version}/ngtcp2-%{version}.tar.xz
 Patch0:         ngtcp2-addr-memcpy.patch
-Source1:        ngtcp2-1.25.0.tar.xz.asc
+Source1:        ngtcp2-1.26.0.tar.xz.asc
 Source2:        tatsuhiro-t.asc
 # Release does not contain all parts to build documentation
 # https://github.com/ngtcp2/ngtcp2/pull/1404
