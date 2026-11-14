@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 74b1081d21fff13ae4bd7c16e5d6e504a4c26f7cde1dca0d963a484174bbcacd
+%global source0_hash 6a24504a14de4a744103dcb936be976df6fbe88ccff26065e54c1c47946f4a5e
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 
 Summary: A GNU set of database routines which use extensible hashing
 Name: gdbm
-Version:        1.23
+Version:        1.26
 Release:        1%{?dist}
 Epoch: 1
 License: GPL-3.0-or-later
