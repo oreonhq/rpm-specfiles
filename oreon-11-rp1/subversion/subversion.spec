@@ -56,3 +56,6 @@ subversion/svn/svn --version
 
 %files -f %{_builddir}/%{name}.files
 %{_bindir}/svn
+
+%changelog
+%autochangelog
