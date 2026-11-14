@@ -96,3 +96,6 @@ sed -i "s/lncurses/ltinfo/" configure
 %dir %{_includedir}/editline
 %{_includedir}/editline/readline.h
 
+
+%changelog
+%autochangelog
