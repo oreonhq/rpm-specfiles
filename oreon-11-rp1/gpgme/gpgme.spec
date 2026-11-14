@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 0687a95b299871c4141f507c0f740de6b429c9ac067d0fa4e062e3264df5fb77
+%global source0_hash 7160e80e84dafd00d956c84891c533bb7ab16a6a54fbe1574b2f3acf0496977b
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -16,14 +16,14 @@
 
 Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
-Version:        2.1.2
+Version:        2.2.0
 Release:        1%{?dist}
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
 License:        LGPL-2.1-or-later AND MIT
 URL:            https://gnupg.org/related_software/gpgme/
 Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
-Source1:        gpgme-2.1.2.tar.bz2.sig
+Source1:        gpgme-2.2.0.tar.bz2.sig
 Source2:        gpgme-multilib.h
 Source3:        signature_key.asc
 
