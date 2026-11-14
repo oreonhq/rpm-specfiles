@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 239781632846db3b01901028147fb4b57e6f2d5330ca63ce104b21d9b3e6031f
+%global source0_hash 623be9429f64fa2165bfc5957c6a642ec309c5cf23c0d53855c99f7591922297
 %global source5_hash edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -9,13 +9,13 @@
 %oreon_bootstrap
 Summary: Utilities for managing accounts and shadow password files
 Name: shadow-utils
-Version:        4.20.0
+Version:        4.20.3
 Release:        1%{?dist}
 Epoch: 2
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: https://github.com/shadow-maint/shadow
 Source0:        https://github.com/shadow-maint/shadow/releases/download/%{version}/shadow-%{version}.tar.xz
-Source1:        shadow-4.20.0.tar.xz.asc
+Source1:        shadow-%{version}.tar.xz.asc
 Source2: shadow-utils.useradd
 Source3: shadow-utils.login.defs
 Source4: shadow-bsd.txt
@@ -115,7 +115,7 @@ Development files for shadow-utils-subid.
 %oreon_sha256
 echo '%{source5_hash}  %{SOURCE5}' | sha256sum -c -
 
-%autosetup -p 1 -S git -n shadow-4.20.0
+%autosetup -p 1 -S git -n shadow-%{version}
 
 iconv -f ISO88591 -t utf-8  doc/HOWTO > doc/HOWTO.utf8
 cp -f doc/HOWTO.utf8 doc/HOWTO
