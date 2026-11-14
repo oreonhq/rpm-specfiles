@@ -86,13 +86,13 @@ recourse if other workarounds are not available.
 
 ### Toolchain selection
 
-The default toolchain uses GCC, and the `%toolchain` macro is defined
-as `gcc`.
+The default toolchain uses Clang, and the `%toolchain` macro is defined
+as `clang`.
 
 It is enough to override `toolchain` macro and all relevant macro for C/C++
 compilers will be switched. Either in the spec or in the command-line.
 
-    %global toolchain clang
+    %global toolchain gcc
 
 or:
 

@@ -1,0 +1,7 @@
+--- a/mallard/ducktype/extensions/__init__.py
++++ b/mallard/ducktype/extensions/__init__.py
+@@ -18,4 +18,3 @@
+ # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ # THE SOFTWARE.
+ 
+-__import__('pkg_resources').declare_namespace(__name__)

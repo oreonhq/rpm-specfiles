@@ -8,6 +8,8 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 BuildRequires: oreon-rpm-macros
+%global toolchain clang
+%global _lto_cflags %{nil}
 %define py3_shebang_fix() find %{*} -type f -print0 | xargs -0 grep -I -l -E '^#![ ]*/.*python' | while read -r f; do sed -i '1s|^#![ ]*/.*python.*|#!%{__python3}|' "$f"; done || :
 %define cmake %{set_build_flags}; CFLAGS=$(echo "$CFLAGS" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-specs=[^ ]*//g'); export CFLAGS; CXXFLAGS=$(echo "$CXXFLAGS" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-specs=[^ ]*//g'); export CXXFLAGS; %__cmake %{!?__cmake_in_source_build:-S "%{_vpath_srcdir}"} %{!?__cmake_in_source_build:-B "%{__cmake_builddir}"} %{?_cmake_generator:-G %{_cmake_generator}} -DCMAKE_C_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_CXX_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" -DCMAKE_VERBOSE_MAKEFILE:BOOL=OFF -DCMAKE_INSTALL_DO_STRIP:BOOL=OFF -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} -DCMAKE_INSTALL_FULL_SBINDIR:PATH=%{_sbindir} -DCMAKE_INSTALL_SBINDIR:PATH=%(s=%{_sbindir}; echo ${s##*/}) -DINCLUDE_INSTALL_DIR:PATH=%{_includedir} -DLIB_INSTALL_DIR:PATH=%{_libdir} -DSYSCONF_INSTALL_DIR:PATH=%{_sysconfdir} -DSHARE_INSTALL_PREFIX:PATH=%{_datadir} %{?_cmake_lib_suffix64} %{?_cmake_shared_libs}
 %global optflags %{optflags} -gz=zstd
@@ -58,7 +60,7 @@ BuildRequires: oreon-rpm-macros
 %bcond_with compat_build
 # Bundle compat libraries for a previous LLVM version, as part of llvm-libs and
 %bcond_with bundle_compat_lib
-%bcond_without check
+%bcond_with check
 
 %if %{with bundle_compat_lib}
 %global compat_maj_ver 22
@@ -205,17 +207,7 @@ end
 %endif
 
 #region pgo
-%ifarch %{ix86}
 %bcond_with pgo
-%else
-# Disable PGO on s390x temporarily in order to reduce LLVM build time and
-# disk usage.
-%ifarch s390x
-%bcond_with pgo
-%else
-%bcond_without pgo
-%endif
-%endif
 
 # Sanity checks for PGO and bootstrapping
 #----------------------------------------
@@ -243,20 +235,11 @@ end
 %{error:PGO requires --with=lld}
 %endif
 
-# For PGO Disable LTO for now because of LLVMgold.so not found error
-# Use LLVM_ENABLE_LTO:BOOL=ON flags to enable LTO instead
-%if 0%{without lto_build} || 0%{with pgo}
-%global _lto_cflags %nil
-%endif
-
 %if %{without compat_build}
 %bcond_without libclc
 %else
 %bcond_with libclc
 %endif
-
-# We are building with clang for faster/lower memory LTO builds.
-%global toolchain clang
 
 # Make sure that we are not building with a newer compiler than the targeted
 # version. For example, if we build LLVM 19 with Clang 20, then we'd build
@@ -572,6 +555,7 @@ Patch2307:        227851.patch
 # ompd_get_curr_parallel_handle returns unavailable outside a team.
 # The test only accepted stale_handle.
 Patch2308:        ompd-curr-parallel-handle-check.patch
+Patch2309:        flang-rt-link-libm.patch
 
 
 %if %{with fastclang}
@@ -1441,6 +1425,9 @@ cd llvm/utils/lit
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
 %endif
 
+%global optflags %(echo %{optflags} | sed -E -e 's/(^| )-flto(=[^ ]*)?//g' -e 's/(^| )-ffat-lto-objects//g')
+%global build_ldflags %(echo %{build_ldflags} | sed -E -e 's/(^| )-flto(=[^ ]*)?//g' -e 's/(^| )-ffat-lto-objects//g')
+
 %global projects clang;clang-tools-extra;lld
 %global runtimes compiler-rt;openmp
 
@@ -1519,30 +1506,48 @@ cd llvm
 
 OREON_NINJA_FILTER="$RPM_BUILD_DIR/oreon-ninja-filter.awk"
 cat > "$OREON_NINJA_FILTER" <<'OREON_AWK'
+BEGIN { keep = 0; nbuf = 0 }
+function dumpbuf() {
+  print lastcmd
+  for (i = 0; i < nbuf; i++) print buf[i]
+  nbuf = 0
+}
 /^\[[0-9]+\/[0-9]+\]/ {
-  if (match($0, /^\[([0-9]+)\/([0-9]+)\]/, m)) {
-    if (m[1] % 50 == 0 || $0 ~ /FAILED:|fatal error:|^error: /) {
-      printf "[ninja %%s/%%s]\n", m[1], m[2]
-      fflush()
-    }
-    next
+  nbuf = 0
+  lastcmd = $0
+  if (match($0, /^\[([0-9]+)\/([0-9]+)\]/, m) && (m[1] % 50 == 0 || $0 ~ /FAILED:/)) {
+    if ($0 ~ /FAILED:/) print
+    else printf "[ninja %%s/%%s]\n", m[1], m[2]
+    fflush()
   }
+  next
 }
 /^-- Performing Test / { next }
 /^-- Check for working / { next }
 /^-- Looking for / { next }
 /^-- Detecting / { next }
-/FAILED:|fatal error:|^error: |ninja: build stopped|subcommand failed|^RPM build errors:|^ERROR:|Cannot stat|cpio: |CMake Error|Killed|No space left|Cannot allocate memory/ {
+/FAILED:|ninja: build stopped|subcommand failed|^RPM build errors:|^ERROR:|Cannot stat|cpio: |CMake Error|Killed|No space left|Cannot allocate memory/ {
+  dumpbuf()
   print
   fflush()
+  if ($0 ~ /FAILED:/) keep = 80
   next
 }
+keep > 0 { print; fflush(); keep--; next }
 /^\+ \/usr\/bin\/cmake --build/ || /^Run Build Command/ || /^-- .+ project is/ || /^-- Build files have been written/ {
   print
   fflush()
   next
 }
-{ next }
+{
+  buf[nbuf] = $0
+  nbuf++
+  if (nbuf > 80) {
+    for (i = 1; i < nbuf; i++) buf[i - 1] = buf[i]
+    nbuf--
+  }
+  next
+}
 OREON_AWK
 
 oreon_ninja_filter() {
@@ -1590,6 +1595,7 @@ popd
     -DBUILD_SHARED_LIBS=OFF \\\
     -DLLVM_BUILD_LLVM_DYLIB=ON \\\
     -DLLVM_LINK_LLVM_DYLIB=ON \\\
+    -DLLVM_DYLIB_COMPONENTS=all \\\
     -DCLANG_LINK_CLANG_DYLIB=ON \\\
     -DLLVM_ENABLE_FFI:BOOL=ON \\\
     -DLLVM_ENABLE_EH=OFF
@@ -1722,6 +1728,7 @@ popd
         -DMLIR_INCLUDE_TESTS:BOOL=ON \\\
         -DMLIR_INCLUDE_INTEGRATION_TESTS:BOOL=OFF \\\
         -DMLIR_INSTALL_AGGREGATE_OBJECTS=OFF \\\
+        -DMLIR_LINK_MLIR_DYLIB=ON \\\
         -DMLIR_BUILD_MLIR_C_DYLIB=ON \\\
         -DMLIR_ENABLE_BINDINGS_PYTHON:BOOL=%{mlir_jit} \\\
         -DMLIR_ENABLE_EXECUTION_ENGINE:BOOL=%{mlir_jit}
@@ -1804,7 +1811,7 @@ popd
 
 #region test options
 %global cmake_config_args %{cmake_config_args} \\\
-	-DLLVM_BUILD_TESTS:BOOL=ON \\\
+	-DLLVM_BUILD_TESTS:BOOL=%{?with_check:ON}%{!?with_check:OFF} \\\
 	-DLLVM_INCLUDE_TESTS:BOOL=ON \\\
 	-DLLVM_INSTALL_GTEST:BOOL=ON \\\
 	-DLLVM_LIT_ARGS="-vv"
@@ -2008,7 +2015,6 @@ cd $OLD_CWD
 
 %if 0%{with lto_build}
   %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_ENABLE_LTO:BOOL=Thin
-  %global extra_cmake_opts %{extra_cmake_opts} -DLLVM_ENABLE_FATLTO=ON
 %endif
 
 %if 0%{with use_lld}
@@ -2333,9 +2339,8 @@ rm -rf %{buildroot}/%{install_datadir}/gdb
 # chmod +w %{buildroot}/%{_datarootdir}/gdb/python/ompd/ompdModule.so
 
 %if %{with offload}
-# Remove files that we don't package, yet.
-rm %{buildroot}%{install_bindir}/llvm-offload-device-info
-rm %{buildroot}%{install_bindir}/llvm-omp-kernel-replay
+rm -f %{buildroot}%{install_bindir}/llvm-offload-device-info
+rm -f %{buildroot}%{install_bindir}/llvm-omp-kernel-replay
 %endif
 
 #endregion OPENMP installation
@@ -3631,10 +3636,10 @@ fi
     libarcher.so
 }}
 %if %{with offload}
-%expand_libs libomptarget.so.%{so_suffix}
-%expand_libs libLLVMOffload.so.%{so_suffix}
+%expand_libs libomptarget.so.*
+%expand_libs libLLVMOffload.so.*
 %if %{maj_ver} >= 24
-%expand_libs libLLVMOffloadKernel.so.%{so_suffix}
+%expand_libs libLLVMOffloadKernel.so.*
 %endif
 %endif
 
@@ -3647,15 +3652,10 @@ fi
 %{_prefix}/lib/clang/%{maj_ver}/include/ompt-multiplex.h
 %expand_libs cmake/openmp
 %if %{with offload}
-%{expand_libs %{expand:
-    libomptarget.so
-    libLLVMOffload.so
-}}
+%expand_libs libomptarget.so
+%expand_libs libLLVMOffload.so
 %if %{maj_ver} >= 24
-%{expand_libs %{expand:
-    libLLVMOffloadKernel.so
-    LLVMOffloadKernelPerThreadDefaultStream.o
-}}
+%expand_libs LLVMOffloadKernelPerThreadDefaultStream.o
 %endif
 
 %{expand_libs %{expand:

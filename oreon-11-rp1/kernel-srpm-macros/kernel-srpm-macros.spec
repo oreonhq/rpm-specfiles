@@ -10,7 +10,7 @@
 Name:           kernel-srpm-macros
 Version:        1.0
 # when bumping version and resetting release, don't forget to bump version of kernel-rpm-macros as well
-Release:        2%{?dist}
+Release:        12%{?dist}
 Summary:        RPM macros that list arches the full kernel is built on
 # The license is the standard (MIT) specified in
 # and as URL we provide dist-git URL

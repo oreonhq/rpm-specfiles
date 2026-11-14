@@ -13,7 +13,7 @@
 
 Name: oreon-release
 Version: %{major}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: %{distro} release files
 License: GPL-2.0-or-later
 URL: https://oreonhq.com/
@@ -26,6 +26,7 @@ Provides: system-release = %{version}-%{release}
 Provides: system-release(releasever) = %{major}
 Provides: system-release(releasever_major) = %{major}
 Provides: base-module(platform:or%{major})
+Provides: fedora-release = %{version}-%{release}
 Requires: oreon-release-common = %{version}-%{release}
 Conflicts: system-release
 
@@ -36,6 +37,7 @@ files, and the dist tag macros used by rpmbuild.
 %package common
 Summary: %{distro} release files shared by every edition
 Provides: system-release-common = %{version}-%{release}
+Provides: fedora-release-common = %{version}-%{release}
 
 %description common
 os-release, system-release-cpe, issue files, and the rpm dist macros for

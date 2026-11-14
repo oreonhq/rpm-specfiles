@@ -51,8 +51,8 @@
 %__cxx_clang clang++
 %__cpp_clang clang-cpp
 
-# Default to the GCC toolchain
-%toolchain gcc
+# Default to the Clang toolchain
+%toolchain clang
 
 %__cc %{expand:%%{__cc_%{toolchain}}}
 %__cxx %{expand:%%{__cxx_%{toolchain}}}

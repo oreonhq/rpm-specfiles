@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash b154b405aae8e92a661805e2eed3c9e0d63403533aa70b556ab52f8836cd3dfd
+%global source0_hash 4d9c68d409facc8351f1d15d824ead687d59204319524f7647903738f940efe3
 %global debug_package %{nil}
 %global rrcdir /usr/lib/rpm/oreon
 
 Name: oreon-rpm-config
 Version: 345
-Release: 13%{?dist}
+Release: 14%{?dist}
 Summary: Oreon rpm build configuration
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles
@@ -62,11 +62,14 @@ Requires: coreutils
 Requires: rpm >= 4.19.91
 Requires: dwz >= 0.4
 Requires: zip
+Requires: clang
+Requires: compiler-rt
 Requires: %{_bindir}/find
 Requires: %{_bindir}/file
 Requires: %{_bindir}/grep
 Requires: %{_bindir}/sed
 Requires: %{_bindir}/xargs
+Requires: %{_bindir}/pkgconf
 Requires: (gcc-plugin-annobin if gcc)
 Requires: efi-srpm-macros
 Requires: cmake-srpm-macros
@@ -123,8 +126,18 @@ install -p -m 644 -t %{buildroot}%{_rpmluadir}/oreon common.lua
 install -p -m 644 -t %{buildroot}%{_rpmluadir}/fedora common.lua
 mkdir -p %{buildroot}%{_rpmconfigdir}/redhat
 install -p -m 644 oreon-hardened-cc1 %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-cc1
+install -p -m 644 oreon-hardened-ld %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-ld
+install -p -m 644 oreon-hardened-ld-errors %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-ld-errors
+install -p -m 644 oreon-hardened-clang.cfg %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-clang.cfg
+install -p -m 644 oreon-hardened-clang-ld.cfg %{buildroot}%{_rpmconfigdir}/redhat/redhat-hardened-clang-ld.cfg
+install -p -m 644 oreon-annobin-cc1 %{buildroot}%{_rpmconfigdir}/redhat/redhat-annobin-cc1
 
 install -p -m 644 %{SOURCE35} .
+
+mkdir -p %{buildroot}%{_bindir}
+for t in x86_64-oreon-linux-gnu aarch64-oreon-linux-gnu; do
+  ln -s pkgconf %{buildroot}%{_bindir}/$t-pkg-config
+done
 
 %triggerin -- gcc-plugin-annobin gcc
 %{rrcdir}/oreon-annobin-plugin-select.sh
@@ -136,6 +149,8 @@ install -p -m 644 %{SOURCE35} .
 
 %files
 %doc buildflags.md
+%{_bindir}/x86_64-oreon-linux-gnu-pkg-config
+%{_bindir}/aarch64-oreon-linux-gnu-pkg-config
 %dir %{rrcdir}
 %{rrcdir}/brp-ldconfig
 %{rrcdir}/brp-mangle-shebangs
@@ -173,4 +188,10 @@ install -p -m 644 %{SOURCE35} .
 %dir %{_rpmluadir}/oreon/rpm
 %{_rpmluadir}/oreon/common.lua
 %{_rpmluadir}/fedora/common.lua
+%dir %{_rpmconfigdir}/redhat
 %{_rpmconfigdir}/redhat/redhat-hardened-cc1
+%{_rpmconfigdir}/redhat/redhat-hardened-ld
+%{_rpmconfigdir}/redhat/redhat-hardened-ld-errors
+%{_rpmconfigdir}/redhat/redhat-hardened-clang.cfg
+%{_rpmconfigdir}/redhat/redhat-hardened-clang-ld.cfg
+%{_rpmconfigdir}/redhat/redhat-annobin-cc1

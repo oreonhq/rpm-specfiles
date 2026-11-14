@@ -8,7 +8,7 @@ packages: filesystem, setup, rpm, rpm-sequoia, tree-pkg, chkconfig, oreon-releas
 [srpm-macros]
 summary: macros imported into other specs. a mistake here breaks the whole tree
 maintainer: Brandon Lester
-packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macros, go-srpm-macros, java-srpm-macros, kernel-srpm-macros, lua-srpm-macros, ocaml-srpm-macros, openblas-srpm-macros, package-notes-srpm-macros, perl-srpm-macros, perl-generators, pyproject-rpm-macros, pyproject-srpm-macros, python-srpm-macros, qt6-srpm-macros, rust-srpm-macros
+packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macros, go-srpm-macros, java-srpm-macros, kernel-srpm-macros, lua-srpm-macros, ocaml-srpm-macros, openblas-srpm-macros, package-notes-srpm-macros, perl-srpm-macros, perl-Oreon-VSP, perl-generators, pyproject-rpm-macros, pyproject-srpm-macros, python-srpm-macros, qt6-srpm-macros, rust-srpm-macros, python-rpm-generators, python-rpm-macros, cargo-rpm-macros
 
 [toolchain]
 summary: compilers, libc, binutils, debuggers. these are slow and they fill disks
@@ -18,7 +18,7 @@ packages: gcc, binutils, glibc, gdb, llvm, elfutils, libtool, ccache, dwz, debug
 [build-tools]
 summary: the tools that turn a tarball into a package
 maintainer: Brandon Lester
-packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, gnulib-l10n, orbscli
+packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy
 
 [shell-and-users]
 summary: login, shells, core unix tools
@@ -33,22 +33,22 @@ packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarch
 [crypto]
 summary: tls, gpg, and the policy that tells the rest what to use
 maintainer: Brandon Lester
-packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, crypto-policies, libsodium, keyutils, krb5, libxcrypt
+packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, crypto-policies, libsodium, keyutils, krb5, libxcrypt, fips-provider, tpm2-tss
 
 [python]
 summary: interpreters and the python modules the build root needs
 maintainer: Brandon Lester
-packages: python3, python3.15, python3-build, python3-installer, python3-jinja2, python3-markupsafe, python3-packaging, python3-pefile, python3-pyelftools, python3-pyproject-hooks, python3-setuptools, python3-setuptools_scm, python3-vcs-versioning, python3-wheel, python-dateutil, python-dbus, python-distro, python-six, python-systemd, python-tzdata, swig
+packages: python3.15, python3-build, python3-installer, python3-jinja2, python3-markupsafe, python3-packaging, python3-pefile, python3-pyelftools, python3-pyproject-hooks, python3-setuptools, python3-setuptools_scm, python3-vcs-versioning, python3-wheel, python-dateutil, python-dbus, python-distro, python-six, python-systemd, python-tzdata, swig, python-flit-core, python-pip, python-mallard-ducktype, python3-lxml, pygobject3, python3-iniconfig, python3-pluggy, python3-pygments, python3-pytest, python3-testpath, python3-execnet, python3-pytest-xdist, python3-alabaster, python3-babel, python3-docutils, python3-imagesize, python3-snowballstemmer, python3-roman-numerals, python3-sphinxcontrib-applehelp, python3-sphinxcontrib-devhelp, python3-sphinxcontrib-htmlhelp, python3-sphinxcontrib-jsmath, python3-sphinxcontrib-qthelp, python3-sphinxcontrib-serializinghtml, python3-sphinx, python3-sphinxcontrib-jquery, python3-sphinx_rtd_theme, python3-breathe, python3-cython, python3-charset-normalizer, python3-idna, python3-urllib3, python3-certifi, python3-requests, python3-pyparsing, python3-calver, python3-pathspec, python3-trove-classifiers, python3-hatchling, python3-configobj, python3-fastbencode, python3-patiencediff, python3-merge3, python3-dulwich, python3-pyyaml, python3-catalogus, python3-vcsgraph, python3-poetry-core, python3-tomlkit, python3-hatch-vcs, python3-semantic-version, python3-setuptools-rust, python3-setuptools-gettext, python3-pycparser, python3-cffi, python3-maturin, python3-cryptography, python3-freezegun, python3-scripttest, python3-tomli-w, python3-werkzeug, python3-distlib, python3-hatch-fancy-pypi-readme, python3-zipremove, python3-packageurl, python3-sbom, python3-filelock, python3-platformdirs, python3-python-discovery, python3-virtualenv
 
 [perl]
 summary: perl and the small modules other specs require by name
 maintainer: Brandon Lester
-packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Oreon-VSP
+packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum
 
 [languages]
 summary: other language runtimes and the generators that wrap them
 maintainer: Brandon Lester
-packages: lua, rust, mpdecimal, fmt, toml11
+packages: lua, rust, mpdecimal, fmt, toml11, cargo2rpm
 
 [networking]
 summary: http, ssh, dns names, and the libraries under them
@@ -58,7 +58,7 @@ packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2
 [services]
 summary: pid 1, dbus, cron, logging
 maintainer: Brandon Lester
-packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate
+packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate, dbus-broker
 
 [packaging-stack]
 summary: dnf and the libraries it links
@@ -73,7 +73,7 @@ packages: libselinux, libsepol, libsemanage, audit, ima-evm-utils, libcap, libca
 [libraries]
 summary: shared libraries that are not big enough to be their own group
 maintainer: Brandon Lester
-packages: glib2, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, json-c, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm
+packages: glib2, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, json-c, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm, fuse3, libcbor, libfido2, libpfm, cmocka, libdb, libxslt, apr, apr-util, systemtap
 
 [x11]
 summary: the x11 client libraries we actually build
@@ -83,4 +83,9 @@ packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans
 [admin-tools]
 summary: things a person runs on a booted system
 maintainer: Brandon Lester
-packages: procps-ng, man-db, nano, htop, iotop-c, fastfetch, tmux, git, fzf, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot
+packages: procps-ng, man-db, nano, htop, iotop-c, fastfetch, tmux, git, fzf, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot, e2fsprogs
+
+[desktop]
+summary: the graphical session and apps on it
+maintainer: sk1lld
+packages: oreonvr-shell

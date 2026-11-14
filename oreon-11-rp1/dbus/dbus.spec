@@ -30,7 +30,7 @@ BuildRequires: oreon-rpm-macros
 Name:    dbus
 Epoch:   1
 Version:        1.16.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary: D-BUS message bus
 
 # The effective license of the majority of the package, including the shared
@@ -148,8 +148,6 @@ other supporting documentation such as the introspect dtd file.
 %package devel
 Summary: Development files for D-BUS
 Requires: dbus-libs%{?_isa} = %{epoch}:%{version}-%{release}
-# For xml directory ownership.
-Requires: xml-common
 
 %description devel
 This package contains libraries and header files needed for
@@ -437,6 +435,7 @@ fi
 %{_datadir}/gtk-doc
 
 %files devel
+%dir %{_datadir}/xml
 %{_datadir}/xml/dbus-1
 %{_libdir}/lib*.so
 %dir %{_libdir}/dbus-1.0

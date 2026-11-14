@@ -1,12 +1,12 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 6c690ae1b7b4c6f0036b759c3fdba8bcd42b1d7649409d8efa09f11f16528703
+%global source0_hash 58f5d68c68bfb5d73e7849cf4271e745b988fa349b864b2010d6c7d84a397bd8
 %global debug_package %{nil}
 
 Name: python-srpm-macros
 Version: 3.15
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: SRPM macros for Python packages
 License: MIT
 URL: https://www.python.org/

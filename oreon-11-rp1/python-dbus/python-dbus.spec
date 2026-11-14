@@ -9,7 +9,7 @@
 
 Name: python-dbus
 Version: 1.5.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Python bindings for D-Bus
 License: MIT
 URL: https://www.freedesktop.org/wiki/Software/DBusBindings/
@@ -25,6 +25,8 @@ BuildRequires: python3-devel
 BuildRequires: dbus-devel
 BuildRequires: glib2-devel
 BuildRequires: patchelf
+
+%global __requires_exclude ^pkgconfig\\(dbus-1\\)
 
 Provides: python3-dbus = %{version}-%{release}
 Requires: python3

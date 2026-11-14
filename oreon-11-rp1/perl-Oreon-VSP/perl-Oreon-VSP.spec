@@ -17,11 +17,7 @@ BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make
 BuildRequires:  perl-interpreter
-%if %{defined perl_bootstrap}
 BuildRequires:  perl-macros
-%else
-BuildRequires:  perl-generators
-%endif
 BuildRequires:  perl(ExtUtils::MakeMaker)
 # Run-time:
 BuildRequires:  perl(strict)

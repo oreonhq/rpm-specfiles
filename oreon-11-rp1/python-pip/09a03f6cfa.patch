@@ -1,0 +1,38 @@
+From 09a03f6cfaeecae8bf5774ae371d37c4369e2da4 Mon Sep 17 00:00:00 2001
+From: Damian Shaw <damian.peter.shaw@gmail.com>
+Date: Sat, 15 Aug 2026 13:36:05 -0400
+Subject: [PATCH] Allow flit-core 4 to build pip
+
+---
+ pyproject.toml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 48f64c8018..fe6b39913d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -45,13 +45,13 @@ Source = "https://github.com/pypa/pip"
+ Changelog = "https://pip.pypa.io/en/stable/news/"
+ 
+ [build-system]
+-requires = ["flit-core >=3.11,<4"]
++requires = ["flit-core >=3.11,<5"]
+ build-backend = "flit_core.buildapi"
+ 
+ [dependency-groups]
+ test = [
+     "cryptography",
+-    "flit-core >= 3.11, < 4",
++    "flit-core >= 3.11, < 5",
+     "freezegun",
+     "installer",
+     # pytest-subket requires 7.0+
+@@ -69,7 +69,7 @@ test = [
+ ]
+ 
+ test-common-wheels = [
+-    "flit-core >= 3.11, < 4",
++    "flit-core >= 3.11, < 5",
+     # We pin setuptools<80 because our test suite currently
+     # depends on setup.py develop to generate egg-link files.
+     "setuptools >= 70.1.0, <80",

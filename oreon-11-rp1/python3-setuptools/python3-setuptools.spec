@@ -9,7 +9,7 @@
 
 Name: python3-setuptools
 Version: 84.2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Easily build and distribute Python packages
 License: MIT
 URL: https://pypi.org/project/setuptools/
@@ -81,5 +81,52 @@ while read -r f; do
   esac
 done < %{_builddir}/%{name}.files | sort -u >> %{_builddir}/%{name}.files
 
+mkdir -p %{buildroot}%{python_wheel_dir}
+python3 - %{buildroot} $sitelib %{version} <<'EOF'
+import base64, hashlib, os, sys, zipfile
+root, site, ver = sys.argv[1:]
+base = os.path.join(root + site, "setuptools")
+wheel = os.path.join(root, "usr/share/python-wheels", "setuptools-" + ver + "-py3-none-any.whl")
+os.makedirs(os.path.dirname(wheel), exist_ok=True)
+names = []
+for dirpath, dirnames, filenames in os.walk(base):
+    dirnames[:] = [x for x in dirnames if x != "__pycache__"]
+    for name in filenames:
+        p = os.path.join(dirpath, name)
+        rel = os.path.relpath(p, root + site)
+        if rel.endswith(".pyc"):
+            continue
+        names.append((p, rel))
+pth = os.path.join(root + site, "distutils-precedence.pth")
+names.append((pth, "distutils-precedence.pth"))
+d = os.path.join(root + site, "setuptools-" + ver + ".dist-info")
+for name in os.listdir(d):
+    if name == "INSTALLER":
+        continue
+    names.append((os.path.join(d, name), "setuptools-" + ver + ".dist-info/" + name))
+with zipfile.ZipFile(wheel, "w", zipfile.ZIP_DEFLATED) as z:
+    record = []
+    for p, rel in sorted(names, key=lambda x: x[1]):
+        data = open(p, "rb").read()
+        z.writestr(rel, data)
+        digest = base64.urlsafe_b64encode(hashlib.sha256(data).digest()).rstrip(b"=").decode()
+        record.append("%s,sha256=%s,%d" % (rel, digest, len(data)))
+    record.append("setuptools-%s.dist-info/RECORD,," % ver)
+    z.writestr("setuptools-%s.dist-info/WHEEL" % ver,
+               "Wheel-Version: 1.0\nGenerator: oreon-rpm-macros\nRoot-Is-Purelib: true\nTag: py3-none-any\n")
+    z.writestr("setuptools-%s.dist-info/RECORD" % ver, "\n".join(record) + "\n")
+EOF
+
 %files -f %{_builddir}/%{name}.files
 %license LICENSE
+
+%package -n python-setuptools-wheel
+Summary: The setuptools wheel
+Provides: python-setuptools-wheel = %{version}
+
+%description -n python-setuptools-wheel
+A Python wheel of setuptools to use with venv.
+
+%files -n python-setuptools-wheel
+%dir %{python_wheel_dir}/
+%{python_wheel_dir}/setuptools-%{version}-py3-none-any.whl

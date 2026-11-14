@@ -35,7 +35,7 @@ BuildRequires: gcc-c++
 BuildRequires: glibc-devel
 BuildRequires: gmp-devel
 BuildRequires: mpfr-devel
-BuildRequires: mpc-devel
+BuildRequires: pkgconfig(mpc)
 BuildRequires: zlib-devel
 Requires: binutils
 Requires: cpp%{?_isa} = %{version}-%{release}
@@ -48,6 +48,7 @@ BuildRequires: flex
 BuildRequires: file
 BuildRequires: python3
 BuildRequires: libxml2-devel
+BuildRequires: doxygen
 BuildRequires: gcc-gnat
 BuildRequires: libgnat
 BuildRequires: gcc-gdc
@@ -91,7 +92,7 @@ Summary: Files for building GCC plugins
 Requires: gcc%{?_isa} = %{version}-%{release}
 Requires: gmp-devel
 Requires: mpfr-devel
-Requires: mpc-devel
+Requires: pkgconfig(mpc)
 %description -n gcc-plugin-devel
 Header files for compiling GCC plugins.
 
@@ -536,6 +537,8 @@ find %{_builddir}/gcc-%{version} -name ltmain.sh -exec sed -i \
 unset CFLAGS CXXFLAGS FFLAGS FCFLAGS OBJCFLAGS GOFLAGS DFLAGS LDFLAGS
 export CFLAGS="-O2 -g"
 export CXXFLAGS="-O2 -g"
+export CC=gcc
+export CXX=g++
 export CFLAGS_FOR_TARGET="-O2 -g"
 export CXXFLAGS_FOR_TARGET="-O2 -g"
 export FCFLAGS_FOR_TARGET="-O2 -g"
@@ -671,6 +674,10 @@ step host-make make -s -j"$jobs" LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %endif
 rm -rf stage1-*
 step libstdcxx-docs make -s -C "$target/libstdc++-v3" doc-html-doxygen
+if ! find "$target/libstdc++-v3/doc/doxygen/html" -type f | grep -q .; then
+  echo "libstdc++ doxygen html is empty, is doxygen installed?"
+  exit 1
+fi
 
 mkdir -p %{_builddir}/gcc-jit
 cd %{_builddir}/gcc-jit
@@ -795,7 +802,7 @@ fi
 rm -rf %{_builddir}/gcc-jit
 target=$(%{_builddir}/gcc-%{version}/config.guess)
 doc=%{_builddir}/gcc-build/$target/libstdc++-v3/doc/doxygen/html
-if ! test -d "$doc"; then
+if ! find "$doc" -type f | grep -q .; then
   echo "missing libstdc++ docs $doc"
   exit 1
 fi

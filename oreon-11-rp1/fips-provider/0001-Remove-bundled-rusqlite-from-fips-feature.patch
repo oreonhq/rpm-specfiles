@@ -1,0 +1,30 @@
+From ac2496052dff1a2f04068d40dd34ad912ba6ea4c Mon Sep 17 00:00:00 2001
+From: Simo Sorce <simo@redhat.com>
+Date: Tue, 22 Sep 2026 12:58:45 -0400
+Subject: [PATCH] Remove bundled rusqlite from fips feature
+
+Remove the rusqlite/bundled dependency from the fips feature set in
+Cargo.toml. This prevents the FIPS build from forcing a bundled compilation of
+SQLite, allowing it to rely on the system SQLite library instead.
+
+Signed-off-by: Simo Sorce <simo@redhat.com>
+---
+ Cargo.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 51a6ba6..1a0fa84 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -115,7 +115,7 @@ kdf_all = ["hkdf", "pbkdf2", "sp800_108", "sshkdf", "tlskdf", "simplekdf"]
+ # out of hash_all/kdf_all and only in standard below.
+ standard = ["sqlitedb", "ecc_all", "ffdh", "hash_all", "kdf_all", "rsa", "hotp", "chacha20", "ike"]
+ 
+-fips = ["ossl/fips", "sqlitedb", "rusqlite/bundled", "aes", "ecc_all", "ffdh",
++fips = ["ossl/fips", "sqlitedb", "aes", "ecc_all", "ffdh",
+ "hash_all", "kdf_all", "rsa", "pqc", "dep:vsprintf"]
+ 
+ dynamic = ["ossl/dynamic"] # Builds dynamically against system libcrypto.so
+-- 
+2.55.0
+
