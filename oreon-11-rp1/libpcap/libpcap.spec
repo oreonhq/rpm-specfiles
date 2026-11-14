@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 68fa62cffb974f4275641ce14c2e2d75739251f30e00e6a0900903b247d76a03
+%global source0_hash 9237f5bae9dcf3a91823d9963ec43b7c0e2e3374ef2ad57d92c8cd39530f4723
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Name:     libpcap
 Epoch:    14
-Version:        1.10.7
+Version:        1.11.0
 Release:        1%{?dist}
 Summary:  A system-independent interface for user-level packet capture
 License:  ISC AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause-UC
@@ -28,7 +28,7 @@ BuildRequires:  oreon-rpm-macros
 %endif
 
 Source0:        https://www.tcpdump.org/release/libpcap-%{version}.tar.xz
-Source1:        libpcap-1.10.7.tar.xz.sig
+Source1:        libpcap-1.11.0.tar.xz.sig
 
 Patch0001:        0001-man-tcpdump-and-tcpslice-have-manpages-in-man8.patch
 Patch0002:        0002-pcap-config-mitigate-multilib-conflict.patch
