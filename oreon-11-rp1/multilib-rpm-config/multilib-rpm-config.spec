@@ -2,8 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash ee830f5bbfab3187510513a0a723176a4f0709c06a5876f54d6282ffda2cf89d
-%global commit 8f007caf419811c533b41d0e9c65e3c81f5d72f4
-%global mlurl https://src.fedoraproject.org/rpms/multilib-rpm-config/raw/%{commit}/f
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -16,18 +14,18 @@ Version: 1
 Release: 31%{?dist}
 Summary: Multilib packaging helpers
 License: GPL-2.0-or-later
-URL: https://src.fedoraproject.org/rpms/multilib-rpm-config
-Source0: %{mlurl}/multilib-fix
-Source1: %{mlurl}/macros.ml
-Source2: %{mlurl}/README
-Source3: %{mlurl}/COPYING
-Source4: %{mlurl}/multilib-library
-Source5: %{mlurl}/multilib-info
+URL: https://oreonhq.com
+Source0: multilib-fix
+Source1: macros.ml
+Source2: README
+Source3: COPYING
+Source4: multilib-library
+Source5: multilib-info
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
-Requires: redhat-rpm-config
+Requires:       oreon-rpm-config
 
 %description
 Shell scripts and RPM macros for multilib header packaging.
@@ -62,22 +60,25 @@ install -m 755 -p multilib-fix %{buildroot}/%{ml_fix}
 install -m 755 -p multilib-info %{buildroot}/%{ml_info}
 
 %check
-mkdir tests
-cd tests
+mkdir tests ; cd tests
 ml_fix="sh `pwd`/../multilib-fix --buildroot `pwd`"
 capable="sh `pwd`/../multilib-info --multilib-capable"
+
 mkdir template
-cat > template/main.c <<'EOF'
+cat > template/main.c <<EOF
 #include "header.h"
 int main () { call (); return 0; }
 EOF
-cat > template/header.h <<'EOF'
+cat > template/header.h <<EOF
 #include <stdio.h>
 void call (void) { printf ("works!\n"); }
 EOF
+
 cp -r template basic
 gcc ./basic/main.c
 ./a.out
+
+pwd
 if `$capable`; then
     cp -r template really-works
     $ml_fix --file /really-works/header.h
@@ -85,15 +86,19 @@ if `$capable`; then
     ./a.out
     test -f really-works/header-*.h
 fi
+
 cp -r template other_arch
 $ml_fix --file /other_arch/header.h --arch ppc64
 test -f other_arch/header-*.h
+
 cp -r template other_arch_fix
 $ml_fix --file /other_arch_fix/header.h --arch ppc64p7
 test -f other_arch_fix/header-ppc64.h
+
 cp -r template aarch64-no-change
 $ml_fix --file /aarch64-no-change/header.h --arch aarch64
 test ! -f aarch64-no-change/header-*.h
+
 test `$capable --arch x86_64` = true
 test `$capable --arch aarch64` = false
 test `$capable --arch ppc64p7` = true
@@ -103,3 +108,6 @@ test `$capable --arch ppc64p7` = true
 %doc README
 %{rrcdir}/*
 %{macrosdir}/*
+
+%changelog
+%autochangelog
