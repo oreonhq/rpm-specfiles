@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 877b823198eb29aa1778b16a70cad05f7b54b164b3bf7ab656fc326c393f4c85
-%global source1_hash 1d9dd4d8eed30520d83c0f331ac8ddad5b0c78b9fe8a4f456edbba7b6f871250
+%global source0_hash 69db67211c5aca41bf854974d7e97fcae096d06eeac30de7ddb119570c0277af
+%global source1_hash 6c7ea01268fc2d4bad285b7a345fc24ad5d8fdd246efd502ab2797dedfc42d68
 %global source3_hash a764b07c95d32fff682da0cc58a8d61ccb168b9b070cfcde205a32465c692ed4
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -14,7 +14,7 @@
 
 Summary: A password-checking library
 Name: cracklib
-Version:        2.10.3
+Version:        2.10.4
 Release:        1%{?dist}
 URL: https://github.com/cracklib/cracklib
 License: LGPL-2.1-or-later
