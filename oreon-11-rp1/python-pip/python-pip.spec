@@ -377,3 +377,6 @@ pytest_k="$pytest_k and not test_check_unsupported"
 %dir %{python_wheel_dir}/
 %{python_wheel_dir}/%{python_wheel_name}
 
+
+%changelog
+%autochangelog
