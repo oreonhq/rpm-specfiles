@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 931b44eabdd5f7d170803f3476397c8e9dea07209589e1194ff8379429991ccb
+%global source0_hash f72adc9189eebc4861da1beb24330971e51b855898c913909d90ed57476be4f7
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -16,7 +16,7 @@
 
 
 Name:           %{upstream_name}%{?v2_suffix}
-Version:        2.15.3
+Version:        2.15.4
 Release:        1%{?dist}
 Summary:        Module metadata manipulation library
 
@@ -31,9 +31,9 @@ License:        MIT
 SourceLicense:  %{license} AND GPL-3.0-only AND GPL-3.0-or-later AND GPL-2.0-or-later AND Apache-2.0
 URL:            https://github.com/oreon-modularity/libmodulemd
 Source0:        https://github.com/fedora-modularity/libmodulemd/releases/download/%{version}/modulemd-%{version}.tar.xz
-Source1:        modulemd-2.15.3.tar.xz.asc
+Source1:        modulemd-2.15.4.tar.xz.asc
 # Key exported from Petr Pisar's keyring
-Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
+Source2:        keyring-10E1B1BC73B4796EE25B9CA42D20EEFCA8895F65.pgp
 
 BuildRequires:  gnupg2
 BuildRequires:  meson >= 0.47
