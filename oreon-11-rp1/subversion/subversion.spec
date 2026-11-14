@@ -35,7 +35,7 @@ Subversion version control system.
 %autosetup -n subversion-%{version}
 
 %build
-%configure --with-apr=%{_prefix} --with-apr-util=%{_prefix} --with-sqlite=/usr --with-zlib=/usr --with-lz4=%{_prefix}
+%configure --with-apr=%{_prefix} --with-apr-util=%{_prefix} --with-sqlite=/usr --with-zlib=/usr --with-lz4=%{_prefix} --with-utf8proc=internal
 %make_build
 
 %install
