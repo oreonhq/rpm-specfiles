@@ -7,7 +7,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 # This spec file has been automatically updated
-%bcond_without mingw
+%bcond_with mingw
 
 
 Version:        0.26.6
@@ -272,3 +272,6 @@ fi
 %endif
 
 
+
+%changelog
+%autochangelog
