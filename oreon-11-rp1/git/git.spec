@@ -1,8 +1,8 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3
-%global source1_hash bee7d2f96844063557b07b43811d81e1fc54563e0da2c36a975dfd432b196a5c
+%global source0_hash f0b0bf89264b9bd2e1c640363e7529643989da76281600473c50745cd34a607f
+%global source1_hash b5aeebc4779030742cfb2f599572fc7adb38041a20b6048df4f6b0272be58ab0
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -54,7 +54,7 @@ BuildRequires: oreon-rpm-macros
 %global _package_note_file  %{_builddir}/%{name}-%{real_version}/.package_note-%{name}-%{version}-%{release}.%{_arch}.ld
 
 Name:           git
-Version:        2.56.0
+Version:        2.56.1
 Release:        1%{?dist}
 Summary:        Fast Version Control System
 License:        BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
