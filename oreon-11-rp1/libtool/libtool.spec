@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash f81f5860666b0bc7d84baddefa60d1cb9fa6fceb2398cc3baca6afaa60266675
+%global source0_hash 2ef1067c16c97db930fd740cc9bc3d3ba9a583804ae5ac42cc3e8719e49e191e
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -15,7 +15,7 @@
 
 Summary: The GNU Portable Library Tool
 Name:    libtool
-Version:        2.5.4
+Version:        2.6.2
 Release:        1%{?dist}
 
 # To help future rebase, the following licenses were seen in the following files/folders:
@@ -69,12 +69,6 @@ Patch:        libtool-2.4.7-hardening.patch
 # Please refer to the following ticket regarding PIC support on ARM:
 # https://bugs.launchpad.net/ubuntu/+source/gcc-4.4/+bug/503448
 Patch:        libtool-2.4.6-disable_non-pic_arm.patch
-
-# Discussion re-opened upstream:
-# https://lists.gnu.org/archive/html/bug-libtool/2025-01/msg00004.html
-# Patch was already sent in 2022:
-# https://lists.gnu.org/archive/html/libtool-patches/2022-02/msg00000.html
-Patch:        libtool-2.4.6-keep-compiler-deps.patch
 
 # Patch sent upstream
 # https://lists.gnu.org/archive/html/libtool-patches/2024-02/msg00002.html
@@ -184,8 +178,10 @@ rm -f %{buildroot}%{_libdir}/libltdl.{a,la}
 %{_infodir}/libtool.info*.gz
 %{_mandir}/man1/libtool.1*
 %{_mandir}/man1/libtoolize.1*
+%{_mandir}/man1/libtool-next-version.1*
 %{_bindir}/libtool
 %{_bindir}/libtoolize
+%{_bindir}/libtool-next-version
 %{_datadir}/aclocal/*.m4
 %dir %{_datadir}/libtool
 %{_datadir}/libtool/build-aux
