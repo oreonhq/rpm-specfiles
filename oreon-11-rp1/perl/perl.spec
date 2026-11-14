@@ -16,7 +16,7 @@ BuildRequires: oreon-rpm-macros
 %global parallel_tests 1
 %global tapsetdir   %{_datadir}/systemtap/tapset
 
-%global dual_life 0
+%global dual_life 1
 %global rebuild_from_scratch %{defined perl_bootstrap}
 
 # This overrides filters from build root (/usr/lib/rpm/macros.d/macros.perl)
@@ -122,7 +122,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          %{perl_epoch}
 Version:        5.44.0
 # release number must be even higher, because dual-lived modules will be broken otherwise
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Practical Extraction and Report Language
 Url:            https://www.perl.org/
 Source0:        https://www.cpan.org/src/5.0/perl-%{version}.tar.xz
@@ -490,8 +490,8 @@ Requires:       perl(Devel::PPPort)
 # Compiler and linker options stored into perl and used when building XS
 # modules refer to hardering profiles like
 # /usr/lib/rpm/redhat/redhat-hardened-cc1 that are delivered by
-# redhat-rpm-config. Bug #1557667.
-Requires:       redhat-rpm-config
+# oreon-rpm-config. Bug #1557667.
+Requires:       oreon-rpm-config
 # ExtUtils::Embed -e ldopts include libcrypt, bug #1666098
 Requires:       libxcrypt-devel%{?_isa}
 
@@ -7289,3 +7289,6 @@ ln -s /app/bin/perl %{buildroot}/usr/bin/perl
 %{_mandir}/man3/vmsish.*
 
 # Old changelog entries are preserved in CVS.
+
+%changelog
+%autochangelog
