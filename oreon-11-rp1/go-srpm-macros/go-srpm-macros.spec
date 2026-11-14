@@ -37,3 +37,6 @@ install -m 644 rpm/lua/srpm/go.lua %{buildroot}%{_rpmluadir}/oreon/srpm/go.lua
 %license LICENSE.txt
 %{_rpmmacrodir}/macros.go-srpm
 %{_rpmluadir}/oreon/srpm/go.lua
+
+%changelog
+%autochangelog
