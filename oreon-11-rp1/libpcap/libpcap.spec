@@ -16,7 +16,10 @@ URL:      https://www.tcpdump.org/
 
 BuildRequires: make
 BuildRequires: bison
+%bcond_with bluez
+%if %{with bluez}
 BuildRequires: bluez-libs-devel
+%endif
 BuildRequires: flex
 BuildRequires: gcc
 BuildRequires: git
@@ -103,3 +106,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libpcap.a
 %{_mandir}/man3/pcap*.3*
 %{_mandir}/man5/pcap*.5*
 
+
+%changelog
+%autochangelog
