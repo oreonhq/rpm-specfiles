@@ -122,3 +122,6 @@ find %{buildroot} -type f -name "*.a" -delete -print
 %{_mandir}/man1/fido2-token.1{,.*}
 
 
+
+%changelog
+%autochangelog
