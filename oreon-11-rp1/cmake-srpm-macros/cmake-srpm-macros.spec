@@ -30,3 +30,6 @@ install -m 644 %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.aaa-cmake-srpm
 
 %files
 %{_rpmmacrodir}/macros.aaa-cmake-srpm
+
+%changelog
+%autochangelog
