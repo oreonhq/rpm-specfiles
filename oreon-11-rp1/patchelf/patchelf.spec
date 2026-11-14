@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 491108728f120ce05b539934b41a750235031a6df8abc6b47e57aff7de15094d
+%global source0_hash fac76a3c0b730e8d53ea1d10cd6015322d78c9900af91736f2cca51d5837b612
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -10,7 +10,7 @@
 %undefine _hardened_build
 
 Name:           patchelf
-Version:        0.19.1
+Version:        0.19.3
 Release:        1%{?dist}
 Summary:        A utility for patching ELF binaries
 
