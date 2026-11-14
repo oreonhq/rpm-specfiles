@@ -1,12 +1,12 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d87ec0dac9061f1fa58ebced5c6b1360c87d4c5cd7b455dc0ebe1d3f036920d7
+%global source0_hash 42f829927d2d459f5733fcdb38a5bf2455a8b84072193092450a9c69d6596eca
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global device_mapper_version 1.02.217
+%global device_mapper_version 1.02.218
 
 %global enable_cache 1
 %global enable_lvmdbusd 1
@@ -41,12 +41,11 @@
 
 Summary: Userland logical volume management tools
 Name: lvm2
-Version:        2.03.43
+Version:        2.03.44
 Release:        1%{?dist}
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
 Source0:        https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
-Patch1:        0001-pvscan-preserve-preferred-device-name-when-importing.patch
 
 BuildRequires: make
 BuildRequires: gcc
