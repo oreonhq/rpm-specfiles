@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 621ff2b4faf214d7023143f6f9d496117c7c75131927837750b904140aff48a1
+%global source0_hash 22cf32e84e3eb508d97a9e991c2c3cc006b9dcf4afed201d96311c5c57d08fcf
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 Summary: File system tree viewer
 Name: tree-pkg
-Version:        2.3.1
+Version:        2.3.2
 Release:        1%{?dist}
 
 # The entire source code is LGPL-2.1-or-later except strverscmp.c
