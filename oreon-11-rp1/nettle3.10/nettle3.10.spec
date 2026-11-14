@@ -191,3 +191,6 @@ make check
 %ldconfig_scriptlets
 
 
+
+%changelog
+%autochangelog
