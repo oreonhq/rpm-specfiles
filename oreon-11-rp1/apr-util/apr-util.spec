@@ -17,6 +17,7 @@ Source0: https://archive.apache.org/dist/apr/apr-util-%{version}.tar.bz2
 BuildRequires: oreon-rpm-macros
 BuildRequires: clang
 BuildRequires: make
+BuildRequires: libtool
 BuildRequires: apr-devel
 BuildRequires: openssl-devel
 BuildRequires: expat-devel
@@ -41,30 +42,24 @@ Headers and libraries for building against apr-util.
 export CC=clang
 export CFLAGS="%{optflags}"
 export LDFLAGS="%{build_ldflags}"
-for f in \
-    %{_libdir}/libapr-1.la \
-    %{_libdir}/apr-1/build/libtool \
-    %{_bindir}/apr-1-config \
-    %{_libdir}/pkgconfig/apr-1.pc
-do
-  [ -e "$f" ] || continue
-  sed -i -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' "$f"
-done
 %configure --with-apr=%{_prefix} --with-openssl --with-crypto --with-sqlite3 --with-expat=%{_prefix} --disable-static
-find . -type f \( -name Makefile -o -name '*.mk' -o -name 'libtool' -o -name '*.la' \) -exec sed -i \
+find . -type f \( -name Makefile -o -name '*.mk' -o -name 'libtool' -o -name '*.la' -o -name 'apu-*-config' \) -print0 \
+  | xargs -0 sed -i \
     -e 's/^CC *=.*/CC = clang/' \
-    -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]'\''"]*||g' \
+    -e 's|^LIBTOOL *=.*|LIBTOOL = %{_bindir}/libtool|' \
+    -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
     -e 's|%{_libdir}/libapr-1\.la|-lapr-1|g' \
-    {} +
-%{make_build} CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}"
+    -e 's|/usr/lib64/libapr-1\.la|-lapr-1|g' \
+    -e 's|/usr/lib/libapr-1\.la|-lapr-1|g'
+%{make_build} CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}" LIBTOOL="%{_bindir}/libtool"
 
 %install
-%make_install
+%make_install LIBTOOL="%{_bindir}/libtool"
 rm -f %{buildroot}%{_libdir}/libaprutil-1.la
 %oreon_filelist_devel
 
 %check
-make check CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}"
+make check CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}" LIBTOOL="%{_bindir}/libtool"
 
 %files -f %{_builddir}/%{name}.files
 %files devel -f %{_builddir}/%{name}-devel.files
