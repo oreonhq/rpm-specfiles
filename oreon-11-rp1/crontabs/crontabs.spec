@@ -66,3 +66,6 @@ touch $RPM_BUILD_ROOT/etc/sysconfig/run-parts
 %dir /etc/cron.monthly
 %{_mandir}/man4/*
 
+
+%changelog
+%autochangelog
