@@ -201,3 +201,6 @@ install -m 0644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/depmod.d/dist.conf
 %{_libdir}/pkgconfig/libkmod.pc
 %{_libdir}/libkmod.so
 
+
+%changelog
+%autochangelog
