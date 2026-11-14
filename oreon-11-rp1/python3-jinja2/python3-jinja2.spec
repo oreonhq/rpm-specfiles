@@ -40,3 +40,6 @@ done
 %files
 %license LICENSE.txt
 %{py3_sitelib}/jinja2/
+
+%changelog
+%autochangelog
