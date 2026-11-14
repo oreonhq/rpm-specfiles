@@ -16,7 +16,10 @@ Source0:        https://github.com/htop-dev/htop/releases/download/%{version}/ht
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
+%bcond_with hwloc
+%if %{with hwloc}
 BuildRequires:  hwloc-devel
+%endif
 BuildRequires:  libcap-devel
 BuildRequires:  libnl3-devel
 BuildRequires:  libtool
@@ -62,3 +65,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 %{_datadir}/applications/%{name}.desktop
 %{_mandir}/man1/htop.1*
 
+
+%changelog
+%autochangelog
