@@ -9,7 +9,7 @@
 
 Name: pam
 Version: 1.7.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Pluggable authentication modules
 License: BSD-3-Clause
 URL: https://github.com/linux-pam/linux-pam
@@ -57,6 +57,7 @@ PAM is the pluggable authentication library.
 
 %install
 %oreon_meson_install
+rm -f %{buildroot}%{_sysconfdir}/environment
 find %{buildroot} -type f | while read -r f; do
   file -b "$f" | grep -q '^ELF' || continue
   r=$(patchelf --print-rpath "$f")
