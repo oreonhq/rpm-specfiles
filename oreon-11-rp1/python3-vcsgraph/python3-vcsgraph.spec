@@ -48,6 +48,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+cd %{_builddir}
 PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import vcsgraph'
 
 %files -f %{_builddir}/%{name}.files
