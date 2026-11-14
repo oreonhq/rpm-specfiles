@@ -22,6 +22,8 @@ BuildRequires: apr-devel
 BuildRequires: openssl-devel
 BuildRequires: expat-devel
 BuildRequires: sqlite-devel
+BuildRequires: libuuid-devel
+BuildRequires: libxcrypt-devel
 
 %description
 Apache Portable Runtime Utility library.
@@ -49,7 +51,6 @@ find . -type f \( -name Makefile -o -name '*.mk' -o -name 'libtool' -o -name '*.
     -e 's|^LIBTOOL *=.*|LIBTOOL = %{_bindir}/libtool|' \
     -e 's|-specs=/usr/lib/rpm/redhat/[^[:space:]]*||g' \
     -e 's|%{_libdir}/libapr-1\.la|-lapr-1|g' \
-    -e 's|/usr/lib64/libapr-1\.la|-lapr-1|g' \
     -e 's|/usr/lib/libapr-1\.la|-lapr-1|g'
 %{make_build} CC=clang CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}" APRUTIL_LDFLAGS="%{build_ldflags}" LIBTOOL="%{_bindir}/libtool"
 
