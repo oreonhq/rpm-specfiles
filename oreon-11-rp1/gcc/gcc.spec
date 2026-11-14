@@ -854,6 +854,14 @@ rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
 rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %endif
 
+target=$(%{_builddir}/gcc-%{version}/config.guess)
+clang_gcc=%{_target_cpu}-redhat-linux
+for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
+  if [ -d "$dir/$target" ] && [ "$target" != "$clang_gcc" ]; then
+    ln -sfn "$target" "$dir/$clang_gcc"
+  fi
+done
+
 out=%{_builddir}/gcc-split
 rm -rf "$out"
 mkdir -p "$out"
@@ -1016,7 +1024,7 @@ set +x
 find "$ROOT" -print | sort | while read p; do
   rel=${p#"$ROOT"}
   [ -n "$rel" ] || continue
-  if [ -d "$p" ]; then
+  if [ -d "$p" ] && [ ! -L "$p" ]; then
     continue
   fi
   entry=$rel
