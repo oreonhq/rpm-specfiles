@@ -42,3 +42,6 @@ cd %{_builddir}
 PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import hatch_fancy_pypi_readme'
 
 %files -f %{_builddir}/%{name}.files
+
+%changelog
+%autochangelog
