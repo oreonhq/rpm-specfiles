@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 40a8cefd45f0d2a06827e6658efb830d484868c449ad80f7efb33516af44f3da
+%global source0_hash 39675dfa06fb0e99be8da5d4a1784acbaab58ae0870231d956ff7870cb99eec1
 %global source1_hash 082967d6bf793499d3d655cea2149e07c0da97287f1877a6eab88d17cb703d0d
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -12,7 +12,7 @@
 Summary: A network traffic monitoring tool
 Name: tcpdump
 Epoch: 14
-Version:        4.99.6
+Version:        4.99.7
 Release:        1%{?dist}
 License: BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC AND ISC AND NTP
 URL: http://www.tcpdump.org
@@ -23,7 +23,7 @@ BuildRequires:  oreon-rpm-macros
 
 Source0:        http://www.tcpdump.org/release/tcpdump-%{version}.tar.xz
 Source1:        http://www.tcpdump.org/release/tcpslice-1.8.tar.gz
-Source2:        tcpdump-4.99.6.tar.xz.sig
+Source2:        tcpdump-4.99.7.tar.xz.sig
 Source3: tcpdump-sysusers.conf
 
 Patch0002:        0002-Use-getnameinfo-instead-of-gethostbyaddr.patch
