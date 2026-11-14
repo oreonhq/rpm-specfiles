@@ -364,3 +364,6 @@ make test || (echo "Tests failed, printing full log..." && cat testrunner.log &&
 %{_bindir}/sqlite3_analyzer
 %endif
 
+
+%changelog
+%autochangelog
