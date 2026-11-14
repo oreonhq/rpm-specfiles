@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 67bea6fbc3a42a535a0230c9e891e5ddfb4d9d39422d46565a2990d1ace15216
+%global source0_hash 9d2021f47a4501c667862c9942a92d1953694b21d11bcd1702e83eb594e3d67d
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -12,7 +12,7 @@ BuildRequires: oreon-rpm-macros
 
 Summary: System and process monitoring utilities
 Name: procps-ng
-Version:        4.0.6
+Version:        4.0.7
 Release:        1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://sourceforge.net/projects/procps-ng/
