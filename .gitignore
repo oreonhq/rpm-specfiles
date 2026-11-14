@@ -28,6 +28,8 @@ __pycache__/
 !oreon-11-rp1/python3-fastbencode/fastbencode-*-vendor.tar.xz
 !oreon-11-rp1/python3-patiencediff/patiencediff-*-vendor.tar.xz
 !oreon-11-rp1/python3-vcsgraph/vcsgraph-*-vendor.tar.xz
+!oreon-11-rp1/python-pip/coverage-0-py3-none-any.whl
+!oreon-11-rp1/fips-provider/kryoptic-*-vendor.tar.xz
 !oreon-11-rp1/doxygen/doxywizard-icons.tar.bz2
 !oreon-11-rp1/tzdata/javazic-1.8-37392f2f5d59.tar.xz
 
