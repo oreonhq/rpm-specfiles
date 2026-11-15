@@ -283,7 +283,9 @@ BuildRequires: gcc
 BuildRequires: gdbm-devel
 BuildRequires: git-core
 BuildRequires: glibc-devel
+%if %{without bootstrap}
 BuildRequires: libX11-devel
+%endif
 BuildRequires: libffi-devel
 BuildRequires: libuuid-devel
 BuildRequires: libzstd-devel
@@ -324,15 +326,19 @@ BuildRequires: clang >= 19
 BuildRequires: llvm >= 19
 %endif
 
+%if %{without bootstrap}
 %ifarch %{valgrind_arches}
 BuildRequires: valgrind-devel
 %endif
+%endif
 
 %if %{with main_python}
-BuildRequires: desktop-file-utils
 %bcond_with appstream_glib
+%if %{without bootstrap}
+BuildRequires: desktop-file-utils
 %if %{with appstream_glib}
 BuildRequires: libappstream-glib
+%endif
 %endif
 %endif
 
@@ -1139,8 +1145,10 @@ EOF
 %if %{with rpmwheels}
   --with-wheel-pkg-dir=%{python_wheel_dir} \
 %endif
+%if %{without bootstrap}
 %ifarch %{valgrind_arches}
   --with-valgrind \
+%endif
 %endif
   $ExtraConfigArgs \
   %{nil}
@@ -1323,17 +1331,20 @@ install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freet
 %endif
 
 %if %{with main_python}
-# add idle3 to menu
 install -D -m 0644 Lib/idlelib/Icons/idle_16.png %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/idle3.png
 install -D -m 0644 Lib/idlelib/Icons/idle_32.png %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/idle3.png
 install -D -m 0644 Lib/idlelib/Icons/idle_48.png %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/idle3.png
 install -D -m 0644 Lib/idlelib/Icons/idle_256.png %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/idle3.png
-desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE10}
-
-# Install and validate appdata file
 mkdir -p %{buildroot}%{_metainfodir}
 cp -a %{SOURCE11} %{buildroot}%{_metainfodir}
+%if %{without bootstrap}
+desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE10}
+%if %{with appstream_glib}
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/idle3.appdata.xml
+%endif
+%else
+install -D -m 0644 %{SOURCE10} %{buildroot}%{_datadir}/applications/idle3.desktop
+%endif
 %endif
 
 # Make sure sysconfig looks at the right pyconfig-32.h/pyconfig-64.h file instead of pyconfig.h
