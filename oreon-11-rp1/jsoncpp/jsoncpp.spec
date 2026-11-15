@@ -21,11 +21,9 @@ URL:            https://github.com/open-source-parsers/jsoncpp
 Source0:        https://github.com/open-source-parsers/jsoncpp/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  oreon-rpm-macros
-BuildRequires:  meson
-BuildRequires:  ninja-build
+BuildRequires:  cmake >= 3.1
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  pkgconfig
 BuildRequires:  python3
 %if %{with docs}
 BuildRequires:  doxygen
@@ -68,16 +66,25 @@ sed -i -e 's!^DOT_FONTNAME.*=.*!DOT_FONTNAME =!g' doc/doxyfile.in
 %endif
 
 %build
-%meson -Ddefault_library=shared -Dtests=true
-%meson_build
+%cmake \
+  -DBUILD_STATIC_LIBS:BOOL=OFF \
+  -DBUILD_OBJECT_LIBS:BOOL=OFF \
+  -DJSONCPP_WITH_CMAKE_PACKAGE:BOOL=ON \
+  -DJSONCPP_WITH_EXAMPLE:BOOL=OFF \
+  -DJSONCPP_WITH_PKGCONFIG_SUPPORT:BOOL=ON \
+  -DJSONCPP_WITH_POST_BUILD_UNITTEST:BOOL=OFF \
+  -DJSONCPP_WITH_STRICT_ISO:BOOL=ON \
+  -DJSONCPP_WITH_TESTS:BOOL=ON \
+  -DPYTHON_EXECUTABLE:STRING="%{__python3}"
+%cmake_build
 %if %{with docs}
-printf '%s\n' %{version} > version
+cp -p %{__cmake_builddir}/version .
 %{__python3} doxybuild.py --with-dot --doxygen /usr/bin/doxygen
 rm -f version
 %endif
 
 %install
-%meson_install
+%cmake_install
 mkdir -p %{buildroot}%{_docdir}/%{name}
 install -pm 0644 README.md %{buildroot}%{_docdir}/%{name}
 %if %{with docs}
@@ -89,7 +96,8 @@ hardlink -cfv %{buildroot}%{_docdir}/%{name}
 %endif
 
 %check
-%meson_test
+%global _smp_mflags -j1
+%ctest
 
 %ldconfig_scriptlets
 
@@ -101,6 +109,7 @@ hardlink -cfv %{buildroot}%{_docdir}/%{name}
 %exclude %{_docdir}/%{name}/html
 %endif
 %{_libdir}/lib%{name}.so.%{sover}{,.*}
+%{_libdir}/lib%{name}.so.%{version}
 
 %files devel
 %{_libdir}/lib%{name}.so
