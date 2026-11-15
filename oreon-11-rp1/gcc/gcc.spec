@@ -17,7 +17,8 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 8%{?dist}
+Release: 9%{?dist}
+%global gcc_major %(echo %{version} | cut -d. -f1)
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -41,6 +42,7 @@ Requires: binutils
 Requires: cpp%{?_isa} = %{version}-%{release}
 Requires: glibc-devel
 Requires: libgcc%{?_isa} = %{version}-%{release}
+Provides: gcc(major) = %{gcc_major}
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: texinfo
 BuildRequires: bison
