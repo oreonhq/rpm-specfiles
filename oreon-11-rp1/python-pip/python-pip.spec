@@ -8,10 +8,8 @@
 %global oreon_bootstrap %{nil}
 %bcond bootstrap 0
 %oreon_bootstrap
-# to prevent pulling many unwanted packages in.
-%bcond tests 1
-# Whether to build the manual pages (useful for bootstrapping Sphinx)
-%bcond man 1
+%bcond tests %{without bootstrap}
+%bcond man %{without bootstrap}
 
 %global srcname pip
 %global base_version 26.1.2
