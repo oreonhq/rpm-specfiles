@@ -17,8 +17,9 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 9%{?dist}
+Release: 10%{?dist}
 %global gcc_major %(echo %{version} | cut -d. -f1)
+%global gcc_target_platform %{_target_cpu}-redhat-linux
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -548,7 +549,7 @@ export FCFLAGS_FOR_TARGET="-O2 -g"
 jobs=%{?_smp_build_ncpus}
 if [ -z "$jobs" ]; then jobs=1; fi
 src=%{_builddir}/gcc-%{version}
-target=$("$src/config.guess")
+target=%{gcc_target_platform}
 
 step() {
   name=$1
@@ -570,6 +571,9 @@ common() {
     --libexecdir=%{_libexecdir} \
     --mandir=%{_mandir} \
     --infodir=%{_infodir} \
+    --build=%{gcc_target_platform} \
+    --host=%{gcc_target_platform} \
+    --target=%{gcc_target_platform} \
     --enable-threads=posix \
     --enable-checking=release \
     --with-system-zlib \
@@ -739,7 +743,7 @@ step() {
 cd %{_builddir}/gcc-build
 step host-install make -s install DESTDIR=%{buildroot} LDFLAGS_FOR_TARGET="-Wl,-z,relro,-z,now"
 %ifarch x86_64
-target=$(%{_builddir}/gcc-%{version}/config.guess)
+target=%{gcc_target_platform}
 off=%{_builddir}/offload-root%{_prefix}
 dest=%{buildroot}%{_prefix}
 mkdir -p "$dest/bin"
@@ -803,7 +807,7 @@ if [ -f %{_builddir}/gcc-jit/gcc/doc/libgccjit.info ]; then
   cp -a %{_builddir}/gcc-jit/gcc/doc/libgccjit.info %{buildroot}%{_infodir}/
 fi
 rm -rf %{_builddir}/gcc-jit
-target=$(%{_builddir}/gcc-%{version}/config.guess)
+target=%{gcc_target_platform}
 doc=%{_builddir}/gcc-build/$target/libstdc++-v3/doc/doxygen/html
 if ! find "$doc" -type f | grep -q .; then
   echo "missing libstdc++ docs $doc"
@@ -856,13 +860,25 @@ rm -rf %{buildroot}%{_libdir}/gcc/*/*/install-tools
 rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %endif
 
-target=$(%{_builddir}/gcc-%{version}/config.guess)
-clang_gcc=%{_target_cpu}-redhat-linux
+target=%{gcc_target_platform}
+guess=$(%{_builddir}/gcc-%{version}/config.guess)
 for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
-  if [ -d "$dir/$target" ] && [ "$target" != "$clang_gcc" ]; then
-    ln -sfn "$target" "$dir/$clang_gcc"
+  if [ -d "$dir/$target" ]; then
+    for alias in %{_target_cpu}-redhat-linux-gnu "$guess"; do
+      if [ -n "$alias" ] && [ "$alias" != "$target" ] && [ ! -e "$dir/$alias" ]; then
+        ln -sfn "$target" "$dir/$alias"
+      fi
+    done
   fi
 done
+cxxinc=%{buildroot}%{_includedir}/c++/%{gcc_major}
+if [ -d "$cxxinc/$target" ]; then
+  for alias in %{_target_cpu}-redhat-linux-gnu "$guess"; do
+    if [ -n "$alias" ] && [ "$alias" != "$target" ] && [ ! -e "$cxxinc/$alias" ]; then
+      ln -sfn "$target" "$cxxinc/$alias"
+    fi
+  done
+fi
 
 out=%{_builddir}/gcc-split
 rm -rf "$out"
