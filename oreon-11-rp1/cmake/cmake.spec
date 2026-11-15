@@ -6,51 +6,30 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-# Do we add appdata-files?
-# consider conditional on whether %%_metainfodir is defined or not instead -- rex
-%bcond_without appdata
 
-# Set to bcond_without or use --with bootstrap if bootstrapping a new release
-# or architecture
-%bcond_with bootstrap
-
-# Build with Emacs support
-%bcond_without emacs
-
-# Run git tests
-%bcond_without git_test
-
-# Set to bcond_with or use --without gui to disable qt gui build
-%bcond_without gui
-
-# Use ncurses for colorful output
+%bcond_with appdata
+%bcond_with emacs
+%bcond_with git_test
+%bcond_with gui
 %bcond_without ncurses
-
-# Setting the Python-version used by default
-%bcond_without python3
-
-# Enable RPM dependency generators for cmake files written in Python
-%bcond_without rpm
-
-%bcond_without sphinx
-
+%bcond_with python3
+%bcond_with rpm
+%bcond_with sphinx
 %bcond_with bundled_jsoncpp
 %bcond_with bundled_rhash
-
-# cppdap is currently shipped as a static lib from upstream,
-# so we do not have it in the repos.
 %bcond_without bundled_cppdap
-
-# Run tests
-# ... except i686.
 %ifnarch i686
 %bcond_without test
 %else
 %bcond_with test
 %endif
+%bcond_with X11_test
 
-# Enable X11 tests
-%bcond_without X11_test
+%if %{with bootstrap}
+%global with_bundled_jsoncpp 1
+%global with_bundled_rhash 1
+%global with_bundled_cppdap 1
+%endif
 
 # Do not build non-lto objects to reduce build time significantly.
 %global build_cflags   %(echo '%{build_cflags}'   | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
@@ -183,11 +162,12 @@ BuildRequires: pkgconfig(Qt6Widgets)
 BuildRequires: desktop-file-utils
 %endif
 
+%if %{without bootstrap}
 BuildRequires: pkgconfig(bash-completion)
+%endif
 %global bash_completionsdir %(pkg-config --variable=completionsdir bash-completion 2>/dev/null || echo '%{_datadir}/bash-completion/completions')
 
 %if %{without bootstrap}
-# Ensure we have our own rpm-macros in place during build.
 BuildRequires:  %{name}-rpm-macros
 %endif
 BuildRequires: make
@@ -197,14 +177,14 @@ Requires:       %{name}-data = %{version}-%{release}
 Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
 Requires:       %{name}-filesystem%{?_isa} = %{version}-%{release}
 
-# TODO: Change to the latter design. Currently blocked by various `Requires: make` in dependency chains
-#   Also relevant for user configuration: https://gitlab.kitware.com/cmake/cmake/-/issues/26891
 Requires:       make
+%if %{without bootstrap}
 %if %{without bundled_jsoncpp}
 Requires:       jsoncpp%{?_isa}
 %endif
 %if %{without bundled_rhash}
 Requires:       rhash%{?_isa}
+%endif
 %endif
 
 # Explicitly require the generators with ninja-build as the default
