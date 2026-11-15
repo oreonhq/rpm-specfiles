@@ -20,12 +20,7 @@ License:        MIT
 URL:            https://github.com/openSUSE/libeconf
 Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v%{version}/libeconf-%{version}.tar.gz
 
-### Patches ###
-# This should be a temporary workaround. I don't have enough time to check what's happening, but since we aren't shipping the html documentation it's fine to stop installing it
-Patch0101:        0001-cmake-no-install-html.patch
-# Intermittent failure of a test in aarch64, thus temporarily disabling the failing test suite
-Patch0102:        0002-disable-test.patch
-
+Patch0101:      0001-cmake-no-install-html.patch
 
 BuildRequires:  cmake >= 3.12
 BuildRequires:  gcc
