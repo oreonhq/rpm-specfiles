@@ -390,7 +390,7 @@ end
 #region main package
 Name:		%{pkg_name_llvm}
 Version:        23.1.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	Apache-2.0 WITH LLVM-exception OR NCSA
@@ -785,9 +785,10 @@ Summary:	A C language family front-end for LLVM
 
 Requires:	%{pkg_name_clang}-libs%{?_isa} = %{version}-%{release}
 
-# clang requires gcc, clang++ requires libstdc++-devel
 Requires:	libstdc++-devel
 Requires:	gcc-c++
+Requires:	%{pkg_name_lld}%{?_isa} = %{version}-%{release}
+Requires:	%{pkg_name_compiler_rt}%{?_isa} = %{version}-%{release}
 
 Provides:	clang(major) = %{maj_ver}
 
