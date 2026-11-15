@@ -171,7 +171,9 @@ BuildRequires: pkgconfig(bash-completion)
 BuildRequires:  %{name}-rpm-macros
 %endif
 BuildRequires: make
-BuildRequires:  oreon-rpm-macros
+BuildRequires:  oreon-rpm-macros >= 1-7
+BuildRequires:  oreon-rpm-config >= 345-16
+
 
 Requires:       %{name}-data = %{version}-%{release}
 Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
@@ -216,7 +218,9 @@ Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
 %if %{with emacs}
 Requires:       emacs-filesystem%{?_emacs_version: >= %{_emacs_version}}
 %endif
+%if %{without bootstrap}
 Requires:       vim-filesystem
+%endif
 
 BuildArch:      noarch
 
