@@ -7,7 +7,7 @@
 
 Name: oreon-rpm-config
 Version: 345
-Release: 15%{?dist}
+Release: 16%{?dist}
 Summary: Oreon rpm build configuration
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles
@@ -56,8 +56,9 @@ Obsoletes: rpmautospec-rpm-macros < 0.6.3-2
 Provides: redhat-rpm-config = %{version}-%{release}
 Obsoletes: redhat-rpm-config < %{version}-%{release}
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-7
 
+Requires: oreon-rpm-macros >= 1-7
 Requires: coreutils
 Requires: rpm >= 4.19.91
 Requires: dwz >= 0.4
