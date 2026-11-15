@@ -50,7 +50,22 @@ if probe == "" and have ~= "1" then\
   local h = io.open(bin, "r")\
   if h then\
     h:close()\
-    local p = io.popen(bin .. " 2>/dev/null")\
+    local spec = ""\
+    local sourcedir = rpm.expand("%{?_sourcedir}")\
+    local name = rpm.expand("%{?name}")\
+    if sourcedir ~= "" and name ~= "" then\
+      local cand = sourcedir .. "/" .. name .. ".spec"\
+      local f = io.open(cand, "r")\
+      if f then\
+        f:close()\
+        spec = cand\
+      end\
+    end\
+    local cmd = bin\
+    if spec ~= "" then\
+      cmd = bin .. " " .. string.format("%q", spec)\
+    end\
+    local p = io.popen(cmd .. " 2>/dev/null")\
     if p then\
       local out = p:read("*a") or ""\
       p:close()\

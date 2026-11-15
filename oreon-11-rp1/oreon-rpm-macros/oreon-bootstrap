@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 import os, subprocess, sys
 
 def gated_requires(full, boot):
@@ -12,12 +12,39 @@ def gated_requires(full, boot):
 def unmet(reqs, probe):
     return [req for req in reqs if not probe(req)]
 
-def spec_from_parent():
-    raw = open("/proc/%s/cmdline" % os.getppid(), "rb").read().split(b"\0")
-    args = [a.decode("utf-8", "replace") for a in raw if a]
-    for arg in args:
+def cmdline_of(pid):
+    try:
+        raw = open("/proc/%s/cmdline" % pid, "rb").read().split(b"\0")
+    except OSError:
+        return []
+    return [a.decode("utf-8", "replace") for a in raw if a]
+
+def ppid_of(pid):
+    try:
+        for line in open("/proc/%s/status" % pid, "r", encoding="utf-8"):
+            if line.startswith("PPid:"):
+                return int(line.split()[1])
+    except (OSError, ValueError, IndexError):
+        return 0
+    return 0
+
+def spec_from_argv():
+    for arg in sys.argv[1:]:
         if arg.endswith(".spec") and os.path.isfile(arg):
             return arg
+    return ""
+
+def spec_from_parents():
+    pid = os.getppid()
+    seen = set()
+    for _ in range(12):
+        if not pid or pid in seen:
+            break
+        seen.add(pid)
+        for arg in cmdline_of(pid):
+            if arg.endswith(".spec") and os.path.isfile(arg):
+                return arg
+        pid = ppid_of(pid)
     return ""
 
 def buildrequires(spec, extra):
@@ -29,7 +56,7 @@ def buildrequires(spec, extra):
     ]
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
-        return []
+        return None
     return [line.strip() for line in r.stdout.splitlines() if line.strip()]
 
 def available(req):
@@ -39,14 +66,21 @@ def available(req):
     q = subprocess.run(["rpm", "-q", "--whatprovides", name], capture_output=True, text=True)
     if q.returncode == 0 and q.stdout.strip():
         return True
-    d = subprocess.run(["dnf", "repoquery", "-q", "--whatprovides", name], capture_output=True, text=True)
+    d = subprocess.run(
+        ["dnf", "repoquery", "-q", "--whatprovides", name],
+        capture_output=True, text=True,
+    )
     return d.returncode == 0 and bool(d.stdout.strip())
 
 def main():
-    spec = spec_from_parent()
+    spec = spec_from_argv() or spec_from_parents()
     if not spec:
         return 0
-    gap = gated_requires(buildrequires(spec, []), buildrequires(spec, ["--with", "bootstrap"]))
+    full = buildrequires(spec, [])
+    boot = buildrequires(spec, ["--with", "bootstrap"])
+    if full is None or boot is None:
+        return 0
+    gap = gated_requires(full, boot)
     if unmet(gap, available):
         print("1")
     return 0
