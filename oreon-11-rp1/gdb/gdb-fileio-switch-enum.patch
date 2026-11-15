@@ -1,0 +1,12 @@
+--- a/gdbsupport/fileio.cc	2026-11-14 16:44:24.142955675 -0800
++++ b/gdbsupport/fileio.cc	2026-11-14 16:44:24.154544575 -0800
+@@ -123,6 +123,9 @@
+ 	return ENOSYS;
+       case FILEIO_ENAMETOOLONG:
+ 	return ENAMETOOLONG;
++      case FILEIO_SUCCESS:
++      case FILEIO_EUNKNOWN:
++	break;
+     }
+   return -1;
+ }
