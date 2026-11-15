@@ -1,0 +1,39 @@
+--- a/gdb/gdb-add-index.in	2026-11-14 15:42:32.513438050 -0800
++++ b/gdb/gdb-add-index.in	2026-11-14 15:42:32.528031861 -0800
+@@ -16,9 +16,8 @@
+ # You should have received a copy of the GNU General Public License
+ # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
+-# This program assumes gdb and objcopy are in $PATH.
++# This program assumes objcopy and readelf are in $PATH.
+ # If not, or you want others, pass the following in the environment
+-GDB=${GDB:=gdb}
+ OBJCOPY=${OBJCOPY:=objcopy}
+ READELF=${READELF:=readelf}
+ 
+@@ -52,6 +51,25 @@
+     echo "GNU gdb-add-index (${PKGVERSION}) ${VERSION}"
+ }
+ 
++# Prefer gdb.minimal in the buildroot, then gdb, then /usr/libexec/gdb.
++if test -z "$GDB"; then
++    for possible_gdb in /usr/bin/gdb.minimal gdb /usr/libexec/gdb; do
++        if ! command -v "$possible_gdb" >/dev/null 2>&1; then
++            continue
++        fi
++        possible_gdb=$(command -v "$possible_gdb")
++        if ! test -x "$possible_gdb"; then
++            continue
++        fi
++        GDB="$possible_gdb"
++        break
++    done
++    if test -z "$GDB"; then
++        echo "$myname: Failed to find a useable GDB binary" 1>&2
++        exit 1
++    fi
++fi
++
+ dwarf5=""
+ 
+ # Parse options.
