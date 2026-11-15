@@ -17,7 +17,7 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 10%{?dist}
+Release: 11%{?dist}
 %global gcc_major %(echo %{version} | cut -d. -f1)
 %global gcc_target_platform %{_target_cpu}-redhat-linux
 Summary: GNU Compiler Collection
@@ -864,7 +864,7 @@ target=%{gcc_target_platform}
 guess=$(%{_builddir}/gcc-%{version}/config.guess)
 for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
   if [ -d "$dir/$target" ]; then
-    for alias in %{_target_cpu}-redhat-linux-gnu "$guess"; do
+    for alias in %{_target_cpu}-redhat-linux-gnu %{_target_cpu}-oreon-linux-gnu %{_target_cpu}-oreon-linux "$guess"; do
       if [ -n "$alias" ] && [ "$alias" != "$target" ] && [ ! -e "$dir/$alias" ]; then
         ln -sfn "$target" "$dir/$alias"
       fi
@@ -873,7 +873,7 @@ for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
 done
 cxxinc=%{buildroot}%{_includedir}/c++/%{gcc_major}
 if [ -d "$cxxinc/$target" ]; then
-  for alias in %{_target_cpu}-redhat-linux-gnu "$guess"; do
+  for alias in %{_target_cpu}-redhat-linux-gnu %{_target_cpu}-oreon-linux-gnu %{_target_cpu}-oreon-linux "$guess"; do
     if [ -n "$alias" ] && [ "$alias" != "$target" ] && [ ! -e "$cxxinc/$alias" ]; then
       ln -sfn "$target" "$cxxinc/$alias"
     fi
