@@ -200,6 +200,12 @@ Requires:       %{name}-filesystem%{?_isa} = %{version}-%{release}
 # TODO: Change to the latter design. Currently blocked by various `Requires: make` in dependency chains
 #   Also relevant for user configuration: https://gitlab.kitware.com/cmake/cmake/-/issues/26891
 Requires:       make
+%if %{without bundled_jsoncpp}
+Requires:       jsoncpp%{?_isa}
+%endif
+%if %{without bundled_rhash}
+Requires:       rhash%{?_isa}
+%endif
 
 # Explicitly require the generators with ninja-build as the default
 # Requires:       (ninja-build or make)
