@@ -1,0 +1,11 @@
+--- a/gdbsupport/function-view.h	2026-11-14 16:19:21.217888290 -0800
++++ b/gdbsupport/function-view.h	2026-11-14 16:19:21.219257081 -0800
+@@ -218,7 +218,7 @@
+ /* Use partial specialization to get access to the callable's
+    signature. */
+ template<class Signature>
+-struct function_view;
++class function_view;
+ 
+ template<typename Res, typename... Args>
+ class function_view<Res (Args...)>
