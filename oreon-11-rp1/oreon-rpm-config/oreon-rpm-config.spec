@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash c53983c926e42cded8f95060ac4bdfc370aa414c50dee78da55a21262cb65068
+%global source0_hash 9e146964f4d899932af6c6d75fa9b5a6b19c4f4c647f18a461bf346a5ddeb02e
 %global debug_package %{nil}
 %global rrcdir /usr/lib/rpm/oreon
 
@@ -56,8 +56,10 @@ Provides: redhat-rpm-config = %{version}-%{release}
 Obsoletes: redhat-rpm-config < %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros >= 1-7
+BuildRequires: gcc >= 16.2.0-11
 
 Requires: oreon-rpm-macros >= 1-7
+Requires: gcc >= 16.2.0-11
 Requires: coreutils
 Requires: rpm >= 4.19.91
 Requires: dwz >= 0.4
