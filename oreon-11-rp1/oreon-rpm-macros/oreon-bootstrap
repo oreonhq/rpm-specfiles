@@ -21,7 +21,12 @@ def spec_from_parent():
     return ""
 
 def buildrequires(spec, extra):
-    cmd = ["rpmspec", "-q", "--buildrequires", "--define", "oreon_bootstrap %{nil}", *extra, spec]
+    cmd = [
+        "rpmspec", "-q", "--buildrequires",
+        "--define", "oreon_bootstrap %{nil}",
+        "--define", "oreon_bootstrap_probe 1",
+        *extra, spec,
+    ]
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
         return []

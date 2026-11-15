@@ -1,5 +1,6 @@
 %_oreon_helper /usr/libexec/oreon-rpm-macros/oreon-build
 %_oreon_gpgverify /usr/libexec/oreon-rpm-macros/oreon-gpgverify
+%_oreon_bootstrap_bin /usr/libexec/oreon-rpm-macros/oreon-bootstrap
 
 %_oreon_cflags -O2 -g -pipe -Wall -Wformat -Werror=format-security -fexceptions -fstack-protector-strong -Wp,-D_FORTIFY_SOURCE=3
 %_oreon_ldflags -Wl,-z,relro -Wl,-z,now -Wl,--as-needed
@@ -41,6 +42,24 @@
 %oreon_filelist %{_oreon_helper} files %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}.files --
 %oreon_filelist_devel %{_oreon_helper} files %{_oreon_paths} --destdir %{buildroot} --out %{_builddir}/%{name}.files --devel-out %{_builddir}/%{name}-devel.files --
 
-%oreon_bootstrap %{nil}
+%oreon_bootstrap %{lua:\
+local probe = rpm.expand("%{?oreon_bootstrap_probe}")\
+local have = rpm.expand("%{?with_bootstrap}")\
+if probe == "" and have ~= "1" then\
+  local bin = rpm.expand("%{_oreon_bootstrap_bin}")\
+  local h = io.open(bin, "r")\
+  if h then\
+    h:close()\
+    local p = io.popen(bin .. " 2>/dev/null")\
+    if p then\
+      local out = p:read("*a") or ""\
+      p:close()\
+      if string.find(out, "1", 1, true) then\
+        print("%global with_bootstrap 1")\
+      end\
+    end\
+  end\
+end\
+}
 
 %oreon_sha256 %{!?source0_hash:%{error:source0_hash is not set}}echo '%{source0_hash}  %{SOURCE0}' | sha256sum -c -
