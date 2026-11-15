@@ -9,7 +9,7 @@
 %global libname mesonbuild
 
 %bcond check 0
-%bcond docs 1
+%bcond docs %{without bootstrap}
 
 Name:           meson
 Version:        1.12.1
