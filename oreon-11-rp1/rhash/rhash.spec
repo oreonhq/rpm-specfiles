@@ -7,6 +7,8 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
+%global sover 1
+
 Name:           rhash
 Version:        1.4.5
 Release:        1%{?dist}
@@ -18,6 +20,8 @@ Source0:        https://github.com/rhash/RHash/archive/v%{version}/%{name}-%{ver
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  gcc
 BuildRequires:  make
+
+Provides:       librhash.so.%{sover}()(%{__isa_bits}bit)
 
 %description
 RHash is a console utility for calculation and verification of magnet links
@@ -39,6 +43,7 @@ Features:
 %package        devel
 Summary:        Development files for lib%{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Provides:       pkgconfig(librhash) = %{version}
 
 %description    devel
 LibRHash is a professional, portable, thread-safe C library for computing
@@ -72,6 +77,7 @@ INSTALL_INCDIR=%{_includedir} ./configure \
 
 %install
 %make_install
+make DESTDIR=%{buildroot} install-pkg-config
 make DESTDIR=%{buildroot} -C librhash install-so-link install-lib-headers
 
 %check
@@ -82,12 +88,13 @@ make test-shared
 %doc ChangeLog README.md
 %config(noreplace) %{_sysconfdir}/rhashrc
 %{_bindir}/*
-%{_libdir}/*.so.1*
+%{_libdir}/librhash.so.%{sover}{,.*}
 %{_mandir}/man1/*.1*
 
 %files devel
 %{_includedir}/*
-%{_libdir}/*.so
+%{_libdir}/librhash.so
+%{_libdir}/pkgconfig/librhash.pc
 
 %changelog
 %autochangelog
