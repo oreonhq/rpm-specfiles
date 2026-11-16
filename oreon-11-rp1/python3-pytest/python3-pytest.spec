@@ -20,6 +20,7 @@ BuildRequires: python3-installer
 BuildRequires: python3-wheel
 BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
+BuildRequires: python3-vcs-versioning
 BuildRequires: python3-iniconfig
 BuildRequires: python3-packaging
 BuildRequires: python3-pluggy
