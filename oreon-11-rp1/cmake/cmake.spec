@@ -172,7 +172,7 @@ BuildRequires: pkgconfig(bash-completion)
 BuildRequires:  %{name}-rpm-macros
 %endif
 BuildRequires: make
-BuildRequires:  oreon-rpm-macros >= 1-9
+BuildRequires:  oreon-rpm-macros >= 1-10
 BuildRequires:  oreon-rpm-config >= 345-16
 
 

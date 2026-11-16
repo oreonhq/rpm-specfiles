@@ -65,12 +65,36 @@ def spec_from_builddir():
             return hits[0]
     return ""
 
+def sources_dir_for(spec):
+    """mock keeps local SourceN under SOURCES, git keeps them beside the .spec"""
+    specdir = os.path.dirname(os.path.abspath(spec))
+    for folder in (
+        os.environ.get("RPM_SOURCE_DIR"),
+        "/builddir/build/SOURCES",
+        specdir,
+    ):
+        if folder and os.path.isdir(folder):
+            return folder
+    return specdir
+
+def spec_dir_for(spec):
+    specdir = os.path.dirname(os.path.abspath(spec))
+    for folder in (
+        os.environ.get("RPM_SPEC_DIR"),
+        "/builddir/build/SPECS",
+        specdir,
+    ):
+        if folder and os.path.isdir(folder):
+            return folder
+    return specdir
+
 def buildrequires(spec, extra):
-    sourcedir = os.path.dirname(os.path.abspath(spec))
+    sourcedir = sources_dir_for(spec)
+    specdir = spec_dir_for(spec)
     cmd = [
         "rpmspec", "-q", "--buildrequires",
         "--define", "_sourcedir " + sourcedir,
-        "--define", "_specdir " + sourcedir,
+        "--define", "_specdir " + specdir,
         "--define", "oreon_bootstrap %{nil}",
         "--define", "oreon_bootstrap_probe 1",
         *extra, spec,
@@ -123,6 +147,11 @@ def main():
     boot = buildrequires(spec, ["--with", "bootstrap"])
     if boot is None:
         boot = buildrequires(spec, ["--define", "perl_bootstrap 1"])
+    # full parses, bootstrap mode does not → still need bootstrap (real
+    # rpmbuild has the right _sourcedir for %include, the probe may not)
+    if full is not None and boot is None:
+        print("1")
+        return 0
     if full is None or boot is None:
         return 0
     gap = gated_requires(full, boot)

@@ -5,7 +5,7 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-BuildRequires: oreon-rpm-macros >= 1-9
+BuildRequires: oreon-rpm-macros >= 1-10
 %global perl_version    5.44.0
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
