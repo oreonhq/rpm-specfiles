@@ -103,7 +103,9 @@ Patch1:        cmake-rename.patch
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc-c++
+%if %{without bootstrap}
 BuildRequires:  gcc-gfortran
+%endif
 BuildRequires:  sed
 %if %{with git_test}
 # Tests fail if only git-core is installed, bug #1488830
