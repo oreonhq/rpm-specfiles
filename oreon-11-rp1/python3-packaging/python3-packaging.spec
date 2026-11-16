@@ -17,7 +17,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
-BuildRequires: python-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-flit-core
@@ -38,6 +38,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+cd /
 PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import packaging, importlib.metadata; assert importlib.metadata.version("packaging")'
 
 %files -f %{_builddir}/%{name}.files
