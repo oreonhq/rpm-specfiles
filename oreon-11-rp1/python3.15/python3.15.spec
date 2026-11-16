@@ -662,8 +662,7 @@ Requires: %{pkgname}-libs%{?_isa} = %{version}-%{release}
 # But we want them when packages BuildRequire python3-devel
 Requires: (python-rpm-macros if rpm-build)
 Requires: (python3-rpm-macros if rpm-build)
-# from pyproject-srpm-macros instead.
-Requires: (pyproject-rpm-macros if rpm-build)
+Requires: (pyproject-srpm-macros if rpm-build)
 
 %unversioned_obsoletes_of_python3_X_if_main devel
 
