@@ -61,7 +61,8 @@ ln -s %{name}-%{version}.soc %{buildroot}%{_sysconfdir}/sgml/%{name}.soc
 rm -f %{buildroot}%{_libdir}/*.so %{buildroot}%{_libdir}/*.la
 
 %check
-./jade/openjade -v 2>&1 | grep -F 'OpenJade'
+LD_LIBRARY_PATH="$PWD/style/.libs:$PWD/spgrove/.libs:$PWD/grove/.libs${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+  ./jade/.libs/openjade -v 2>&1 | grep -F 'openjade version'
 
 %post
 %{_bindir}/install-catalog --add \
