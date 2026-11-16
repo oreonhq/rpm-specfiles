@@ -6,15 +6,11 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
+
 Name:           pyproject-rpm-macros
 Summary:        RPM macros for PEP 517 Python packages
 # SPDX
 License:        MIT
-
-%bcond tests %{without bootstrap}
-%bcond pytest_xdist 1
-%bcond tox_tests 0
 
 # The idea is to follow the spirit of semver
 # Given version X.Y.Z:
@@ -23,7 +19,12 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        2%{?dist}
+Release:        3%{?dist}
+
+%oreon_bootstrap
+%bcond tests %{without bootstrap}
+%bcond pytest_xdist 1
+%bcond tox_tests 0
 
 # Macro files
 Source0:        macros.pyproject
@@ -69,19 +70,18 @@ URL:            https://github.com/fedora-python/pyproject-rpm-macros
 BuildArch:      noarch
 
 %if %{with tests}
-BuildRequires:  python3dist(pytest)
+BuildRequires:  python3-pytest
 %if %{with pytest_xdist}
-BuildRequires:  python3dist(pytest-xdist)
+BuildRequires:  python3-pytest-xdist
 %endif
-BuildRequires:  python3dist(pyyaml)
-BuildRequires:  python3dist(packaging)
-BuildRequires:  python3dist(pip)
-BuildRequires:  python3dist(setuptools)
+BuildRequires:  python3-pyyaml
+BuildRequires:  python3-packaging
+BuildRequires:  python3-pip
+BuildRequires:  python3-setuptools
 %if %{with tox_tests}
-BuildRequires:  python3dist(tox-current-env) >= 0.0.16
+BuildRequires:  python3-tox-current-env >= 0.0.16
 %endif
-BuildRequires:  (python3dist(wheel) if python3dist(setuptools) < 71)
-BuildRequires:  (python3dist(tomli) if python3 < 3.11)
+BuildRequires:  (python3-wheel if python3-setuptools < 71)
 %endif
 
 # We build on top of those:
