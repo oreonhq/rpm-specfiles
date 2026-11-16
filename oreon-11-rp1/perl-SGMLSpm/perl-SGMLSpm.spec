@@ -29,6 +29,7 @@ stream produced by an SGML parser.
 %build
 
 %install
+mkdir -p %{buildroot}%{_bindir} %{buildroot}%{perl_vendorlib}/SGMLS
 make install_system \
     BINDIR=%{buildroot}%{_bindir} \
     PERL=%{__perl} \
