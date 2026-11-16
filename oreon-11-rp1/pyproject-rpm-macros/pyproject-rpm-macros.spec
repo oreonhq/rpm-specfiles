@@ -12,7 +12,7 @@ Summary:        RPM macros for PEP 517 Python packages
 # SPDX
 License:        MIT
 
-%bcond tests 1
+%bcond tests %{without bootstrap}
 %bcond pytest_xdist 1
 %bcond tox_tests 0
 
