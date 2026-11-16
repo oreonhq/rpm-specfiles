@@ -16,11 +16,11 @@ Source0: https://files.pythonhosted.org/packages/bf/89/780e11f9588d9e7128a3f8778
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
-BuildRequires: python3-devel
+BuildRequires: python3
+BuildRequires: python-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-hatchling
-BuildRequires: python3-hatch-vcs
 BuildRequires: python3-hatch-vcs
 Requires: python3
 
@@ -40,7 +40,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import execnet'
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import execnet'
 
 %files -f %{_builddir}/%{name}.files
 
