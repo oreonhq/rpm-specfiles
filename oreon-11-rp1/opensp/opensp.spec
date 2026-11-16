@@ -83,6 +83,7 @@ rm -rf %{buildroot}%{_datadir}/OpenSP
 %find_lang sp5
 
 %check
+export LD_LIBRARY_PATH="$PWD/lib/.libs${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 make check SHOWSTOPPERS=
 
 %ldconfig_scriptlets
