@@ -19,7 +19,7 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
