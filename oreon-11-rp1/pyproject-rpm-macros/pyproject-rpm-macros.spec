@@ -23,7 +23,7 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # Macro files
 Source0:        macros.pyproject
@@ -91,7 +91,7 @@ BuildRequires:  python3-rpm-macros
 Requires:       python-rpm-macros
 Requires:       python-srpm-macros
 Requires:       python3-rpm-macros
-Requires:       pyproject-srpm-macros = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       pyproject-srpm-macros >= %{version}
 
 # We use the following tools outside of coreutils
 Requires:       /usr/bin/find
@@ -120,18 +120,6 @@ These macros replace %%py3_build and %%py3_install,
 which only work with setup.py.
 
 
-%package -n pyproject-srpm-macros
-Summary:        Minimal implementation of %%pyproject_buildrequires
-Requires:       (pyproject-rpm-macros = %{?epoch:%{epoch}:}%{version}-%{release} if pyproject-rpm-macros)
-Requires:       (rpm-build >= 4.14.90 if rpm-build)
-
-%description -n pyproject-srpm-macros
-This package contains a minimal implementation of %%pyproject_buildrequires.
-When used in %%generate_buildrequires, it will generate BuildRequires
-for pyproject-rpm-macros. When both packages are installed, the full version
-takes precedence.
-
-
 %prep
 %oreon_sha256
 
@@ -150,7 +138,6 @@ mkdir -p %{buildroot}%{_rpmmacrodir}
 mkdir -p %{buildroot}%{_rpmconfigdir}/oreon
 mkdir -p %{buildroot}%{_rpmluadir}/oreon/rpm
 install -pm 644 macros.pyproject %{buildroot}%{_rpmmacrodir}/
-install -pm 644 macros.aaa-pyproject-srpm %{buildroot}%{_rpmmacrodir}/
 install -pm 644 pyproject_getopt.lua %{buildroot}%{_rpmluadir}/oreon/rpm/
 install -pm 644 pyproject_buildrequires.py %{buildroot}%{_rpmconfigdir}/oreon/
 install -pm 644 pyproject_convert.py %{buildroot}%{_rpmconfigdir}/oreon/
@@ -165,10 +152,8 @@ install -pm 644 pyproject_verify_license.py %{buildroot}%{_rpmconfigdir}/oreon/
 
 %if %{with tests}
 %check
-export HOSTNAME="rpmbuild"  # to speedup tox in network-less mock, see rhbz#1856356
+export HOSTNAME="rpmbuild"
 %pytest -vv --doctest-modules %{?with_pytest_xdist:-n auto} %{!?with_tox_tests:-k "not tox"}
-
-# brp-compress is provided as an argument to get the right directory macro expansion
 %{python3} compare_mandata.py -f %{_rpmconfigdir}/brp-compress
 %endif
 
@@ -187,10 +172,6 @@ export HOSTNAME="rpmbuild"  # to speedup tox in network-less mock, see rhbz#1856
 %{_rpmluadir}/oreon/rpm/pyproject_getopt.lua
 
 %doc README.md
-%license LICENSE
-
-%files -n pyproject-srpm-macros
-%{_rpmmacrodir}/macros.aaa-pyproject-srpm
 %license LICENSE
 
 
