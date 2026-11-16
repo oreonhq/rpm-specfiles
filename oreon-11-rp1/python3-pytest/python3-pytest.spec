@@ -9,7 +9,7 @@ Release: 1%{?dist}
 Summary: pytest: simple powerful testing with Python
 License: MIT
 URL: https://pypi.org/project/pytest/
-Source0: https://files.pythonhosted.org/packages/79/42/bb4641652e58dedeac2ec51abc1f8cae4fee4ec63899a0999016229a0f2a/pytest-9.2.0.tar.gz
+Source0: https://files.pythonhosted.org/packages/source/p/pytest/pytest-%{version}.tar.gz
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
@@ -33,7 +33,7 @@ pytest: simple powerful testing with Python
 
 %prep
 %oreon_sha256
-%autosetup -n pytest-9.2.0
+%autosetup -n pytest-%{version}
 
 %build
 export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
@@ -41,12 +41,17 @@ python3 -m build --wheel --no-isolation
 
 %install
 python3 -m installer --destdir %{buildroot} dist/*.whl
-%oreon_filelist
 
 %check
 python3 -c 'import pytest'
 
-%files -f %{_builddir}/%{name}.files
+%files
+%license LICENSE
+%{_bindir}/pytest
+%{_bindir}/py.test
+%{python3_sitelib}/_pytest
+%{python3_sitelib}/pytest
+%{python3_sitelib}/pytest*.dist-info
 
 %changelog
 %autochangelog
