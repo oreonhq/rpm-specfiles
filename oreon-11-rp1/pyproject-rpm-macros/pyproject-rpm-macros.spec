@@ -19,7 +19,7 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
@@ -89,6 +89,7 @@ Requires:       /usr/bin/sed
 Requires:       ((rpm-build >= 4.14.90 with (rpm-build < 4.19.90 or rpm-build >= 4.19.91-8)) if rpm-build)
 BuildRequires:  rpm-build >= 4.14.90
 BuildRequires:  oreon-rpm-macros
+BuildRequires:  dnf5
 
 %description
 These macros allow projects that follow the Python packaging specifications
@@ -123,7 +124,7 @@ need="$need python3-tox-current-env"
 %endif
 missing=0
 for p in $need; do
-  dnf repoquery -q --latest-limit 1 "$p" > /tmp/oreon-rq || exit 1
+  /usr/bin/dnf repoquery -q --latest-limit 1 "$p" > /tmp/oreon-rq || exit 1
   grep -q . /tmp/oreon-rq || missing=1
 done
 if [ "$missing" = 0 ]; then
