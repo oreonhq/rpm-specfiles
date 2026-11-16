@@ -5,11 +5,7 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
-%if %{with bootstrap}
-%{!?perl_bootstrap:%global perl_bootstrap 1}
-%endif
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-9
 %global perl_version    5.44.0
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
@@ -20,7 +16,6 @@ BuildRequires: oreon-rpm-macros
 %global tapsetdir   %{_datadir}/systemtap/tapset
 
 %global dual_life 1
-%global rebuild_from_scratch %{defined perl_bootstrap}
 
 # This overrides filters from build root (/usr/lib/rpm/macros.d/macros.perl)
 # intentionally (unversioned perl(DB) is removed and versioned one is kept).
@@ -63,6 +58,11 @@ BuildRequires: oreon-rpm-macros
 %undefine _package_note_file
 
 Name:           perl
+%oreon_bootstrap
+%if %{with bootstrap}
+%{!?perl_bootstrap:%global perl_bootstrap 1}
+%endif
+%global rebuild_from_scratch %{defined perl_bootstrap}
 # These are all found licenses. They are distributed among various
 # subpackages.
 # dist/Tie-File/lib/Tie/File.pm:        GPL-2.0-or-later OR Artistic-1.0-Perl

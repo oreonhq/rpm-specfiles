@@ -5,7 +5,6 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
 
 %bcond_with appdata
 %bcond_with emacs
@@ -24,12 +23,6 @@
 %bcond_with test
 %endif
 %bcond_with X11_test
-
-%if %{with bootstrap}
-%global with_bundled_jsoncpp 1
-%global with_bundled_rhash 1
-%global with_bundled_cppdap 1
-%endif
 
 # Do not build non-lto objects to reduce build time significantly.
 %global build_cflags   %(echo '%{build_cflags}'   | sed -e 's!-ffat-lto-objects!-fno-fat-lto-objects!g')
@@ -66,6 +59,12 @@
 %global orig_name cmake
 
 Name:           %{orig_name}%{?name_suffix}
+%oreon_bootstrap
+%if %{with bootstrap}
+%global with_bundled_jsoncpp 1
+%global with_bundled_rhash 1
+%global with_bundled_cppdap 1
+%endif
 Version:        4.5.0
 Release:        1%{?dist}
 Summary:        Cross-platform make system
@@ -173,7 +172,7 @@ BuildRequires: pkgconfig(bash-completion)
 BuildRequires:  %{name}-rpm-macros
 %endif
 BuildRequires: make
-BuildRequires:  oreon-rpm-macros >= 1-8
+BuildRequires:  oreon-rpm-macros >= 1-9
 BuildRequires:  oreon-rpm-config >= 345-16
 
 

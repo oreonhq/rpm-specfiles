@@ -31,7 +31,7 @@ def ppid_of(pid):
 def spec_from_argv():
     for arg in sys.argv[1:]:
         if arg.endswith(".spec") and os.path.isfile(arg):
-            return arg
+            return os.path.abspath(arg)
     return ""
 
 def spec_from_parents():
@@ -43,13 +43,34 @@ def spec_from_parents():
         seen.add(pid)
         for arg in cmdline_of(pid):
             if arg.endswith(".spec") and os.path.isfile(arg):
-                return arg
+                return os.path.abspath(arg)
         pid = ppid_of(pid)
     return ""
 
+def spec_from_builddir():
+    for folder in (
+        os.environ.get("RPM_SOURCE_DIR"),
+        "/builddir/build/SPECS",
+        "/builddir/build/SOURCES",
+        os.getcwd(),
+    ):
+        if not folder or not os.path.isdir(folder):
+            continue
+        hits = sorted(
+            os.path.join(folder, name)
+            for name in os.listdir(folder)
+            if name.endswith(".spec")
+        )
+        if len(hits) == 1:
+            return hits[0]
+    return ""
+
 def buildrequires(spec, extra):
+    sourcedir = os.path.dirname(os.path.abspath(spec))
     cmd = [
         "rpmspec", "-q", "--buildrequires",
+        "--define", "_sourcedir " + sourcedir,
+        "--define", "_specdir " + sourcedir,
         "--define", "oreon_bootstrap %{nil}",
         "--define", "oreon_bootstrap_probe 1",
         *extra, spec,
@@ -95,7 +116,7 @@ def available(req):
         shutil.rmtree(tmp, ignore_errors=True)
 
 def main():
-    spec = spec_from_argv() or spec_from_parents()
+    spec = spec_from_argv() or spec_from_parents() or spec_from_builddir()
     if not spec:
         return 0
     full = buildrequires(spec, [])
