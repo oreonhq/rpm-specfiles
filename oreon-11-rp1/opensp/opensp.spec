@@ -52,6 +52,8 @@ mv -f ChangeLog.tmp ChangeLog
 touch lib/parser_inst.cxx
 
 %build
+export CPPFLAGS="${CPPFLAGS:-} -Dregister="
+export CXXFLAGS="${CXXFLAGS:-} -Dregister="
 %configure \
     --disable-dependency-tracking \
     --disable-static \
