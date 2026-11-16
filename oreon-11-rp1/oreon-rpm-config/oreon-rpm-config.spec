@@ -56,10 +56,10 @@ Provides: redhat-rpm-config = %{version}-%{release}
 Obsoletes: redhat-rpm-config < %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros >= 1-7
-BuildRequires: gcc >= 16.2.0-11
+BuildRequires: gcc(crt-triple)
 
 Requires: oreon-rpm-macros >= 1-7
-Requires: gcc >= 16.2.0-11
+Requires: gcc(crt-triple)
 Requires: coreutils
 Requires: rpm >= 4.19.91
 Requires: dwz >= 0.4
