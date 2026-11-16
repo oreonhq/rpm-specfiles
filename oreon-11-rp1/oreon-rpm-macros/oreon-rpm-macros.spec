@@ -3,7 +3,7 @@
 
 Name:           oreon-rpm-macros
 Version:        1
-Release:        7%{?dist}
+Release:        11%{?dist}
 Summary:        Build macros for Oreon packages
 License:        MIT
 URL:            https://github.com/oreonhq/rpm-specfiles
@@ -55,12 +55,12 @@ install -D -p -m 755 %{SOURCE5} %{buildroot}%{_rpmconfigdir}/oreon/oreon-pythond
 %{_libexecdir}/oreon-rpm-macros/oreon-gpgverify
 %{_libexecdir}/oreon-rpm-macros/oreon-bootstrap
 %{_rpmconfigdir}/macros.d/macros.oreon
+%dir %{_rpmconfigdir}/oreon
+%{_rpmconfigdir}/fileattrs/oreon-python.attr
+%{_rpmconfigdir}/oreon/oreon-pythondeps
 
 %files python
 %{_libexecdir}/oreon-rpm-macros/oreon-pyfiles
-%{_rpmconfigdir}/fileattrs/oreon-python.attr
-%dir %{_rpmconfigdir}/oreon
-%{_rpmconfigdir}/oreon/oreon-pythondeps
 
 %changelog
 %autochangelog
