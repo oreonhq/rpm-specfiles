@@ -2,9 +2,6 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 97c4f3b1f3c7414aa36465e09b8220f1d03627993bd51b1282e193753c80557b
-%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
-%bcond bootstrap 0
-%oreon_bootstrap
 
 Name: python3-pytest
 Version: 9.2.0
