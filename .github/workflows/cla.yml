@@ -23,6 +23,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path-to-signatures: 'signatures/version1/cla.json'
-          path-to-document: 'https://raw.githubusercontent.com/oreonhq/wiki/refs/heads/main/docs/policies/contributors.md'
+          path-to-document: 'https://wiki.oreonhq.com/docs/policies/contributors'
           branch: 'main'
           allowlist: 'bot*'
