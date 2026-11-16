@@ -6,6 +6,9 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+%if %{with bootstrap}
+%{!?perl_bootstrap:%global perl_bootstrap 1}
+%endif
 BuildRequires: oreon-rpm-macros
 %global perl_version    5.44.0
 %global perl_epoch      4
