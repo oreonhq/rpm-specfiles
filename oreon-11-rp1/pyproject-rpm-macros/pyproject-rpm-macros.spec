@@ -19,7 +19,7 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
@@ -114,18 +114,18 @@ cp -p %{sources} .
 
 %generate_buildrequires
 %if %{with tests}
-echo 'BuildRequires: python3-pytest'
+echo python3-pytest
 %if %{with pytest_xdist}
-echo 'BuildRequires: python3-pytest-xdist'
+echo python3-pytest-xdist
 %endif
-echo 'BuildRequires: python3-pyyaml'
-echo 'BuildRequires: python3-packaging'
-echo 'BuildRequires: python3-pip'
-echo 'BuildRequires: python3-setuptools'
+echo python3-pyyaml
+echo python3-packaging
+echo python3-pip
+echo python3-setuptools
 %if %{with tox_tests}
-echo 'BuildRequires: python3-tox-current-env >= 0.0.16'
+echo 'python3-tox-current-env >= 0.0.16'
 %endif
-echo 'BuildRequires: (python3-wheel if python3-setuptools < 71)'
+echo '(python3-wheel if python3-setuptools < 71)'
 %endif
 
 %build
