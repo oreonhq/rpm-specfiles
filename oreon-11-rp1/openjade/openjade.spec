@@ -62,7 +62,7 @@ rm -f %{buildroot}%{_libdir}/*.so %{buildroot}%{_libdir}/*.la
 
 %check
 out=$(LD_LIBRARY_PATH="%{buildroot}%{_libdir}" %{buildroot}%{_bindir}/openjade -v 2>&1 || true)
-printf '%s\n' "$out" | grep -F 'openjade version' || { printf '%s\n' "$out"; exit 1; }
+printf '%s\n' "$out" | grep -F '"openjade" version' || { printf '%s\n' "$out"; exit 1; }
 
 %post
 %{_bindir}/install-catalog --add \
