@@ -19,6 +19,7 @@ Patch1: opensp-nodeids.patch
 Patch2: opensp-sigsegv.patch
 Patch3: opensp-manpage.patch
 Patch4: opensp-configure-c99.patch
+Patch5: opensp-c11-using.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc-c++
