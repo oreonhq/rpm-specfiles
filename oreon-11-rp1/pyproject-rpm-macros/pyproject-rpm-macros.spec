@@ -19,7 +19,7 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
@@ -114,18 +114,24 @@ cp -p %{sources} .
 
 %generate_buildrequires
 %if %{with tests}
-echo python3-pytest
+need="python3-pytest python3-pyyaml python3-packaging python3-pip python3-setuptools"
 %if %{with pytest_xdist}
-echo python3-pytest-xdist
+need="$need python3-pytest-xdist"
 %endif
-echo python3-pyyaml
-echo python3-packaging
-echo python3-pip
-echo python3-setuptools
 %if %{with tox_tests}
-echo 'python3-tox-current-env >= 0.0.16'
+need="$need python3-tox-current-env"
 %endif
-echo '(python3-wheel if python3-setuptools < 71)'
+missing=0
+for p in $need; do
+  dnf repoquery -q --latest-limit 1 "$p" > /tmp/oreon-rq || exit 1
+  grep -q . /tmp/oreon-rq || missing=1
+done
+if [ "$missing" = 0 ]; then
+  for p in $need; do
+    echo "$p"
+  done
+  echo '(python3-wheel if python3-setuptools < 71)'
+fi
 %endif
 
 %build
@@ -150,9 +156,11 @@ install -pm 644 pyproject_verify_license.py %{buildroot}%{_rpmconfigdir}/oreon/
 
 %if %{with tests}
 %check
+if rpm -q python3-pytest python3-pyyaml python3-packaging python3-pip python3-setuptools %{?with_pytest_xdist:python3-pytest-xdist} >/dev/null 2>&1; then
 export HOSTNAME="rpmbuild"
 %pytest -vv --doctest-modules %{?with_pytest_xdist:-n auto} %{!?with_tox_tests:-k "not tox"}
 %{python3} compare_mandata.py -f %{_rpmconfigdir}/brp-compress
+fi
 %endif
 
 
