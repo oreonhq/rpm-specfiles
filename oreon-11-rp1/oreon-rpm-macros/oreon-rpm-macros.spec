@@ -3,7 +3,7 @@
 
 Name:           oreon-rpm-macros
 Version:        1
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        Build macros for Oreon packages
 License:        MIT
 URL:            https://github.com/oreonhq/rpm-specfiles

@@ -51,14 +51,17 @@ if probe == "" and have ~= "1" then\
   if h then\
     h:close()\
     local spec = ""\
-    local sourcedir = rpm.expand("%{?_sourcedir}")\
     local name = rpm.expand("%{?name}")\
-    if sourcedir ~= "" and name ~= "" then\
-      local cand = sourcedir .. "/" .. name .. ".spec"\
-      local f = io.open(cand, "r")\
-      if f then\
-        f:close()\
-        spec = cand\
+    local dirs = {rpm.expand("%{?_specdir}"), rpm.expand("%{?_sourcedir}")}\
+    for i = 1, #dirs do\
+      local dir = dirs[i]\
+      if spec == "" and dir ~= "" and name ~= "" then\
+        local cand = dir .. "/" .. name .. ".spec"\
+        local f = io.open(cand, "r")\
+        if f then\
+          f:close()\
+          spec = cand\
+        end\
       end\
     end\
     local cmd = bin\
