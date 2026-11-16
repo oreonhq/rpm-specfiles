@@ -31,7 +31,7 @@ def ppid_of(pid):
 def spec_from_argv():
     for arg in sys.argv[1:]:
         if arg.endswith(".spec") and os.path.isfile(arg):
-            return arg
+            return os.path.abspath(arg)
     return ""
 
 def spec_from_parents():
@@ -43,13 +43,58 @@ def spec_from_parents():
         seen.add(pid)
         for arg in cmdline_of(pid):
             if arg.endswith(".spec") and os.path.isfile(arg):
-                return arg
+                return os.path.abspath(arg)
         pid = ppid_of(pid)
     return ""
 
+def spec_from_builddir():
+    for folder in (
+        os.environ.get("RPM_SOURCE_DIR"),
+        "/builddir/build/SPECS",
+        "/builddir/build/SOURCES",
+        os.getcwd(),
+    ):
+        if not folder or not os.path.isdir(folder):
+            continue
+        hits = sorted(
+            os.path.join(folder, name)
+            for name in os.listdir(folder)
+            if name.endswith(".spec")
+        )
+        if len(hits) == 1:
+            return hits[0]
+    return ""
+
+def sources_dir_for(spec):
+    """mock keeps local SourceN under SOURCES, git keeps them beside the .spec"""
+    specdir = os.path.dirname(os.path.abspath(spec))
+    for folder in (
+        os.environ.get("RPM_SOURCE_DIR"),
+        "/builddir/build/SOURCES",
+        specdir,
+    ):
+        if folder and os.path.isdir(folder):
+            return folder
+    return specdir
+
+def spec_dir_for(spec):
+    specdir = os.path.dirname(os.path.abspath(spec))
+    for folder in (
+        os.environ.get("RPM_SPEC_DIR"),
+        "/builddir/build/SPECS",
+        specdir,
+    ):
+        if folder and os.path.isdir(folder):
+            return folder
+    return specdir
+
 def buildrequires(spec, extra):
+    sourcedir = sources_dir_for(spec)
+    specdir = spec_dir_for(spec)
     cmd = [
         "rpmspec", "-q", "--buildrequires",
+        "--define", "_sourcedir " + sourcedir,
+        "--define", "_specdir " + specdir,
         "--define", "oreon_bootstrap %{nil}",
         "--define", "oreon_bootstrap_probe 1",
         *extra, spec,
@@ -95,13 +140,18 @@ def available(req):
         shutil.rmtree(tmp, ignore_errors=True)
 
 def main():
-    spec = spec_from_argv() or spec_from_parents()
+    spec = spec_from_argv() or spec_from_parents() or spec_from_builddir()
     if not spec:
         return 0
     full = buildrequires(spec, [])
     boot = buildrequires(spec, ["--with", "bootstrap"])
     if boot is None:
         boot = buildrequires(spec, ["--define", "perl_bootstrap 1"])
+    # full parses, bootstrap mode does not → still need bootstrap (real
+    # rpmbuild has the right _sourcedir for %include, the probe may not)
+    if full is not None and boot is None:
+        print("1")
+        return 0
     if full is None or boot is None:
         return 0
     gap = gated_requires(full, boot)
