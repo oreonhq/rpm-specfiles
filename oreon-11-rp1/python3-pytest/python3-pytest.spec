@@ -14,7 +14,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
-BuildRequires: python-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-wheel
@@ -47,6 +47,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+cd /
 PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import pytest'
 
 %files -f %{_builddir}/%{name}.files
