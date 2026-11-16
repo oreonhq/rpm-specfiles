@@ -60,17 +60,39 @@ def buildrequires(spec, extra):
     return [line.strip() for line in r.stdout.splitlines() if line.strip()]
 
 def available(req):
+    """True only if dnf can depsolve an install from configured repos."""
+    import shutil
+    import tempfile
     name = req.split()[0]
     if not name or name.startswith(("%", "(")):
         return False
-    q = subprocess.run(["rpm", "-q", "--whatprovides", name], capture_output=True, text=True)
-    if q.returncode == 0 and q.stdout.strip():
+    try:
+        import dnf
+        import dnf.exceptions
+    except ImportError:
+        return False
+    tmp = tempfile.mkdtemp(prefix="oreon-bootstrap-")
+    base = dnf.Base()
+    try:
+        base.conf.install_weak_deps = False
+        base.conf.best = False
+        base.conf.cachedir = os.path.join(tmp, "cache")
+        base.conf.persistdir = os.path.join(tmp, "persist")
+        base.conf.logdir = os.path.join(tmp, "log")
+        base.read_all_repos()
+        base.fill_sack(load_system_repo=False)
+        base.install(req)
+        base.resolve()
         return True
-    d = subprocess.run(
-        ["dnf", "repoquery", "-q", "--whatprovides", name],
-        capture_output=True, text=True,
-    )
-    return d.returncode == 0 and bool(d.stdout.strip())
+    except (dnf.exceptions.PackageNotFoundError, dnf.exceptions.MarkingError,
+            dnf.exceptions.DepsolveError, dnf.exceptions.Error, Exception):
+        return False
+    finally:
+        try:
+            base.close()
+        except Exception:
+            pass
+        shutil.rmtree(tmp, ignore_errors=True)
 
 def main():
     spec = spec_from_argv() or spec_from_parents()
@@ -78,6 +100,8 @@ def main():
         return 0
     full = buildrequires(spec, [])
     boot = buildrequires(spec, ["--with", "bootstrap"])
+    if boot is None:
+        boot = buildrequires(spec, ["--define", "perl_bootstrap 1"])
     if full is None or boot is None:
         return 0
     gap = gated_requires(full, boot)
