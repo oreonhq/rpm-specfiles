@@ -26,6 +26,7 @@ BuildRequires: gcc-c++
 BuildRequires: gettext
 BuildRequires: make
 BuildRequires: xmlto
+BuildRequires: docbook-dtds
 
 Requires: sgml-common >= 0.5
 
@@ -50,6 +51,10 @@ Header files and libtool library for developing applications that use OpenSP.
 iconv -f latin1 -t utf8 ChangeLog -o ChangeLog.tmp
 mv -f ChangeLog.tmp ChangeLog
 touch lib/parser_inst.cxx
+sed -i \
+    -e 's|DTD DocBook XML V4\.1\.2|DTD DocBook XML V4.5|g' \
+    -e 's|/usr/share/sgml/docbook/xml-dtd-4\.1\.2|/usr/share/xml/docbook/xml-dtd-4.5|g' \
+    docsrc/*.xml
 
 %build
 export CPPFLAGS="${CPPFLAGS:-} -Dregister="
@@ -62,7 +67,7 @@ export CXXFLAGS="${CXXFLAGS:-} -Dregister="
     --enable-default-search-path=/usr/share/sgml:/usr/share/xml
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
-%make_build
+%make_build XMLTO='xmlto --skip-validation'
 
 %install
 %make_install
