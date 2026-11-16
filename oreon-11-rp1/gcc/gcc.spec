@@ -17,9 +17,13 @@
 
 Name: gcc
 Version: 16.2.0
-Release: 11%{?dist}
+Release: 12%{?dist}
 %global gcc_major %(echo %{version} | cut -d. -f1)
-%global gcc_target_platform %{_target_cpu}-redhat-linux
+%ifarch aarch64
+%global gcc_target_platform aarch64-unknown-linux-gnu
+%else
+%global gcc_target_platform %{_target_cpu}-pc-linux-gnu
+%endif
 Summary: GNU Compiler Collection
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1)
 URL: https://gcc.gnu.org
@@ -44,6 +48,7 @@ Requires: cpp%{?_isa} = %{version}-%{release}
 Requires: glibc-devel
 Requires: libgcc%{?_isa} = %{version}-%{release}
 Provides: gcc(major) = %{gcc_major}
+Provides: gcc(crt-triple)
 %if %{without bootstrap} && !0%{?bootstrap}
 BuildRequires: texinfo
 BuildRequires: bison
@@ -861,11 +866,10 @@ rm -rf %{buildroot}%{_libexecdir}/gcc/*/*/install-tools
 %endif
 
 target=%{gcc_target_platform}
-guess=$(%{_builddir}/gcc-%{version}/config.guess)
 for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
   if [ -d "$dir/$target" ]; then
-    for alias in %{_target_cpu}-redhat-linux-gnu %{_target_cpu}-oreon-linux-gnu %{_target_cpu}-oreon-linux "$guess"; do
-      if [ -n "$alias" ] && [ "$alias" != "$target" ] && [ ! -e "$dir/$alias" ]; then
+    for alias in %{_target_cpu}-redhat-linux %{_target_cpu}-redhat-linux-gnu %{_target_cpu}-oreon-linux-gnu %{_target_cpu}-oreon-linux; do
+      if [ "$alias" != "$target" ] && [ ! -e "$dir/$alias" ]; then
         ln -sfn "$target" "$dir/$alias"
       fi
     done
@@ -873,8 +877,8 @@ for dir in %{buildroot}%{_libdir}/gcc %{buildroot}%{_libexecdir}/gcc; do
 done
 cxxinc=%{buildroot}%{_includedir}/c++/%{gcc_major}
 if [ -d "$cxxinc/$target" ]; then
-  for alias in %{_target_cpu}-redhat-linux-gnu %{_target_cpu}-oreon-linux-gnu %{_target_cpu}-oreon-linux "$guess"; do
-    if [ -n "$alias" ] && [ "$alias" != "$target" ] && [ ! -e "$cxxinc/$alias" ]; then
+  for alias in %{_target_cpu}-redhat-linux %{_target_cpu}-redhat-linux-gnu %{_target_cpu}-oreon-linux-gnu %{_target_cpu}-oreon-linux; do
+    if [ "$alias" != "$target" ] && [ ! -e "$cxxinc/$alias" ]; then
       ln -sfn "$target" "$cxxinc/$alias"
     fi
   done
