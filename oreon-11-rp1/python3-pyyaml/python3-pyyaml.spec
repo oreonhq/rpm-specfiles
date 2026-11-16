@@ -22,6 +22,7 @@ BuildRequires: python3-setuptools
 BuildRequires: python3-cython
 BuildRequires: gcc
 BuildRequires: libyaml-devel
+BuildRequires: pyproject-rpm-macros >= 1.24.0-2
 Requires: python3
 Requires: libyaml
 
