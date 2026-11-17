@@ -57,7 +57,7 @@ BuildRequires:  /usr/bin/update-desktop-database
 # static glib2 without depending on a static build of GnuTLS as well. This will
 # ensure we notice if the GnuTLS soname bumps, so that we can update our patch.
 BuildRequires:  gnutls
-BuildRequires:  oreon-rpm-macros
+BuildRequires:  oreon-rpm-macros >= 1-14
 %if 0%{?__isa_bits} == 64
 Requires: libgnutls.so.30()(64bit)
 %else
