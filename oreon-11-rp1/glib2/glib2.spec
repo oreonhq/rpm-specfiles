@@ -8,7 +8,7 @@
 %oreon_bootstrap
 Name:           glib2
 Version:        2.90.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A library of handy utility functions
 
 License:        LGPL-2.1-or-later
@@ -98,7 +98,9 @@ The glib2-doc package includes documentation for the GLib library.
 Summary: glib static
 Requires: %{name}-devel = %{version}-%{release}
 Requires: pcre2-static
+%if %{with sysprof}
 Requires: sysprof-capture-static
+%endif
 
 %description static
 The %{name}-static subpackage contains static libraries for %{name}.
@@ -123,6 +125,11 @@ the functionality of the installed glib2 package.
     -Dinstalled_tests=true \
     -Dgnutls=true \
     --default-library=both \
+%if %{with sysprof}
+    -Dsysprof=enabled \
+%else
+    -Dsysprof=disabled \
+%endif
     %{nil}
 %meson_build
 
