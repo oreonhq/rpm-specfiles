@@ -8,7 +8,7 @@
 
 Name: python3-sphinxcontrib-qthelp
 Version: 2.0.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp doc...
 License: BSD License
 URL: https://pypi.org/project/sphinxcontrib-qthelp/
@@ -22,6 +22,7 @@ BuildRequires: python3-installer
 BuildRequires: python3-flit-core
 BuildRequires: python3-rpm-macros
 BuildRequires: python3-docutils
+BuildRequires: python3-sphinx
 Requires: python3
 Requires: python3-docutils
 
