@@ -19,7 +19,7 @@ Source0: https://download.gnome.org/sources/%{name}/%{gi_series}/%{name}-%{versi
 
 Patch0: workaround.patch
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: bison
 BuildRequires: flex
 BuildRequires: gcc
