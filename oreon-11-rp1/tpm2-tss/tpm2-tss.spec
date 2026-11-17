@@ -13,7 +13,7 @@
 
 Name:          tpm2-tss
 Version:        4.2.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:       TPM2.0 Software Stack
 
 License:       BSD-2-Clause
@@ -33,10 +33,13 @@ BuildRequires: libtool
 %endif
 BuildRequires: make
 BuildRequires: doxygen
+BuildRequires: spdlog
+BuildRequires: xapian-core
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: json-c-devel
-BuildRequires: libcurl-devel
+BuildRequires: libcurl-devel >= 8.23.0
+BuildRequires: libfido2
 BuildRequires: libusb1-devel
 BuildRequires: openssl-devel
 BuildRequires: pkgconfig
