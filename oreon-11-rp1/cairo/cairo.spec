@@ -13,7 +13,7 @@
 
 Name: cairo
 Version: 1.18.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A 2D graphics library
 License: LGPL-2.1-only OR MPL-1.1
 URL: https://cairographics.org
@@ -116,7 +116,6 @@ This package contains tools for working with the cairo graphics library.
   -Dspectre=disabled \
   -Dsymbol-lookup=disabled \
   -Dtee=enabled \
-  -Dtests=enabled \
   -Dxcb=enabled \
   -Dxlib=enabled \
   %{nil}
