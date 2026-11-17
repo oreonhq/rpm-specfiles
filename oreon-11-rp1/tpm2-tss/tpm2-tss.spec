@@ -13,7 +13,7 @@
 
 Name:          tpm2-tss
 Version:        4.2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:       TPM2.0 Software Stack
 
 License:       BSD-2-Clause
@@ -40,7 +40,7 @@ BuildRequires: libcurl-devel
 BuildRequires: libusb1-devel
 BuildRequires: openssl-devel
 BuildRequires: pkgconfig
-BuildRequires: systemd
+BuildRequires: systemd-devel
 BuildRequires: systemd-rpm-macros
 BuildRequires: libuuid-devel
 BuildRequires:  oreon-rpm-macros
