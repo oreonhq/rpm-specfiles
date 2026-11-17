@@ -9,7 +9,7 @@
 
 Name: iso-codes
 Version: 4.20.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: ISO code lists and translations
 License: LGPL-2.1-or-later
 URL: https://salsa.debian.org/iso-codes-team/iso-codes
@@ -41,8 +41,7 @@ ISO code lists with translations.
 %meson_test
 
 %files
-%license LICENSE COPYING
-%doc ChangeLog README.md
+%doc README.md
 %{_datadir}/iso-codes/
 %{_datadir}/xml/iso-codes/
 %{_datadir}/locale/*/LC_MESSAGES/*
