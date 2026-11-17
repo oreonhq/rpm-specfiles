@@ -15,7 +15,7 @@ License: MIT
 URL: https://github.com/harfbuzz/harfbuzz
 Source0: https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
 BuildRequires: gcc-c++
 %if %{without bootstrap}
