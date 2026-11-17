@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 154b120dd897d6411a55e5a2833044807eaf31a61412df601384be6fd101ed8f
+%global source4_hash 20261d2771b9a052abfa3d8fab1aa62be05791a010281c566f9073bf0e644538
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -9,7 +10,7 @@
 
 Name: docbook-utils
 Version: 0.6.15
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Shell scripts for managing DocBook documents
 License: GPL-2.0-or-later
 URL: https://github.com/devexp-db/docbook-utils
@@ -17,6 +18,7 @@ Source0: https://github.com/devexp-db/docbook-utils/releases/download/v%{version
 Source1: db2html
 Source2: gdp-both.dsl
 Source3: docbook2man-spec.pl
+Source4: https://www.oasis-open.org/docbook/sgml/3.1/docbk31.zip
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
@@ -24,8 +26,7 @@ BuildRequires: perl-generators
 BuildRequires: perl-SGMLSpm
 BuildRequires: openjade
 BuildRequires: docbook-style-dsssl
-BuildRequires: docbook-dtds
-BuildRequires: sgml-common
+BuildRequires: python3
 BuildRequires: make
 
 Requires: docbook-style-dsssl >= 1.72
@@ -58,10 +59,14 @@ Script for converting DocBook documents to PDF.
 
 %prep
 %oreon_sha256
+echo '%{source4_hash}  %{SOURCE4}' | sha256sum -c -
 %autosetup
+mkdir -p sgml-dtd-3.1
+python3 -m zipfile -e %{SOURCE4} sgml-dtd-3.1
 
 %build
 ./configure --prefix=%{_prefix} --mandir=%{_mandir} --libdir=%{_libdir}
+sed -i "s|/etc/sgml/catalog|$PWD/sgml-dtd-3.1/docbook.cat|g" doc/man/Makefile doc/HTML/Makefile
 %make_build
 
 %install
