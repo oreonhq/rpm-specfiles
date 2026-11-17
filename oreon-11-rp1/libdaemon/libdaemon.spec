@@ -9,7 +9,7 @@
 
 Name:           libdaemon
 Version:        0.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library for writing UNIX daemons
 License:        LGPL-2.1-or-later
 URL:            https://0pointer.de/lennart/projects/libdaemon/
@@ -20,6 +20,8 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  pkgconfig
 BuildRequires:  doxygen
+BuildRequires:  spdlog
+BuildRequires:  xapian-core
 
 %description
 libdaemon is a lightweight C library that eases the writing of UNIX daemons.
