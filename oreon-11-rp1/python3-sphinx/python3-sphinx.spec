@@ -18,7 +18,7 @@ BuildArch: noarch
 Provides: /usr/bin/sphinx-build
 Provides: /usr/bin/sphinx-build-3
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
