@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 1083bc5ccd4c1adfc45a83e22a05be139251f512afbfa1c589fddb00ae099ffe
+%global source0_hash 6419b62eac602f5f285b327ceca8c079c964c96015ea690cfcabf1db36fcebf0
 
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
@@ -19,7 +19,7 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        9%{?dist}
+Release:        10%{?dist}
 
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
