@@ -12,7 +12,7 @@
 
 Name:           gtk-doc
 Version:        1.36.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        API documentation generation tool for GTK+ and GNOME
 License:        GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later
 URL:            https://gitlab.gnome.org/GNOME/gtk-doc/
@@ -25,7 +25,7 @@ BuildRequires:  /usr/bin/xsltproc
 BuildRequires:  dblatex
 %endif
 BuildRequires:  python3-parameterized
-BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook-style-xsl >= 1.79.2-2
 BuildRequires:  docbook-utils
 BuildRequires:  gcc
 BuildRequires:  gettext
