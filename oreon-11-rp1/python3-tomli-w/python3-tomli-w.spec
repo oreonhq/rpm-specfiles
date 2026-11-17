@@ -8,7 +8,7 @@
 
 Name: python3-tomli-w
 Version: 1.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A lil TOML writer
 License: MIT
 URL: https://pypi.org/project/tomli-w/
@@ -16,6 +16,7 @@ Source0: https://files.pythonhosted.org/packages/19/75/241269d1da26b624c0d5e110e
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
@@ -37,7 +38,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import tomli_w'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import tomli_w'
 
 %files -f %{_builddir}/%{name}.files
 
