@@ -5,7 +5,7 @@
 %global source1_hash e147c0549f27767ba362f9da434eab9c5dc0045d5304feb602a0af001089fc51
 %global source3_hash e7a0304069ea895172e3c7bb703292e992c5d1555dd1233ab7b5621b5b69e62c
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
@@ -168,7 +168,7 @@ BuildRequires:  python%{python3_pkgversion}-flit-core
 BuildRequires:  python%{python3_pkgversion}-packaging
 BuildRequires:  bash-completion
 BuildRequires:  ca-certificates
-BuildRequires:  oreon-rpm-macros
+BuildRequires:  oreon-rpm-macros >= 1-14
 Requires:       ca-certificates
 
 # Virtual provides for the packages bundled by pip:
