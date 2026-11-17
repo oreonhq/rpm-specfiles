@@ -10,7 +10,7 @@
 
 Name: docbook-utils
 Version: 0.6.15
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Shell scripts for managing DocBook documents
 License: GPL-2.0-or-later
 URL: https://github.com/devexp-db/docbook-utils
@@ -92,7 +92,7 @@ ln -s jw.1.gz %{buildroot}%{_mandir}/man1/docbook2txt.1
 rm -f %{buildroot}%{_bindir}/db2html
 install -p -m 755 %{SOURCE1} %{buildroot}%{_bindir}/db2html
 install -p -m 644 %{SOURCE2} %{buildroot}%{_datadir}/sgml/docbook/utils-%{version}/docbook-utils.dsl
-install -p -m 755 %{SOURCE3} %{buildroot}%{_datadir}/sgml/docbook/utils-%{version}/helpers/docbook2man-spec.pl
+install -p -m 644 %{SOURCE3} %{buildroot}%{_datadir}/sgml/docbook/utils-%{version}/helpers/docbook2man-spec.pl
 rm -rf %{buildroot}/tmp
 
 %check
@@ -125,6 +125,10 @@ test -x %{buildroot}%{_bindir}/db2html
 %{_mandir}/*/docbook2txt.*
 %{_mandir}/*/jw.*
 %{_mandir}/*/sgmldiff.*
+%{_mandir}/*/docbook2man-spec.pl.*
+%{_mandir}/*/docbook2texi-spec.pl.*
+%{_mandir}/*/backend-spec.*
+%{_mandir}/*/frontend-spec.*
 
 %files pdf
 %{_bindir}/docbook2pdf
