@@ -9,7 +9,7 @@
 
 Name: libipt
 Version: 2.2.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Intel Processor Trace decoder library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt
@@ -48,7 +48,7 @@ Headers and libraries for %{name}.
 
 %files
 %license LICENSE
-%doc README.md
+%doc README
 %{_libdir}/libipt.so.*
 
 %files devel
