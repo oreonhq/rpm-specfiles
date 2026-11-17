@@ -10,7 +10,7 @@
 
 Name: docbook-utils
 Version: 0.6.15
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Shell scripts for managing DocBook documents
 License: GPL-2.0-or-later
 URL: https://github.com/devexp-db/docbook-utils
@@ -75,7 +75,8 @@ test -f "$jade"
 test -f "$dsssl"
 test -f "$PWD/sgml-dtd-3.1/docbook.cat"
 cat="$iso:$jade:$dsssl:$PWD/sgml-dtd-3.1/docbook.cat"
-grep -rlZ '/etc/sgml/catalog' doc | xargs -0 sed -i "s|/etc/sgml/catalog|$cat|g"
+sed -i "s|/etc/sgml/catalog|$cat|g" doc/man/Makefile doc/HTML/Makefile
+touch doc/man/Makefile doc/HTML/Makefile
 grep -q "$iso" doc/man/Makefile
 grep -q "$iso" doc/HTML/Makefile
 %make_build
