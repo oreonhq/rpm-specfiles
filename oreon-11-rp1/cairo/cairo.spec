@@ -13,7 +13,7 @@
 
 Name: cairo
 Version: 1.18.6
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A 2D graphics library
 License: LGPL-2.1-only OR MPL-1.1
 URL: https://cairographics.org
@@ -41,6 +41,11 @@ BuildRequires: pkgconfig(xcb)
 BuildRequires: pkgconfig(xcb-render)
 BuildRequires: pkgconfig(xrender)
 BuildRequires: pkgconfig(zlib)
+BuildRequires: ghostscript
+%if %{without bootstrap}
+BuildRequires: pkgconfig(poppler-glib) >= 0.17.4
+BuildRequires: pkgconfig(librsvg-2.0) >= 2.35.0
+%endif
 
 %description
 Cairo is a 2D graphics library designed to provide high-quality display
@@ -115,6 +120,9 @@ This package contains tools for working with the cairo graphics library.
 %endif
   -Dspectre=disabled \
   -Dsymbol-lookup=disabled \
+%if %{without bootstrap}
+  -Dtests=enabled \
+%endif
   -Dtee=enabled \
   -Dxcb=enabled \
   -Dxlib=enabled \
