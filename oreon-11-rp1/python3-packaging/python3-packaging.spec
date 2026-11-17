@@ -8,7 +8,7 @@
 
 Name: python3-packaging
 Version: 26.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Core utilities for Python packages
 License: Apache-2.0 OR BSD-2-Clause
 URL: https://github.com/pypa/packaging
@@ -22,6 +22,7 @@ BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-flit-core
 Requires: python3
+Provides: python3dist(packaging) = %{version}
 
 %description
 Core utilities for Python packages.
