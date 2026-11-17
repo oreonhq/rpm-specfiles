@@ -9,7 +9,7 @@
 
 Name:           perl-libintl-perl
 Version:        1.37
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Perl interface to gettext
 License:        GPL-3.0-or-later
 URL:            https://metacpan.org/release/libintl-perl
@@ -54,7 +54,6 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
 %license COPYING
 %doc README Changes
 %{perl_vendorlib}/Locale
-%{perl_vendorarch}/Locale
 %{perl_vendorarch}/auto
 %{_mandir}/man3/*
 
