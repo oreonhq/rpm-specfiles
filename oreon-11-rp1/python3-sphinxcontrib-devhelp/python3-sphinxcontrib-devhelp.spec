@@ -8,7 +8,7 @@
 
 Name: python3-sphinxcontrib-devhelp
 Version: 2.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp d...
 License: BSD License
 URL: https://pypi.org/project/sphinxcontrib-devhelp/
@@ -20,7 +20,10 @@ BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-flit-core
+BuildRequires: python3-rpm-macros
+BuildRequires: python3-docutils
 Requires: python3
+Requires: python3-docutils
 
 %description
 sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp d...
@@ -37,7 +40,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import sphinxcontrib.devhelp'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import sphinxcontrib.devhelp'
 
 %files -f %{_builddir}/%{name}.files
 
