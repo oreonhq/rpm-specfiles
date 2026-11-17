@@ -131,13 +131,13 @@ fi
 for site_dir in ${site_dirs[@]}; do
   for distinfo in %{buildroot}$site_dir/*.dist-info; do
     echo "%ghost %dir ${distinfo#%{buildroot}}" >> %{_pyproject_ghost_distinfo_base}
-    _normalized=$(PYTHONPATH=%{_rpmconfigdir}/redhat \\
+    _normalized=$(PYTHONPATH=%{_rpmconfigdir}/oreon \\
       %{__python3} -sBc \\
       "import sys; from pyproject_save_files import canonical_name_from_distinfo; print(canonical_name_from_distinfo(sys.argv[1]))" \\
       "$(basename ${distinfo})")
     echo "%ghost %dir ${distinfo#%{buildroot}}" >> "%{_pyproject_ghost_distinfo_base}-${_normalized}"
     sed -i 's/pip/rpm/' ${distinfo}/INSTALLER
-    PYTHONPATH=%{_rpmconfigdir}/redhat \\
+    PYTHONPATH=%{_rpmconfigdir}/oreon \\
       %{__python3} -B %{_rpmconfigdir}/oreon/pyproject_preprocess_record.py \\
       --buildroot %{buildroot} --record ${distinfo}/RECORD --output %{_pyproject_record}
     rm -fv ${distinfo}/RECORD
