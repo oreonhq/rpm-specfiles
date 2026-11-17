@@ -66,7 +66,7 @@ Name:           %{orig_name}%{?name_suffix}
 %bcond_with test
 %endif
 Version:        4.5.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
@@ -144,8 +144,8 @@ BuildRequires:  rhash-devel
 %endif
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
-BuildRequires:  vim-filesystem
 %endif
+BuildRequires:  vim-filesystem >= 9.1-2
 %if %{with emacs}
 BuildRequires:  emacs
 %endif
@@ -171,7 +171,8 @@ BuildRequires: pkgconfig(bash-completion)
 %if %{without bootstrap}
 BuildRequires:  %{name}-rpm-macros
 %endif
-BuildRequires: make
+BuildRequires:  make
+BuildRequires:  python3-rpm-macros
 BuildRequires:  oreon-rpm-macros >= 1-14
 BuildRequires:  oreon-rpm-config >= 345-16
 
@@ -219,9 +220,7 @@ Requires:       (%{name}-rpm-macros = %{version}-%{release} if rpm-build)
 %if %{with emacs}
 Requires:       emacs-filesystem%{?_emacs_version: >= %{_emacs_version}}
 %endif
-%if %{without bootstrap}
 Requires:       vim-filesystem
-%endif
 
 BuildArch:      noarch
 
@@ -381,7 +380,7 @@ mv %{buildroot}%{_emacs_sitelispdir}/%{name}-mode.el %{buildroot}%{_emacs_siteli
 %{_emacs_bytecompile} %{buildroot}%{_emacs_sitelispdir}/%{name}/%{name}-mode.el
 install -p -m 0644 %{SOURCE1} %{buildroot}%{_emacs_sitestartdir}
 %else
-rm -f %{buildroot}%{_emacs_sitelispdir}
+rm -rf %{buildroot}%{_datadir}/emacs
 %endif
 # RPM macros
 install -p -m0644 -D %{SOURCE2} %{buildroot}%{_rpmmacrodir}/macros.%{name}
