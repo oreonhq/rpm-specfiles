@@ -17,7 +17,7 @@
 
 Name:           libglvnd
 Version:        1.7.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Epoch:          1
 Summary:        The GL Vendor-Neutral Dispatch library
 
@@ -162,7 +162,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/egl/egl_external_platform.d/
 mkdir -p %{buildroot}%{_datadir}/egl/egl_external_platform.d/
 
 %check
-%if %{without bootstrap}
+%if %{with glvnd_tests}
 export DO_X11_TESTS=1
 xvfb-run -s '-screen 0 640x480x24' -d make check V=1 || \
 %ifarch s390x ppc64
