@@ -88,7 +88,7 @@ packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans, pixman
 [graphics]
 summary: text layout and image loading libraries
 maintainer: Brandon Lester
-packages: fribidi, harfbuzz, pango, gdk-pixbuf2, libgd, ghostscript, poppler-data, poppler
+packages: fribidi, harfbuzz, pango, gdk-pixbuf2, libgd, ghostscript, poppler-data, poppler, librsvg
 
 [admin-tools]
 summary: things a person runs on a booted system
