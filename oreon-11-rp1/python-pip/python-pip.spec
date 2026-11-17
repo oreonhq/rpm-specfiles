@@ -18,7 +18,7 @@
 
 Name:           python-%{srcname}
 Version:        26.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A tool for installing and managing Python packages
 
 # We bundle a lot of libraries with pip, which itself is under MIT license.
@@ -163,7 +163,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 # Note that the package prefix is always python3-, even if we build for 3.X
 # The minimal version is for bundled provides verification script
 BuildRequires:  python3-rpm-generators >= 11-8
-BuildRequires:  pyproject-rpm-macros
+BuildRequires:  pyproject-rpm-macros >= 1.24.0-9
 BuildRequires:  python%{python3_pkgversion}-flit-core
 BuildRequires:  python%{python3_pkgversion}-packaging
 BuildRequires:  bash-completion
