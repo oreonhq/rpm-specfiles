@@ -9,7 +9,7 @@
 
 Name:           perl-Unicode-EastAsianWidth
 Version:        12.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        East Asian Width properties for Perl
 License:        CC0-1.0
 URL:            https://metacpan.org/release/Unicode-EastAsianWidth
@@ -20,6 +20,7 @@ BuildRequires:  make
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Test)
 Provides:       perl(Unicode::EastAsianWidth)
 
