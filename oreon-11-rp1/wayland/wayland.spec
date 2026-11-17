@@ -12,7 +12,7 @@
 
 Name:           wayland
 Version:        1.26.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Wayland Compositor Infrastructure
 
 License:        MIT
@@ -27,7 +27,7 @@ Patch0:         0001-doc-add-option-to-not-build-the-book.patch
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook-style-xsl >= 1.79.2-2
 BuildRequires:  expat-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  libxslt
