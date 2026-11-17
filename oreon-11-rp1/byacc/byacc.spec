@@ -10,11 +10,11 @@
 
 Name: byacc
 Version: 2.0.%{byaccdate}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Berkeley Yacc LALR parser generator
 License: LicenseRef-Oreon-Public-Domain
 URL: https://invisible-island.net/byacc/byacc.html
-Source0: https://invisible-island.net/archives/byacc/byacc-%{byaccdate}.tgz
+Source0: https://invisible-mirror.net/archives/byacc/byacc-%{byaccdate}.tgz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
