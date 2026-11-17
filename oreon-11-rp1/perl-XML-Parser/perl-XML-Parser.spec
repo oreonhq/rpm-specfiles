@@ -9,7 +9,7 @@
 
 Name:           perl-XML-Parser
 Version:        2.59
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Perl module for parsing XML documents
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Parser
@@ -24,6 +24,7 @@ BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  perl-macros
 BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(File::ShareDir::Install)
 BuildRequires:  perl(Carp)
 BuildRequires:  perl(DynaLoader)
 BuildRequires:  perl(Exporter)
