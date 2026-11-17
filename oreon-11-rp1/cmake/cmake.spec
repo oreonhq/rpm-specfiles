@@ -17,11 +17,6 @@
 %bcond_with bundled_jsoncpp
 %bcond_with bundled_rhash
 %bcond_without bundled_cppdap
-%ifnarch i686
-%bcond test %{without bootstrap}
-%else
-%bcond_with test
-%endif
 %bcond_with X11_test
 
 # Do not build non-lto objects to reduce build time significantly.
@@ -65,8 +60,13 @@ Name:           %{orig_name}%{?name_suffix}
 %global with_bundled_rhash 1
 %global with_bundled_cppdap 1
 %endif
+%ifnarch i686
+%bcond test %{without bootstrap}
+%else
+%bcond_with test
+%endif
 Version:        4.5.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
