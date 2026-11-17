@@ -12,7 +12,7 @@
 Summary: Dynamic analysis tools to detect memory or thread bugs and profile
 Name: valgrind
 Version: 3.28.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 1
 License: GPL-3.0-or-later AND bzip2-1.0.6 AND (GPL-3.0-or-later AND LGPL-2.0-or-later) AND (GPL-3.0-or-later AND ISC) AND (GPL-3.0-or-later AND Unlicense) AND (GPL-3.0-or-later AND Zlib) AND (GPL-3.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-3.0-or-later AND BSD-3-Clause) AND (GPL-3.0-or-later AND (MIT OR NCSA)) AND CMU-Mach AND (GPL-3.0-or-later AND X11 AND BSD-3-Clause) AND X11 AND (GPL-2.0-or-later WITH Autoconf-exception-generic) AND (GPL-3.0-or-later WITH Autoconf-exception-generic-3.0) AND FSFULLR AND FSFAP AND FSFUL AND FSFULLRWD
 URL: https://www.valgrind.org/
@@ -32,6 +32,8 @@ BuildRequires: glibc-devel
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: gdb
+BuildRequires: libipt
+BuildRequires: source-highlight
 BuildRequires: gnupg2
 BuildRequires: procps-ng
 BuildRequires: perl-generators
