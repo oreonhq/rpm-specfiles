@@ -3,12 +3,9 @@
 
 %global source0_hash 84e4e4d8fdd45ba2613800a3ebc6834de26d47ec9746efc3719f94181137b460
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-# When bootstrapping new Python we need to build flit in bootstrap mode.
-# The Python RPM dependency generators and pip are not yet available.
-%bcond bootstrap 0
 
 # Tests are enabled by default, unless we bootstrap.
 # Disable them to avoid a circular build dependency on testpath.
@@ -16,7 +13,7 @@
 
 Name:           python-flit-core
 Version:        4.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        PEP 517 build backend for packages using Flit
 
 # flit-core is BSD-3-Clause
@@ -28,7 +25,10 @@ Source0:        https://files.pythonhosted.org/packages/source/f/flit_core/flit_
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
-BuildRequires:  oreon-rpm-macros
+BuildRequires:  oreon-rpm-macros >= 1-14
+%if %{without bootstrap}
+BuildRequires:  python%{python3_pkgversion}dist(packaging)
+%endif
 
 %if %{with tests}
 BuildRequires:  python%{python3_pkgversion}-pytest
