@@ -9,7 +9,7 @@
 
 Name: libXxf86vm
 Version: 1.1.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: XFree86-VidMode X extension library
 License: MIT
 URL: https://www.x.org
@@ -58,6 +58,7 @@ make check
 %{_libdir}/libXxf86vm.so
 %{_includedir}/X11/extensions/xf86vmode.h
 %{_libdir}/pkgconfig/xxf86vm.pc
+%{_mandir}/man3/XF86*.3*
 
 %changelog
 %autochangelog
