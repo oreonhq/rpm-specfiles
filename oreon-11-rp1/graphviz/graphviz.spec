@@ -9,13 +9,13 @@
 
 Name: graphviz
 Version: 15.1.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Graph Visualization Tools
 License: EPL-1.0
 URL: https://www.graphviz.org/
 Source0: https://gitlab.com/api/v4/projects/graphviz%2Fgraphviz/packages/generic/graphviz-releases/%{version}/graphviz-%{version}.tar.xz
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: make
