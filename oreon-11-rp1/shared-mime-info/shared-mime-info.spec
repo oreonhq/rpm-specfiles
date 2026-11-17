@@ -11,7 +11,7 @@
 
 Name:           shared-mime-info
 Version:        2.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Shared MIME information database
 License:        GPL-2.0-or-later
 URL:            https://freedesktop.org/wiki/Software/shared-mime-info/
@@ -30,6 +30,7 @@ BuildRequires:  pkgconfig(libxml-2.0) >= 2.4
 BuildRequires:  /usr/bin/xmllint
 BuildRequires:  xmlto
 BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook-dtds >= 1.0-3
 
 Requires(post):   coreutils
 Requires(postun): coreutils
