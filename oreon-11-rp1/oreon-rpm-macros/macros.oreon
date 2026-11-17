@@ -50,19 +50,43 @@ if probe == "" and have ~= "1" then\
   local h = io.open(bin, "r")\
   if h then\
     h:close()\
-    local spec = ""\
-    local name = rpm.expand("%{?name}")\
-    local dirs = {rpm.expand("%{?_specdir}"), rpm.expand("%{?_sourcedir}")}\
-    for i = 1, #dirs do\
-      local dir = dirs[i]\
-      if spec == "" and dir ~= "" and name ~= "" then\
-        local cand = dir .. "/" .. name .. ".spec"\
-        local f = io.open(cand, "r")\
-        if f then\
-          f:close()\
-          spec = cand\
-        end\
+    local function readable(path)\
+      if path == nil or path == "" then return false end\
+      local f = io.open(path, "r")\
+      if not f then return false end\
+      f:close()\
+      return true\
+    end\
+    local function one_spec(dir)\
+      if dir == nil or dir == "" then return "" end\
+      local p = io.popen("ls -1 " .. string.format("%q", dir) .. "/*.spec 2>/dev/null")\
+      if not p then return "" end\
+      local first, count = nil, 0\
+      for line in p:lines() do\
+        count = count + 1\
+        if first == nil then first = line end\
       end\
+      p:close()\
+      if count == 1 and readable(first) then return first end\
+      return ""\
+    end\
+    local spec = rpm.expand("%{?_specfile}")\
+    local name = rpm.expand("%{?name}")\
+    local sourcedir = rpm.expand("%{?_sourcedir}")\
+    local specdir = rpm.expand("%{?_specdir}")\
+    if not readable(spec) and specdir ~= "" and name ~= "" then\
+      local cand = specdir .. "/" .. name .. ".spec"\
+      if readable(cand) then spec = cand end\
+    end\
+    if not readable(spec) and sourcedir ~= "" and name ~= "" then\
+      local cand = sourcedir .. "/" .. name .. ".spec"\
+      if readable(cand) then spec = cand end\
+    end\
+    if not readable(spec) then\
+      local hit = one_spec(specdir)\
+      if hit == "" then hit = one_spec(sourcedir) end\
+      if hit == "" then hit = one_spec("/builddir/build/SPECS") end\
+      if hit ~= "" then spec = hit end\
     end\
     local cmd = bin\
     if readable(spec) then\
