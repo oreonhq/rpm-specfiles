@@ -5,11 +5,12 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
 
 Name: sysprof
 Version: 49.0
 Release: 1%{?dist}
+%oreon_bootstrap
+%bcond tests %{without bootstrap}
 Summary: Static library for capturing profiling data
 License: GPL-3.0-or-later AND BSD-2-Clause
 URL: https://gitlab.gnome.org/GNOME/sysprof
@@ -22,7 +23,9 @@ BuildRequires: gcc-c++
 BuildRequires: meson
 BuildRequires: ninja-build
 BuildRequires: pkgconf
+%if %{with tests}
 BuildRequires: glib2-devel
+%endif
 
 %description
 libsysprof-capture is the static library other programs link when they
@@ -40,7 +43,11 @@ record sysprof capture data.
     -Dlibsysprof=false \
     -Dtools=false \
     -Dexamples=false \
+%if %{with tests}
     -Dtests=true \
+%else
+    -Dtests=false \
+%endif
     -Dinstall-static=true \
     -Dpolkit-agent=disabled \
     -Ddebuginfod=disabled
@@ -50,7 +57,9 @@ record sysprof capture data.
 %meson_install
 
 %check
+%if %{with tests}
 %meson_test
+%endif
 
 %files
 %license COPYING
