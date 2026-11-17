@@ -22,7 +22,9 @@ BuildRequires: python3-installer
 BuildRequires: python3-flit-core
 BuildRequires: python3-rpm-macros
 BuildRequires: python3-docutils
+%if %{without bootstrap}
 BuildRequires: python3-sphinx
+%endif
 Requires: python3
 Requires: python3-docutils
 
@@ -41,8 +43,10 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+%if %{without bootstrap}
 cd /
 PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import sphinxcontrib.devhelp'
+%endif
 
 %files -f %{_builddir}/%{name}.files
 
