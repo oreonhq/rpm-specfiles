@@ -9,7 +9,7 @@
 
 Name:           nasm
 Version:        3.01
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        The Netwide Assembler
 License:        BSD-2-Clause
 URL:            https://www.nasm.us/
@@ -20,6 +20,7 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(File::Compare)
+BuildRequires:  perl(File::Copy)
 
 %description
 NASM is the Netwide Assembler, an 80x86 and x86-64 assembler.
