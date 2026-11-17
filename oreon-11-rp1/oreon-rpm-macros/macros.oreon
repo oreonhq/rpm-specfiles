@@ -65,7 +65,7 @@ if probe == "" and have ~= "1" then\
       end\
     end\
     local cmd = bin\
-    if spec ~= "" then\
+    if readable(spec) then\
       cmd = bin .. " " .. string.format("%q", spec)\
     end\
     local p = io.popen(cmd .. " 2>/dev/null")\
