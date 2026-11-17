@@ -8,7 +8,7 @@
 
 Name: python3-platformdirs
 Version: 4.14.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Platform directories
 License: MIT
 URL: https://pypi.org/project/platformdirs/
@@ -16,6 +16,7 @@ Source0: https://files.pythonhosted.org/packages/d7/9a/8475be631fb33ca1466915e70
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
@@ -40,7 +41,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import platformdirs'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import platformdirs'
 
 %files -f %{_builddir}/%{name}.files
 
