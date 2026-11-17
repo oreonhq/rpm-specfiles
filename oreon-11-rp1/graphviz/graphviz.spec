@@ -9,7 +9,7 @@
 
 Name: graphviz
 Version: 15.1.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Graph Visualization Tools
 License: EPL-1.0
 URL: https://www.graphviz.org/
@@ -54,7 +54,6 @@ Headers and libraries for graphviz.
 %autosetup
 
 %build
-./autogen.sh
 %if %{with bootstrap}
 %configure --disable-static --without-gdk-pixbuf --without-gtk --without-pangocairo --without-gdk --disable-python3
 %else
