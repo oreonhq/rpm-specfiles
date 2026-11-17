@@ -24,6 +24,8 @@ BuildRequires: perl-generators
 BuildRequires: perl-SGMLSpm
 BuildRequires: openjade
 BuildRequires: docbook-style-dsssl
+BuildRequires: docbook-dtds
+BuildRequires: sgml-common
 BuildRequires: make
 
 Requires: docbook-style-dsssl >= 1.72
