@@ -3,11 +3,12 @@
 
 Name: vim-filesystem
 Version: 9.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: VIM filesystem layout
 License: Vim
 URL: https://www.vim.org/
 BuildArch: noarch
+Source0: macros.vim
 
 BuildRequires: oreon-rpm-macros
 
@@ -23,6 +24,7 @@ Directories used by Vim add-on packages.
 :
 
 %install
+install -m 644 -D %{SOURCE0} %{buildroot}%{_rpmmacrodir}/macros.vim
 install -m 0755 -d \
   %{buildroot}%{_datadir}/vim \
   %{buildroot}%{_datadir}/vim/vimfiles \
@@ -40,6 +42,7 @@ install -m 0755 -d \
 test -d %{buildroot}%{_datadir}/vim/vimfiles
 
 %files
+%{_rpmmacrodir}/macros.vim
 %dir %{_datadir}/vim
 %dir %{_datadir}/vim/vimfiles
 %dir %{_datadir}/vim/vimfiles/after
