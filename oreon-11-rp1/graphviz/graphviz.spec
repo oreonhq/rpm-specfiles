@@ -9,7 +9,7 @@
 
 Name: graphviz
 Version: 15.1.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Graph Visualization Tools
 License: EPL-1.0
 URL: https://www.graphviz.org/
@@ -64,13 +64,14 @@ Headers and libraries for graphviz.
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/*.la
+cp -p AUTHORS CHANGELOG.md README.md %{buildroot}%{_docdir}/%{name}/
 
 %check
 %make_build check
 
 %files
 %license COPYING
-%doc AUTHORS CHANGELOG.md README.md
+%{_docdir}/%{name}/
 %{_bindir}/*
 %{_libdir}/libcdt.so.*
 %{_libdir}/libcgraph.so.*
@@ -81,6 +82,7 @@ rm -f %{buildroot}%{_libdir}/*.la
 %{_libdir}/graphviz/
 %{_datadir}/graphviz/
 %{_mandir}/man1/*
+%{_mandir}/man3/*
 %{_mandir}/man7/*
 
 %files devel
