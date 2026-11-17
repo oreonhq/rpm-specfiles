@@ -18,7 +18,7 @@
 %bcond_with bundled_rhash
 %bcond_without bundled_cppdap
 %ifnarch i686
-%bcond_without test
+%bcond test %{without bootstrap}
 %else
 %bcond_with test
 %endif
@@ -66,7 +66,7 @@ Name:           %{orig_name}%{?name_suffix}
 %global with_bundled_cppdap 1
 %endif
 Version:        4.5.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Cross-platform make system
 
 # most sources are BSD
