@@ -21,7 +21,7 @@ Source0: https://cairographics.org/releases/%{name}-%{version}.tar.xz
 
 Patch0: cairo-multilib.patch
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
 BuildRequires: gcc-c++
 %if %{without bootstrap}
