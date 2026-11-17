@@ -15,7 +15,7 @@ License: LGPL-2.1-or-later
 URL: https://www.pango.org/
 Source0: https://download.gnome.org/sources/pango/1.58/pango-%{version}.tar.xz
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
 BuildRequires: meson
 BuildRequires: python3
