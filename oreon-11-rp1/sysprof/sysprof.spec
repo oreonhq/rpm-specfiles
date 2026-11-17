@@ -8,7 +8,7 @@
 
 Name: sysprof
 Version: 49.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 %oreon_bootstrap
 %bcond tests %{without bootstrap}
 Summary: Static library for capturing profiling data
@@ -17,7 +17,7 @@ URL: https://gitlab.gnome.org/GNOME/sysprof
 Source0: https://download.gnome.org/sources/sysprof/49/sysprof-%{version}.tar.xz
 Patch0: sysprof-capture-tests.patch
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: meson
