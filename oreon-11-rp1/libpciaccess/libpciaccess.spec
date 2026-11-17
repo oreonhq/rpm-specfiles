@@ -9,7 +9,7 @@
 
 Name:           libpciaccess
 Version:        0.19
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        PCI access library
 
 License:        HPND AND MIT
