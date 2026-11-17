@@ -41,8 +41,8 @@ BuildRequires: pkgconfig(xcb)
 BuildRequires: pkgconfig(xcb-render)
 BuildRequires: pkgconfig(xrender)
 BuildRequires: pkgconfig(zlib)
-BuildRequires: ghostscript
 %if %{without bootstrap}
+BuildRequires: ghostscript
 BuildRequires: pkgconfig(poppler-glib) >= 0.17.4
 BuildRequires: pkgconfig(librsvg-2.0) >= 2.35.0
 %endif
