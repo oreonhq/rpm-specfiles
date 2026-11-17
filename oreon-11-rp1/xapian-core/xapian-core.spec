@@ -5,7 +5,7 @@
 
 Name: xapian-core
 Version: 1.4.29
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Search engine library
 License: GPL-2.0-or-later
 URL: https://xapian.org/
@@ -58,6 +58,7 @@ rm -rf %{buildroot}%{_docdir}/xapian-core
 %{_bindir}/simpleindex
 %{_bindir}/simplesearch
 %{_bindir}/xapian-check
+%{_bindir}/xapian-pos
 %{_bindir}/xapian-compact
 %{_bindir}/xapian-delve
 %{_bindir}/xapian-metadata
@@ -69,6 +70,7 @@ rm -rf %{buildroot}%{_docdir}/xapian-core
 %{_mandir}/man1/copydatabase.1*
 %{_mandir}/man1/quest.1*
 %{_mandir}/man1/xapian-*.1*
+%{_datadir}/xapian-core/
 
 %files devel
 %{_bindir}/xapian-config
