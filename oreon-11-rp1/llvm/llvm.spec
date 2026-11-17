@@ -390,7 +390,7 @@ end
 #region main package
 Name:		%{pkg_name_llvm}
 Version:        23.1.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	Apache-2.0 WITH LLVM-exception OR NCSA
@@ -2484,6 +2484,7 @@ rm %{buildroot}%{install_mandir}/man1/lldb-server.1
 # symlinks. We do it this way around because symlinks between multilib packages
 # would conflict otherwise.
 move_and_replace_with_symlinks %{buildroot}%{install_bindir} %{buildroot}%{_bindir}
+ln -sfn clang %{buildroot}%{_bindir}/cc
 move_and_replace_with_symlinks %{buildroot}%{install_libdir} %{buildroot}%{_libdir}
 move_and_replace_with_symlinks %{buildroot}%{install_libexecdir} %{buildroot}%{_libexecdir}
 move_and_replace_with_symlinks %{buildroot}%{install_includedir} %{buildroot}%{_includedir}
@@ -3407,6 +3408,9 @@ fi
 
 %files -n %{pkg_name_clang}
 %license clang/LICENSE.TXT
+%if %{without compat_build}
+%{_bindir}/cc
+%endif
 %{expand_bins %{expand:
     clang
     clang++
