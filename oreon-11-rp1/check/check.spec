@@ -9,7 +9,7 @@
 
 Name:           check
 Version:        0.15.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A unit test framework for C
 License:        LGPL-2.1-or-later AND GFDL-1.2-no-invariants-or-later
 SourceLicense:  %{shrink:%{license}
@@ -114,6 +114,7 @@ sed -i 's/ -pthread//' %{buildroot}%{_libdir}/pkgconfig/check.pc
 
 %check
 cd autotools_build
+rm -f ../checkmk/test/check_checkmk.*
 mkdir -p checkmk/test
 export LD_LIBRARY_PATH=$PWD/src/.libs
 make check
