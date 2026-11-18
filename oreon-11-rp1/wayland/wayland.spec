@@ -12,7 +12,7 @@
 
 Name:           wayland
 Version:        1.26.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Wayland Compositor Infrastructure
 
 License:        MIT
@@ -136,11 +136,15 @@ Wayland server library
 %{_datadir}/wayland/wayland-scanner.mk
 %{_datadir}/wayland/wayland.xml
 %{_datadir}/wayland/wayland.dtd
+%if %{without bootstrap}
 %{_mandir}/man3/*.3*
+%endif
 
+%if %{without bootstrap}
 %files doc
 %doc README.md
 %{_datadir}/doc/wayland/
+%endif
 
 %files -n libwayland-client
 %license COPYING
