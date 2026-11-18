@@ -22,7 +22,7 @@ print(string.sub(hash, 0, 16))
 }
 
 Version:        3.8.13
-Release:        3%{?dist}
+Release:        4%{?dist}
 Patch:        gnutls-3.2.7-rpath.patch
 
 # follow https://gitlab.com/gnutls/gnutls/-/issues/1443
@@ -156,7 +156,7 @@ Summary: Development files for the %{name} package
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-c++%{?_isa} = %{version}-%{release}
 %if %{with dane}
-Requires: %{name}-dane%{?_isa} = %{version}-%{release}
+Recommends: %{name}-dane%{?_isa} = %{version}-%{release}
 %endif
 Requires: pkgconfig
 
@@ -165,7 +165,7 @@ License: GPL-3.0-or-later
 Summary: Command line tools for TLS protocol
 Requires: %{name}%{?_isa} = %{version}-%{release}
 %if %{with dane}
-Requires: %{name}-dane%{?_isa} = %{version}-%{release}
+Recommends: %{name}-dane%{?_isa} = %{version}-%{release}
 %endif
 
 %if %{with dane}
