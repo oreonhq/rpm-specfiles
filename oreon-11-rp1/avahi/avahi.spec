@@ -28,7 +28,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  pkgconfig
 BuildRequires:  perl-interpreter
 BuildRequires:  xmltoman
-BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(expat)
