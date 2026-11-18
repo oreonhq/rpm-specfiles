@@ -9,7 +9,7 @@
 
 Name: icu
 Version: 78.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: International Components for Unicode tools
 License: Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND NAIST-2003
 URL: https://icu.unicode.org/
@@ -27,6 +27,8 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: doxygen
+BuildRequires: graphviz
+BuildRequires: web-assets
 BuildRequires: spdlog
 BuildRequires: xapian-core
 BuildRequires: autoconf
