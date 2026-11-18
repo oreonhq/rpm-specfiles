@@ -9,7 +9,7 @@
 
 Name: libfyaml
 Version: 0.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Complete YAML parser and emitter
 License: MIT AND GPL-2.0-only AND BSD-2-Clause
 URL: https://github.com/pantoniou/libfyaml
@@ -28,6 +28,7 @@ BuildRequires: libtool-ltdl-devel
 BuildRequires: libyaml-devel
 BuildRequires: make
 BuildRequires: python3-sphinx
+BuildRequires: python3-sphinxcontrib-serializinghtml
 BuildRequires: sed
 
 Provides: bundled(libxxhash)
