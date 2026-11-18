@@ -8,11 +8,11 @@
 %oreon_bootstrap
 
 %global debug_package %{nil}
-%define major_minor %(echo %{version} | cut -d. -f1-2)
 
 Name:           gtk-doc
 Version:        1.36.1
-Release:        5%{?dist}
+Release:        6%{?dist}
+%global major_minor 1.36
 Summary:        API documentation generation tool for GTK+ and GNOME
 License:        GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later
 URL:            https://gitlab.gnome.org/GNOME/gtk-doc/
