@@ -12,7 +12,7 @@
 
 Name: docbook-dtds
 Version: 1.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: DocBook document type definitions
 License: OASIS
 URL: https://www.oasis-open.org/docbook/
@@ -80,6 +80,12 @@ if ! %{_bindir}/xmlcatalog %{_sysconfdir}/sgml/docbook/xmlcatalog \
     file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
     %{_sysconfdir}/sgml/docbook/xmlcatalog
 fi
+if ! %{_bindir}/xmlcatalog %{_sysconfdir}/xml/catalog \
+    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml | grep -q docbook-dtds.xml; then
+  %{_bindir}/xmlcatalog --noout --add nextCatalog "" \
+    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
+    %{_sysconfdir}/xml/catalog
+fi
 
 %preun
 if [ "$1" -eq 0 ]; then
@@ -92,6 +98,9 @@ if [ "$1" -eq 0 ]; then
   %{_bindir}/xmlcatalog --noout --del \
     file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
     %{_sysconfdir}/sgml/docbook/xmlcatalog || :
+  %{_bindir}/xmlcatalog --noout --del \
+    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
+    %{_sysconfdir}/xml/catalog || :
 fi
 
 %files
