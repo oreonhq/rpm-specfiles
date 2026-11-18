@@ -1,5 +1,5 @@
---- a/src/jmemnobs.c	2026-11-18 01:35:31.589566159 -0800
-+++ b/src/jmemnobs.c	2026-11-18 01:35:31.592457637 -0800
+--- a/src/jmemnobs.c	2026-11-18 10:14:26.153934536 -0800
++++ b/src/jmemnobs.c	2026-11-18 10:14:26.155433734 -0800
 @@ -9,25 +9,18 @@
   * file.
   *
@@ -74,7 +74,7 @@
 +{
 +  if (fseek(info->temp_file, file_offset, SEEK_SET))
 +    ERREXIT(cinfo, JERR_TFILE_SEEK);
-+  if (JFREAD(info->temp_file, buffer_address, byte_count) !=
++  if (fread(buffer_address, 1, (size_t)byte_count, info->temp_file) !=
 +      (size_t)byte_count)
 +    ERREXIT(cinfo, JERR_TFILE_READ);
 +}
@@ -86,7 +86,7 @@
 +{
 +  if (fseek(info->temp_file, file_offset, SEEK_SET))
 +    ERREXIT(cinfo, JERR_TFILE_SEEK);
-+  if (JFWRITE(info->temp_file, buffer_address, byte_count) !=
++  if (fwrite(buffer_address, 1, (size_t)byte_count, info->temp_file) !=
 +      (size_t)byte_count)
 +    ERREXIT(cinfo, JERR_TFILE_WRITE);
 +}
