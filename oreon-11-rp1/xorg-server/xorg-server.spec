@@ -29,6 +29,8 @@ BuildRequires: libxkbfile-devel
 BuildRequires: xkbcomp
 BuildRequires: zlib-devel
 BuildRequires: openssl-devel
+BuildRequires: libglvnd-devel
+BuildRequires: mesa-libGL-devel
 
 Provides: xorg-x11-server-Xvfb = %{version}-%{release}
 Requires: xkbcomp
@@ -48,7 +50,7 @@ Virtual framebuffer X server used to run X11 tests.
   -Dxnest=false \
   -Dxvfb=true \
   -Dglamor=false \
-  -Dglx=false \
+  -Dglx=true \
   -Dudev=false \
   -Dudev_kms=false \
   -Dsystemd_logind=false \
@@ -69,6 +71,33 @@ Virtual framebuffer X server used to run X11 tests.
 
 %install
 %meson_install
+cat > %{buildroot}%{_bindir}/xvfb-run <<'EOF'
+#!/bin/sh
+args=
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s) args=$2; shift 2 ;;
+    *) break ;;
+  esac
+done
+n=99
+while [ -e /tmp/.X${n}-lock ]; do
+  n=$((n + 1))
+done
+Xvfb :$n $args >/dev/null 2>&1 &
+pid=$!
+i=0
+while [ ! -e /tmp/.X${n}-lock ] && [ "$i" -lt 50 ]; do
+  i=$((i + 1))
+  sleep 0.1
+done
+DISPLAY=:$n "$@"
+rc=$?
+kill "$pid" 2>/dev/null
+wait "$pid" 2>/dev/null
+exit "$rc"
+EOF
+chmod 0755 %{buildroot}%{_bindir}/xvfb-run
 
 %check
 %meson_test
@@ -76,6 +105,7 @@ Virtual framebuffer X server used to run X11 tests.
 %files
 %license COPYING
 %{_bindir}/Xvfb
+%{_bindir}/xvfb-run
 %{_mandir}/man1/Xvfb.1*
 
 %changelog
