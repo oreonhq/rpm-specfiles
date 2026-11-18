@@ -5,7 +5,7 @@
 
 Name: xapian-core
 Version: 1.4.29
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Search engine library
 License: GPL-2.0-or-later
 URL: https://xapian.org/
@@ -45,7 +45,7 @@ find %{buildroot} -name '*.la' -delete
 rm -rf %{buildroot}%{_docdir}/xapian-core
 
 %check
-%make_build check
+make -j1 check
 
 %ldconfig_scriptlets
 
