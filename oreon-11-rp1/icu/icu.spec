@@ -22,6 +22,7 @@ Source10: icu-config.sh
 Patch4: gennorm2-man.patch
 Patch5: icuinfo-man.patch
 Patch6: 3496.patch
+Patch7: icu-ssearch-fortify.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
