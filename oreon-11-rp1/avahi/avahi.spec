@@ -177,6 +177,7 @@ NOCONFIGURE=1 autoreconf -fiv
 %make_install
 find %{buildroot} -name '*.la' -delete -print
 find %{buildroot} -type d -path '*/site-packages/avahi' -prune -exec rm -rf {} +
+rm -f %{buildroot}%{_mandir}/man1/avahi-bookmarks.1*
 rm -rf %{buildroot}%{_localstatedir}/run
 install -Dpm0644 %{SOURCE1} %{buildroot}%{_sysusersdir}/avahi.conf
 install -Dpm0644 service-type-database/service-types %{buildroot}%{_datadir}/avahi/service-types
