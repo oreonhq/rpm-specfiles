@@ -11,7 +11,7 @@
 
 Name: libxkbcommon
 Version: 1.13.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: X.Org X11 XKB parsing library
 License: MIT AND X11 AND MIT-CMU
 URL: https://xkbcommon.org
@@ -20,7 +20,7 @@ Source0: https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_n
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: meson
-BuildRequires: byacc
+BuildRequires: byacc >= 2.0.20260126-4
 BuildRequires: flex
 BuildRequires: bison
 BuildRequires: xorg-x11-proto-devel
