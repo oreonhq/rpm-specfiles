@@ -14,6 +14,7 @@ Summary: SIMD-accelerated JPEG image codec
 License: IJG AND BSD-3-Clause AND Zlib
 URL: https://github.com/libjpeg-turbo/libjpeg-turbo
 Source0: https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/%{version}/libjpeg-turbo-%{version}.tar.gz
+Patch0: libjpeg-turbo-bmpsize-mem.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
@@ -47,7 +48,7 @@ Command line tools for JPEG images.
 
 %prep
 %oreon_sha256
-%autosetup -n libjpeg-turbo-%{version}
+%autosetup -p1 -n libjpeg-turbo-%{version}
 
 %build
 %cmake -DWITH_JPEG8=1 -DCMAKE_SKIP_INSTALL_RPATH:BOOL=ON

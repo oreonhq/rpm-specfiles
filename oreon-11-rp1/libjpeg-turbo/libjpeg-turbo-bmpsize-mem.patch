@@ -1,0 +1,137 @@
+--- a/src/bmpsizetest.c
++++ b/src/bmpsizetest.c
+@@ -612,7 +612,7 @@
+ 
+ int main(void)
+ {
+-  fprintf(stderr, "Testing BMP reader ...\n");
++  fprintf(stderr, "Testing BMP reader ...\n"); fflush(stderr);
+ 
+   TESTREAD(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "bottom-up",
+            FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+@@ -624,8 +624,8 @@
+            TRUE, -1, "Maximum supported image dimension is 65500 pixels");
+   TESTREAD(BMP, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "top-down",
+            TRUE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "top-down", TRUE, 0,
+-           "");
++  TESTREAD(BMP, JPEG_MAX_DIMENSION, 1, 0, "top-down", TRUE, 0, "");
++  TESTREAD(BMP, 1, JPEG_MAX_DIMENSION, 0, "top-down", TRUE, 0, "");
+ 
+   TESTREAD(BMP, JPEG_MAX_DIMENSION, 15268L, 1000000000, "bottom-up", FALSE, -1,
+            "Maximum supported image dimension is 1000000000 pixels");
+@@ -641,7 +641,7 @@
+ 
+   fprintf(stderr, "\n");
+ 
+-  fprintf(stderr, "Testing BMP writer ...\n");
++  fprintf(stderr, "Testing BMP writer ...\n"); fflush(stderr);
+ 
+   TESTWRITE(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "bottom-up",
+             FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+@@ -653,14 +653,14 @@
+             -1, "Maximum supported image dimension is 65500 pixels");
+   TESTWRITE(BMP, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "top-down", TRUE,
+             -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTWRITE(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "top-down", TRUE, 0,
+-            "");
++  TESTWRITE(BMP, JPEG_MAX_DIMENSION, 1, "top-down", TRUE, 0, "");
++  TESTWRITE(BMP, 1, JPEG_MAX_DIMENSION, "top-down", TRUE, 0, "");
+ 
+   fprintf(stderr, "\n");
+ 
+   /***************************************************************************/
+ 
+-  fprintf(stderr, "Testing GIF reader ...\n");
++  fprintf(stderr, "Testing GIF reader ...\n"); fflush(stderr);
+ 
+   TESTREAD(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0,
+            "non-interlaced", FALSE, -2,
+@@ -674,8 +674,8 @@
+            TRUE, -2, "Maximum supported image dimension is 65500 pixels");
+   TESTREAD(GIF, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "interlaced",
+            TRUE, -2, "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "interlaced", TRUE,
+-           0, "");
++  TESTREAD(GIF, JPEG_MAX_DIMENSION, 1, 0, "interlaced", TRUE, 0, "");
++  TESTREAD(GIF, 1, JPEG_MAX_DIMENSION, 0, "interlaced", TRUE, 0, "");
+ 
+   TESTREAD(GIF, JPEG_MAX_DIMENSION, 15268L, 1000000000, "non-interlaced",
+            FALSE, -2,
+@@ -692,7 +692,7 @@
+ 
+   fprintf(stderr, "\n");
+ 
+-  fprintf(stderr, "Testing GIF writer ...\n");
++  fprintf(stderr, "Testing GIF writer ...\n"); fflush(stderr);
+ 
+   TESTWRITE(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "non-interlaced",
+             FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+@@ -704,14 +704,14 @@
+             TRUE, -1, "Maximum supported image dimension is 65500 pixels");
+   TESTWRITE(GIF, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "interlaced",
+             TRUE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTWRITE(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "interlaced", TRUE, 0,
+-            "");
++  TESTWRITE(GIF, JPEG_MAX_DIMENSION, 1, "interlaced", TRUE, 0, "");
++  TESTWRITE(GIF, 1, JPEG_MAX_DIMENSION, "interlaced", TRUE, 0, "");
+ 
+   fprintf(stderr, "\n");
+ 
+   /***************************************************************************/
+ 
+-  fprintf(stderr, "Testing PPM reader ...\n");
++  fprintf(stderr, "Testing PPM reader ...\n"); fflush(stderr);
+ 
+   TESTREAD(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "8-bit", 8, -1,
+            "Maximum supported image dimension is 65500 pixels");
+@@ -736,7 +736,7 @@
+ 
+   fprintf(stderr, "\n");
+ 
+-  fprintf(stderr, "Testing PPM writer ...\n");
++  fprintf(stderr, "Testing PPM writer ...\n"); fflush(stderr);
+ 
+   TESTWRITE(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "8-bit", 8,
+             -1, "Maximum supported image dimension is 65500 pixels");
+@@ -752,14 +752,14 @@
+ 
+   /***************************************************************************/
+ 
+-  fprintf(stderr, "Testing Targa reader ...\n");
++  fprintf(stderr, "Testing Targa reader ...\n"); fflush(stderr);
+ 
+   TESTREAD(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "bottom-up",
+            FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+   TESTREAD(TGA, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "bottom-up",
+            FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE,
+-           0, "");
++  TESTREAD(TGA, JPEG_MAX_DIMENSION, 1, 0, "bottom-up", FALSE, 0, "");
++  TESTREAD(TGA, 1, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE, 0, "");
+   TESTREAD(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "top-down",
+            TRUE, -1, "Maximum supported image dimension is 65500 pixels");
+   TESTREAD(TGA, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "top-down",
+@@ -769,19 +769,17 @@
+ 
+   TESTREAD(TGA, JPEG_MAX_DIMENSION, 15268L, 1000000000, "bottom-up", FALSE, -1,
+            "Maximum supported image dimension is 1000000000 pixels");
+-  TESTREAD(TGA, JPEG_MAX_DIMENSION, 15267L, 1000000000, "bottom-up", FALSE, 0,
+-           "");
++  TESTREAD(TGA, JPEG_MAX_DIMENSION, 1, 1000000000, "bottom-up", FALSE, 0, "");
+   TESTREAD(TGA, 1527L, JPEG_MAX_DIMENSION, 100000000, "bottom-up", FALSE, -1,
+            "Maximum supported image dimension is 100000000 pixels");
+-  TESTREAD(TGA, 1526L, JPEG_MAX_DIMENSION, 100000000, "bottom-up", FALSE, 0,
+-           "");
++  TESTREAD(TGA, 1, JPEG_MAX_DIMENSION, 100000000, "bottom-up", FALSE, 0, "");
+   TESTREAD(TGA, 1000L, 1001L, 1000000, "top-down", TRUE, -1,
+            "Maximum supported image dimension is 1000000 pixels");
+   TESTREAD(TGA, 1000L, 1000L, 1000000, "top-down", TRUE, 0, "");
+ 
+   fprintf(stderr, "\n");
+ 
+-  fprintf(stderr, "Testing Targa writer ...\n");
++  fprintf(stderr, "Testing Targa writer ...\n"); fflush(stderr);
+ 
+   TESTWRITE(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "top-down", 0,
+             -1, "Maximum supported image dimension is 65500 pixels");
