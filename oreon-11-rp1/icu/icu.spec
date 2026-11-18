@@ -9,7 +9,7 @@
 
 Name: icu
 Version: 78.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: International Components for Unicode tools
 License: Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND NAIST-2003
 URL: https://icu.unicode.org/
@@ -60,21 +60,21 @@ Headers and libraries for developing with ICU.
 %prep
 %oreon_sha256
 %autosetup -p1 -n icu-release-%{version}
-cp -v -f %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} source/data/misc/
+cp -v -f %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} icu4c/source/data/misc/
 
 %build
-cd source
+cd icu4c/source
 %configure --disable-samples --enable-shared --disable-static
 %make_build
 
 %install
-cd source
+cd icu4c/source
 %make_install
 install -D -m 755 %{SOURCE10} %{buildroot}%{_bindir}/icu-config
 rm -f %{buildroot}%{_libdir}/*.la
 
 %check
-cd source
+cd icu4c/source
 %make_build check
 
 %files
