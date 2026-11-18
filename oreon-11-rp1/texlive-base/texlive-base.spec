@@ -40,7 +40,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 2%{?dist}
+Release: 3%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -521,8 +521,8 @@ Source463: %{tlnet_url}/archive/show-pdf-tags.tar.xz
 Source464: %{tlnet_url}/archive/show-pdf-tags.doc.tar.xz
 Source465: %{tlnet_url}/archive/xdvipsk.tar.xz
 Source466: %{tlnet_url}/archive/xdvipsk.doc.tar.xz
-Source467: %{tlnet_url}/tlpkg/texlive.tlpdb.sha512
-Source468: %{tlnet_url}/tlpkg/texlive.tlpdb.sha512.asc
+Source467: texlive.tlpdb.sha512
+Source468: texlive.tlpdb.sha512.asc
 Source469: texlive-release-key.asc
 Source470: texlive-base.sha256
 
