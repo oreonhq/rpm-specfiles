@@ -43,7 +43,7 @@ packages: python3.15, python3-build, python3-installer, python3-jinja2, python3-
 [perl]
 summary: perl and the small modules other specs require by name
 maintainer: Brandon Lester
-packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum, perl-IO-Tty, perl-Expect, perl-XML-Parser, perl-File-ShareDir-Install, perl-SGMLSpm, perl-libintl-perl, perl-Text-Unidecode, perl-Unicode-EastAsianWidth
+packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum, perl-IO-Tty, perl-Expect, perl-XML-Parser, perl-File-ShareDir-Install, perl-Class-Inspector, perl-SGMLSpm, perl-libintl-perl, perl-Text-Unidecode, perl-Unicode-EastAsianWidth
 
 [languages]
 summary: other language runtimes and the generators that wrap them
