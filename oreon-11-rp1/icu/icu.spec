@@ -80,11 +80,16 @@ cd icu4c/source
 
 %files
 %{_bindir}/derb
+%{_bindir}/escapesrc
 %{_bindir}/genbrk
+%{_bindir}/genccode
 %{_bindir}/gencfu
+%{_bindir}/gencmn
 %{_bindir}/gencnval
 %{_bindir}/gendict
+%{_bindir}/gennorm2
 %{_bindir}/genrb
+%{_bindir}/gensprep
 %{_bindir}/icu-config
 %{_bindir}/icuexportdata
 %{_bindir}/icuinfo
