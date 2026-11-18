@@ -1,0 +1,38 @@
+--- a/giscanner/ccompiler.py
++++ b/giscanner/ccompiler.py
+@@ -328,11 +328,30 @@
+             macros.append(('_CRT_NONSTDC_NO_WARNINGS', None))
+             macros.append(('SAL_NO_ATTRIBUTE_DECLARATIONS', None))
+ 
+-        self.compiler.preprocess(source=source,
+-                                 output_file=output,
+-                                 macros=macros,
+-                                 include_dirs=include_dirs,
+-                                 extra_postargs=extra_postargs)
++        cpp = os.environ.get('CPP')
++        if cpp:
++            args = shlex.split(cpp)
++        else:
++            args = shlex.split(os.environ.get('CC') or 'cc') + ['-E']
++        for include_dir in include_dirs:
++            args.append('-I' + include_dir)
++        for macro in macros:
++            if len(macro) == 1:
++                args.append('-U' + macro[0])
++            elif macro[1] is None:
++                args.append('-D' + macro[0])
++            else:
++                args.append('-D%s=%s' % (macro[0], macro[1]))
++        cppflags = os.environ.get('CPPFLAGS')
++        if cppflags:
++            for flag in shlex.split(cppflags):
++                if flag not in FLAGS_RETAINING_MACROS:
++                    args.append(flag)
++        args.extend(extra_postargs)
++        if output:
++            args.extend(['-o', output])
++        args.append(source)
++        self.compiler.spawn(args)
+ 
+     def compile(self, pkg_config_cflags, cpp_includes, source, init_sections):
+         extra_postargs = []

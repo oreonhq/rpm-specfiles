@@ -10,7 +10,7 @@
 
 Name: gobject-introspection
 Version: 1.86.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 %global gi_series 1.86
 Summary: Introspection system for GObject-based libraries
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause
@@ -18,6 +18,7 @@ URL: https://wiki.gnome.org/Projects/GObjectIntrospection
 Source0: https://download.gnome.org/sources/%{name}/%{gi_series}/%{name}-%{version}.tar.xz
 
 Patch0: workaround.patch
+Patch1: giscanner-preprocess.patch
 
 BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: bison
