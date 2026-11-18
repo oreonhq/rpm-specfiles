@@ -11,7 +11,7 @@
 
 Name:           docbook5-style-xsl
 Version:        1.79.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Norman Walsh's XSL stylesheets for DocBook 5
 License:        DocBook-Stylesheet
 URL:            https://github.com/docbook/xslt10-stylesheets
@@ -25,6 +25,7 @@ BuildRequires:  libxml2
 
 Requires:       libxml2
 Requires:       libxslt
+Requires:       ruby
 Provides:       docbook-xsl-ns = %{version}-%{release}
 
 %description
