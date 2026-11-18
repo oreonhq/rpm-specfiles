@@ -11,7 +11,7 @@
 
 Name:           docbook5-style-xsl
 Version:        1.79.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Norman Walsh's XSL stylesheets for DocBook 5
 License:        DocBook-Stylesheet
 URL:            https://github.com/docbook/xslt10-stylesheets
@@ -25,7 +25,6 @@ BuildRequires:  libxml2
 
 Requires:       libxml2
 Requires:       libxslt
-Requires:       ruby
 Provides:       docbook-xsl-ns = %{version}-%{release}
 
 %description
@@ -45,7 +44,8 @@ rm -rf tools docsrc tests
 mkdir -p %{buildroot}%{xsldir}
 cp -a common epub epub3 extensions eclipse fo highlighting html htmlhelp images javahelp lib manpages params profiling roundtrip slides template webhelp website xhtml xhtml-1_1 xhtml5 VERSION VERSION.xsl %{buildroot}%{xsldir}/
 install -pm0644 %{SOURCE1} %{buildroot}%{xsldir}/catalog.xml
-find %{buildroot}%{xsldir} -type f \( -name '*.py' -o -name '*.sh' \) -exec chmod 0644 {} +
+find %{buildroot}%{xsldir} -type f \( -name '*.py' -o -name '*.sh' -o -name '*.rb' \) -exec chmod 0644 {} +
+find %{buildroot}%{xsldir}/epub -type f -executable -exec chmod 0644 {} +
 
 %check
 cat > refentry.xml <<'EOF'
