@@ -12,7 +12,7 @@
 Name:           cups
 Epoch:          1
 Version:        2.4.20
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        CUPS printing system
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://openprinting.github.io/cups/
@@ -28,7 +28,7 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  gnupg2
 BuildRequires:  pkgconfig
-BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
 BuildRequires:  pam-devel
 BuildRequires:  libacl-devel
 BuildRequires:  krb5-devel
