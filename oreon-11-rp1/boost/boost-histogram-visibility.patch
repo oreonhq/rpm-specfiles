@@ -1,0 +1,10 @@
+--- a/libs/histogram/build.jam
++++ b/libs/histogram/build.jam
+@@ -25,7 +25,6 @@
+         <toolset>gcc:<cxxflags>"-Wsign-compare -Wstrict-aliasing -fstrict-aliasing -Wfloat-conversion"
+         <toolset>msvc:<cxxflags>"/bigobj"
+         <toolset>intel-win:<cxxflags>"/bigobj"
+-        <local-visibility>hidden
+     : default-build
+         <warnings>extra
+     ;

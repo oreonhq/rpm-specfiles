@@ -33,7 +33,7 @@ Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
 Version: 1.90.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 %global version_enc %{lua:
@@ -120,6 +120,7 @@ Patch6: boost-1.90-system.patch
 Patch7: boost-1.90.0-range.patch
 Patch8: boost-1.90.0-multi_index-utf8.patch
 Patch9: boost-1.90.0-bloom-utf8.patch
+Patch10: boost-histogram-visibility.patch
 
 
 %description
