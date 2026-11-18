@@ -12,7 +12,7 @@
 
 Name:           mingw-filesystem
 Version:        152
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        MinGW cross compiler base filesystem and environment
 
 License:        GPL-2.0-or-later
