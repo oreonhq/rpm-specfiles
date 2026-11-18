@@ -12,7 +12,7 @@
 Summary: Utilities to generate, maintain and access the AppStream database
 Name: appstream
 Version: 1.1.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://github.com/ximion/appstream
 Source0: https://www.freedesktop.org/software/appstream/releases/AppStream-%{version}.tar.xz
@@ -23,6 +23,7 @@ Source2: gpgkey-D33A3F0CA16B0ACC51A60738494C8A5FBF4DECEB.gpg
 BuildRequires: oreon-rpm-macros
 BuildRequires: cmake
 BuildRequires: docbook5-style-xsl
+BuildRequires: ruby
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: gettext
@@ -54,7 +55,7 @@ BuildRequires: pkgconfig(cairo)
 BuildRequires: pkgconfig(fontconfig)
 BuildRequires: pkgconfig(freetype2)
 BuildRequires: pkgconfig(gio-2.0)
-BuildRequires: pkgconfig(libcurl)
+BuildRequires: pkgconfig(libcurl) >= 8.21.0
 BuildRequires: pkgconfig(libfyaml)
 BuildRequires: pkgconfig(libsystemd)
 BuildRequires: pkgconfig(libxml-2.0)
