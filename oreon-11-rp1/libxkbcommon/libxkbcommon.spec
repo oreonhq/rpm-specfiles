@@ -11,7 +11,7 @@
 
 Name: libxkbcommon
 Version: 1.13.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: X.Org X11 XKB parsing library
 License: MIT AND X11 AND MIT-CMU
 URL: https://xkbcommon.org
@@ -28,6 +28,8 @@ BuildRequires: libX11-devel
 BuildRequires: xkeyboard-config-devel
 BuildRequires: pkgconfig(xcb-xkb) >= 1.10
 BuildRequires: pkgconfig(libxml-2.0)
+BuildRequires: xorg-server
+BuildRequires: xkbcomp
 
 Requires: xkeyboard-config
 
