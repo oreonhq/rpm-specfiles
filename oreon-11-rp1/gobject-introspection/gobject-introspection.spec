@@ -10,7 +10,7 @@
 
 Name: gobject-introspection
 Version: 1.86.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 %global gi_series 1.86
 Summary: Introspection system for GObject-based libraries
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause

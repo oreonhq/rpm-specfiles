@@ -1,6 +1,6 @@
---- a/giscanner/ccompiler.py
-+++ b/giscanner/ccompiler.py
-@@ -328,11 +328,30 @@
+--- a/giscanner/ccompiler.py	2026-11-17 19:04:06.960329380 -0800
++++ b/giscanner/ccompiler.py	2026-11-17 19:07:14.119987931 -0800
+@@ -328,11 +328,28 @@
              macros.append(('_CRT_NONSTDC_NO_WARNINGS', None))
              macros.append(('SAL_NO_ATTRIBUTE_DECLARATIONS', None))
  
@@ -25,9 +25,7 @@
 +                args.append('-D%s=%s' % (macro[0], macro[1]))
 +        cppflags = os.environ.get('CPPFLAGS')
 +        if cppflags:
-+            for flag in shlex.split(cppflags):
-+                if flag not in FLAGS_RETAINING_MACROS:
-+                    args.append(flag)
++            args.extend(shlex.split(cppflags))
 +        args.extend(extra_postargs)
 +        if output:
 +            args.extend(['-o', output])
@@ -36,3 +34,42 @@
  
      def compile(self, pkg_config_cflags, cpp_includes, source, init_sections):
          extra_postargs = []
+@@ -385,11 +402,33 @@
+                 extra_postargs = [f'@{tmp}']
+ 
+         try:
+-            return self.compiler.compile(sources=source,
+-                                     macros=macros,
+-                                     include_dirs=includes,
+-                                     extra_postargs=extra_postargs,
+-                                     output_dir=os.path.abspath(os.sep))
++            sources = list(source)
++            cc = os.environ.get('CC') or 'cc'
++            objs = []
++            for src in sources:
++                root, ext = os.path.splitext(src)
++                obj = root + '.o'
++                objs.append(obj)
++                args = shlex.split(cc)
++                args.extend(['-c', src, '-o', obj])
++                for include in includes:
++                    args.append('-I' + include)
++                for macro in macros:
++                    if len(macro) == 1:
++                        args.append('-U' + macro[0])
++                    elif macro[1] is None:
++                        args.append('-D' + macro[0])
++                    else:
++                        args.append('-D%s=%s' % (macro[0], macro[1]))
++                args.extend(extra_postargs)
++                cflags = os.environ.get('CFLAGS')
++                if cflags:
++                    args.extend(shlex.split(cflags))
++                cppflags = os.environ.get('CPPFLAGS')
++                if cppflags:
++                    args.extend(shlex.split(cppflags))
++                self.compiler.spawn(args)
++            return objs
+         finally:
+             if tmp and not utils.have_debug_flag('save-temps'):
+                 os.unlink(tmp)
