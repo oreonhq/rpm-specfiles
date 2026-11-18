@@ -5,7 +5,7 @@
 
 Name: spdlog
 Version: 1.17.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Fast C++ logging library
 License: MIT
 URL: https://github.com/gabime/spdlog
@@ -54,8 +54,8 @@ int main() {
     return 0;
 }
 EOF
-PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig \
-  g++ spdlog-smoke.cpp $(pkg-config --cflags --libs spdlog) \
+export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
+g++ spdlog-smoke.cpp $(pkg-config --cflags --libs spdlog) \
   -Wl,-rpath,%{buildroot}%{_libdir} -o spdlog-smoke
 ./spdlog-smoke
 
