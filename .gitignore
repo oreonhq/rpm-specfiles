@@ -35,6 +35,7 @@ __pycache__/
 !oreon-11-rp1/librsvg/librsvg-*-vendor.tar.xz
 !oreon-11-rp1/doxygen/doxywizard-icons.tar.bz2
 !oreon-11-rp1/tzdata/javazic-1.8-37392f2f5d59.tar.xz
+!oreon-11-rp1/texlive-base/texlive-licenses.tar.xz
 
 !oreon-10/**/*.tar
 !oreon-10/**/*.tar.gz
