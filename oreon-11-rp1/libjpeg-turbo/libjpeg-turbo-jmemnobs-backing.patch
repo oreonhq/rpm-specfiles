@@ -1,0 +1,131 @@
+--- a/src/jmemnobs.c	2026-11-18 01:35:31.589566159 -0800
++++ b/src/jmemnobs.c	2026-11-18 01:35:31.592457637 -0800
+@@ -9,25 +9,18 @@
+  * file.
+  *
+  * This file provides a really simple implementation of the system-
+- * dependent portion of the JPEG memory manager.  This implementation
+- * assumes that no backing-store files are needed: all required space
+- * can be obtained from malloc().
+- * This is very portable in the sense that it'll compile on almost anything,
+- * but you'd better have lots of main memory (or virtual memory) if you want
+- * to process big images.
++ * dependent portion of the JPEG memory manager.  Memory comes from
++ * malloc().  When max_memory_to_use is set, virt arrays that do not fit
++ * spill to a tmpfile() backing store instead of allocating everything
++ * in RAM.
+  */
+ 
+ #define JPEG_INTERNALS
+ #include "jinclude.h"
+ #include "jpeglib.h"
+-#include "jmemsys.h"            /* import the system-dependent declarations */
++#include "jmemsys.h"
+ 
+ 
+-/*
+- * Memory allocation and freeing are controlled by the regular library
+- * routines malloc() and free().
+- */
+-
+ GLOBAL(void *)
+ jpeg_get_small(j_common_ptr cinfo, size_t sizeofobject)
+ {
+@@ -41,10 +34,6 @@
+ }
+ 
+ 
+-/*
+- * "Large" objects are treated the same as "small" ones.
+- */
+-
+ GLOBAL(void *)
+ jpeg_get_large(j_common_ptr cinfo, size_t sizeofobject)
+ {
+@@ -58,10 +47,6 @@
+ }
+ 
+ 
+-/*
+- * This routine computes the total memory space available for allocation.
+- */
+-
+ GLOBAL(size_t)
+ jpeg_mem_available(j_common_ptr cinfo, size_t min_bytes_needed,
+                    size_t max_bytes_needed, size_t already_allocated)
+@@ -72,39 +57,61 @@
+     else
+       return 0;
+   } else {
+-    /* Here we always say, "we got all you want bud!" */
+     return max_bytes_needed;
+   }
+ }
+ 
+ 
+-/*
+- * Backing store (temporary file) management.
+- * Since jpeg_mem_available always promised the moon,
+- * this should never be called and we can just error out.
+- */
++METHODDEF(void)
++read_backing_store(j_common_ptr cinfo, backing_store_ptr info,
++                   void *buffer_address, long file_offset, long byte_count)
++{
++  if (fseek(info->temp_file, file_offset, SEEK_SET))
++    ERREXIT(cinfo, JERR_TFILE_SEEK);
++  if (JFREAD(info->temp_file, buffer_address, byte_count) !=
++      (size_t)byte_count)
++    ERREXIT(cinfo, JERR_TFILE_READ);
++}
++
++
++METHODDEF(void)
++write_backing_store(j_common_ptr cinfo, backing_store_ptr info,
++                    void *buffer_address, long file_offset, long byte_count)
++{
++  if (fseek(info->temp_file, file_offset, SEEK_SET))
++    ERREXIT(cinfo, JERR_TFILE_SEEK);
++  if (JFWRITE(info->temp_file, buffer_address, byte_count) !=
++      (size_t)byte_count)
++    ERREXIT(cinfo, JERR_TFILE_WRITE);
++}
++
++
++METHODDEF(void)
++close_backing_store(j_common_ptr cinfo, backing_store_ptr info)
++{
++  fclose(info->temp_file);
++}
++
+ 
+ GLOBAL(void)
+ jpeg_open_backing_store(j_common_ptr cinfo, backing_store_ptr info,
+                         long total_bytes_needed)
+ {
+-  ERREXIT(cinfo, JERR_NO_BACKING_STORE);
++  if ((info->temp_file = tmpfile()) == NULL)
++    ERREXITS(cinfo, JERR_TFILE_CREATE, "");
++  info->read_backing_store = read_backing_store;
++  info->write_backing_store = write_backing_store;
++  info->close_backing_store = close_backing_store;
+ }
+ 
+ 
+-/*
+- * These routines take care of any system-dependent initialization and
+- * cleanup required.  Here, there isn't any.
+- */
+-
+ GLOBAL(long)
+ jpeg_mem_init(j_common_ptr cinfo)
+ {
+-  return 0;                     /* just set max_memory_to_use to 0 */
++  return 0;
+ }
+ 
+ GLOBAL(void)
+ jpeg_mem_term(j_common_ptr cinfo)
+ {
+-  /* no work */
+ }

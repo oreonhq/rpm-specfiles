@@ -1,6 +1,70 @@
---- a/src/bmpsizetest.c
-+++ b/src/bmpsizetest.c
-@@ -612,7 +612,7 @@
+--- a/src/bmpsizetest.c	2026-11-18 01:35:31.591293376 -0800
++++ b/src/bmpsizetest.c	2026-11-18 01:35:31.606391162 -0800
+@@ -85,6 +85,7 @@
+   }
+ 
+   jpeg_create_compress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -155,6 +156,7 @@
+   }
+ 
+   jpeg_create_decompress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -210,6 +212,7 @@
+   }
+ 
+   jpeg_create_compress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -298,6 +301,7 @@
+   }
+ 
+   jpeg_create_decompress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -353,6 +357,7 @@
+   }
+ 
+   jpeg_create_compress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -413,6 +418,7 @@
+   }
+ 
+   jpeg_create_decompress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -476,6 +482,7 @@
+   }
+ 
+   jpeg_create_compress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -542,6 +549,7 @@
+   }
+ 
+   jpeg_create_decompress(&cinfo);
++  cinfo.mem->max_memory_to_use = 16L * 1024L * 1024L;
+   jerr->addon_message_table = cdjpeg_message_table;
+   jerr->first_addon_message = JMSG_FIRSTADDONCODE;
+   jerr->last_addon_message = JMSG_LASTADDONCODE;
+@@ -612,20 +620,20 @@
  
  int main(void)
  {
@@ -9,18 +73,24 @@
  
    TESTREAD(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "bottom-up",
             FALSE, -1, "Maximum supported image dimension is 65500 pixels");
-@@ -624,8 +624,8 @@
+   TESTREAD(BMP, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "bottom-up",
+            FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE,
+-           0, "");
++  TESTREAD(BMP, JPEG_MAX_DIMENSION, 2, 0, "bottom-up", FALSE, 0, "");
++  TESTREAD(BMP, 2, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE, 0, "");
+   TESTREAD(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "top-down",
             TRUE, -1, "Maximum supported image dimension is 65500 pixels");
    TESTREAD(BMP, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "top-down",
             TRUE, -1, "Maximum supported image dimension is 65500 pixels");
 -  TESTREAD(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "top-down", TRUE, 0,
 -           "");
-+  TESTREAD(BMP, JPEG_MAX_DIMENSION, 1, 0, "top-down", TRUE, 0, "");
-+  TESTREAD(BMP, 1, JPEG_MAX_DIMENSION, 0, "top-down", TRUE, 0, "");
++  TESTREAD(BMP, JPEG_MAX_DIMENSION, 2, 0, "top-down", TRUE, 0, "");
++  TESTREAD(BMP, 2, JPEG_MAX_DIMENSION, 0, "top-down", TRUE, 0, "");
  
    TESTREAD(BMP, JPEG_MAX_DIMENSION, 15268L, 1000000000, "bottom-up", FALSE, -1,
             "Maximum supported image dimension is 1000000000 pixels");
-@@ -641,7 +641,7 @@
+@@ -641,26 +649,26 @@
  
    fprintf(stderr, "\n");
  
@@ -29,14 +99,20 @@
  
    TESTWRITE(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "bottom-up",
              FALSE, -1, "Maximum supported image dimension is 65500 pixels");
-@@ -653,14 +653,14 @@
+   TESTWRITE(BMP, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "bottom-up",
+             FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTWRITE(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "bottom-up", FALSE, 0,
+-            "");
++  TESTWRITE(BMP, JPEG_MAX_DIMENSION, 2, "bottom-up", FALSE, 0, "");
++  TESTWRITE(BMP, 2, JPEG_MAX_DIMENSION, "bottom-up", FALSE, 0, "");
+   TESTWRITE(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "top-down", TRUE,
              -1, "Maximum supported image dimension is 65500 pixels");
    TESTWRITE(BMP, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "top-down", TRUE,
              -1, "Maximum supported image dimension is 65500 pixels");
 -  TESTWRITE(BMP, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "top-down", TRUE, 0,
 -            "");
-+  TESTWRITE(BMP, JPEG_MAX_DIMENSION, 1, "top-down", TRUE, 0, "");
-+  TESTWRITE(BMP, 1, JPEG_MAX_DIMENSION, "top-down", TRUE, 0, "");
++  TESTWRITE(BMP, JPEG_MAX_DIMENSION, 2, "top-down", TRUE, 0, "");
++  TESTWRITE(BMP, 2, JPEG_MAX_DIMENSION, "top-down", TRUE, 0, "");
  
    fprintf(stderr, "\n");
  
@@ -47,18 +123,26 @@
  
    TESTREAD(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0,
             "non-interlaced", FALSE, -2,
-@@ -674,8 +674,8 @@
+@@ -668,14 +676,14 @@
+   TESTREAD(GIF, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0,
+            "non-interlaced", FALSE, -2,
+            "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "non-interlaced",
+-           FALSE, 0, "");
++  TESTREAD(GIF, JPEG_MAX_DIMENSION, 2, 0, "non-interlaced", FALSE, 0, "");
++  TESTREAD(GIF, 2, JPEG_MAX_DIMENSION, 0, "non-interlaced", FALSE, 0, "");
+   TESTREAD(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "interlaced",
             TRUE, -2, "Maximum supported image dimension is 65500 pixels");
    TESTREAD(GIF, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "interlaced",
             TRUE, -2, "Maximum supported image dimension is 65500 pixels");
 -  TESTREAD(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "interlaced", TRUE,
 -           0, "");
-+  TESTREAD(GIF, JPEG_MAX_DIMENSION, 1, 0, "interlaced", TRUE, 0, "");
-+  TESTREAD(GIF, 1, JPEG_MAX_DIMENSION, 0, "interlaced", TRUE, 0, "");
++  TESTREAD(GIF, JPEG_MAX_DIMENSION, 2, 0, "interlaced", TRUE, 0, "");
++  TESTREAD(GIF, 2, JPEG_MAX_DIMENSION, 0, "interlaced", TRUE, 0, "");
  
    TESTREAD(GIF, JPEG_MAX_DIMENSION, 15268L, 1000000000, "non-interlaced",
             FALSE, -2,
-@@ -692,7 +692,7 @@
+@@ -692,26 +700,26 @@
  
    fprintf(stderr, "\n");
  
@@ -67,14 +151,20 @@
  
    TESTWRITE(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "non-interlaced",
              FALSE, -1, "Maximum supported image dimension is 65500 pixels");
-@@ -704,14 +704,14 @@
+   TESTWRITE(GIF, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "non-interlaced",
+             FALSE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTWRITE(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "non-interlaced",
+-            FALSE, 0, "");
++  TESTWRITE(GIF, JPEG_MAX_DIMENSION, 2, "non-interlaced", FALSE, 0, "");
++  TESTWRITE(GIF, 2, JPEG_MAX_DIMENSION, "non-interlaced", FALSE, 0, "");
+   TESTWRITE(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "interlaced",
              TRUE, -1, "Maximum supported image dimension is 65500 pixels");
    TESTWRITE(GIF, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "interlaced",
              TRUE, -1, "Maximum supported image dimension is 65500 pixels");
 -  TESTWRITE(GIF, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "interlaced", TRUE, 0,
 -            "");
-+  TESTWRITE(GIF, JPEG_MAX_DIMENSION, 1, "interlaced", TRUE, 0, "");
-+  TESTWRITE(GIF, 1, JPEG_MAX_DIMENSION, "interlaced", TRUE, 0, "");
++  TESTWRITE(GIF, JPEG_MAX_DIMENSION, 2, "interlaced", TRUE, 0, "");
++  TESTWRITE(GIF, 2, JPEG_MAX_DIMENSION, "interlaced", TRUE, 0, "");
  
    fprintf(stderr, "\n");
  
@@ -85,7 +175,18 @@
  
    TESTREAD(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "8-bit", 8, -1,
             "Maximum supported image dimension is 65500 pixels");
-@@ -736,7 +736,7 @@
+@@ -719,8 +727,8 @@
+            -1, "Maximum supported image dimension is 65500 pixels");
+   TESTREAD(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "16-bit", 16,
+            -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "16-bit", 16, 0,
+-           "");
++  TESTREAD(PPM, JPEG_MAX_DIMENSION, 2, 0, "16-bit", 16, 0, "");
++  TESTREAD(PPM, 2, JPEG_MAX_DIMENSION, 0, "16-bit", 16, 0, "");
+   TESTREAD(PPM, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "17-bit", 17,
+            -1, "Unsupported JPEG data precision 17");
+ 
+@@ -736,7 +744,7 @@
  
    fprintf(stderr, "\n");
  
@@ -94,7 +195,17 @@
  
    TESTWRITE(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "8-bit", 8,
              -1, "Maximum supported image dimension is 65500 pixels");
-@@ -752,14 +752,14 @@
+@@ -744,7 +752,8 @@
+             -1, "Maximum supported image dimension is 65500 pixels");
+   TESTWRITE(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "16-bit", 16,
+             -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTWRITE(PPM, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "16-bit", 16, 0, "");
++  TESTWRITE(PPM, JPEG_MAX_DIMENSION, 2, "16-bit", 16, 0, "");
++  TESTWRITE(PPM, 2, JPEG_MAX_DIMENSION, "16-bit", 16, 0, "");
+   TESTWRITE(PPM, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "17-bit", 17,
+             -1, "Unsupported JPEG data precision 17");
+ 
+@@ -752,20 +761,20 @@
  
    /***************************************************************************/
  
@@ -107,26 +218,20 @@
             FALSE, -1, "Maximum supported image dimension is 65500 pixels");
 -  TESTREAD(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE,
 -           0, "");
-+  TESTREAD(TGA, JPEG_MAX_DIMENSION, 1, 0, "bottom-up", FALSE, 0, "");
-+  TESTREAD(TGA, 1, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE, 0, "");
++  TESTREAD(TGA, JPEG_MAX_DIMENSION, 2, 0, "bottom-up", FALSE, 0, "");
++  TESTREAD(TGA, 2, JPEG_MAX_DIMENSION, 0, "bottom-up", FALSE, 0, "");
    TESTREAD(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, 0, "top-down",
             TRUE, -1, "Maximum supported image dimension is 65500 pixels");
    TESTREAD(TGA, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, 0, "top-down",
-@@ -769,19 +769,17 @@
+            TRUE, -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTREAD(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, 0, "top-down", TRUE,
+-           0, "");
++  TESTREAD(TGA, JPEG_MAX_DIMENSION, 2, 0, "top-down", TRUE, 0, "");
++  TESTREAD(TGA, 2, JPEG_MAX_DIMENSION, 0, "top-down", TRUE, 0, "");
  
    TESTREAD(TGA, JPEG_MAX_DIMENSION, 15268L, 1000000000, "bottom-up", FALSE, -1,
             "Maximum supported image dimension is 1000000000 pixels");
--  TESTREAD(TGA, JPEG_MAX_DIMENSION, 15267L, 1000000000, "bottom-up", FALSE, 0,
--           "");
-+  TESTREAD(TGA, JPEG_MAX_DIMENSION, 1, 1000000000, "bottom-up", FALSE, 0, "");
-   TESTREAD(TGA, 1527L, JPEG_MAX_DIMENSION, 100000000, "bottom-up", FALSE, -1,
-            "Maximum supported image dimension is 100000000 pixels");
--  TESTREAD(TGA, 1526L, JPEG_MAX_DIMENSION, 100000000, "bottom-up", FALSE, 0,
--           "");
-+  TESTREAD(TGA, 1, JPEG_MAX_DIMENSION, 100000000, "bottom-up", FALSE, 0, "");
-   TESTREAD(TGA, 1000L, 1001L, 1000000, "top-down", TRUE, -1,
-            "Maximum supported image dimension is 1000000 pixels");
-   TESTREAD(TGA, 1000L, 1000L, 1000000, "top-down", TRUE, 0, "");
+@@ -781,13 +790,14 @@
  
    fprintf(stderr, "\n");
  
@@ -135,3 +240,11 @@
  
    TESTWRITE(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION + 1, "top-down", 0,
              -1, "Maximum supported image dimension is 65500 pixels");
+   TESTWRITE(TGA, JPEG_MAX_DIMENSION + 1, JPEG_MAX_DIMENSION, "top-down", 0,
+             -1, "Maximum supported image dimension is 65500 pixels");
+-  TESTWRITE(TGA, JPEG_MAX_DIMENSION, JPEG_MAX_DIMENSION, "top-down", 0, 0, "");
++  TESTWRITE(TGA, JPEG_MAX_DIMENSION, 2, "top-down", 0, 0, "");
++  TESTWRITE(TGA, 2, JPEG_MAX_DIMENSION, "top-down", 0, 0, "");
+ 
+   fprintf(stderr, "\n");
+ 
