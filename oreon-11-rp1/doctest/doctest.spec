@@ -11,7 +11,7 @@
 
 Name: doctest
 Version: 2.5.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Feature-rich header-only C++ testing framework
 # logo is CC-BY-4.0
 # doctest/doctest.h and doctest/parts/doctest_fwd.h include BSL-1.0
@@ -23,7 +23,6 @@ Source0: %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc-c++
 BuildRequires: cmake
-BuildRequires: git
 
 %description
 A fast (both in compile times and runtime) C++ testing framework, with the
