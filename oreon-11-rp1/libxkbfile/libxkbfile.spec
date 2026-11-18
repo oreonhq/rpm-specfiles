@@ -9,7 +9,7 @@
 
 Name: libxkbfile
 Version: 1.1.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: XKB file library
 License: MIT
 URL: https://www.x.org
@@ -59,6 +59,8 @@ rm -f %{buildroot}%{_libdir}/*.la
 
 %files devel
 %{_includedir}/X11/extensions/XKB*.h
+%{_includedir}/X11/extensions/XKM.h
+%{_includedir}/X11/extensions/XKMformat.h
 %{_libdir}/libxkbfile.so
 %{_libdir}/pkgconfig/xkbfile.pc
 
