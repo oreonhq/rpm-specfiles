@@ -8,7 +8,7 @@
 
 Name: python3-sphinx_rtd_theme
 Version: 3.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Read the Docs theme for Sphinx
 License: MIT
 URL: https://pypi.org/project/sphinx-rtd-theme/
@@ -21,6 +21,7 @@ BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-setuptools
 BuildRequires: python3-sphinx
+BuildRequires: python3-sphinxcontrib-serializinghtml
 BuildRequires: python3-docutils
 BuildRequires: python3-sphinxcontrib-jquery
 Requires: python3
