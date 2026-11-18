@@ -8,7 +8,7 @@
 
 Name: python3-breathe
 Version: 5.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Sphinx Doxygen renderer
 License: BSD License
 URL: https://pypi.org/project/breathe/
@@ -21,7 +21,10 @@ BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-flit-core
 BuildRequires: python3-sphinx
+BuildRequires: python3-sphinxcontrib-serializinghtml
 BuildRequires: doxygen
+BuildRequires: spdlog
+BuildRequires: xapian-core
 Requires: python3
 Requires: python3-sphinx
 Requires: doxygen
