@@ -11,7 +11,7 @@
 
 Name:           shared-mime-info
 Version:        2.5.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Shared MIME information database
 License:        GPL-2.0-or-later
 URL:            https://freedesktop.org/wiki/Software/shared-mime-info/
@@ -73,6 +73,8 @@ fi
 %{_datadir}/mime/
 %{_datadir}/pkgconfig/shared-mime-info.pc
 %{_mandir}/man1/update-mime-database.1*
+%{_datadir}/gettext/its/shared-mime-info.its
+%{_datadir}/gettext/its/shared-mime-info.loc
 
 %changelog
 %autochangelog
