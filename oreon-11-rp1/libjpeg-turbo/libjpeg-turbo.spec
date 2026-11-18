@@ -9,7 +9,7 @@
 
 Name: libjpeg-turbo
 Version: 3.1.4.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: SIMD-accelerated JPEG image codec
 License: IJG AND BSD-3-Clause AND Zlib
 URL: https://github.com/libjpeg-turbo/libjpeg-turbo
@@ -57,7 +57,7 @@ Command line tools for JPEG images.
 %cmake_install
 
 %check
-%ctest
+%ctest --parallel 1
 
 %files
 %license LICENSE.md README.ijg
