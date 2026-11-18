@@ -12,7 +12,7 @@
 
 Name: docbook-dtds
 Version: 1.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: DocBook document type definitions
 License: OASIS
 URL: https://www.oasis-open.org/docbook/
@@ -74,18 +74,18 @@ test -f %{buildroot}%{_datadir}/xml/docbook/xml-dtd-4.1.2/docbookx.dtd
 %post
 %{_bindir}/install-catalog --add %{_sysconfdir}/sgml/sgml-docbook-3.1.cat \
   %{_datadir}/sgml/docbook/sgml-dtd-3.1/docbook.cat >/dev/null 2>&1 || :
-if ! %{_bindir}/xmlcatalog %{_sysconfdir}/sgml/docbook/xmlcatalog \
-    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml | grep -q docbook-dtds.xml; then
-  %{_bindir}/xmlcatalog --noout --add nextCatalog "" \
-    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
-    %{_sysconfdir}/sgml/docbook/xmlcatalog
-fi
-if ! %{_bindir}/xmlcatalog %{_sysconfdir}/xml/catalog \
-    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml | grep -q docbook-dtds.xml; then
-  %{_bindir}/xmlcatalog --noout --add nextCatalog "" \
-    file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
-    %{_sysconfdir}/xml/catalog
-fi
+%{_bindir}/xmlcatalog --noout --del \
+  file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
+  %{_sysconfdir}/sgml/docbook/xmlcatalog >/dev/null 2>&1 || :
+%{_bindir}/xmlcatalog --noout --add nextCatalog "" \
+  file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
+  %{_sysconfdir}/sgml/docbook/xmlcatalog
+%{_bindir}/xmlcatalog --noout --del \
+  file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
+  %{_sysconfdir}/xml/catalog >/dev/null 2>&1 || :
+%{_bindir}/xmlcatalog --noout --add nextCatalog "" \
+  file://%{_sysconfdir}/sgml/docbook/docbook-dtds.xml \
+  %{_sysconfdir}/xml/catalog
 
 %preun
 if [ "$1" -eq 0 ]; then
