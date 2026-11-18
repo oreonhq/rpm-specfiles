@@ -12,7 +12,7 @@
 
 Name:           wayland
 Version:        1.26.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Wayland Compositor Infrastructure
 
 License:        MIT
@@ -110,7 +110,12 @@ Wayland server library
 %autosetup -p1
 
 %conf
-%meson %{!?with_book:-Dbook=false}
+%meson %{!?with_book:-Dbook=false} \
+%if %{with bootstrap}
+  -Ddocumentation=false
+%else
+  -Ddocumentation=true
+%endif
 
 %build
 %meson_build
