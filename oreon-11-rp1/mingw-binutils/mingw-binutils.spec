@@ -13,7 +13,7 @@
 
 Name:           mingw-binutils
 Version:        2.46.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Cross-compiled version of binutils for Win32 and Win64 environments
 
 License:        GPL-3.0-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND BSD-3-Clause AND GFDL-1.3-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -47,10 +47,10 @@ BuildRequires:  bison
 BuildRequires:  texinfo
 BuildRequires:  gnupg2
 BuildRequires:  zlib-devel
-BuildRequires:  mingw-filesystem-base >= 152-2
-BuildRequires:  mingw32-filesystem >= 152-2
-BuildRequires:  mingw64-filesystem >= 152-2
-BuildRequires:  ucrt64-filesystem >= 152-2
+BuildRequires:  mingw-filesystem-base >= 152-3
+BuildRequires:  mingw32-filesystem >= 152-3
+BuildRequires:  mingw64-filesystem >= 152-3
+BuildRequires:  ucrt64-filesystem >= 152-3
 %if %{run_testsuite}
 BuildRequires:  dejagnu
 %endif
