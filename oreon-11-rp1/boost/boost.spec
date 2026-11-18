@@ -33,7 +33,7 @@ Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
 Version: 1.90.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 %global version_enc %{lua:
@@ -566,7 +566,7 @@ echo ============================= build serial ==================
 
 echo ============================= build Boost.Build ==================
 (cd tools/build
- ./bootstrap.sh --with-toolset=%{toolchain} --prefix=$RPM_BUILD_ROOT%{_prefix})
+ ./bootstrap.sh %{toolchain})
 
 %check
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
