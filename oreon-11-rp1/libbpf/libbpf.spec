@@ -53,8 +53,8 @@ Static library for developing applications that use libbpf.
 %make_install -C src %{make_flags}
 
 %check
-test -s %{_vpath_builddir}/libbpf.so
-readelf -d %{_vpath_builddir}/libbpf.so | grep -q 'SONAME.*libbpf.so.1'
+test -s src/libbpf.so
+readelf -d src/libbpf.so | grep -q 'SONAME.*libbpf.so.1'
 
 %ldconfig_scriptlets
 
