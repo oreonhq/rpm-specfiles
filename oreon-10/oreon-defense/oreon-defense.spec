@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 Name:           oreon-defense
-Version:        1.0.17
+Version:        1.0.18
 Release:        1%{?dist}
 Summary:        Oreon security system with real-time protection
 License:        GPL-3.0-or-later
