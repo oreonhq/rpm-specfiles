@@ -67,7 +67,7 @@ configuration files from applications that use %{name}.
 
 
 %check
-%cmake_build --target check
+%ctest
 
 
 %files
