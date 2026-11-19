@@ -44,7 +44,7 @@ automake --add-missing --copy
 autoconf
 
 %build
-%configure --enable-shared --disable-static
+%configure --enable-shared --disable-static --docdir=%{_docdir}/%{name}
 %make_build
 
 %install
@@ -59,6 +59,8 @@ make check
 %doc AUTHORS ChangeLog NEWS README
 %{_libdir}/libcunit.so.*
 %{_datadir}/CUnit/
+%{_docdir}/%{name}/
+%{_mandir}/man3/CUnit.3*
 
 %files devel
 %{_libdir}/libcunit.so
