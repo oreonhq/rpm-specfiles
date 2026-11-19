@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash bc5ca2e99bf8bc6145054e8a487e716bc45275126980e46d3da638329d5e3072
+%global source0_hash d1008fb78dcae1323ddab664bcb352a61f022b1b131bd8018548e021d975ec7a
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -9,18 +9,16 @@
 
 Name: less
 Version: 710
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A text file browser similar to more
 License: GPL-3.0-or-later OR BSD-2-Clause
 URL: https://www.greenwoodsoftware.com/less/
-Source0: https://github.com/gwsw/less/archive/refs/tags/v%{version}.tar.gz#/less-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/less/less-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires: ncurses-devel
-BuildRequires: autoconf
-BuildRequires: automake
 
 %description
 The less utility is a text file browser that resembles more.
@@ -30,7 +28,6 @@ The less utility is a text file browser that resembles more.
 %autosetup -n less-%{version}
 
 %build
-./autogen.sh
 %configure
 %make_build
 
