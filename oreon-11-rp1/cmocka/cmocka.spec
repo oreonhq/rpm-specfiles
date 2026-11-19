@@ -5,7 +5,6 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global _lto_cflags %{nil}
 
 Name: cmocka
 Version: 2.0.2
@@ -49,7 +48,7 @@ rm -f %{buildroot}%{_libdir}/libcmocka.a
 %ctest
 
 %files -f %{_builddir}/%{name}.files
-%license COPYING
+%license LICENSE
 
 %files devel -f %{_builddir}/%{name}-devel.files
 
