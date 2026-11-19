@@ -19,11 +19,14 @@ BuildRequires: gcc
 BuildRequires: make
 BuildRequires: rpm-devel
 
+Requires: gcc-plugin-annobin
+Provides: annobin-plugin-gcc = %{version}-%{release}
 Provides: annobin-annocheck = %{version}-%{release}
 Provides: /usr/bin/annocheck
 
 %description
 Annobin records and checks compiler hardening information in ELF binaries.
+The GCC plugin is supplied by the matching GCC build.
 
 %prep
 %oreon_sha256
