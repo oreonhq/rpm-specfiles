@@ -6,7 +6,6 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global _lto_cflags %{nil}
 
 %global origname SoftHSMv2
 
@@ -79,6 +78,7 @@ install -Dpm0644 %{SOURCE1} %{buildroot}%{_sysusersdir}/%{name}.conf
 
 rm -f %{buildroot}%{_sysconfdir}/softhsm2.conf.sample
 rm -f %{buildroot}%{_libdir}/pkcs11/*.la
+rm -f %{buildroot}%{_libdir}/pkcs11/*.a
 mkdir -p %{buildroot}%{_includedir}/softhsm
 cp -p src/lib/*.h %{buildroot}%{_includedir}/softhsm
 mkdir -p %{buildroot}%{_sharedstatedir}/softhsm/tokens
