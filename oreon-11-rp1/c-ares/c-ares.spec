@@ -18,6 +18,8 @@ Source0: https://github.com/c-ares/c-ares/releases/download/v%{version}/c-ares-%
 BuildRequires: oreon-rpm-macros
 BuildRequires: cmake
 BuildRequires: gcc
+BuildRequires: gcc-c++
+BuildRequires: gtest-devel
 BuildRequires: make
 
 %description
