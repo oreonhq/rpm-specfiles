@@ -80,7 +80,6 @@ BuildRequires: perl-generators
 BuildRequires: perl-interpreter
 BuildRequires: unixODBC-devel
 BuildRequires: cracklib-devel
-BuildRequires: systemd
 BuildRequires: systemd-rpm-macros
 %if %{with argon2}
 BuildRequires: libsodium-devel
