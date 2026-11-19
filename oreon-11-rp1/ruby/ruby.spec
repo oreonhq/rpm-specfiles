@@ -26,10 +26,11 @@
 Name:           ruby
 Version:        4.0.9
 Release:        1%{?dist}
+%global ruby_version %{version}
 Summary:        Ruby programming language interpreter
 License:        (Ruby OR BSD-2-Clause) AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Unicode-3.0 AND CC0-1.0 AND Zlib AND ISC
 URL:            https://www.ruby-lang.org/
-Source0:        https://cache.ruby-lang.org/pub/ruby/%{major_minor_version}/ruby-%{version}.tar.xz
+Source0:        https://cache.ruby-lang.org/pub/ruby/%{major_minor_version}/ruby-%{ruby_version}.tar.xz
 Source1:        operating_system.rb
 Source2:        macros.ruby
 Source3:        macros.rubygems
@@ -773,7 +774,7 @@ in RBS format, a standard type description format for Ruby 3.0.
 
 %prep
 %oreon_sha256
-%autosetup -n ruby-%{version}
+%autosetup -n ruby-%{ruby_version}
 
 %build
 %configure \
