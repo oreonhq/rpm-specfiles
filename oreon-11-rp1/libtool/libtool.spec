@@ -82,20 +82,24 @@ Patch:        libtool-nodocs.patch
 # Libtool must be rebuilt whenever a new upstream gcc is built
 # number changes need libtool rebuilding.
 Requires: gcc(major) = %{gcc_major}
-Requires: autoconf, automake, sed, tar, findutils
+Requires: autoconf
+Requires: automake
+Requires: sed
+Requires: tar
+Requires: findutils
 
 %if ! 0%{?_module_build}
 BuildRequires: texinfo
 %endif
-BuildRequires: autoconf, automake
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: help2man
-
-# make sure we can configure all supported langs
-BuildRequires: libstdc++-devel, gcc-gfortran
-
-BuildRequires: gcc, gcc-c++
+BuildRequires: libstdc++-devel
+BuildRequires: gcc-gfortran >= 16.2.0-13
+BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: make
-BuildRequires:  oreon-rpm-macros
+BuildRequires: oreon-rpm-macros
 
 
 %description
