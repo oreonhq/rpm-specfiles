@@ -104,7 +104,7 @@ rm -f $RPM_BUILD_ROOT/%{_infodir}/dir
 
 %check
 export LD_LIBRARY_PATH=`pwd`/src/.libs/:`pwd`/compat/.libs/
-make check
+make -j1 check
 
 %ldconfig_scriptlets libs
 
