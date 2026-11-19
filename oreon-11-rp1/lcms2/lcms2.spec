@@ -13,7 +13,7 @@ Release:        1%{?dist}
 Summary:        Color Management Engine
 License:        MIT
 URL:            https://www.littlecms.com/
-Source0:        https://github.com/mm2/Little-CMS/releases/download/lcms2.%{version}/lcms2-%{version}.tar.gz
+Source0:        https://github.com/mm2/Little-CMS/releases/download/lcms%{version}/lcms2-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libjpeg-turbo-devel
