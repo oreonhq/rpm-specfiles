@@ -56,12 +56,7 @@ This package contains development files for %{name}.
     %{?__debug_package:%{__debug_install_post}} \
     %{__arch_install_post} \
     %{__os_install_post} \
-    mkdir -p %{buildroot}%{_libdir}/fipscheck \
-    %{buildroot}%{_bindir}/fipshmac -d %{buildroot}%{_libdir}/fipscheck \
-        %{buildroot}%{_bindir}/fipscheck \
-        %{buildroot}%{_libdir}/libfipscheck.so.1.2.1 \
-    ln -sf libfipscheck.so.1.2.1.hmac \
-        %{buildroot}%{_libdir}/fipscheck/libfipscheck.so.1.hmac \
+    mkdir -p %{buildroot}%{_libdir}/fipscheck && %{buildroot}%{_bindir}/fipshmac -d %{buildroot}%{_libdir}/fipscheck %{buildroot}%{_bindir}/fipscheck %{buildroot}%{_libdir}/libfipscheck.so.1.2.1 && ln -sf libfipscheck.so.1.2.1.hmac %{buildroot}%{_libdir}/fipscheck/libfipscheck.so.1.hmac \
 %{nil}
 
 %install
