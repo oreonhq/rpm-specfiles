@@ -19,7 +19,7 @@ BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires: ncurses-devel
-BuildRequires: perl
+BuildRequires: perl-interpreter >= 4:5.44.0-4
 
 %description
 The less utility is a text file browser that resembles more.
