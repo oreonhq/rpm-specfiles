@@ -36,12 +36,15 @@ Headers and libraries for %{name}.
 %autosetup -n lmdb-LMDB_%{version} -p1
 
 %build
-%make_build -C libraries/liblmdb CC="%{__cc}" CFLAGS="%{optflags}"
+%make_build -C libraries/liblmdb CC="%{__cc}" CFLAGS="%{optflags}" \
+    LDFLAGS="%{build_ldflags} -Wl,-soname,liblmdb.so.0"
 
 %install
 %make_install -C libraries/liblmdb prefix=%{_prefix} libdir=%{_libdir} mandir=%{_mandir}
-# drop static
 rm -f %{buildroot}%{_libdir}/liblmdb.a
+mv %{buildroot}%{_libdir}/liblmdb.so %{buildroot}%{_libdir}/liblmdb.so.0.0.0
+ln -s liblmdb.so.0.0.0 %{buildroot}%{_libdir}/liblmdb.so.0
+ln -s liblmdb.so.0 %{buildroot}%{_libdir}/liblmdb.so
 
 %check
 %make_build -C libraries/liblmdb test
@@ -53,7 +56,7 @@ rm -f %{buildroot}%{_libdir}/liblmdb.a
 %{_bindir}/mdb_dump
 %{_bindir}/mdb_load
 %{_bindir}/mdb_stat
-%{_libdir}/liblmdb.so.*
+%{_libdir}/liblmdb.so.0*
 %{_mandir}/man1/mdb_*.1*
 
 %files devel
