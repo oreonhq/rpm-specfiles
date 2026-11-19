@@ -33,7 +33,7 @@ Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
 Version: 1.90.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 %global version_enc %{lua:
@@ -550,7 +550,7 @@ EOF
 ./bootstrap.sh --with-toolset=%{toolchain} --with-icu --prefix=$RPM_BUILD_ROOT%{_prefix}
 
 echo ============================= build serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -572,7 +572,7 @@ echo ============================= build Boost.Build ==================
 %check
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -591,7 +591,7 @@ export RPM_LD_FLAGS
 cd %{_builddir}/%{toplev_dirname}
 
 echo ============================= install serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
