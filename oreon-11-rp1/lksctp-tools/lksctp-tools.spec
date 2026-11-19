@@ -72,9 +72,9 @@ rm -f doc/rfc2960.txt doc/states.txt
 find $RPM_BUILD_ROOT -type f -name "*.la" -delete
 
 %check
-nm -D --defined-only %{buildroot}%{_libdir}/libsctp.so.1 | grep -q ' T sctp_bindx$'
-nm -D --defined-only %{buildroot}%{_libdir}/libsctp.so.1 | grep -q ' T sctp_sendmsg$'
-nm -D --defined-only %{buildroot}%{_libdir}/libsctp.so.1 | grep -q ' T sctp_peeloff$'
+nm -D --defined-only %{buildroot}%{_libdir}/libsctp.so.1.* | grep -E -q ' T sctp_bindx($|@)'
+nm -D --defined-only %{buildroot}%{_libdir}/libsctp.so.1.* | grep -E -q ' T sctp_sendmsg($|@)'
+nm -D --defined-only %{buildroot}%{_libdir}/libsctp.so.1.* | grep -E -q ' T sctp_peeloff($|@)'
 test -x %{buildroot}%{_bindir}/checksctp
 
 %files
