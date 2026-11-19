@@ -1,0 +1,11 @@
+--- a/annocheck/notes.c
++++ b/annocheck/notes.c
+@@ -39,7 +39,7 @@
+ static local_note *  saved_notes = NULL;
+ static uint          num_saved_notes = 0;
+ static uint          num_allocated_notes = 0;
+-static bool          string_notes_seen = false;
++static bool          string_notes_seen __attribute__((unused)) = false;
+ 
+ static bool
+ notes_start_file (annocheck_data * data)
