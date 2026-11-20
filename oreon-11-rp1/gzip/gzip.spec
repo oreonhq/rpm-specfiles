@@ -15,6 +15,7 @@ Release:        1%{?dist}
 License: GPL-3.0-or-later AND GFDL-1.3-only
 Source0:        https://mirror.cs.odu.edu/gnu/gzip/gzip-%{version}.tar.xz
 Source1:        fdl-1.3.txt
+Patch0:         gzip-1.15-aarch64-head.patch
 
 # downstream solution for coloured z*grep (#1034839)
 Source100: colorzgrep.csh
@@ -50,6 +51,7 @@ very commonly used data compression program.
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 
 %setup -q
+%patch -P0 -p1
 
 cp %{SOURCE1} .
 autoreconf
