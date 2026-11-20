@@ -1846,7 +1846,9 @@ CheckPython freethreading
 
 %files -n %{pkgname}-tkinter
 %{pylibdir}/tkinter
+%if %{with tk}
 %{dynload_dir}/_tkinter.%{SOABI_optimized}.so
+%endif
 %{pylibdir}/turtle.py
 %{pylibdir}/__pycache__/turtle*%{bytecode_suffixes}
 %dir %{pylibdir}/turtledemo
@@ -1906,7 +1908,9 @@ CheckPython freethreading
 # Analog of the libs, test, and tkinter extension modules:
 %extension_modules %{dynload_dir} %{SOABI_debug}
 %extension_modules_test %{dynload_dir} %{SOABI_debug}
+%if %{with tk}
 %{dynload_dir}/_tkinter.%{SOABI_debug}.so
+%endif
 
 # Analog of the -devel subpackage's files:
 %{pylibdir}/config-%{LDVERSION_debug}-%{platform_triplet}/
@@ -2003,7 +2007,9 @@ CheckPython freethreading
 
 %files -n python%{pybasever}-freethreading-tkinter
 %{pylibdir_freethreading}/tkinter/
+%if %{with tk}
 %{dynload_dir_freethreading}/_tkinter.%{SOABI_freethreading}.so
+%endif
 %{pylibdir_freethreading}/turtle.py
 %{pylibdir_freethreading}/__pycache__/turtle*%{bytecode_suffixes}
 %dir %{pylibdir_freethreading}/turtledemo/
@@ -2036,7 +2042,9 @@ CheckPython freethreading
 # Analog of the libs, test, and tkinter extension modules:
 %extension_modules %{dynload_dir_freethreading} %{SOABI_freethreading_debug}
 %extension_modules_test %{dynload_dir_freethreading} %{SOABI_freethreading_debug}
+%if %{with tk}
 %{dynload_dir_freethreading}/_tkinter.%{SOABI_freethreading_debug}.so
+%endif
 
 # Analog of the -devel subpackage's files:
 %{pylibdir_freethreading}/config-%{LDVERSION_freethreading_debug}-%{platform_triplet}/
