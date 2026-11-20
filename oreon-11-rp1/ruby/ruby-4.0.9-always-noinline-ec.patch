@@ -1,0 +1,75 @@
+--- a/thread_pthread.h
++++ b/thread_pthread.h
+@@ -17,10 +17,7 @@
+ #define RB_NATIVETHREAD_LOCK_INIT PTHREAD_MUTEX_INITIALIZER
+ #define RB_NATIVETHREAD_COND_INIT PTHREAD_COND_INITIALIZER
+ 
+-// TLS can not be accessed across .so on arm64 and perhaps ppc64le too.
+-#if defined(__arm64__) || defined(__aarch64__) || defined(__powerpc64__)
+-# define RB_THREAD_CURRENT_EC_NOINLINE
+-#endif
++#define RB_THREAD_CURRENT_EC_NOINLINE
+ 
+ // this data should be protected by timer_th.waiting_lock
+ struct rb_thread_sched_waiting {
+@@ -148,15 +147,11 @@
+ #ifdef RB_THREAD_LOCAL_SPECIFIER
+   NOINLINE(void rb_current_ec_set(struct rb_execution_context_struct *));
+ 
+-  # ifdef RB_THREAD_CURRENT_EC_NOINLINE
+-    NOINLINE(struct rb_execution_context_struct *rb_current_ec(void));
+-  # else
+-    RUBY_EXTERN RB_THREAD_LOCAL_SPECIFIER struct rb_execution_context_struct *ruby_current_ec;
+-
+-    // for RUBY_DEBUG_LOG()
+-    RUBY_EXTERN RB_THREAD_LOCAL_SPECIFIER rb_atomic_t ruby_nt_serial;
+-    #define RUBY_NT_SERIAL 1
+-  # endif
++  NOINLINE(struct rb_execution_context_struct *rb_current_ec(void));
++
++  // for RUBY_DEBUG_LOG()
++  RUBY_EXTERN RB_THREAD_LOCAL_SPECIFIER rb_atomic_t ruby_nt_serial;
++  #define RUBY_NT_SERIAL 1
+ #else
+ typedef pthread_key_t native_tls_key_t;
+ 
+--- a/vm_core.h
++++ b/vm_core.h
+@@ -2101,11 +2101,7 @@
+ rb_current_execution_context(bool expect_ec)
+ {
+ #ifdef RB_THREAD_LOCAL_SPECIFIER
+-  #ifdef RB_THREAD_CURRENT_EC_NOINLINE
+     rb_execution_context_t * volatile ec = rb_current_ec();
+-  #else
+-    rb_execution_context_t * volatile ec = ruby_current_ec;
+-  #endif
+ 
+     /* On the shared objects, `__tls_get_addr()` is used to access the TLS
+      * and the address of the `ruby_current_ec` can be stored on a function
+--- a/vm.c
++++ b/vm.c
+@@ -698,14 +698,12 @@
+ }
+ 
+ 
+-#ifdef RB_THREAD_CURRENT_EC_NOINLINE
+ rb_execution_context_t *
+ rb_current_ec(void)
+ {
+     return ruby_current_ec;
+ }
+ 
+-#endif
+ #else
+ native_tls_key_t ruby_current_ec_key;
+ 
+--- a/thread_none.h
++++ b/thread_none.h
+@@ -17,5 +17,6 @@
+ 
+ RUBY_EXTERN struct rb_execution_context_struct *ruby_current_ec;
+ NOINLINE(struct rb_execution_context_struct *rb_current_ec_noinline(void)); // for assertions
++struct rb_execution_context_struct *rb_current_ec(void);
+ 
+ #endif /* RUBY_THREAD_NONE_H */

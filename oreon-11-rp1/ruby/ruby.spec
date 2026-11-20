@@ -2,6 +2,11 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash a8057adb39f51ad6dc3106237504c93dd792bb515837b4fe7817ae21ed7e51f4
+%global source10_hash 206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
+%global source11_hash c64ff16d9788119805cbc6a3f4b6d87cc22417c2d25976a3330de136896b5469
+%global source12_hash bf538ca6d367ff5b0d85a87fdb5c0c6038f2cd1308a0eeba07476caa02d22f35
+%global source13_hash ea5c7ff3054a6098ca6039aacef80aec69d5a8a3ef80be8fc88337359b672a30
+%global source14_hash e4160030309b7e3e9d9863dfe720a35dfcc577162f5402cd68fc8c5258a0ffd6
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -25,7 +30,7 @@
 
 Name:           ruby
 Version:        4.0.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 %global ruby_version %{version}
 Summary:        Ruby programming language interpreter
 License:        (Ruby OR BSD-2-Clause) AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Unicode-3.0 AND CC0-1.0 AND Zlib AND ISC
@@ -38,6 +43,12 @@ Source4:        rubygems.attr
 Source5:        rubygemsdeps.rb
 Source6:        rubygems.prov
 Source7:        rubygems.req
+Source10:       https://rubygems.org/downloads/rspec-3.13.2.gem
+Source11:       https://rubygems.org/downloads/rspec-core-3.13.7.gem
+Source12:       https://rubygems.org/downloads/rspec-expectations-3.13.6.gem
+Source13:       https://rubygems.org/downloads/rspec-mocks-3.13.9.gem
+Source14:       https://rubygems.org/downloads/rspec-support-3.13.8.gem
+Patch0:         ruby-4.0.9-always-noinline-ec.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -774,7 +785,12 @@ in RBS format, a standard type description format for Ruby 3.0.
 
 %prep
 %oreon_sha256
-%autosetup -n ruby-%{ruby_version}
+echo "%{source10_hash}  %{SOURCE10}" | sha256sum -c -
+echo "%{source11_hash}  %{SOURCE11}" | sha256sum -c -
+echo "%{source12_hash}  %{SOURCE12}" | sha256sum -c -
+echo "%{source13_hash}  %{SOURCE13}" | sha256sum -c -
+echo "%{source14_hash}  %{SOURCE14}" | sha256sum -c -
+%autosetup -n ruby-%{ruby_version} -p1
 
 %build
 %configure \
@@ -832,7 +848,10 @@ done
 
 %check
 export LANG=C.UTF-8
-make check
+./miniruby -I./lib -I. -I.ext/common ./tool/runruby.rb --extout=.ext -- --disable-gems -C . \
+  bin/gem install --no-document --install-dir .bundle --local \
+  %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE14}
+make check PREPARE_SYNTAX_SUGGEST=
 
 %ldconfig_scriptlets libs
 
