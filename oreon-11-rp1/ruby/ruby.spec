@@ -48,6 +48,7 @@ Source11:       https://rubygems.org/downloads/rspec-core-3.13.7.gem
 Source12:       https://rubygems.org/downloads/rspec-expectations-3.13.6.gem
 Source13:       https://rubygems.org/downloads/rspec-mocks-3.13.9.gem
 Source14:       https://rubygems.org/downloads/rspec-support-3.13.8.gem
+Source15:       https://rubygems.org/downloads/diff-lcs-1.6.2.gem
 Patch0:         ruby-4.0.9-always-noinline-ec.patch
 
 BuildRequires:  gcc
@@ -850,7 +851,7 @@ done
 export LANG=C.UTF-8
 ./miniruby -I./lib -I. -I.ext/common ./tool/runruby.rb --extout=.ext -- --disable-gems -C . \
   bin/gem install --no-document --install-dir .bundle --local \
-  %{SOURCE10} %{SOURCE11} %{SOURCE12} %{SOURCE13} %{SOURCE14}
+  %{SOURCE15} %{SOURCE14} %{SOURCE13} %{SOURCE12} %{SOURCE11} %{SOURCE10}
 make check PREPARE_SYNTAX_SUGGEST=
 
 %ldconfig_scriptlets libs
