@@ -209,10 +209,8 @@ popd
 %build
 
 %set_build_flags
-# enable experimental support for LDAP over UDP (LDAP_CONNECTIONLESS)
-export CFLAGS="${CFLAGS} ${LDFLAGS} -Wl,--as-needed -Wl,-z,now -DLDAP_CONNECTIONLESS"
-# disable legacy hash algorithm
-export CFLAGS="${CFLAGS} -DOPENSSL_NO_MD2"
+export CPPFLAGS="${CPPFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2"
+export CFLAGS="${CFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2 -Wl,--as-needed -Wl,-z,now"
 
 pushd openldap-%{version}
 %configure \
