@@ -17,6 +17,7 @@ License: GPL-3.0-or-later
 URL: http://www.gnu.org/software/gdbm/
 
 Source0:        https://mirror.cs.odu.edu/gnu/gdbm/gdbm-%{version}.tar.gz
+Patch0:         gdbm-1.26-lockwait-ret-timing.patch
 
 BuildRequires: gcc
 BuildRequires: libtool
@@ -67,6 +68,7 @@ gdbm database library.  You'll also need to install the gdbm package.
 %oreon_sha256
 
 %setup -q
+%patch -P0 -p1
 
 %build
 
