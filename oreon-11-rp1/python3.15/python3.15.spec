@@ -310,6 +310,7 @@ BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: /usr/bin/dtrace
 BuildRequires: gdb
+BuildRequires: source-highlight
 
 %if %{with tests}
 BuildRequires: gcc-c++
