@@ -45,11 +45,11 @@ The less utility is a text file browser that resembles more.
 %license COPYING LICENSE
 %doc NEWS README
 %{_bindir}/less
-%{_bindir}/lessecho
-%{_bindir}/lesskey
+%{_libexecdir}/lessecho
+%{_libexecdir}/less-osc8-open
 %{_mandir}/man1/less.1*
 %{_mandir}/man1/lessecho.1*
-%{_mandir}/man1/lesskey.1*
+%{_mandir}/man5/lesskey.5*
 
 %changelog
 %autochangelog
