@@ -9,7 +9,7 @@
 
 Name: less
 Version: 710
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A text file browser similar to more
 License: GPL-3.0-or-later OR BSD-2-Clause
 URL: https://www.greenwoodsoftware.com/less/
@@ -17,8 +17,11 @@ Source0: https://ftp.gnu.org/gnu/less/less-%{version}.tar.gz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
+BuildRequires: glibc-gconv-extra
+BuildRequires: glibc-langpack-en
 BuildRequires: make
 BuildRequires: ncurses-devel
+BuildRequires: pcre2-devel
 BuildRequires: perl-interpreter >= 4:5.44.0-4
 
 %description
@@ -29,7 +32,7 @@ The less utility is a text file browser that resembles more.
 %autosetup -n less-%{version}
 
 %build
-%configure
+%configure --with-regex=pcre2
 %make_build
 
 %install
