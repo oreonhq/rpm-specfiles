@@ -38,7 +38,7 @@ BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  libtool
 BuildRequires:  libev-devel
-BuildRequires:  gnutls-devel >= 3.7.5
+BuildRequires:  gnutls-devel >= 3.8.13-4
 BuildRequires:  openssl-devel >= 3.5.0
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  python3-sphinx
