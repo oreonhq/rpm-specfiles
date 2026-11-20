@@ -853,7 +853,7 @@ export GEM_HOME="$PWD/.bundle"
 export GEM_PATH="$GEM_HOME"
 for gem in %{SOURCE15} %{SOURCE14} %{SOURCE13} %{SOURCE12} %{SOURCE11} %{SOURCE10}; do
   ./miniruby -I./lib -I. -I.ext/common ./tool/runruby.rb --extout=.ext -- --disable-gems -C . \
-    bin/gem install --no-document --install-dir .bundle --local "$gem"
+    bin/gem install --no-document --ignore-dependencies --install-dir .bundle --local "$gem"
 done
 make check PREPARE_SYNTAX_SUGGEST=
 
