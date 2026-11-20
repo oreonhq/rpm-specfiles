@@ -309,10 +309,10 @@ BuildRequires: tk-devel
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: /usr/bin/dtrace
+BuildRequires: gdb
 
 %if %{with tests}
 BuildRequires: gcc-c++
-BuildRequires: gdb
 BuildRequires: glibc-all-langpacks
 BuildRequires: tzdata
 %endif
