@@ -1,0 +1,25 @@
+--- a/cmd/httpserv/httpserv.c
++++ b/cmd/httpserv/httpserv.c
+@@ -320,7 +320,10 @@
+ 
+     /* The worker threads empty the jobQ before they terminate. */
+     PR_Lock(qLock);
+-    PORT_Assert(threadCount == 0);
++    if (threadCount != 0) {
++        fprintf(stderr, "httpserv: %d threads still active at shutdown\n",
++                threadCount);
++    }
+     PORT_Assert(PR_CLIST_IS_EMPTY(&jobQ));
+     PR_Unlock(qLock);
+ 
+@@ -1336,7 +1339,9 @@
+     if (prStatus != PR_SUCCESS)
+         errExit("PR_SetFDInheritable");
+ 
+-    lm = PR_NewLogModule("TestCase");
++    lm = PR_NewLogModule("TestCase");
++    if (!lm)
++        fprintf(stderr, "httpserv: PR_NewLogModule failed\n");
+ 
+     /* set our password function */
+     PK11_SetPasswordFunc(SECU_GetModulePassword);

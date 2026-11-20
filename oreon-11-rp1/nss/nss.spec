@@ -162,6 +162,7 @@ Patch100:         nspr-config-pc.patch
 Patch101:         nspr-gcc-atomics.patch
 Patch71:          nss-3.127-disable-dtls13-clientcert-test.patch
 Patch72:          nss-3.133-fipstest-self-tests-ran.patch
+Patch73:          nss-3.133-httpserv-unused-set.patch
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
@@ -405,6 +406,7 @@ export BUILD_OPT=1
 
 # Generate symbolic info for debuggers
 export XCFLAGS=$RPM_OPT_FLAGS
+export CCC="${CXX:-clang++}"
 
 # Work around false-positive warnings with gcc 10:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1803029
