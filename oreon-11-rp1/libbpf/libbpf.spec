@@ -59,7 +59,7 @@ readelf -d src/libbpf.so | grep -q 'SONAME.*libbpf.so.1'
 %ldconfig_scriptlets
 
 %files
-%license LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1
+%license LICENSE LICENSE.BSD-2-Clause LICENSE.LGPL-2.1-only
 %{_libdir}/libbpf.so.1*
 
 %files devel
