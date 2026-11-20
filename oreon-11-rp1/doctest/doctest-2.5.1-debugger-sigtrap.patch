@@ -1,0 +1,14 @@
+--- a/tests/doctest/test_debugger.cpp
++++ b/tests/doctest/test_debugger.cpp
+@@ -82,7 +82,11 @@
+ 
+     debugger::setup();
+     CHECK(debugger::signal_caught == false);
++#if defined(DOCTEST_PLATFORM_LINUX)
++    raise(SIGTRAP);
++#else
+     DOCTEST_BREAK_INTO_DEBUGGER();
++#endif
+     CHECK(debugger::signal_caught == true);
+     debugger::cleanup();
+ }
