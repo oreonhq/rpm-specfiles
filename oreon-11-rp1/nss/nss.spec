@@ -93,6 +93,8 @@ BuildRequires:    gawk
 BuildRequires:    psmisc
 BuildRequires:    perl-interpreter
 BuildRequires:    gcc-c++
+BuildRequires:    xmlto
+BuildRequires:    docbook-dtds >= 1.0-6
 
 Source0:          https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/%{nss_nspr_archive}.tar.gz
 Source1:          nss-util.pc.in
@@ -204,7 +206,7 @@ Requires:         nss-softokn-devel
 Requires:         nspr-devel >= %{nspr_version}
 Requires:         pkgconfig
 BuildRequires:    xmlto
-BuildRequires:    docbook-dtds
+BuildRequires:    docbook-dtds >= 1.0-6
 
 %description devel
 Header and Library files for doing development with Network Security Services.
@@ -307,7 +309,7 @@ Release:        %{nspr_release}%{?dist}
 Requires:       nspr%{?_isa} = %{nspr_version}-%{nspr_release}%{?dist}
 Requires:       pkgconfig
 BuildRequires:  xmlto
-BuildRequires:  docbook-dtds
+BuildRequires:  docbook-dtds >= 1.0-6
 Conflicts:      filesystem < 3
 
 %description -n nspr-devel
@@ -368,6 +370,7 @@ echo -n %{nspr_version} > version.xml
 for m in %{SOURCE101}; do
   cp ${m} .
 done
+export XML_CATALOG_FILES=%{_sysconfdir}/xml/catalog
 for m in nspr-config.xml; do
   xmlto man ${m}
 done
