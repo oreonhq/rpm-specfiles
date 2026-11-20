@@ -23,3 +23,34 @@
  
      /* set our password function */
      PK11_SetPasswordFunc(SECU_GetModulePassword);
+--- a/cmd/selfserv/selfserv.c
++++ b/cmd/selfserv/selfserv.c
+@@ -3098,7 +3098,9 @@
+         }
+     }
+ 
+-    lm = PR_NewLogModule("TestCase");
++    lm = PR_NewLogModule("TestCase");
++    if (!lm)
++        fprintf(stderr, "selfserv: PR_NewLogModule failed\n");
+ 
+     if (fileName)
+         readBigFile(fileName);
+--- a/cmd/signtool/javascript.c
++++ b/cmd/signtool/javascript.c
+@@ -14,7 +14,6 @@
+ static PRStatus ensureExists(char *base, char *path);
+ static int make_dirs(char *path, PRInt32 file_perms);
+ 
+-static char *jartree = NULL;
+ static int idOrdinal;
+ static PRBool dumpParse = PR_FALSE;
+ 
+@@ -58,7 +57,6 @@
+ int
+ InlineJavaScript(char *dir, PRBool recurse)
+ {
+-    jartree = dir;
+     if (verbosity >= 0) {
+         PR_fprintf(outputFD, "\nGenerating inline signatures from HTML files in: %s\n",
+                    dir);
