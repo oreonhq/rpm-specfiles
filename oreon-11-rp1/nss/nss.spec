@@ -122,8 +122,6 @@ Source23:         cert8.db.xml
 Source25:         key3.db.xml
 Source27:         secmod.db.xml
 %endif
-Source30:         nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files.tar.xz
-
 Source101:        nspr-config.xml
 
 # This patch uses the GCC -iquote option documented at
@@ -327,9 +325,6 @@ popd
 pushd nss
 %autopatch -p1 -M 99
 popd
-
-tar -xf %{SOURCE30}
-cp -r nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files/* nss/tests/tools/
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1247353
 find nss/lib/libpkix -perm /u+x -type f -exec chmod -x {} \;
