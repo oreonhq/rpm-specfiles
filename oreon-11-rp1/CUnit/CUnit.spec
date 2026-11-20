@@ -50,6 +50,12 @@ autoconf
 %install
 %make_install
 find %{buildroot} -name '*.la' -delete
+mkdir -p %{buildroot}%{_docdir}
+if [ -d %{buildroot}/usr/doc/CUnit ]; then
+  rm -rf %{buildroot}%{_docdir}/%{name}
+  mv %{buildroot}/usr/doc/CUnit %{buildroot}%{_docdir}/%{name}
+  rmdir %{buildroot}/usr/doc 2>/dev/null || true
+fi
 
 %check
 make check
