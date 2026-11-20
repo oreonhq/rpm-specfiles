@@ -210,7 +210,8 @@ popd
 
 %set_build_flags
 export CPPFLAGS="${CPPFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2"
-export CFLAGS="${CFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2 -Wl,--as-needed -Wl,-z,now"
+export CFLAGS="${CFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2"
+export LDFLAGS="${LDFLAGS} -Wl,--as-needed -Wl,-z,now"
 
 pushd openldap-%{version}
 %configure \
@@ -261,7 +262,7 @@ find . -name Makefile -exec sed -i \
 popd
 
 pushd openldap-ppolicy-check-password-%{check_password_version}
-%make_build LDAP_INC="-I../openldap-%{version}/include \
+%make_build CC=%{__cc} LDAP_INC="-I../openldap-%{version}/include \
  -I../openldap-%{version}/servers/slapd \
  -I../openldap-%{version}/build-servers/include"
 popd
