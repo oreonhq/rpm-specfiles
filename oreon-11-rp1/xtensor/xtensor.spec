@@ -24,6 +24,7 @@ BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  xtl-devel
 BuildRequires:  doctest-devel
+BuildRequires:  nlohmann-json-devel
 
 %global debug_package %{nil}
 
@@ -43,6 +44,7 @@ Summary:        %{summary}
 Provides:       %{name} = %{version}-%{release}
 Provides:       %{name}-static = %{version}-%{release}
 Requires:       xtl-devel
+Requires:       nlohmann-json-devel
 
 %description devel %_description
 
