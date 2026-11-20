@@ -204,6 +204,7 @@ Requires:         nss-softokn-devel
 Requires:         nspr-devel >= %{nspr_version}
 Requires:         pkgconfig
 BuildRequires:    xmlto
+BuildRequires:    docbook-dtds
 
 %description devel
 Header and Library files for doing development with Network Security Services.
@@ -306,6 +307,7 @@ Release:        %{nspr_release}%{?dist}
 Requires:       nspr%{?_isa} = %{nspr_version}-%{nspr_release}%{?dist}
 Requires:       pkgconfig
 BuildRequires:  xmlto
+BuildRequires:  docbook-dtds
 Conflicts:      filesystem < 3
 
 %description -n nspr-devel
