@@ -1080,6 +1080,7 @@ make check PREPARE_SYNTAX_SUGGEST=
 %{gem_dir}/gems/rdoc-7.0.4
 %{gem_dir}/specifications/rdoc-7.0.4.gemspec
 %{gem_dir}/cache/rdoc-7.0.4.gem
+%{gem_dir}/plugins/rdoc_plugin.rb
 %{_bindir}/rdoc
 %{_bindir}/ri
 
