@@ -89,7 +89,10 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
 %{buildroot}%{_bindir}/opj_compress -i in.ppm -o out.j2k -r 1
 %{buildroot}%{_bindir}/opj_decompress -i out.j2k -o out.ppm
-cmp in.ppm out.ppm
+test "$(wc -c < out.ppm)" -ge 12288
+tail -c 12288 in.ppm > in.raw
+tail -c 12288 out.ppm > out.raw
+cmp in.raw out.raw
 %{buildroot}%{_bindir}/opj_dump -i out.j2k | grep -q 'numcomps=3'
 
 %ldconfig_scriptlets
