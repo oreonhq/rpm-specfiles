@@ -15,7 +15,7 @@
 %bcond context 1
 %endif
 
-%bcond python3 1
+%bcond python3 %{without bootstrap}
 
 %ifnarch %{ix86} x86_64
 %bcond quadmath 0
