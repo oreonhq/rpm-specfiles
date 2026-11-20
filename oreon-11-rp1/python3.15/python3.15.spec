@@ -295,6 +295,7 @@ BuildRequires: ncurses-devel
 BuildRequires: openssl-devel
 BuildRequires: pkgconfig
 BuildRequires: python-rpm-macros
+BuildRequires: python-srpm-macros
 BuildRequires: readline-devel
 BuildRequires: oreon-rpm-config
 BuildRequires: oreon-rpm-macros
@@ -1387,7 +1388,7 @@ find . -name "*~" -exec rm -f {} \;
 # The clamp_source_mtime module is only guaranteed to exist on Fedoras that enabled this option:
 %if 0%{?clamp_mtime_to_source_date_epoch}
 LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
-PYTHONPATH="%{_rpmconfigdir}/redhat" \
+PYTHONPATH="%{_rpmconfigdir}/oreon:%{_rpmconfigdir}/redhat" \
 %{buildroot}%{_bindir}/python%{pybasever} -s -B -m clamp_source_mtime %{buildroot}%{pylibdir} %{?with_freethreading_build:%{buildroot}%{pylibdir_freethreading}} %{buildroot}%{_datadir}/gdb/auto-load
 %endif
 # compileall CMD line options:
