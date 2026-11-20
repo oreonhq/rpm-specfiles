@@ -161,6 +161,7 @@ Patch70:          nss-3.125-drbg-reseed-after-fork.patch
 Patch100:         nspr-config-pc.patch
 Patch101:         nspr-gcc-atomics.patch
 Patch71:          nss-3.127-disable-dtls13-clientcert-test.patch
+Patch72:          nss-3.133-fipstest-self-tests-ran.patch
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
