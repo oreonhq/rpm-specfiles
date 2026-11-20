@@ -35,10 +35,12 @@ Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/mark
 
 BuildRequires:  autoconf
 BuildRequires:  gcc
-BuildRequires:  gdb
 BuildRequires:  make
 BuildRequires:  libtool
 BuildRequires:  libev-devel
+BuildRequires:  gnutls-devel >= 3.7.5
+BuildRequires:  openssl-devel >= 3.5.0
+BuildRequires:  oreon-rpm-macros
 BuildRequires:  python3-sphinx
 BuildRequires:  python3-markupsafe
 BuildRequires:  python3-sphinx_rtd_theme
@@ -74,7 +76,6 @@ GnuTLS library provider.
 Summary:        The ngtcp2 GnuTLS crypto provider headers
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       %{name}-crypto-gnutls%{?_isa} = %{version}-%{release}
-BuildRequires:  gnutls-devel >= 3.7.5
 Requires:       gnutls-devel >= 3.7.5
 Provides:       %{name}-crypto-any-devel = %{version}-%{release}
 
@@ -96,8 +97,6 @@ OpenSSL library provider.
 Summary:        The ngtcp2 dependency for OpenSSL headers
 Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
 Requires:       %{name}-crypto-ossl%{?_isa} = %{version}-%{release}
-BuildRequires:  openssl-devel >= 3.5.0
-BuildRequires:  oreon-rpm-macros
 Requires:       openssl-devel >= 3.5.0
 Provides:       %{name}-crypto-any-devel = %{version}-%{release}
 
