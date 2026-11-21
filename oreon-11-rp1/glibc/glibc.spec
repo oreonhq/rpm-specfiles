@@ -311,8 +311,11 @@ local original = rpm.expand("%{macrobody:__debug_install_post}")
 -- Strip leading newline.  It confuses the macro redefinition.
 -- Avoid embedded newlines that confuse the macro definition.
 original = original:match("^%s*(.-)%s*$"):gsub("\\\n", "")
+-- oreon __debug_install_post starts with "export GDB=...", so run it as a
+-- shell snippet instead of treating the first word as a script path.
 rpm.define("__debug_install_post bash " .. wrapper
-  .. " " .. sysroot .. " %{_prefix}%{glibc_ldso} " .. original)
+  .. " " .. sysroot .. " %{_prefix}%{glibc_ldso} /bin/bash -ec "
+  .. string.format("%q", original))
 }
 
 # sysroot package support.  These contain arch-specific packages, so
