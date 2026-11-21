@@ -16,6 +16,7 @@
 %endif
 
 %bcond python3 1
+%bcond numpy 1
 
 %ifnarch %{ix86} x86_64
 %bcond quadmath 0
@@ -99,7 +100,6 @@ BuildRequires: zlib-devel
 BuildRequires: xz-devel
 %if %{with python3}
 BuildRequires: python3-devel
-%bcond_with numpy
 %if %{with numpy}
 BuildRequires: python3-numpy
 %endif
@@ -314,7 +314,7 @@ Summary: Standard library functions with UTF-8 API on Windows
 
 Run-time support for Boost.Nowide.
 
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 
 %package numpy3
 Summary: Run-time component of boost numpy library for Python 3
@@ -459,8 +459,10 @@ Requires: openssl-devel%{?_isa}
 %if %{with quadmath}
 Requires: libquadmath-devel%{?_isa}
 %endif
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 Requires: %{name}-numpy3%{?_isa} = %{version}-%{release}
+%endif
+%if %{with python3}
 Provides: %{name}-python3-devel = %{version}-%{release}
 Provides: %{name}-python3-devel%{?_isa} = %{version}-%{release}
 %endif
@@ -845,7 +847,7 @@ fi
 %license LICENSE_1_0.txt
 %{_libdir}/libboost_nowide.so.%{sonamever}
 
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 %files numpy3
 %license LICENSE_1_0.txt
 %{_libdir}/libboost_numpy%{python3_version_nodots}.so.%{sonamever}
@@ -956,7 +958,7 @@ fi
 %{_libdir}/libboost_math_c99f.so
 %{_libdir}/libboost_math_c99l.so
 %{_libdir}/libboost_nowide.so
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 %{_libdir}/libboost_numpy%{python3_version_nodots}.so
 %endif
 %{_libdir}/libboost_process.so
