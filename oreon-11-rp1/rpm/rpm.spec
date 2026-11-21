@@ -62,6 +62,7 @@ Obsoletes: python2-rpm < %{version}-%{release}
 # XXX generally assumed to be installed but make it explicit as rpm
 # is a bit special...
 BuildRequires: redhat-rpm-config >= 94
+BuildRequires: rpm-build
 BuildRequires: systemd-rpm-macros
 BuildRequires: gcc gcc-c++ make
 BuildRequires: cmake >= 3.18
