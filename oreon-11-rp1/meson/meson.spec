@@ -22,8 +22,11 @@ Source0:        https://github.com/mesonbuild/meson/archive/%{version}/meson-%{v
 
 BuildArch:      noarch
 
+BuildRequires:  oreon-rpm-macros
 BuildRequires:  python3-devel
 BuildRequires:  python3-pip
+BuildRequires:  python-rpm-macros
+BuildRequires:  pyproject-rpm-macros
 Requires:       ninja-build
 
 Requires:       meson-srpm-macros = %{version}-%{release}
@@ -89,7 +92,6 @@ BuildRequires:  llvm-devel
 BuildRequires:  cups-devel
 BuildRequires:  /usr/bin/wx-config
 BuildRequires:  /usr/bin/sdl2-config
-BuildRequires:  oreon-rpm-macros
 %endif
 
 # generated BuildRequires, refresh with: orbscli plan bake
