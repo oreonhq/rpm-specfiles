@@ -125,7 +125,8 @@
   LDFLAGS="${LDFLAGS:-%{build_ldflags}}" ; export LDFLAGS ; \
   LT_SYS_LIBRARY_PATH="${LT_SYS_LIBRARY_PATH:-%_libdir:}" ; export LT_SYS_LIBRARY_PATH ; \
   CC="${CC:-%{__cc}}" ; export CC ; \
-  CXX="${CXX:-%{__cxx}}" ; export CXX
+  CXX="${CXX:-%{__cxx}}" ; export CXX ; \
+  CCC="${CCC:-${CXX}}" ; export CCC
 
 # Automatically use set_build_flags macro for build, check, and
 # install phases.

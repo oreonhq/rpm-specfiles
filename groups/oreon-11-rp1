@@ -18,7 +18,7 @@ packages: gcc, binutils, glibc, gdb, llvm, elfutils, annobin, libtool, ccache, d
 [build-tools]
 summary: the tools that turn a tarball into a package
 maintainer: Brandon Lester
-packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, teckit, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, docbook-style-dsssl, openjade, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy, expect, dejagnu, asciidoc, po4a, docbook-utils, chrpath, check, desktop-file-utils, gtk-doc, beakerlib, tcl, sharutils, cscope, imake, byacc, re2c, ncompress, emacs, emacs-filesystem, rust-bindgen-cli, vim-filesystem, docbook5-style-xsl, rust-cbindgen, xmltoman, source-highlight, web-assets, gi-docgen, qt6-linguist
+packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, teckit, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, docbook-style-dsssl, openjade, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy, expect, dejagnu, asciidoc, po4a, docbook-utils, chrpath, check, desktop-file-utils, gtk-doc, beakerlib, tcl, sharutils, cscope, imake, byacc, re2c, ncompress, emacs, emacs-filesystem, rust-bindgen-cli, vim-filesystem, docbook5-style-xsl, rust-cbindgen, cargo-c, xmltoman, source-highlight, web-assets, gi-docgen, qt6-linguist
 
 [shell-and-users]
 summary: login, shells, core unix tools
@@ -43,7 +43,7 @@ packages: python3.15, python3-build, python3-installer, python3-jinja2, python3-
 [perl]
 summary: perl and the small modules other specs require by name
 maintainer: Brandon Lester
-packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum, perl-IO-Tty, perl-Expect, perl-XML-Parser, perl-SGMLSpm
+packages: perl, perl-Carp, perl-constant, perl-Exporter, perl-Digest-SHA, perl-bignum, perl-IO-Tty, perl-Expect, perl-XML-Parser, perl-File-ShareDir-Install, perl-Class-Inspector, perl-File-ShareDir, perl-SGMLSpm, perl-libintl-perl, perl-Text-Unidecode, perl-Unicode-EastAsianWidth
 
 [languages]
 summary: other language runtimes and the generators that wrap them
@@ -78,7 +78,7 @@ packages: libselinux, libsepol, libsemanage, audit, ima-evm-utils, libcap, libca
 [libraries]
 summary: shared libraries that are not big enough to be their own group
 maintainer: Brandon Lester
-packages: glib2, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, yaml-cpp, json-c, json-glib, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm, fuse3, libcbor, libfido2, libpfm, cmocka, libdb, libxslt, apr, apr-util, systemtap, libev, c-ares, CUnit, nss_wrapper, socket_wrapper, uid_wrapper, pam_wrapper, resolv_wrapper, priv_wrapper, softhsm, newt, cppunit, rhash, jsoncpp, libgit2, valgrind, boost, gtest, appstream, gobject-introspection, createrepo_c, icu, slang, libxmlb, libfyaml, opensp, libpng, graphviz, iso-codes, libjpeg-turbo, vulkan-headers, vulkan-loader, qt6, qt6-qtbase, qt6-qtsvg, lzo, lksctp-tools, sgml-common, alsa-lib, shared-mime-info, libutempter, libdaemon, libunwind, flatbuffers, xtl, xtensor, doctest, lmdb, libipt, libtiff, lcms2, jbig2dec, openjpeg, libpaper, urw-base35-fonts, libblake3, spdlog, xapian-core, libstemmer, expected, nlohmann-json, catch2, libmpdclient, libaio, libbpf, libmnl, libmpc
+packages: glib2, sysprof, libffi, libxml2, expat, pcre2, ncurses, readline, sqlite, popt, libyaml, yaml-cpp, json-c, json-glib, jansson, libevent, libuv, oniguruma, libb2, xxhash, file, libpipeline, libeconf, libverto, libedit, libassuan, libassuan2, libksba, npth, gmp, mpfr, mpc, libusb1, libnl3, libnsl2, libtirpc, rdma-core, unixODBC, hiredis, jq, gdbm, fuse3, libcbor, libfido2, libpfm, cmocka, libdb, libxslt, apr, apr-util, systemtap, libev, c-ares, CUnit, nss_wrapper, socket_wrapper, uid_wrapper, pam_wrapper, resolv_wrapper, priv_wrapper, softhsm, newt, cppunit, rhash, jsoncpp, libgit2, valgrind, boost, gtest, appstream, gobject-introspection, createrepo_c, icu, slang, libxmlb, libfyaml, opensp, libpng, graphviz, iso-codes, libjpeg-turbo, vulkan-headers, vulkan-loader, qt6, qt6-qtbase, qt6-qtsvg, lzo, lksctp-tools, sgml-common, alsa-lib, shared-mime-info, libutempter, libdaemon, libunwind, flatbuffers, xtl, xtensor, doctest, lmdb, libipt, libtiff, lcms2, jbig2dec, openjpeg, libpaper, urw-base35-fonts, libblake3, spdlog, xapian-core, libstemmer, expected, nlohmann-json, catch2, libmpdclient, libaio, libbpf, libmnl, libmpc
 
 [x11]
 summary: the x11 client libraries we actually build
@@ -88,7 +88,7 @@ packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans, pixman
 [graphics]
 summary: text layout and image loading libraries
 maintainer: Brandon Lester
-packages: fribidi, harfbuzz, pango, gdk-pixbuf2, libgd, ghostscript
+packages: fribidi, harfbuzz, pango, gdk-pixbuf2, libgd, ghostscript, poppler-data, poppler, librsvg
 
 [admin-tools]
 summary: things a person runs on a booted system

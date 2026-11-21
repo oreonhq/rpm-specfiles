@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5
+%global source0_hash aa77dd25f036731b7246abbfbebe6cc813b42799b62c874bc82bd4e1f90f2918
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 
 Name: apr-util
-Version: 1.6.3
+Version: 1.6.6
 Release: 1%{?dist}
 Summary: Apache Portable Runtime Utility library
 License: Apache-2.0

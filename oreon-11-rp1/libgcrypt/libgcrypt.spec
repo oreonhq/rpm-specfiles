@@ -30,9 +30,11 @@ BuildRequires: texinfo
 BuildRequires: autoconf, automake, libtool
 BuildRequires: make
 BuildRequires: gnupg2
-BuildRequires: annobin-annocheck binutils
+BuildRequires: annobin-annocheck
+BuildRequires: binutils
 BuildRequires: gdb
-BuildRequires:  oreon-rpm-macros
+BuildRequires: source-highlight
+BuildRequires: oreon-rpm-macros
 
 %package devel
 Summary: Development files for the %{name} package

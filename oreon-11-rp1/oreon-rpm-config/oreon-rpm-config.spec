@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 9e146964f4d899932af6c6d75fa9b5a6b19c4f4c647f18a461bf346a5ddeb02e
+%global source0_hash f4550a9236ab4a7e2a82c7ec8912d1ead9e97cc094b426bb89d946a3268b4143
 %global debug_package %{nil}
 %global rrcdir /usr/lib/rpm/oreon
 
 Name: oreon-rpm-config
 Version: 345
-Release: 17%{?dist}
+Release: 18%{?dist}
 Summary: Oreon rpm build configuration
 License: GPL-1.0-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic
 URL: https://github.com/oreonhq/rpm-specfiles

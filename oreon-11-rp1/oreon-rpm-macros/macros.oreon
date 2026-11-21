@@ -98,6 +98,7 @@ if probe == "" and have ~= "1" then\
       p:close()\
       if string.find(out, "1", 1, true) then\
         rpm.define("with_bootstrap 1")\
+        rpm.define("without_bootstrap 0")\
       end\
     end\
   end\

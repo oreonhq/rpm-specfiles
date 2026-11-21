@@ -1,9 +1,9 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d4aadbc1610876385a370494bbfd7d994356f446dff60cd09eea5933befb1471
+%global source0_hash bd4efc89ee01aca8ff771cae268d84333b7594c2d4afee50bb13b859f1113c3f
 
-%global oreon_bootstrap %{nil}
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %bcond_with rc
@@ -12,8 +12,8 @@
 %endif
 
 Name:          tpm2-tss
-Version:        4.2.1
-Release:        1%{?dist}
+Version:        4.2.2
+Release:        3%{?dist}
 Summary:       TPM2.0 Software Stack
 
 License:       BSD-2-Clause
@@ -33,14 +33,17 @@ BuildRequires: libtool
 %endif
 BuildRequires: make
 BuildRequires: doxygen
+BuildRequires: spdlog
+BuildRequires: xapian-core
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: json-c-devel
-BuildRequires: libcurl-devel
+BuildRequires: libcurl-devel >= 8.23.0
+BuildRequires: libfido2
 BuildRequires: libusb1-devel
 BuildRequires: openssl-devel
 BuildRequires: pkgconfig
-BuildRequires: systemd
+BuildRequires: systemd-devel
 BuildRequires: systemd-rpm-macros
 BuildRequires: libuuid-devel
 BuildRequires:  oreon-rpm-macros

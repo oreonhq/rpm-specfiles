@@ -33,7 +33,7 @@ Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
 Version: 1.90.0
-Release: 1%{?dist}
+Release: 4%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 %global version_enc %{lua:
@@ -120,6 +120,7 @@ Patch6: boost-1.90-system.patch
 Patch7: boost-1.90.0-range.patch
 Patch8: boost-1.90.0-multi_index-utf8.patch
 Patch9: boost-1.90.0-bloom-utf8.patch
+Patch10: boost-histogram-visibility.patch
 
 
 %description
@@ -520,6 +521,11 @@ a number of significant features and is now developed independently.
 %oreon_sha256
 %autosetup -n %{toplev_dirname} -p1
 find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
+host_triple=$(%{__cxx} -dumpmachine)
+host_vendor=$(printf '%s\n' "$host_triple" | cut -d- -f2)
+host_sys=$(printf '%s\n' "$host_triple" | cut -d- -f3-)
+sed -i "s/case linux : vendor = pc ; sys = linux ;/case linux : vendor = ${host_vendor} ; sys = ${host_sys} ;/" \
+  tools/build/src/tools/clang.jam
 
 %build
 %set_build_flags
@@ -527,6 +533,11 @@ find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
 PYTHON3_ABIFLAGS=$(/usr/bin/python3-config --abiflags)
 : PYTHON3_VERSION=%{python3_version}
 : PYTHON3_ABIFLAGS=${PYTHON3_ABIFLAGS}
+pyinc=/usr/include/python%{python3_version}${PYTHON3_ABIFLAGS}
+test -f "${pyinc}/pyconfig.h"
+printf '#include "%s/pyconfig.h"\n' "${pyinc}" > pyconfig.h
+export CPLUS_INCLUDE_PATH="${pyinc}${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="${pyinc}${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
 %endif
 
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
@@ -549,7 +560,7 @@ EOF
 ./bootstrap.sh --with-toolset=%{toolchain} --with-icu --prefix=$RPM_BUILD_ROOT%{_prefix}
 
 echo ============================= build serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -566,12 +577,17 @@ echo ============================= build serial ==================
 
 echo ============================= build Boost.Build ==================
 (cd tools/build
- ./bootstrap.sh --with-toolset=%{toolchain} --prefix=$RPM_BUILD_ROOT%{_prefix})
+ ./bootstrap.sh %{toolchain})
 
 %check
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
-./b2 -d+2 -q %{?_smp_mflags} \
+%if %{with python3}
+pyinc=/usr/include/python%{python3_version}$(/usr/bin/python3-config --abiflags)
+export CPLUS_INCLUDE_PATH="${pyinc}${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="${pyinc}${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
+%endif
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -590,7 +606,7 @@ export RPM_LD_FLAGS
 cd %{_builddir}/%{toplev_dirname}
 
 echo ============================= install serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \

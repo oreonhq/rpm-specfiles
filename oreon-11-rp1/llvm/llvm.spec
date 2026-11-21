@@ -390,7 +390,7 @@ end
 #region main package
 Name:		%{pkg_name_llvm}
 Version:        23.1.5
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	Apache-2.0 WITH LLVM-exception OR NCSA
@@ -595,10 +595,6 @@ BuildRequires:	binutils-devel
 %if %{with gold}
 BuildRequires:	binutils-gold
 %endif
-%ifarch %{valgrind_arches}
-# Enable extra functionality when run the LLVM JIT under valgrind.
-BuildRequires:	valgrind-devel
-%endif
 %if %{with libedit}
 # LLVM's LineEditor library will use libedit if it is available.
 BuildRequires:	libedit-devel
@@ -622,8 +618,7 @@ BuildRequires: libffi-devel
 BuildRequires: perl-interpreter
 BuildRequires:	perl-generators
 
-# We only need the emacs packaging macros, which are part of emacs-common.
-BuildRequires:	emacs-common
+%global _emacs_sitestartdir %{_datadir}/emacs/site-lisp/site-start.d
 
 BuildRequires:	libatomic
 
@@ -1476,7 +1471,7 @@ cd llvm/utils/lit
 # Copy CFLAGS into ASMFLAGS, so -fcf-protection is used when compiling assembly files.
 export ASMFLAGS="%{build_cflags}"
 
-# We set CLANG_DEFAULT_PIE_ON_LINUX=OFF and PPC_LINUX_DEFAULT_IEEELONGDOUBLE=ON to match the
+# pie on by default, same as gcc --enable-default-pie
 
 # Disable dwz because it takes a huge amount of time to decide not to
 # optimize things.
@@ -1591,7 +1586,7 @@ popd
 %global cmake_config_args %{cmake_config_args} \\\
 	-DCLANG_BUILD_EXAMPLES:BOOL=OFF \\\
 	-DCLANG_CONFIG_FILE_SYSTEM_DIR=%{_sysconfdir}/%{pkg_name_clang}/ \\\
-	-DCLANG_DEFAULT_PIE_ON_LINUX=OFF \\\
+	-DCLANG_DEFAULT_PIE_ON_LINUX=ON \\\
 	-DCLANG_DEFAULT_UNWINDLIB=libgcc \\\
 	-DCLANG_ENABLE_ARCMT:BOOL=ON \\\
 	-DCLANG_ENABLE_STATIC_ANALYZER:BOOL=ON \\\
@@ -2484,6 +2479,7 @@ rm %{buildroot}%{install_mandir}/man1/lldb-server.1
 # symlinks. We do it this way around because symlinks between multilib packages
 # would conflict otherwise.
 move_and_replace_with_symlinks %{buildroot}%{install_bindir} %{buildroot}%{_bindir}
+ln -sfn clang %{buildroot}%{_bindir}/cc
 move_and_replace_with_symlinks %{buildroot}%{install_libdir} %{buildroot}%{_libdir}
 move_and_replace_with_symlinks %{buildroot}%{install_libexecdir} %{buildroot}%{_libexecdir}
 move_and_replace_with_symlinks %{buildroot}%{install_includedir} %{buildroot}%{_includedir}
@@ -3407,6 +3403,9 @@ fi
 
 %files -n %{pkg_name_clang}
 %license clang/LICENSE.TXT
+%if %{without compat_build}
+%{_bindir}/cc
+%endif
 %{expand_bins %{expand:
     clang
     clang++

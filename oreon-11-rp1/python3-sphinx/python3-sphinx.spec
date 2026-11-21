@@ -4,11 +4,12 @@
 %global source0_hash 90470459f3cab15d9dfed146c71cf77694b0445df17b2e0e69059cb9f7fc9ee4
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
 
 Name: python3-sphinx
 Version: 9.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
+%oreon_bootstrap
+%bcond tests %{without bootstrap}
 Summary: Python documentation generator
 License: MIT
 URL: https://pypi.org/project/sphinx/
@@ -17,17 +18,20 @@ BuildArch: noarch
 Provides: /usr/bin/sphinx-build
 Provides: /usr/bin/sphinx-build-3
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-flit-core
+%if %{with tests}
 BuildRequires: python3-sphinxcontrib-applehelp
 BuildRequires: python3-sphinxcontrib-devhelp
 BuildRequires: python3-sphinxcontrib-htmlhelp
 BuildRequires: python3-sphinxcontrib-jsmath
 BuildRequires: python3-sphinxcontrib-qthelp
 BuildRequires: python3-sphinxcontrib-serializinghtml
+%endif
 BuildRequires: python3-jinja2
 BuildRequires: python3-pygments
 BuildRequires: python3-docutils
@@ -71,7 +75,10 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import sphinx'
+%if %{with tests}
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import sphinx'
+%endif
 
 %files -f %{_builddir}/%{name}.files
 

@@ -5,45 +5,44 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
-%global debug_package %{nil}
 
 Name: python3-packaging
 Version: 26.3
-Release: 1%{?dist}
+Release: 3%{?dist}
 Summary: Core utilities for Python packages
 License: Apache-2.0 OR BSD-2-Clause
 URL: https://github.com/pypa/packaging
-Source0: https://files.pythonhosted.org/packages/source/p/packaging/packaging-%{version}.tar.gz
+Source0: https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-%{version}.tar.gz
+BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
+BuildRequires: python3-rpm-macros
+BuildRequires: python3-build
+BuildRequires: python3-installer
+BuildRequires: python3-flit-core
 Requires: python3
+Provides: python3dist(packaging) = %{version}
 
 %description
 Core utilities for Python packages.
 
 %prep
 %oreon_sha256
-%autosetup -n packaging-%{version} -p1
+%autosetup -n packaging-%{version}
 
 %build
+python3 -m build --wheel --no-isolation
 
 %install
-sitelib=$(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
-mkdir -p %{buildroot}$sitelib
-cp -a src/packaging %{buildroot}$sitelib/
-find %{buildroot} -type f -exec grep -I -l -E '^#! */usr/bin/env python' {} + | while read -r f; do
-  sed -i '1s|^#! */usr/bin/env python.*|#!/usr/bin/python3|' "$f"
-done
+python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
-while read -r f; do
-  case "$f" in
-    *.py) printf '%s\n' "$(dirname "$f")/__pycache__/*" ;;
-  esac
-done < %{_builddir}/%{name}.files | sort -u >> %{_builddir}/%{name}.files
+
+%check
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import packaging, importlib.metadata; assert importlib.metadata.version("packaging")'
 
 %files -f %{_builddir}/%{name}.files
-%license LICENSE LICENSE.APACHE LICENSE.BSD
 
 %changelog
 %autochangelog

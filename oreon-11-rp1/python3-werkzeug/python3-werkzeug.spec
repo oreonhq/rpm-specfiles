@@ -8,7 +8,7 @@
 
 Name: python3-werkzeug
 Version: 3.1.9
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The comprehensive WSGI web application library
 License: BSD-3-Clause
 URL: https://pypi.org/project/werkzeug/
@@ -16,6 +16,7 @@ Source0: https://files.pythonhosted.org/packages/a4/34/4dd12fc8bb7d61c91467ec3ef
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
@@ -39,7 +40,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import werkzeug'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import werkzeug'
 
 %files -f %{_builddir}/%{name}.files
 

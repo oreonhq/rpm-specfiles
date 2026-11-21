@@ -1,0 +1,12 @@
+--- a/meson.build
++++ b/meson.build
+@@ -42,8 +42,7 @@
+                    get_option('sysprofd') == 'bundled' or
+                    get_option('libsysprof') or
+                    get_option('examples') or
+-                   get_option('tools') or
+-                   get_option('tests'))
++                   get_option('tools'))
+ 
+ dex_req = '0.9'
+ glib_req = '2.76.0'

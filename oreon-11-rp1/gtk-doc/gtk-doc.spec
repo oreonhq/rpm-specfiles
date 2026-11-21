@@ -8,11 +8,11 @@
 %oreon_bootstrap
 
 %global debug_package %{nil}
-%define major_minor %(echo %{version} | cut -d. -f1-2)
 
 Name:           gtk-doc
 Version:        1.36.1
-Release:        2%{?dist}
+Release:        6%{?dist}
+%global major_minor 1.36
 Summary:        API documentation generation tool for GTK+ and GNOME
 License:        GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later
 URL:            https://gitlab.gnome.org/GNOME/gtk-doc/
@@ -23,13 +23,14 @@ BuildRequires:  /usr/bin/xsltproc
 %bcond_with pdf_docs
 %if %{with pdf_docs}
 BuildRequires:  dblatex
-BuildRequires:  python3-parameterized
 %endif
-BuildRequires:  docbook-style-xsl
+BuildRequires:  python3-parameterized
+BuildRequires:  docbook-style-xsl >= 1.79.2-2
 BuildRequires:  docbook-utils
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  glib2-devel
+BuildRequires:  pkgconfig(sysprof-capture-4) >= 3.38.0
 BuildRequires:  meson
 BuildRequires:  python3-devel
 BuildRequires:  python3-lxml

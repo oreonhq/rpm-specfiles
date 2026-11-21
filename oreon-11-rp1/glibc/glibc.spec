@@ -311,8 +311,11 @@ local original = rpm.expand("%{macrobody:__debug_install_post}")
 -- Strip leading newline.  It confuses the macro redefinition.
 -- Avoid embedded newlines that confuse the macro definition.
 original = original:match("^%s*(.-)%s*$"):gsub("\\\n", "")
+-- oreon __debug_install_post starts with "export GDB=...", so run it as a
+-- shell snippet instead of treating the first word as a script path.
 rpm.define("__debug_install_post bash " .. wrapper
-  .. " " .. sysroot .. " %{_prefix}%{glibc_ldso} " .. original)
+  .. " " .. sysroot .. " %{_prefix}%{glibc_ldso} /bin/bash -ec "
+  .. string.format("%q", original))
 }
 
 # sysroot package support.  These contain arch-specific packages, so
@@ -1162,32 +1165,6 @@ that can be installed across architectures.
 %endif
 
 ##############################################################################
-# glibc32 (only for use in building GCC, not shipped)
-##############################################################################
-%ifarch x86_64
-%package -n glibc32
-Summary: The GNU libc libraries (32-bit)
-Conflicts: glibc(x86-32)
-%dnl The gcc package does not use ELF dependencies to install glibc32:
-%dnl BuildRequires: (glibc32 or glibc-devel(%{__isa_name}-32))
-%dnl Not generating the ELF dependencies for glibc32 makes it less likely
-%dnl that the package is selected by accident over glibc.i686.
-AutoReqProv: no
-
-%description -n glibc32
-This package is only used for internal building of multilib aware
-packages, like gcc, due to a technical limitation in the distribution
-build environment. Any package which needs both 32-bit and 64-bit
-runtimes at the same time must install glibc32 (marked as a 64-bit
-package) to access the 32-bit development files during a 64-bit build.
-
-This package is not supported or intended for use outside of the
-distribution build enviroment. Regular users can install both 32-bit and
-64-bit runtimes and development files without any problems.
-
-%endif
-
-##############################################################################
 # Prepare for the build.
 ##############################################################################
 %prep
@@ -1408,19 +1385,6 @@ build()
 	popd
 }
 
-%ifarch x86_64
-# Build for the glibc32 package.
-# There is no libatomic.so.1, so for robustness ensure it is not used.
-build build-%{target}-32 \
-  CC="gcc -m32 -fno-link-libatomic" \
-  CXX="g++ -m32 -fno-link-libatomic" \
-  CFLAGS="${glibc_flags_cflags/-m64/-m32}" \
-  --host=i686-linux-gnu \
-%dnl There is no libgcc_s.so.1, but building support/ requires it.
-  --disable-libsupport \
-#
-%endif
-
 # Default set of compiler options.
 build build-%{target} \
   CC="gcc $glibc_flags_cc $glibc_flags_cc_main" \
@@ -1462,21 +1426,6 @@ for d in $usrmove_file_names ; do
     ln -s "usr/$d" "%{glibc_sysroot}/$d"
 done
 
-%ifarch x86_64
-# Install for the glibc32 package.
-pushd build-%{target}-32
-%make_build -s install_root=%{glibc_sysroot} install
-popd
-pushd %{glibc_sysroot}
-rm -rf etc var usr/bin usr/lib/gconv usr/libexec usr/sbin usr/share
-rm -f lib/libnss_db* lib/libnss_hesiod* lib/libnsl* usr/lib/libnsl* usr/lib/libnss*
-rm usr/lib/libc_malloc_debug.so
-strip -g usr/lib/*.o
-popd
-mkdir glibc32-headers
-cp -a %{glibc_sysroot}%{_includedir} glibc32-headers
-%endif
-
 # Build and install:
 pushd build-%{target}
 %make_build -s install_root=%{glibc_sysroot} install
@@ -1487,22 +1436,6 @@ popd
 # via hardlinks, so we must group them ourselves.
 hardlink -c %{glibc_sysroot}/usr/lib/locale
 
-%ifarch x86_64
-# Verify that there are no unexpected differences in the header files common
-# between i386 and x86_64.
-diff -ur %{glibc_sysroot}%{_includedir} glibc32-headers/include \
-     > glibc-32-64.diff || true
-if test -s  glibc-32-64.diff ; then
-    if test $(grep -v '^Only in ' glibc-32-64.diff | wc -l) -ne 0; then
-	: Unexpected header file differences
-	exit 1
-    fi
-else
-    : Missing additional stubs header files.
-fi
-rm glibc-32-64.diff
-rm -rf glibc32-headers
-%endif
 
 %if %{glibc_autorequires}
 mkdir -p %{glibc_sysroot}/%{_rpmconfigdir} %{glibc_sysroot}/%{_fileattrsdir}
@@ -1812,8 +1745,7 @@ mkdir -p usr/lib usr/lib64
 
 cp -a %{glibc_sysroot}/%{_prefix}/include usr/.
 %ifarch x86_64
-# 32-bit headers for glibc32 don't go in the sysroot.
-rm usr/include/gnu/*-32.h
+rm -f usr/include/gnu/lib-names-32.h usr/include/gnu/stubs-32.h
 %endif
 for lib in lib lib64;  do
 %ifarch x86_64
@@ -2327,11 +2259,6 @@ update_gconv_modules_cache ()
 %if %{glibc_has_libmvec}
 %{_libdir}/libmvec.so
 %endif
-%ifarch x86_64
-# This files are included in the buildroot for glibc32 below.
-%exclude %{_includedir}/gnu/lib-names-32.h
-%exclude %{_includedir}/gnu/stubs-32.h
-%endif
 
 %if %{with docs}
 %files doc
@@ -2393,17 +2320,6 @@ update_gconv_modules_cache ()
 %files -n sysroot-%{_arch}-%{sysroot_dist}-glibc
 %{sysroot_prefix}
 %endif
-
-%ifarch x86_64
-%files -n glibc32
-%{_includedir}/gnu/lib-names-32.h
-%{_includedir}/gnu/stubs-32.h
-%{_prefix}/lib/*.a
-%{_prefix}/lib/*.o
-%{_prefix}/lib/*.so*
-%{_prefix}/lib/audit/*
-%endif
-
 
 %changelog
 %autochangelog

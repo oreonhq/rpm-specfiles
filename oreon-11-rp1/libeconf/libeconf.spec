@@ -13,7 +13,7 @@
 
 Name:           libeconf
 Version:        0.8.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Enhanced config file parser library
 
 License:        MIT
@@ -67,7 +67,7 @@ configuration files from applications that use %{name}.
 
 
 %check
-%cmake_build --target check
+%ctest
 
 
 %files

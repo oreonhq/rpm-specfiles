@@ -1,0 +1,11 @@
+--- a/lib/softoken/fipstest.c
++++ b/lib/softoken/fipstest.c
+@@ -783,7 +783,7 @@
+         sftk_self_tests_success = PR_FALSE;
+         sftk_startup_tests_with_rerun(PR_TRUE);
+     }
+-    if (!sftk_self_tests_success) {
++    if (!sftk_self_tests_ran || !sftk_self_tests_success) {
+         return CKR_DEVICE_ERROR;
+     }
+     return CKR_OK;

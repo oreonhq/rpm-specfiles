@@ -6,7 +6,7 @@
 
 Name: docbook-style-dsssl
 Version: 1.79
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Modular DocBook DSSSL stylesheets
 License: MIT
 URL: https://docbook.sourceforge.net/
@@ -30,7 +30,7 @@ print and HTML output.
 
 %install
 install -d %{buildroot}%{style_dir}
-cp -a bin common contrib dtds frames html images lib olink print catalog \
+cp -a bin common contrib dtds frames html images lib olink print catalog VERSION \
     %{buildroot}%{style_dir}/
 chmod 0755 %{buildroot}%{style_dir}/bin/collateindex.pl
 install -d %{buildroot}%{_bindir}
@@ -41,6 +41,7 @@ ln -s dsssl-stylesheets-%{version} \
 %check
 test -f %{buildroot}%{style_dir}/html/docbook.dsl
 test -f %{buildroot}%{style_dir}/print/docbook.dsl
+test -f %{buildroot}%{style_dir}/VERSION
 perl -c %{buildroot}%{style_dir}/bin/collateindex.pl
 
 %files

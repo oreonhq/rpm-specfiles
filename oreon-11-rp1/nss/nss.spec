@@ -36,16 +36,17 @@
 # because the signing algorithm changed on 3.14 to DSA2 with SHA256
 # whereas we previously signed with DSA and SHA1. We must Keep this line
 # until all mock platforms have been updated.
-# After %%{__os_install_post} we would add
-# export LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%%{_libdir}
+# After %%{__os_install_post}, sign the stripped libraries. shlibsign is the
+# copy we just installed, and the buildroot has no libnssutil3.so on the
+# default linker path, so point it at %%{_libdir} in the buildroot.
 %define __spec_install_post \
     %{?__debug_package:%{__debug_install_post}} \
     %{__arch_install_post} \
     %{__os_install_post} \
-    $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libsoftokn3.so \
-    $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libfreeblpriv3.so \
-    $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libfreebl3.so \
-    %{?with_dbm:$RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libnssdbm3.so} \
+    LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir} $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libsoftokn3.so \
+    LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir} $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libfreeblpriv3.so \
+    LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir} $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libfreebl3.so \
+    %{?with_dbm:LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir} $RPM_BUILD_ROOT/%{unsupported_tools_directory}/shlibsign -i $RPM_BUILD_ROOT/%{_libdir}/libnssdbm3.so} \
 %{nil}
 
 # The upstream omits the trailing ".0", while we need it for
@@ -93,6 +94,8 @@ BuildRequires:    gawk
 BuildRequires:    psmisc
 BuildRequires:    perl-interpreter
 BuildRequires:    gcc-c++
+BuildRequires:    xmlto
+BuildRequires:    docbook-dtds >= 1.0-6
 
 Source0:          https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/%{nss_nspr_archive}.tar.gz
 Source1:          nss-util.pc.in
@@ -122,8 +125,6 @@ Source23:         cert8.db.xml
 Source25:         key3.db.xml
 Source27:         secmod.db.xml
 %endif
-Source30:         nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files.tar.xz
-
 Source101:        nspr-config.xml
 
 # This patch uses the GCC -iquote option documented at
@@ -161,6 +162,8 @@ Patch70:          nss-3.125-drbg-reseed-after-fork.patch
 Patch100:         nspr-config-pc.patch
 Patch101:         nspr-gcc-atomics.patch
 Patch71:          nss-3.127-disable-dtls13-clientcert-test.patch
+Patch72:          nss-3.133-fipstest-self-tests-ran.patch
+Patch73:          nss-3.133-httpserv-unused-set.patch
 
 %description
 Network Security Services (NSS) is a set of libraries designed to
@@ -206,6 +209,7 @@ Requires:         nss-softokn-devel
 Requires:         nspr-devel >= %{nspr_version}
 Requires:         pkgconfig
 BuildRequires:    xmlto
+BuildRequires:    docbook-dtds >= 1.0-6
 
 %description devel
 Header and Library files for doing development with Network Security Services.
@@ -308,6 +312,7 @@ Release:        %{nspr_release}%{?dist}
 Requires:       nspr%{?_isa} = %{nspr_version}-%{nspr_release}%{?dist}
 Requires:       pkgconfig
 BuildRequires:  xmlto
+BuildRequires:  docbook-dtds >= 1.0-6
 Conflicts:      filesystem < 3
 
 %description -n nspr-devel
@@ -327,9 +332,6 @@ popd
 pushd nss
 %autopatch -p1 -M 99
 popd
-
-tar -xf %{SOURCE30}
-cp -r nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files/* nss/tests/tools/
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1247353
 find nss/lib/libpkix -perm /u+x -type f -exec chmod -x {} \;
@@ -371,6 +373,7 @@ echo -n %{nspr_version} > version.xml
 for m in %{SOURCE101}; do
   cp ${m} .
 done
+export XML_CATALOG_FILES=%{_sysconfdir}/xml/catalog
 for m in nspr-config.xml; do
   xmlto man ${m}
 done
@@ -404,6 +407,7 @@ export BUILD_OPT=1
 
 # Generate symbolic info for debuggers
 export XCFLAGS=$RPM_OPT_FLAGS
+export CCC="${CXX:-clang++}"
 
 # Work around false-positive warnings with gcc 10:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1803029

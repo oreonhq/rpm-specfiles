@@ -28,7 +28,7 @@ BuildRequires:  gettext-devel
 BuildRequires:  pkgconfig
 BuildRequires:  perl-interpreter
 BuildRequires:  xmltoman
-BuildRequires:  systemd
+BuildRequires:  systemd-rpm-macros
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(expat)
@@ -39,6 +39,7 @@ BuildRequires:  pkgconfig(libevent)
 BuildRequires:  gdbm-devel
 BuildRequires:  libcap-devel
 BuildRequires:  gobject-introspection-devel
+BuildRequires:  python3
 
 %{?systemd_ordering}
 %{?sysusers_requires_compat}
@@ -160,7 +161,6 @@ NOCONFIGURE=1 autoreconf -fiv
     --disable-gtk3 \
     --disable-mono \
     --disable-monodoc \
-    --disable-python \
     --disable-pygobject \
     --disable-python-dbus \
     --disable-compat-howl \
@@ -176,8 +176,11 @@ NOCONFIGURE=1 autoreconf -fiv
 %install
 %make_install
 find %{buildroot} -name '*.la' -delete -print
+find %{buildroot} -type d -path '*/site-packages/avahi' -prune -exec rm -rf {} +
+rm -f %{buildroot}%{_mandir}/man1/avahi-bookmarks.1*
 rm -rf %{buildroot}%{_localstatedir}/run
 install -Dpm0644 %{SOURCE1} %{buildroot}%{_sysusersdir}/avahi.conf
+install -Dpm0644 service-type-database/service-types %{buildroot}%{_datadir}/avahi/service-types
 mkdir -p %{buildroot}%{_localstatedir}/lib/avahi-autoipd
 ln -s avahi-compat-libdns_sd/dns_sd.h %{buildroot}%{_includedir}/dns_sd.h
 %find_lang %{name}
@@ -222,7 +225,7 @@ make check
 %config(noreplace) %{_sysconfdir}/avahi/avahi-daemon.conf
 %config(noreplace) %{_sysconfdir}/avahi/hosts
 %config(noreplace) %{_sysconfdir}/avahi/services/*.service
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/avahi-dbus.conf
+%config(noreplace) %{_datadir}/dbus-1/system.d/avahi-dbus.conf
 %{_sbindir}/avahi-daemon
 %dir %{_datadir}/avahi
 %{_datadir}/avahi/avahi-service.dtd

@@ -12,7 +12,7 @@
 
 Name:           mingw-filesystem
 Version:        152
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        MinGW cross compiler base filesystem and environment
 
 License:        GPL-2.0-or-later
@@ -80,7 +80,7 @@ Summary:        MinGW cross compiler base filesystem and environment for the win
 Requires:       %{name}-base = %{version}-%{release}
 Provides:       mingw32-pkg-config = 0.28-17
 %if %{without bootstrap}
-Requires:       mingw-binutils-generic
+Recommends:     mingw-binutils-generic
 %endif
 
 %description -n mingw32-filesystem
@@ -93,7 +93,7 @@ Summary:        MinGW cross compiler base filesystem and environment for the win
 Requires:       %{name}-base = %{version}-%{release}
 Provides:       mingw64-pkg-config = 0.28-17
 %if %{without bootstrap}
-Requires:       mingw-binutils-generic
+Recommends:     mingw-binutils-generic
 %endif
 
 %description -n mingw64-filesystem
@@ -106,7 +106,7 @@ Summary:        MinGW cross compiler base filesystem and environment for the win
 Requires:       %{name}-base = %{version}-%{release}
 Provides:       ucrt64-pkg-config = 0.28-17
 %if %{without bootstrap}
-Requires:       mingw-binutils-generic
+Recommends:     mingw-binutils-generic
 %endif
 
 %description -n ucrt64-filesystem

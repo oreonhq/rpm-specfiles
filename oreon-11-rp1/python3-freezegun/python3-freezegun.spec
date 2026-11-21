@@ -8,7 +8,7 @@
 
 Name: python3-freezegun
 Version: 1.5.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Let your Python tests travel through time
 License: Apache-2.0
 URL: https://pypi.org/project/freezegun/
@@ -22,6 +22,8 @@ BuildRequires: python3-installer
 BuildRequires: python3-wheel
 BuildRequires: python3-setuptools
 BuildRequires: python3-dateutil
+BuildRequires: python3-six
+BuildRequires: python3-rpm-macros
 Requires: python3
 Requires: python3-dateutil
 
@@ -40,6 +42,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+cd /
 PYTHONPATH=%{buildroot}%{python3_sitelib}:%{buildroot}%{python3_sitearch} python3 -c 'import freezegun'
 
 %files -f %{_builddir}/%{name}.files

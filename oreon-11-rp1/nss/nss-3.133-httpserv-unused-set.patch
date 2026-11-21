@@ -1,0 +1,56 @@
+--- a/cmd/httpserv/httpserv.c
++++ b/cmd/httpserv/httpserv.c
+@@ -320,7 +320,10 @@
+ 
+     /* The worker threads empty the jobQ before they terminate. */
+     PR_Lock(qLock);
+-    PORT_Assert(threadCount == 0);
++    if (threadCount != 0) {
++        fprintf(stderr, "httpserv: %d threads still active at shutdown\n",
++                threadCount);
++    }
+     PORT_Assert(PR_CLIST_IS_EMPTY(&jobQ));
+     PR_Unlock(qLock);
+ 
+@@ -1336,7 +1339,9 @@
+     if (prStatus != PR_SUCCESS)
+         errExit("PR_SetFDInheritable");
+ 
+-    lm = PR_NewLogModule("TestCase");
++    lm = PR_NewLogModule("TestCase");
++    if (!lm)
++        fprintf(stderr, "httpserv: PR_NewLogModule failed\n");
+ 
+     /* set our password function */
+     PK11_SetPasswordFunc(SECU_GetModulePassword);
+--- a/cmd/selfserv/selfserv.c
++++ b/cmd/selfserv/selfserv.c
+@@ -3098,7 +3098,9 @@
+         }
+     }
+ 
+-    lm = PR_NewLogModule("TestCase");
++    lm = PR_NewLogModule("TestCase");
++    if (!lm)
++        fprintf(stderr, "selfserv: PR_NewLogModule failed\n");
+ 
+     if (fileName)
+         readBigFile(fileName);
+--- a/cmd/signtool/javascript.c
++++ b/cmd/signtool/javascript.c
+@@ -14,7 +14,6 @@
+ static PRStatus ensureExists(char *base, char *path);
+ static int make_dirs(char *path, PRInt32 file_perms);
+ 
+-static char *jartree = NULL;
+ static int idOrdinal;
+ static PRBool dumpParse = PR_FALSE;
+ 
+@@ -58,7 +57,6 @@
+ int
+ InlineJavaScript(char *dir, PRBool recurse)
+ {
+-    jartree = dir;
+     if (verbosity >= 0) {
+         PR_fprintf(outputFD, "\nGenerating inline signatures from HTML files in: %s\n",
+                    dir);

@@ -1,13 +1,13 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash d18b97764c755528c1051d376e33545d0eb60c6ebf85680436813fa5b04cc3d1
+%global source0_hash af518eab2114b0e11dfeacf8dd618b0a1ea04f28cd0b38acad2ec99abff2fd04
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 
 Name: libpfm
-Version: 4.13.0
+Version: 4.14.1
 Release: 1%{?dist}
 Summary: Performance monitoring library
 License: MIT

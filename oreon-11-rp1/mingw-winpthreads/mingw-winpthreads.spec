@@ -144,7 +144,9 @@ Requires:       ucrt64-winpthreads = %{version}-%{release}
 Static version of the MinGW Windows pthreads library.
 %endif
 
+%if %{without bootstrap}
 %{?mingw_debug_package}
+%endif
 
 
 %prep

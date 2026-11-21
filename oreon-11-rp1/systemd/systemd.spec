@@ -300,7 +300,7 @@ Provides:       system-setup-keyboard = 0.9
 Obsoletes:      systemd-sysv < 206
 Provides:       systemd-sysv = 206
 Conflicts:      initscripts < 9.56.1
-Conflicts:      oreon-release < 23-0.12
+Conflicts:      oreon-release < 11
 BuildRequires:  setup >= 2.15.0-3
 BuildRequires:  python3
 Conflicts:      setup < 2.15.0-3

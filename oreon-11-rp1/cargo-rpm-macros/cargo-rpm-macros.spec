@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash e8cc2e3ad0c28dca89ee540a22bcc939fd65e8fd55657a5b6b5b8a784703a58c
+%global source0_hash 6e44cfb464e022d47b9a981b1bcbbbc7ad95594270740a56678e56f7ce8c98cd
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 %global debug_package %{nil}
 
 Name: cargo-rpm-macros
-Version: 28.4
+Version: 28.5
 Release: 1%{?dist}
 Summary: RPM macros for building Rust packages with cargo
 License: MIT

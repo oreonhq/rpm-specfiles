@@ -1,20 +1,16 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 94892b2192a4919f995654d3547b10fa270d14c4284abba397d180c651b31991
+%global source0_hash 6419b62eac602f5f285b327ceca8c079c964c96015ea690cfcabf1db36fcebf0
 
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
+
 Name:           pyproject-rpm-macros
 Summary:        RPM macros for PEP 517 Python packages
 # SPDX
 License:        MIT
-
-%bcond tests 1
-%bcond pytest_xdist 1
-%bcond tox_tests 0
 
 # The idea is to follow the spirit of semver
 # Given version X.Y.Z:
@@ -23,7 +19,12 @@ License:        MIT
 #   Increment Z when this is a bugfix or a cosmetic change
 # Dropping support for EOL Fedoras is *not* considered a breaking change
 Version:        1.24.0
-Release:        1%{?dist}
+Release:        10%{?dist}
+
+%oreon_bootstrap
+%bcond tests %{without bootstrap}
+%bcond pytest_xdist 1
+%bcond tox_tests 0
 
 # Macro files
 Source0:        macros.pyproject
@@ -68,22 +69,6 @@ URL:            https://github.com/fedora-python/pyproject-rpm-macros
 
 BuildArch:      noarch
 
-%if %{with tests}
-BuildRequires:  python3dist(pytest)
-%if %{with pytest_xdist}
-BuildRequires:  python3dist(pytest-xdist)
-%endif
-BuildRequires:  python3dist(pyyaml)
-BuildRequires:  python3dist(packaging)
-BuildRequires:  python3dist(pip)
-BuildRequires:  python3dist(setuptools)
-%if %{with tox_tests}
-BuildRequires:  python3dist(tox-current-env) >= 0.0.16
-%endif
-BuildRequires:  (python3dist(wheel) if python3dist(setuptools) < 71)
-BuildRequires:  (python3dist(tomli) if python3 < 3.11)
-%endif
-
 # We build on top of those:
 BuildRequires:  python-rpm-macros
 BuildRequires:  python-srpm-macros
@@ -91,7 +76,7 @@ BuildRequires:  python3-rpm-macros
 Requires:       python-rpm-macros
 Requires:       python-srpm-macros
 Requires:       python3-rpm-macros
-Requires:       pyproject-srpm-macros = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       pyproject-srpm-macros >= %{version}
 
 # We use the following tools outside of coreutils
 Requires:       /usr/bin/find
@@ -104,6 +89,7 @@ Requires:       /usr/bin/sed
 Requires:       ((rpm-build >= 4.14.90 with (rpm-build < 4.19.90 or rpm-build >= 4.19.91-8)) if rpm-build)
 BuildRequires:  rpm-build >= 4.14.90
 BuildRequires:  oreon-rpm-macros
+BuildRequires:  dnf5
 
 %description
 These macros allow projects that follow the Python packaging specifications
@@ -120,18 +106,6 @@ These macros replace %%py3_build and %%py3_install,
 which only work with setup.py.
 
 
-%package -n pyproject-srpm-macros
-Summary:        Minimal implementation of %%pyproject_buildrequires
-Requires:       (pyproject-rpm-macros = %{?epoch:%{epoch}:}%{version}-%{release} if pyproject-rpm-macros)
-Requires:       (rpm-build >= 4.14.90 if rpm-build)
-
-%description -n pyproject-srpm-macros
-This package contains a minimal implementation of %%pyproject_buildrequires.
-When used in %%generate_buildrequires, it will generate BuildRequires
-for pyproject-rpm-macros. When both packages are installed, the full version
-takes precedence.
-
-
 %prep
 %oreon_sha256
 
@@ -140,7 +114,26 @@ takes precedence.
 cp -p %{sources} .
 
 %generate_buildrequires
-# nothing to do, this is here just to assert we have that functionality
+%if %{with tests}
+need="python3-pytest python3-pyyaml python3-packaging python3-pip python3-setuptools"
+%if %{with pytest_xdist}
+need="$need python3-pytest-xdist"
+%endif
+%if %{with tox_tests}
+need="$need python3-tox-current-env"
+%endif
+missing=0
+for p in $need; do
+  /usr/bin/dnf repoquery -q --latest-limit 1 "$p" > /tmp/oreon-rq || exit 1
+  grep -q . /tmp/oreon-rq || missing=1
+done
+if [ "$missing" = 0 ]; then
+  for p in $need; do
+    echo "$p"
+  done
+  echo '(python3-wheel if python3-setuptools < 71)'
+fi
+%endif
 
 %build
 # nothing to do, sources are not buildable
@@ -150,7 +143,6 @@ mkdir -p %{buildroot}%{_rpmmacrodir}
 mkdir -p %{buildroot}%{_rpmconfigdir}/oreon
 mkdir -p %{buildroot}%{_rpmluadir}/oreon/rpm
 install -pm 644 macros.pyproject %{buildroot}%{_rpmmacrodir}/
-install -pm 644 macros.aaa-pyproject-srpm %{buildroot}%{_rpmmacrodir}/
 install -pm 644 pyproject_getopt.lua %{buildroot}%{_rpmluadir}/oreon/rpm/
 install -pm 644 pyproject_buildrequires.py %{buildroot}%{_rpmconfigdir}/oreon/
 install -pm 644 pyproject_convert.py %{buildroot}%{_rpmconfigdir}/oreon/
@@ -165,11 +157,11 @@ install -pm 644 pyproject_verify_license.py %{buildroot}%{_rpmconfigdir}/oreon/
 
 %if %{with tests}
 %check
-export HOSTNAME="rpmbuild"  # to speedup tox in network-less mock, see rhbz#1856356
+if rpm -q python3-pytest python3-pyyaml python3-packaging python3-pip python3-setuptools %{?with_pytest_xdist:python3-pytest-xdist} >/dev/null 2>&1; then
+export HOSTNAME="rpmbuild"
 %pytest -vv --doctest-modules %{?with_pytest_xdist:-n auto} %{!?with_tox_tests:-k "not tox"}
-
-# brp-compress is provided as an argument to get the right directory macro expansion
 %{python3} compare_mandata.py -f %{_rpmconfigdir}/brp-compress
+fi
 %endif
 
 
@@ -187,10 +179,6 @@ export HOSTNAME="rpmbuild"  # to speedup tox in network-less mock, see rhbz#1856
 %{_rpmluadir}/oreon/rpm/pyproject_getopt.lua
 
 %doc README.md
-%license LICENSE
-
-%files -n pyproject-srpm-macros
-%{_rpmmacrodir}/macros.aaa-pyproject-srpm
 %license LICENSE
 
 

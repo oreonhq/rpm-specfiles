@@ -16,7 +16,8 @@ Source0: https://files.pythonhosted.org/packages/78/b4/439b179d1ff526791eb921115
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
-BuildRequires: python3-devel
+BuildRequires: python3
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-setuptools
@@ -43,7 +44,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import xdist'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import xdist'
 
 %files -f %{_builddir}/%{name}.files
 

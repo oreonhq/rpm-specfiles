@@ -18,7 +18,11 @@ Source0: https://github.com/c-ares/c-ares/releases/download/v%{version}/c-ares-%
 BuildRequires: oreon-rpm-macros
 BuildRequires: cmake
 BuildRequires: gcc
+BuildRequires: gcc-c++
+BuildRequires: gtest-devel
+BuildRequires: gmock-devel
 BuildRequires: make
+BuildRequires: glibc-devel
 
 %description
 c-ares is a C library for asynchronous DNS requests.
@@ -37,7 +41,11 @@ Headers and libraries for %{name}.
 %autosetup -p1
 
 %build
-%cmake -DCARES_SHARED=ON -DCARES_STATIC=OFF -DCARES_BUILD_TESTS=ON
+%cmake \
+  -DCARES_SHARED=ON \
+  -DCARES_STATIC=OFF \
+  -DCARES_BUILD_TESTS=ON \
+  -DCMAKE_NO_SYSTEM_FROM_IMPORTED=ON
 %cmake_build
 
 %install

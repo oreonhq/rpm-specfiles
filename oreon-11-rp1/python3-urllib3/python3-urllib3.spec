@@ -8,7 +8,7 @@
 
 Name: python3-urllib3
 Version: 2.8.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: HTTP library with thread-safe connection pooling, file post, and more.
 License: MIT
 URL: https://pypi.org/project/urllib3/
@@ -16,6 +16,7 @@ Source0: https://files.pythonhosted.org/packages/e3/05/b17359e1cefb4f909b5e40b1b
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
@@ -40,7 +41,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import urllib3'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import urllib3'
 
 %files -f %{_builddir}/%{name}.files
 

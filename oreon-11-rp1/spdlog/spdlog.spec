@@ -5,7 +5,7 @@
 
 Name: spdlog
 Version: 1.17.0
-Release: 1%{?dist}
+Release: 4%{?dist}
 Summary: Fast C++ logging library
 License: MIT
 URL: https://github.com/gabime/spdlog
@@ -16,6 +16,7 @@ BuildRequires: cmake
 BuildRequires: fmt-devel
 BuildRequires: gcc-c++
 BuildRequires: ninja-build
+BuildRequires: pkgconf
 
 %description
 Spdlog is a fast C++ logging library with synchronous and asynchronous
@@ -53,9 +54,10 @@ int main() {
     return 0;
 }
 EOF
-g++ spdlog-smoke.cpp -I%{buildroot}%{_includedir} \
-  -L%{buildroot}%{_libdir} -Wl,-rpath,%{buildroot}%{_libdir} \
-  -lspdlog -lfmt -pthread -o spdlog-smoke
+export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
+export PKG_CONFIG_SYSROOT_DIR=%{buildroot}
+g++ spdlog-smoke.cpp $(pkg-config --cflags --libs spdlog) \
+  -Wl,-rpath,%{buildroot}%{_libdir} -o spdlog-smoke
 ./spdlog-smoke
 
 %ldconfig_scriptlets
