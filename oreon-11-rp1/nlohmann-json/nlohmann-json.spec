@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 42f6e95cad6ec532fd372391373363b62a14af6d771056dbfc86160e6dfff7aa
+%global source0_hash 4b92eb0c06d10683f7447ce9406cb97cd4b453be18d7279320f7b2f025c10187
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -14,7 +14,7 @@ Release:        1%{?dist}
 Summary:        JSON for Modern C++
 License:        MIT
 URL:            https://github.com/nlohmann/json
-Source0:        https://github.com/nlohmann/json/releases/download/v%{version}/json.tar.xz
+Source0:        https://github.com/nlohmann/json/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  cmake
@@ -37,7 +37,7 @@ Header-only development files for %{name}.
 
 %prep
 %oreon_sha256
-%autosetup -n json -p1
+%autosetup -n json-%{version} -p1
 
 %build
 %cmake -G Ninja \
