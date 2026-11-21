@@ -1,5 +1,5 @@
 # Copyright (C) 2026 Oreon HQ
-# SPDX-License-Identifier: GPL-2.0-or-later
+# SPDX-License-Identifier: MIT
 
 %global source0_hash 9364b70a12eb59a06830fb488d9357f90100dff0d98b23ea3593a183d43e6f2f
 
@@ -14,7 +14,6 @@ Summary: Library for asynchronous DNS requests
 License: MIT
 URL: https://c-ares.org/
 Source0: https://github.com/c-ares/c-ares/releases/download/v%{version}/c-ares-%{version}.tar.gz
-Patch0: c-ares-cxx-flags.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: cmake
