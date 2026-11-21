@@ -40,8 +40,8 @@ BuildRequires: oreon-rpm-macros
 %if %{with fastclang}
 %define bcond_override_default_lldb 0
 %define bcond_override_default_offload 0
-%define bcond_override_default_mlir 0
-%define bcond_override_default_flang 0
+%define bcond_override_default_mlir 1
+%define bcond_override_default_flang 1
 %define bcond_override_default_libclc 0
 %define bcond_override_default_build_bolt 0
 %define bcond_override_default_polly 0
@@ -90,8 +90,14 @@ BuildRequires: oreon-rpm-macros
 %endif
 %endif
 
-# MLIR needs nanobind/numpy/pybind11 which are not in the tree yet
-%bcond_with mlir
+%bcond_without mlir
+# bindings need numpy, numpy needs this flang
+%bcond_with mlir_python
+%if %{with mlir_python}
+%global mlir_python_toggle ON
+%else
+%global mlir_python_toggle OFF
+%endif
 
 %ifarch riscv64
 # MLIR Execution Engine doesn't quite work on riscv64, see:
@@ -102,8 +108,7 @@ BuildRequires: oreon-rpm-macros
 %endif
 
 #region flang
-# flang needs mlir which is gated off until its python deps land
-%bcond_with flang
+%bcond_without flang
 
 %if %{with flang}
 
@@ -636,7 +641,7 @@ BuildRequires: perl(Term::ANSIColor)
 BuildRequires: perl(Text::ParseWords)
 BuildRequires: perl(Sys::Hostname)
 
-%if %{with mlir}
+%if %{with mlir_python}
 BuildRequires: python%{python3_pkgversion}-numpy
 BuildRequires: python%{python3_pkgversion}-pybind11
 BuildRequires: python%{python3_pkgversion}-pyyaml
@@ -1064,6 +1069,7 @@ Requires: %{pkg_name_mlir}-static%{?_isa} = %{version}-%{release}
 %description -n %{pkg_name_mlir}-devel
 MLIR development files.
 
+%if %{with mlir_python}
 %package -n python%{python3_pkgversion}-mlir
 Summary:	MLIR python bindings
 
@@ -1074,6 +1080,7 @@ Requires: %{pkg_name_llvm}-libs%{?_isa} = %{version}-%{release}
 
 %description -n python%{python3_pkgversion}-mlir
 MLIR python bindings.
+%endif
 %endif
 #endregion MLIR packages
 
@@ -1705,7 +1712,7 @@ popd
         -DMLIR_INSTALL_AGGREGATE_OBJECTS=OFF \\\
         -DMLIR_LINK_MLIR_DYLIB=ON \\\
         -DMLIR_BUILD_MLIR_C_DYLIB=ON \\\
-        -DMLIR_ENABLE_BINDINGS_PYTHON:BOOL=%{mlir_jit} \\\
+        -DMLIR_ENABLE_BINDINGS_PYTHON:BOOL=%{mlir_python_toggle} \\\
         -DMLIR_ENABLE_EXECUTION_ENGINE:BOOL=%{mlir_jit}
 %endif
 #endregion mlir options
@@ -2355,7 +2362,7 @@ ln -vsf "../../../${liblldb}" %{buildroot}%{python3_sitearch}/lldb/_lldb.so
 #endregion LLDB installation
 
 #region mlir installation
-%if %{with mlir} && "%{mlir_jit}" == "ON"
+%if %{with mlir_python}
 mkdir -p %{buildroot}/%{python3_sitearch}
 mv %{buildroot}%{install_prefix}/python_packages/mlir_core/mlir %{buildroot}/%{python3_sitearch}
 # These directories should be empty now.
@@ -3791,7 +3798,7 @@ fi
 }}
 %endif
 
-%if "%{mlir_jit}" == "ON"
+%if %{with mlir_python}
 %files -n python%{python3_pkgversion}-%{pkg_name_mlir}
 %{python3_sitearch}/mlir/
 %endif
