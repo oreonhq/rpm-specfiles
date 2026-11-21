@@ -1,0 +1,28 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -53,6 +53,11 @@
+ 	MESSAGE (WARNING "Static building was requested be disabled, but re-enabled to support tests")
+ ENDIF ()
+ 
++# cxx before EnableWarnings so it does not blank CMAKE_CXX_FLAGS
++IF (CARES_BUILD_TESTS OR CARES_BUILD_CONTAINER_TESTS)
++	enable_language(CXX)
++ENDIF ()
++
+ INCLUDE (EnableWarnings)
+ 
+ # Optionally treat warnings as errors for the c-ares library itself.  This is
+--- a/cmake/EnableWarnings.cmake
++++ b/cmake/EnableWarnings.cmake
+@@ -198,7 +198,11 @@
+ 		endif ()
+ 	endforeach()
+ 
++	get_property(_enabled_languages GLOBAL PROPERTY ENABLED_LANGUAGES)
+ 	foreach(lang C CXX)
++		if (NOT "${lang}" IN_LIST _enabled_languages)
++			continue()
++		endif ()
+ 		foreach (config IN LISTS ${configs_var})
+ 			string(TOUPPER "${config}" config)
+ 			if (config STREQUAL "NONE")
