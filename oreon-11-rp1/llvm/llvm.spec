@@ -390,7 +390,7 @@ end
 #region main package
 Name:		%{pkg_name_llvm}
 Version:        23.1.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	Apache-2.0 WITH LLVM-exception OR NCSA
@@ -1476,7 +1476,7 @@ cd llvm/utils/lit
 # Copy CFLAGS into ASMFLAGS, so -fcf-protection is used when compiling assembly files.
 export ASMFLAGS="%{build_cflags}"
 
-# We set CLANG_DEFAULT_PIE_ON_LINUX=OFF and PPC_LINUX_DEFAULT_IEEELONGDOUBLE=ON to match the
+# pie on by default, same as gcc --enable-default-pie
 
 # Disable dwz because it takes a huge amount of time to decide not to
 # optimize things.
@@ -1591,7 +1591,7 @@ popd
 %global cmake_config_args %{cmake_config_args} \\\
 	-DCLANG_BUILD_EXAMPLES:BOOL=OFF \\\
 	-DCLANG_CONFIG_FILE_SYSTEM_DIR=%{_sysconfdir}/%{pkg_name_clang}/ \\\
-	-DCLANG_DEFAULT_PIE_ON_LINUX=OFF \\\
+	-DCLANG_DEFAULT_PIE_ON_LINUX=ON \\\
 	-DCLANG_DEFAULT_UNWINDLIB=libgcc \\\
 	-DCLANG_ENABLE_ARCMT:BOOL=ON \\\
 	-DCLANG_ENABLE_STATIC_ANALYZER:BOOL=ON \\\
