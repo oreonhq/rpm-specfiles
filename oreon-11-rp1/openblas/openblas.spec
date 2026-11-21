@@ -18,7 +18,7 @@ Source0:        https://github.com/OpenMathLib/OpenBLAS/releases/download/v%{ver
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  cmake
 BuildRequires:  ninja-build
-BuildRequires:  gcc-gfortran
+BuildRequires:  flang
 
 %description
 OpenBLAS is an optimized BLAS library based on GotoBLAS2, with LAPACK.
@@ -36,12 +36,17 @@ Headers, cmake files, and the pkg-config file for OpenBLAS.
 %autosetup -n OpenBLAS-%{version}
 
 %build
-FFLAGS=$(printf '%s\n' "$FFLAGS" | sed -e 's/--config=[^ ]*//g' -e 's/-flto=thin//g' -e 's/-ffat-lto-objects//g')
+FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
+  -e 's/-fplugin=[^ ]*//g' \
+  -e 's/-grecord-gcc-switches//g' \
+  -e 's/-fexceptions//g' \
+  -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' \
+  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g')
 FCFLAGS="$FFLAGS"
 export FFLAGS FCFLAGS
 
 %cmake \
-  -DCMAKE_Fortran_COMPILER=gfortran \
+  -DCMAKE_Fortran_COMPILER=flang \
   -DBUILD_SHARED_LIBS=ON \
   -DBUILD_STATIC_LIBS=OFF \
   -DBUILD_TESTING=ON \
