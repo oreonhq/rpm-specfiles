@@ -109,6 +109,7 @@ BuildRequires: libicu-devel
 BuildRequires: libquadmath-devel
 %endif
 BuildRequires: libzstd-devel
+BuildRequires: openssl-devel
 BuildRequires: which
 
 Patch0: boost-1.81.0-build-optflags.patch
@@ -454,6 +455,7 @@ Summary: The Boost C++ headers and shared development libraries
 License: BSL-1.0 AND MIT AND (MIT OR NCSA) AND (BSL-1.0 OR MIT) AND HPND-sell-variant AND Zlib AND Apache-2.0 AND (BSL-1.0 OR Apache-2.0) AND (BSL-1.0 OR Apache-2.0 WITH LLVM-exception)
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libicu-devel%{?_isa}
+Requires: openssl-devel%{?_isa}
 %if %{with quadmath}
 Requires: libquadmath-devel%{?_isa}
 %endif
@@ -576,6 +578,14 @@ echo ============================= build serial ==================
 %endif
 	stage
 
+echo ============================= build cobalt ==================
+./b2 -q %{?_smp_mflags} \
+	--build-dir=serial \
+	--with-cobalt \
+	cxxstd=20 \
+	variant=release threading=multi debug-symbols=on pch=off \
+	stage
+
 echo ============================= build Boost.Build ==================
 (cd tools/build
  ./bootstrap.sh %{toolchain})
@@ -622,6 +632,16 @@ echo ============================= install serial ==================
 %if !%{with stacktrace_from_exception}
 	boost.stacktrace.from_exception=off \
 %endif
+	install
+
+echo ============================= install cobalt ==================
+./b2 -q %{?_smp_mflags} \
+	--build-dir=serial \
+	--with-cobalt \
+	cxxstd=20 \
+	--prefix=$RPM_BUILD_ROOT%{_prefix} \
+	--libdir=$RPM_BUILD_ROOT%{_libdir} \
+	variant=release threading=multi debug-symbols=on pch=off \
 	install
 
 cat > $RPM_BUILD_ROOT%{_libdir}/libboost_system.so << EOT
@@ -759,6 +779,7 @@ fi
 %license LICENSE_1_0.txt
 %{_libdir}/libboost_cobalt.so.%{sonamever}
 %{_libdir}/libboost_cobalt_io.so.%{sonamever}
+%{_libdir}/libboost_cobalt_io_ssl.so.%{sonamever}
 
 %files container
 %license LICENSE_1_0.txt
@@ -910,6 +931,7 @@ fi
 %{_libdir}/libboost_chrono.so
 %{_libdir}/libboost_cobalt.so
 %{_libdir}/libboost_cobalt_io.so
+%{_libdir}/libboost_cobalt_io_ssl.so
 %{_libdir}/libboost_container.so
 %{_libdir}/libboost_contract.so
 %if %{with context}
