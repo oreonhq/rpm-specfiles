@@ -77,6 +77,7 @@ BuildRequires: gettext-devel
 BuildRequires: ncurses-devel
 BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: lua-devel >= 5.1
+BuildRequires: lua-rpm-macros
 BuildRequires: libcap-devel
 BuildRequires: libacl-devel
 %if %{with xz}
