@@ -521,6 +521,8 @@ a number of significant features and is now developed independently.
 %oreon_sha256
 %autosetup -n %{toplev_dirname} -p1
 find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
+sed -i 's/case linux : vendor = pc ; sys = linux ;/case linux : vendor = pc ; sys = linux-gnu ;/' \
+  tools/build/src/tools/clang.jam
 
 %build
 %set_build_flags
@@ -528,6 +530,11 @@ find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
 PYTHON3_ABIFLAGS=$(/usr/bin/python3-config --abiflags)
 : PYTHON3_VERSION=%{python3_version}
 : PYTHON3_ABIFLAGS=${PYTHON3_ABIFLAGS}
+pyinc=/usr/include/python%{python3_version}${PYTHON3_ABIFLAGS}
+test -f "${pyinc}/pyconfig.h"
+printf '#include "%s/pyconfig.h"\n' "${pyinc}" > pyconfig.h
+export CPLUS_INCLUDE_PATH="${pyinc}${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="${pyinc}${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
 %endif
 
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
@@ -572,6 +579,11 @@ echo ============================= build Boost.Build ==================
 %check
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
+%if %{with python3}
+pyinc=/usr/include/python%{python3_version}$(/usr/bin/python3-config --abiflags)
+export CPLUS_INCLUDE_PATH="${pyinc}${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="${pyinc}${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
+%endif
 ./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
