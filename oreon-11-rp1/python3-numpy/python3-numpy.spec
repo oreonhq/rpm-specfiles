@@ -26,7 +26,7 @@ BuildRequires:  meson
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig
 BuildRequires:  gcc-c++
-BuildRequires:  gcc-gfortran
+BuildRequires:  flang
 BuildRequires:  openblas-devel
 BuildRequires:  python3-pytest
 BuildRequires:  python3-hypothesis
@@ -42,6 +42,14 @@ NumPy is the array library for Python. This build links OpenBLAS.
 %autosetup -n numpy-%{version}
 
 %build
+FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
+  -e 's/-fplugin=[^ ]*//g' \
+  -e 's/-grecord-gcc-switches//g' \
+  -e 's/-fexceptions//g' \
+  -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' \
+  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g')
+FCFLAGS="$FFLAGS"
+export FFLAGS FCFLAGS FC=flang F77=flang
 python3 -m build --wheel --no-isolation \
   -Csetup-args=-Dblas=openblas \
   -Csetup-args=-Dlapack=openblas \
@@ -52,6 +60,14 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
+  -e 's/-fplugin=[^ ]*//g' \
+  -e 's/-grecord-gcc-switches//g' \
+  -e 's/-fexceptions//g' \
+  -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' \
+  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g')
+FCFLAGS="$FFLAGS"
+export FFLAGS FCFLAGS FC=flang F77=flang
 PYTHONPATH=%{buildroot}%{python3_sitearch} python3 -c 'import numpy as np; a = np.eye(4); assert np.allclose(np.linalg.inv(a), a)'
 PYTHONPATH=%{buildroot}%{python3_sitearch} python3 -m pytest -q --pyargs numpy -m 'not slow' -p no:cacheprovider
 
