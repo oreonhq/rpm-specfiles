@@ -521,7 +521,10 @@ a number of significant features and is now developed independently.
 %oreon_sha256
 %autosetup -n %{toplev_dirname} -p1
 find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
-sed -i 's/case linux : vendor = pc ; sys = linux ;/case linux : vendor = pc ; sys = linux-gnu ;/' \
+host_triple=$(%{__cxx} -dumpmachine)
+host_vendor=$(printf '%s\n' "$host_triple" | cut -d- -f2)
+host_sys=$(printf '%s\n' "$host_triple" | cut -d- -f3-)
+sed -i "s/case linux : vendor = pc ; sys = linux ;/case linux : vendor = ${host_vendor} ; sys = ${host_sys} ;/" \
   tools/build/src/tools/clang.jam
 
 %build
