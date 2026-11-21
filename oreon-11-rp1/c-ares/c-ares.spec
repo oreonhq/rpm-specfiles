@@ -22,6 +22,7 @@ BuildRequires: gcc-c++
 BuildRequires: gtest-devel
 BuildRequires: gmock-devel
 BuildRequires: make
+BuildRequires: glibc-devel
 
 %description
 c-ares is a C library for asynchronous DNS requests.
