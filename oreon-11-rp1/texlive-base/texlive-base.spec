@@ -49,7 +49,7 @@ License: Apache-2.0 AND Artistic-2.0 AND BSD-3-Clause AND GFDL-1.1-or-later AND 
 URL: http://tug.org/texlive/
 Source0: https://ctan.math.illinois.edu/systems/texlive/Source/%{source_name}.tar.xz
 Source1: macros.texlive
-Source2: %{tlnet_url}/tlpkg/texlive.tlpdb
+Source2: texlive.tlpdb
 Source3: texlive-licenses.tar.xz
 Source4: generate-fmtutilcnf
 # These noarch components are packed wrong upstream (do not unpack into texmf-dist)
@@ -479,7 +479,7 @@ Source425: %{tlnet_url}/archive/texaccents.source.tar.xz
 Source426: %{tlnet_url}/archive/aomart.tar.xz
 Source427: %{tlnet_url}/archive/aomart.doc.tar.xz
 # We don't unpack this because we have the perl files from separate packaging
-# SourceNNN: %{tlnet_url}/archive/bibtexperllibs.tar.xz
+# SourceNNN: %%{tlnet_url}/archive/bibtexperllibs.tar.xz
 Source428: %{tlnet_url}/archive/bibtexperllibs.doc.tar.xz
 Source429: %{tlnet_url}/archive/bookshelf.tar.xz
 Source430: %{tlnet_url}/archive/bookshelf.doc.tar.xz
