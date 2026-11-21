@@ -121,6 +121,7 @@ Patch7: boost-1.90.0-range.patch
 Patch8: boost-1.90.0-multi_index-utf8.patch
 Patch9: boost-1.90.0-bloom-utf8.patch
 Patch10: boost-histogram-visibility.patch
+Patch11: boost-1.90.0-regex-example-in-avail.patch
 
 
 %description
