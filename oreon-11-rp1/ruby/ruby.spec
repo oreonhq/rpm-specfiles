@@ -30,8 +30,8 @@
 
 Name:           ruby
 Version:        4.0.9
-Release:        2%{?dist}
-%global ruby_version %{version}
+Release:        3%{?dist}
+%{lua:rpm.define("ruby_version " .. rpm.expand("%{version}"))}
 Summary:        Ruby programming language interpreter
 License:        (Ruby OR BSD-2-Clause) AND BSD-2-Clause AND BSD-3-Clause AND MIT AND Unicode-3.0 AND CC0-1.0 AND Zlib AND ISC
 URL:            https://www.ruby-lang.org/
@@ -126,7 +126,7 @@ Summary:        Macros and development tools for packaging RubyGems
 Version:        %{rubygems_version}
 License:        (Ruby OR BSD-2-Clause) AND MIT
 Requires:       ruby(rubygems) >= %{rubygems_version}
-Requires:       ruby >= %{version}
+Requires:       ruby >= %{ruby_version}
 BuildArch:      noarch
 
 %description -n rubygems-devel
