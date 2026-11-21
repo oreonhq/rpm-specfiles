@@ -595,10 +595,6 @@ BuildRequires:	binutils-devel
 %if %{with gold}
 BuildRequires:	binutils-gold
 %endif
-%ifarch %{valgrind_arches}
-# Enable extra functionality when run the LLVM JIT under valgrind.
-BuildRequires:	valgrind-devel
-%endif
 %if %{with libedit}
 # LLVM's LineEditor library will use libedit if it is available.
 BuildRequires:	libedit-devel
@@ -622,8 +618,7 @@ BuildRequires: libffi-devel
 BuildRequires: perl-interpreter
 BuildRequires:	perl-generators
 
-# We only need the emacs packaging macros, which are part of emacs-common.
-BuildRequires:	emacs-common
+%global _emacs_sitestartdir %{_datadir}/emacs/site-lisp/site-start.d
 
 BuildRequires:	libatomic
 
