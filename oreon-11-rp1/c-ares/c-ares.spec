@@ -20,6 +20,7 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: gtest-devel
+BuildRequires: gmock-devel
 BuildRequires: make
 
 %description
@@ -39,7 +40,11 @@ Headers and libraries for %{name}.
 %autosetup -p1
 
 %build
-%cmake -DCARES_SHARED=ON -DCARES_STATIC=OFF -DCARES_BUILD_TESTS=ON
+%cmake \
+  -DCARES_SHARED=ON \
+  -DCARES_STATIC=OFF \
+  -DCARES_BUILD_TESTS=ON \
+  -DCMAKE_NO_SYSTEM_FROM_IMPORTED=ON
 %cmake_build
 
 %install
