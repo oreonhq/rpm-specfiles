@@ -49,6 +49,11 @@ FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
   -e 's/-fcf-protection\(=[^ ]*\)\{0,1\}//g' \
   -e 's/-mtls-dialect=[^ ]*//g' \
   -e 's/-mno-omit-leaf-frame-pointer//g' \
+  -e 's/-mbranch-protection=[^ ]*//g' \
+  -e 's/-mbackchain//g' \
+  -e 's/-mfpmath=[^ ]*//g' \
+  -e 's/-mstackrealign//g' \
+  -e 's/-msse2//g' \
   -e 's/-I[^ ]*gfortran\/modules//g')
 FCFLAGS="$FFLAGS"
 LDFLAGS=$(printf '%s\n' "$LDFLAGS" | sed \
