@@ -2034,7 +2034,7 @@ oreon_done ${PIPESTATUS[0]}
 ) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
-%if "%{mlir_jit}" == "ON"
+%if %{with mlir_python}
 (
 %cmake_build --target libMLIRPythonCAPI.so
 ) 2>&1 | oreon_ninja_filter
