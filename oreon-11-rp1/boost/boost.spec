@@ -16,7 +16,11 @@
 %endif
 
 %bcond python3 1
+%if %{with bootstrap}
+%bcond numpy 0
+%else
 %bcond numpy 1
+%endif
 
 %ifnarch %{ix86} x86_64
 %bcond quadmath 0
