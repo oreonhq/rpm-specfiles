@@ -537,6 +537,7 @@ Patch2307:        227851.patch
 # The test only accepted stale_handle.
 Patch2308:        ompd-curr-parallel-handle-check.patch
 Patch2309:        flang-rt-link-libm.patch
+Patch2310:        flang-rt-install-libdir.patch
 
 
 %if %{with fastclang}
@@ -1755,7 +1756,8 @@ popd
 # See also https://llvm.org/devmtg/2025-04/slides/quick_talk/kruse_flang-rt.pdf
 %global cmake_config_args %{cmake_config_args} \\\
   -DFLANG_RT_ENABLE_SHARED:BOOL=ON \\\
-  -DFLANG_RT_ENABLE_STATIC:BOOL=ON
+  -DFLANG_RT_ENABLE_STATIC:BOOL=ON \\\
+  -DFLANG_RT_INSTALL_RESOURCE_LIB_PATH=%{_libdir}
 # The amount of RAM used per process has been set by trial and error.
 # This number may increase/decrease from time to time and may require changes.
 # We prefer to be on the safe side in order to avoid spurious errors.
@@ -2111,14 +2113,6 @@ popd
 %endif
 
 %cmake_install
-
-%if %{with flang}
-# Create ld.so.conf.d entry
-mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-cat >> %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{pkg_name_flang}-%{_arch}.conf << EOF
-%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}/
-EOF
-%endif
 
 popd
 
@@ -2875,7 +2869,7 @@ export LIT_OPTS="$LIT_OPTS --max-retries-per-test=4"
 # Without this we run into a libflang_rt.runtime.so not found error.
 # See https://github.com/llvm/llvm-project/pull/150722 for why this only
 # happens when flang is found.
-export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}
+export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 %endif
 
 %cmake_build --target check-openmp
@@ -3831,9 +3825,8 @@ fi
 %{_prefix}/lib/clang/%{maj_ver}/include/ISO_Fortran_binding.h
 
 %files -n %{pkg_name_flang}-runtime
-%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}/libflang_rt.runtime.a
-%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}/libflang_rt.runtime.so
-%config(noreplace) %{_sysconfdir}/ld.so.conf.d/%{pkg_name_flang}-%{_arch}.conf
+%{_libdir}/libflang_rt.runtime.a
+%{_libdir}/libflang_rt.runtime.so
 
 %endif
 #region flang files
