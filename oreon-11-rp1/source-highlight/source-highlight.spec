@@ -48,6 +48,8 @@ export CXXFLAGS="$CXXFLAGS -std=gnu++14"
 %install
 %make_install
 find %{buildroot} -name '*.la' -delete
+rm -f %{buildroot}%{_infodir}/dir
+rm -f %{buildroot}%{_docdir}/%{name}/COPYING
 
 %check
 make check -j1
@@ -55,6 +57,7 @@ make check -j1
 %files
 %license COPYING
 %doc AUTHORS ChangeLog NEWS README THANKS CREDITS
+%{_docdir}/%{name}/
 %{_bindir}/check-regexp
 %{_bindir}/cpp2html
 %{_bindir}/java2html
