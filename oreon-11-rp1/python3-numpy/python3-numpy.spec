@@ -14,7 +14,6 @@ Summary:        Array processing for numbers, strings, records, and objects
 License:        BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0
 URL:            https://numpy.org
 Source0:        https://files.pythonhosted.org/packages/4e/3a/8770c288c47f0b5c2a786d3c20e79f66fd245f2d42cd232d7cd5e00e83e5/numpy-%{version}.tar.gz
-Patch0:         numpy-flang-runtime.patch
 Provides:       python3dist(numpy) = %{version}
 
 BuildRequires:  oreon-rpm-macros
