@@ -9,7 +9,7 @@
 
 Name: python3-meson-python
 Version: 0.22.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Meson Python build backend
 License: MIT
 URL: https://github.com/mesonbuild/meson-python
@@ -28,6 +28,7 @@ BuildRequires: patchelf
 Requires: python3
 Requires: patchelf
 Requires: python3-packaging
+Requires: python3-pyproject-metadata
 Requires: meson
 
 %description
