@@ -98,6 +98,7 @@ FCFLAGS="$FFLAGS"
 LDFLAGS=$(printf '%s\n' "$LDFLAGS" | sed \
   -e 's/--config=[^ ]*oreon-hardened-clang-ld.cfg//g')
 export FFLAGS FCFLAGS LDFLAGS FC=flang F77=flang
+cd %{_builddir}
 PYTHONPATH=%{buildroot}%{python3_sitearch} python3 -c 'import numpy as np; a = np.eye(4); assert np.allclose(np.linalg.inv(a), a)'
 PYTHONPATH=%{buildroot}%{python3_sitearch} python3 -m pytest -q --pyargs numpy -m 'not slow' -p no:cacheprovider
 
