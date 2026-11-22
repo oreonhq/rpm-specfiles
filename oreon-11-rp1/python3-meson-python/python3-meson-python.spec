@@ -1,5 +1,5 @@
 # Copyright (C) 2026 Oreon HQ
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 52c88628b0e5671592dc2306613fb5f6f3615fd24def059b9894f143b7f9a139
 
@@ -24,7 +24,9 @@ BuildRequires: python3-installer
 BuildRequires: python3-packaging
 BuildRequires: python3-pyproject-metadata
 BuildRequires: meson
+BuildRequires: patchelf
 Requires: python3
+Requires: patchelf
 Requires: python3-packaging
 Requires: meson
 
