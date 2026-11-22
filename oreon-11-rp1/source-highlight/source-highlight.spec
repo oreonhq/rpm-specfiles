@@ -14,6 +14,7 @@ Summary: Produces a document with syntax highlighting
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/src-highlite/
 Source0: https://ftp.gnu.org/gnu/src-highlite/source-highlight-%{version}.tar.gz
+Patch0: source-highlight-clang-tests.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc-c++
