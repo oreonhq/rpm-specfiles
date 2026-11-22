@@ -41,9 +41,19 @@ FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
   -e 's/-grecord-gcc-switches//g' \
   -e 's/-fexceptions//g' \
   -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' \
-  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g')
+  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g' \
+  -e 's/-pipe//g' \
+  -e 's/-fstack-protector-strong//g' \
+  -e 's/-fasynchronous-unwind-tables//g' \
+  -e 's/-fstack-clash-protection//g' \
+  -e 's/-fcf-protection\(=[^ ]*\)\{0,1\}//g' \
+  -e 's/-mtls-dialect=[^ ]*//g' \
+  -e 's/-mno-omit-leaf-frame-pointer//g' \
+  -e 's/-I[^ ]*gfortran\/modules//g')
 FCFLAGS="$FFLAGS"
-export FFLAGS FCFLAGS
+LDFLAGS=$(printf '%s\n' "$LDFLAGS" | sed \
+  -e 's/--config=[^ ]*oreon-hardened-clang-ld.cfg//g')
+export FFLAGS FCFLAGS LDFLAGS
 
 %cmake \
   -DCMAKE_Fortran_COMPILER=flang \
