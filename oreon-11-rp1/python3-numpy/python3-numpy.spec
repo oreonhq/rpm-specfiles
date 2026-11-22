@@ -47,9 +47,19 @@ FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
   -e 's/-grecord-gcc-switches//g' \
   -e 's/-fexceptions//g' \
   -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' \
-  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g')
+  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g' \
+  -e 's/-pipe//g' \
+  -e 's/-fstack-protector-strong//g' \
+  -e 's/-fasynchronous-unwind-tables//g' \
+  -e 's/-fstack-clash-protection//g' \
+  -e 's/-fcf-protection\(=[^ ]*\)\{0,1\}//g' \
+  -e 's/-mtls-dialect=[^ ]*//g' \
+  -e 's/-mno-omit-leaf-frame-pointer//g' \
+  -e 's/-I[^ ]*gfortran\/modules//g')
 FCFLAGS="$FFLAGS"
-export FFLAGS FCFLAGS FC=flang F77=flang
+LDFLAGS=$(printf '%s\n' "$LDFLAGS" | sed \
+  -e 's/--config=[^ ]*oreon-hardened-clang-ld.cfg//g')
+export FFLAGS FCFLAGS LDFLAGS FC=flang F77=flang
 python3 -m build --wheel --no-isolation \
   -Csetup-args=-Dblas=openblas \
   -Csetup-args=-Dlapack=openblas \
@@ -65,9 +75,19 @@ FFLAGS=$(printf '%s\n' "$FFLAGS" | sed \
   -e 's/-grecord-gcc-switches//g' \
   -e 's/-fexceptions//g' \
   -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' \
-  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g')
+  -e 's/-Wp,-D_GLIBCXX_ASSERTIONS//g' \
+  -e 's/-pipe//g' \
+  -e 's/-fstack-protector-strong//g' \
+  -e 's/-fasynchronous-unwind-tables//g' \
+  -e 's/-fstack-clash-protection//g' \
+  -e 's/-fcf-protection\(=[^ ]*\)\{0,1\}//g' \
+  -e 's/-mtls-dialect=[^ ]*//g' \
+  -e 's/-mno-omit-leaf-frame-pointer//g' \
+  -e 's/-I[^ ]*gfortran\/modules//g')
 FCFLAGS="$FFLAGS"
-export FFLAGS FCFLAGS FC=flang F77=flang
+LDFLAGS=$(printf '%s\n' "$LDFLAGS" | sed \
+  -e 's/--config=[^ ]*oreon-hardened-clang-ld.cfg//g')
+export FFLAGS FCFLAGS LDFLAGS FC=flang F77=flang
 PYTHONPATH=%{buildroot}%{python3_sitearch} python3 -c 'import numpy as np; a = np.eye(4); assert np.allclose(np.linalg.inv(a), a)'
 PYTHONPATH=%{buildroot}%{python3_sitearch} python3 -m pytest -q --pyargs numpy -m 'not slow' -p no:cacheprovider
 
