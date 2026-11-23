@@ -41,7 +41,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import filelock'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import filelock'
 
 %files -f %{_builddir}/%{name}.files
 
