@@ -12,7 +12,7 @@
 Summary: Dynamic analysis tools to detect memory or thread bugs and profile
 Name: valgrind
 Version: 3.28.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Epoch: 1
 License: GPL-3.0-or-later AND bzip2-1.0.6 AND (GPL-3.0-or-later AND LGPL-2.0-or-later) AND (GPL-3.0-or-later AND ISC) AND (GPL-3.0-or-later AND Unlicense) AND (GPL-3.0-or-later AND Zlib) AND (GPL-3.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-3.0-or-later AND BSD-3-Clause) AND (GPL-3.0-or-later AND (MIT OR NCSA)) AND CMU-Mach AND (GPL-3.0-or-later AND X11 AND BSD-3-Clause) AND X11 AND (GPL-2.0-or-later WITH Autoconf-exception-generic) AND (GPL-3.0-or-later WITH Autoconf-exception-generic-3.0) AND FSFULLR AND FSFAP AND FSFUL AND FSFULLRWD
 URL: https://www.valgrind.org/
@@ -156,17 +156,27 @@ Header files and libraries for development of valgrind tools.
 
 %undefine _strict_symbol_defs_build
 
-%ifarch ppc64
-CFLAGS="$(echo " %{optflags} " | sed -e 's/ -fstack-protector\([-a-z]*\) / /g' -e 's/ -O[0-9s] / /g' -e 's/ -fno-omit-frame-pointer / /g' -e 's/ -mno-omit-leaf-frame-pointer / /g' -e 's/ -fstack-clash-protection / /g' -e 's/ -fcf-protection\(=[[:alnum:]_.+-]*\)\{0,1\} / /g' -e 's/ -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9] / /g' -e 's/ -fexceptions / /g')"
-%else
-CFLAGS="$(echo " %{optflags} " | sed -e 's/ -fstack-protector\([-a-z]*\) / /g' -e 's/ -O[0-9s] / /g' -e 's/ -fno-omit-frame-pointer / /g' -e 's/ -mno-omit-leaf-frame-pointer / /g' -e 's/ -fstack-clash-protection / /g' -e 's/ -fcf-protection\(=[[:alnum:]_.+-]*\)\{0,1\} / /g' -e 's/ -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9] / /g')"
-%endif
-CFLAGS="$CFLAGS -fno-stack-protector -U_FORTIFY_SOURCE"
+CFLAGS="$(echo " %{optflags} " | sed \
+  -e 's/ -fstack-protector\([-a-z]*\) / /g' \
+  -e 's/ -O[0-9s] / /g' \
+  -e 's/ -fno-omit-frame-pointer / /g' \
+  -e 's/ -mno-omit-leaf-frame-pointer / /g' \
+  -e 's/ -fstack-clash-protection / /g' \
+  -e 's/ -fcf-protection\(=[[:alnum:]_.+-]*\)\{0,1\} / /g' \
+  -e 's/ -mbranch-protection[=][[:alnum:]_+-]* / /g' \
+  -e 's/ -fasynchronous-unwind-tables / /g' \
+  -e 's/ -fexceptions / /g' \
+  -e 's/ -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9] / /g' \
+  -e 's/ -Wp,-D_GLIBCXX_ASSERTIONS / /g' \
+  -e 's/ -specs=[^ ]*//g')"
+CFLAGS="$CFLAGS -fno-stack-protector -U_FORTIFY_SOURCE -fno-pie"
 export CFLAGS
 CXXFLAGS="$CFLAGS"
 export CXXFLAGS
 
-LDFLAGS="$(echo " %{build_ldflags} " | sed -e 's/ -Wl,-z,now / /g')"
+LDFLAGS="$(echo " %{build_ldflags} " | sed \
+  -e 's/ -Wl,-z,now / /g' \
+  -e 's/ -specs=[^ ]*//g')"
 export LDFLAGS
 
 %configure \
@@ -196,9 +206,14 @@ chmod 644 %{buildroot}%{_libexecdir}/valgrind/vgpreload*-%{valarch}-*so
 %check
 LD_SHOW_AUXV=1 /bin/true
 ./vg-in-place --error-exitcode=1 /bin/true --help
-%make_build CFLAGS="" CXXFLAGS="" LDFLAGS="" check
+%ifarch aarch64
+vg_check_cflags="-fPIE"
+%else
+vg_check_cflags=""
+%endif
+%make_build CFLAGS="$vg_check_cflags" CXXFLAGS="$vg_check_cflags" LDFLAGS="" check
 export PYTHONCOERCECLOCALE=0
-if ! make regtest; then
+if ! make CFLAGS="$vg_check_cflags" CXXFLAGS="$vg_check_cflags" LDFLAGS="" regtest; then
   find . -name '*.diff' -size +0c -print -exec cat {} +
   exit 1
 fi
