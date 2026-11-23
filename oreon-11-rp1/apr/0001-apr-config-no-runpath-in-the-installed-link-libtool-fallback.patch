@@ -1,0 +1,25 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: [PATCH] apr-config: no runpath in the installed --link-libtool fallback
+
+libapr-1.la is not shipped, so an installed apr-1-config answers
+--link-libtool with -L$libdir -R$libdir. libtool turns the -R into a
+RUNPATH of /usr/lib64 in every library linked against apr, which
+check-rpaths rejects. Emit the same flags as --link-ld instead.
+---
+--- a/apr-config.in	2026-11-23 15:17:12.228172924 -0800
++++ b/apr-config.in	2026-11-23 15:17:12.468171339 -0800
+@@ -230,10 +230,10 @@
+     if test -f "$LA_FILE"; then
+         flags="$flags $LA_FILE"
+     elif test "$location" = "installed"; then
+-        ### avoid using -L if libdir is a "standard" location like /usr/lib
+-        # Since the user is specifying they are linking with libtool, we
+-        # *know* that -R will be recognized by libtool.
+-        flags="$flags -L$libdir -R$libdir -l${APR_LIBNAME}"
++        # The .la file is not installed. Do not hand libtool -R$libdir,
++        # it would hardcode the system libdir as a runpath into every
++        # consumer.
++        flags="$flags -L$libdir -l${APR_LIBNAME}"
+     elif test "$location" = "crosscompile"; then
+         flags="$flags  -L${APR_TARGET_DIR}/$libdir  -l${APR_LIBNAME}"
+     else
