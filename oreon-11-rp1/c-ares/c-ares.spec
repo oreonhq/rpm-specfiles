@@ -78,12 +78,17 @@ kill "$(cat cares-test-dns.pid)" || :
 %license LICENSE.md
 %doc README.md
 %{_libdir}/libcares.so.*
+%{_bindir}/adig
+%{_bindir}/ahost
+%{_mandir}/man1/adig.1*
+%{_mandir}/man1/ahost.1*
 
 %files devel
 %{_libdir}/libcares.so
 %{_includedir}/ares*.h
 %{_libdir}/pkgconfig/libcares.pc
 %{_libdir}/cmake/c-ares/
+%{_mandir}/man3/ares_*.3*
 
 %changelog
 %autochangelog
