@@ -237,19 +237,16 @@ BuildRequires:  gawk
 BuildRequires:  hostname
 BuildRequires:  python3
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(jinja2)
-BuildRequires:  python3dist(lxml)
-BuildRequires:  python3dist(pefile)
-BuildRequires:  python3dist(pytest)
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-lxml
+BuildRequires:  python3-pefile
+BuildRequires:  python3-pytest
 %if 0%{?want_bootloader}
-BuildRequires:  python3dist(pyelftools)
+BuildRequires:  python3-pyelftools
 %endif
 BuildRequires:  libseccomp-devel
 BuildRequires:  meson >= 0.43
 BuildRequires:  gettext
-%ifarch %{valgrind_arches}
-BuildRequires:  valgrind-devel
-%endif
 %if %{with full_features}
 BuildRequires:  qrencode-devel
 BuildRequires:  iptables-devel
@@ -511,9 +508,9 @@ Requires:       (systemd-boot if %{shrink:(
         filesystem(riscv64) or
         filesystem(loongarch64)
 )})
-Requires:       python3dist(pefile)
+Requires:       python3-pefile
 Requires:       python3dist(zstandard)
-Requires:       python3dist(cryptography)
+Requires:       python3-cryptography
 Recommends:     python3dist(pillow)
 
 # for tests
