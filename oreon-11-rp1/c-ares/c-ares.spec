@@ -15,6 +15,7 @@ License: MIT
 URL: https://c-ares.org/
 Source0: https://github.com/c-ares/c-ares/releases/download/v%{version}/c-ares-%{version}.tar.gz
 Patch0: c-ares-cmake-cxx.patch
+Patch1: c-ares-live-resolv.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: cmake
@@ -52,6 +53,8 @@ Headers and libraries for %{name}.
 %cmake_install
 
 %check
+printf 'nameserver 1.1.1.1\nnameserver 1.0.0.1\n' > cares-test-resolv.conf
+export CARES_TEST_RESOLV="$PWD/cares-test-resolv.conf"
 %ctest
 
 %files
