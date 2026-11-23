@@ -62,6 +62,64 @@ static int put32(unsigned char *p, int cap, int off, unsigned int v)
 	return put16(p, cap, off, v & 0xffff);
 }
 
+static int eq_ci(const char *a, const char *b)
+{
+	while (*a && *b) {
+		unsigned char ca = (unsigned char)*a;
+		unsigned char cb = (unsigned char)*b;
+		if (ca >= 'A' && ca <= 'Z')
+			ca = (unsigned char)(ca + 32);
+		if (cb >= 'A' && cb <= 'Z')
+			cb = (unsigned char)(cb + 32);
+		if (ca != cb)
+			return 0;
+		a++;
+		b++;
+	}
+	return *a == 0 && *b == 0;
+}
+
+static int qname_eq(const unsigned char *p, int len, int off, const char *want)
+{
+	char got[256];
+	int n = 0;
+	int steps = 0;
+
+	while (off < len && steps++ < 64) {
+		unsigned int lab = p[off];
+		if (lab == 0)
+			break;
+		if (lab & 0xc0)
+			return 0;
+		if (off + 1 + (int)lab > len || n + (int)lab + 1 >= (int)sizeof(got))
+			return 0;
+		if (n)
+			got[n++] = '.';
+		memcpy(got + n, p + off + 1, lab);
+		n += (int)lab;
+		off += 1 + (int)lab;
+	}
+	got[n] = 0;
+	return eq_ci(got, want);
+}
+
+static int nxdomain(unsigned char *out, int cap, const unsigned char *q, int qend)
+{
+	unsigned int flags;
+	if (qend > cap)
+		return -1;
+	memcpy(out, q, (size_t)qend);
+	flags = 0x8483;
+	if (q[2] & 0x01)
+		flags |= 0x0100;
+	out[2] = (unsigned char)(flags >> 8);
+	out[3] = (unsigned char)flags;
+	out[4] = out[5] = 0;
+	out[6] = out[7] = 0;
+	out[8] = out[9] = out[10] = out[11] = 0;
+	return qend;
+}
+
 static int answer(unsigned char *out, int cap, const unsigned char *q, int qlen)
 {
 	int name_end, qend, off, rdlen_at, rdata, type;
@@ -75,6 +133,11 @@ static int answer(unsigned char *out, int cap, const unsigned char *q, int qlen)
 	type = (q[name_end] << 8) | q[name_end + 1];
 	if (qend > cap)
 		return -1;
+	if (type == 12 &&
+	    (qname_eq(q, qlen, 12, "0.2.0.192.in-addr.arpa") ||
+	     qname_eq(q, qlen, 12,
+		      "4.0.3.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.2.0.1.0.8.b.d.0.1.0.0.2.ip6.arpa")))
+		return nxdomain(out, cap, q, qend);
 	memcpy(out, q, (size_t)qend);
 	flags = 0x8480;
 	if (q[2] & 0x01)
