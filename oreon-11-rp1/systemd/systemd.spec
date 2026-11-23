@@ -47,15 +47,10 @@
 # Build with OBS-specific quirks
 %bcond obs       0
 
-# When bootstrap, libcryptsetup is disabled
-# but auto-features causes many options to be turned on
-# that depend on libcryptsetup (e.g. libcryptsetup-plugins, homed)
-%if %{with bootstrap}
-%global __meson_auto_features disabled
 # If we're building for upstream, don't unconditionally enable all
 # new features as new features might be introduced for which we're
 # missing build dependencies.
-%elif %{with upstream}
+%if %{with upstream}
 %global __meson_auto_features auto
 %endif
 
@@ -174,11 +169,11 @@ BuildRequires:  coreutils
 BuildRequires:  libmount-devel
 BuildRequires:  libfdisk-devel
 BuildRequires:  libpwquality-devel
-%if %{without bootstrap}
 BuildRequires:  cryptsetup-devel
-%endif
 BuildRequires:  p11-kit-devel
 BuildRequires:  qrencode-devel
+BuildRequires:  pcre2-devel
+BuildRequires:  glib2-devel
 BuildRequires:  libxcrypt-devel
 BuildRequires:  pam-devel
 BuildRequires:  libselinux-devel
@@ -845,7 +840,15 @@ CONFIGURE_OPTS=(
         -Dgcrypt=disabled
         -Daudit=enabled
         -Delfutils=enabled
+        -Dlibcrypt=enabled
+        -Dlibmount=enabled
+        -Dlibarchive=enabled
+        -Dpcre2=enabled
+        -Dglib=enabled
+        -Ddbus=enabled
+        -Dimportd=enabled
         -Dlibcryptsetup=%[%{with bootstrap}?"disabled":"enabled"]
+        -Dlibcryptsetup-plugins=%[%{with bootstrap}?"disabled":"enabled"]
         -Drepart=enabled
         -Dpwquality=enabled
         -Dqrencode=%[0?"disabled":"enabled"]
