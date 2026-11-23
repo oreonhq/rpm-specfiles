@@ -14,6 +14,7 @@ Summary: Library for asynchronous DNS requests
 License: MIT
 URL: https://c-ares.org/
 Source0: https://github.com/c-ares/c-ares/releases/download/v%{version}/c-ares-%{version}.tar.gz
+Source1: cares-test-dns.c
 Patch0: c-ares-cmake-cxx.patch
 Patch1: c-ares-live-resolv.patch
 
@@ -53,9 +54,22 @@ Headers and libraries for %{name}.
 %cmake_install
 
 %check
-printf 'nameserver 1.1.1.1\nnameserver 1.0.0.1\n' > cares-test-resolv.conf
+gcc -O2 -o cares-test-dns %{SOURCE1}
+./cares-test-dns 53 > cares-test-dns.log 2>&1 &
+echo $! > cares-test-dns.pid
+ready=0
+for _ in 1 2 3 4 5 6 7 8 9 10; do
+  if grep -q ready cares-test-dns.log; then
+    ready=1
+    break
+  fi
+  sleep 0.1
+done
+test "$ready" = 1
+printf 'nameserver 127.0.0.1\noptions timeout:1 attempts:1\n' > cares-test-resolv.conf
 export CARES_TEST_RESOLV="$PWD/cares-test-resolv.conf"
 %ctest
+kill "$(cat cares-test-dns.pid)" || :
 
 %files
 %license LICENSE.md
