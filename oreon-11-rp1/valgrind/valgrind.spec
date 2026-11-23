@@ -169,7 +169,7 @@ CFLAGS="$(echo " %{optflags} " | sed \
   -e 's/ -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9] / /g' \
   -e 's/ -Wp,-D_GLIBCXX_ASSERTIONS / /g' \
   -e 's/ -specs=[^ ]*//g')"
-CFLAGS="$CFLAGS -fno-stack-protector -U_FORTIFY_SOURCE -fno-pie"
+CFLAGS="$CFLAGS -fno-stack-protector -U_FORTIFY_SOURCE"
 export CFLAGS
 CXXFLAGS="$CFLAGS"
 export CXXFLAGS
