@@ -123,3 +123,68 @@ diff -ruN a/memcheck/tests/linux/madv_guard.prereq b/memcheck/tests/linux/madv_g
 +if [ $rc -eq 0 ]; then ./madv_guard_prereq; rc=$?; fi
 +rm -f madv_guard_prereq madv_guard_prereq.c
 +exit $rc
+diff -ruN a/memcheck/tests/arm64-linux/scalar.c b/memcheck/tests/arm64-linux/scalar.c
+--- a/memcheck/tests/arm64-linux/scalar.c	2026-11-23 01:47:40.922125088 -0800
++++ b/memcheck/tests/arm64-linux/scalar.c	2026-11-23 01:47:41.984814335 -0800
+@@ -381,7 +381,7 @@
+ 
+    // __NR_getgroups 80
+    GO(__NR_getgroups, "2s 1m");
+-   SY(__NR_getgroups, x0+1, x0+1); FAIL;
++   SY(__NR_getgroups, x0+1, x0+1); SUCC_OR_FAIL;
+ 
+    // __NR_setgroups 81
+    GO(__NR_setgroups, "2s 1m");
+diff -ruN a/memcheck/tests/Makefile.am b/memcheck/tests/Makefile.am
+--- a/memcheck/tests/Makefile.am	2026-11-23 01:47:41.984656782 -0800
++++ b/memcheck/tests/Makefile.am	2026-11-23 01:47:41.984955950 -0800
+@@ -759,7 +759,8 @@
+ demangle_SOURCES = demangle.cpp
+ demangle_rust_SOURCES = demangle-rust.c
+ demangle_rust_CFLAGS	= $(AM_CFLAGS) @FLAG_W_NO_USE_AFTER_FREE@
+-dw4_CFLAGS		= $(AM_CFLAGS) -gdwarf-4 -fdebug-types-section @FLAG_W_NO_DEPRECATED_DECLARATIONS@
++dw4_CFLAGS		= $(AM_CFLAGS) -gdwarf-4 -fdebug-types-section @FLAG_W_NO_DEPRECATED_DECLARATIONS@ -fPIE
++dw4_LDFLAGS		= $(AM_LDFLAGS) -pie
+ 
+ descr_belowsp_LDADD     = -lpthread
+ err_disable3_LDADD 	= -lpthread
+@@ -897,24 +898,24 @@
+ 
+ # To make it a bit more realistic, have some optimisation enabled
+ # for the varinfo tests.  We still expect sane results.
+-varinfo1_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo1_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo1_CFLAGS		+= -fno-inline
+ endif
+-varinfo2_CFLAGS		= $(AM_CFLAGS) -O -Wno-shadow @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo2_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments -Wno-shadow @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo2_CFLAGS         += -fno-inline
+ endif
+-varinfo3_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo3_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo3_CFLAGS         += -fno-inline
+ endif
+-varinfo4_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo4_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo4_CFLAGS         += -fno-inline
+ endif
+-varinfo5_CFLAGS		= $(AM_CFLAGS) -O
+-varinfo6_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo5_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments
++varinfo6_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo6_CFLAGS         += -fno-inline
+ endif
+@@ -933,7 +934,7 @@
+ endif
+ 
+ varinfo5so_so_SOURCES   = varinfo5so.c
+-varinfo5so_so_CFLAGS    = $(AM_CFLAGS) -fpic -O -Wno-shadow -fno-optimize-sibling-calls @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo5so_so_CFLAGS    = $(AM_CFLAGS) -fpic -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments -Wno-shadow -fno-optimize-sibling-calls @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+  varinfo5so_so_LDFLAGS  = -fpic $(AM_FLAG_M3264_PRI) -dynamic \
+ 				-dynamiclib -all_load

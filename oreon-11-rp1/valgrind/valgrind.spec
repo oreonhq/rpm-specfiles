@@ -206,11 +206,7 @@ chmod 644 %{buildroot}%{_libexecdir}/valgrind/vgpreload*-%{valarch}-*so
 %check
 LD_SHOW_AUXV=1 /bin/true
 ./vg-in-place --error-exitcode=1 /bin/true --help
-%ifarch aarch64
-vg_check_cflags="-fPIE"
-%else
-vg_check_cflags=""
-%endif
+vg_check_cflags="-fno-omit-frame-pointer -fvar-tracking-assignments"
 %make_build CFLAGS="$vg_check_cflags" CXXFLAGS="$vg_check_cflags" LDFLAGS="" check
 export PYTHONCOERCECLOCALE=0
 if ! make CFLAGS="$vg_check_cflags" CXXFLAGS="$vg_check_cflags" LDFLAGS="" regtest; then
