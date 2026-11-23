@@ -22,14 +22,14 @@ print(string.sub(hash, 0, 16))
 }
 
 Version:        3.8.13
-Release:        4%{?dist}
+Release:        5%{?dist}
 Patch:        gnutls-3.2.7-rpath.patch
 
 # follow https://gitlab.com/gnutls/gnutls/-/issues/1443
 Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_without bootstrap
-%bcond_with dane
+%bcond_without dane
 %bcond_without fips
 %bcond_with tpm12
 %bcond_without tpm2
@@ -102,7 +102,8 @@ Recommends: trousers >= 0.3.11.2
 %endif
 
 %if %{with dane}
-BuildRequires: unbound-devel unbound-libs
+BuildRequires: unbound-devel
+BuildRequires: unbound-libs
 %endif
 BuildRequires: make gtk-doc
 
@@ -156,7 +157,7 @@ Summary: Development files for the %{name} package
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: %{name}-c++%{?_isa} = %{version}-%{release}
 %if %{with dane}
-Recommends: %{name}-dane%{?_isa} = %{version}-%{release}
+Requires: %{name}-dane%{?_isa} = %{version}-%{release}
 %endif
 Requires: pkgconfig
 
@@ -165,7 +166,7 @@ License: GPL-3.0-or-later
 Summary: Command line tools for TLS protocol
 Requires: %{name}%{?_isa} = %{version}-%{release}
 %if %{with dane}
-Recommends: %{name}-dane%{?_isa} = %{version}-%{release}
+Requires: %{name}-dane%{?_isa} = %{version}-%{release}
 %endif
 
 %if %{with dane}
