@@ -50,13 +50,20 @@ interoperate with pycairo.
 
 %install
 %meson_install
-%oreon_filelist_devel
 
 %check
 %meson_test
 
-%files -f %{_builddir}/%{name}.files
-%files devel -f %{_builddir}/%{name}-devel.files
+%files
+%license COPYING COPYING-LGPL-2.1 COPYING-MPL-1.1
+%doc README.rst
+%{python3_sitearch}/cairo/
+%{python3_sitearch}/pycairo-%{version}.dist-info/
+
+%files devel
+%dir %{_includedir}/pycairo
+%{_includedir}/pycairo/py3cairo.h
+%{_libdir}/pkgconfig/py3cairo.pc
 
 %changelog
 %autochangelog
