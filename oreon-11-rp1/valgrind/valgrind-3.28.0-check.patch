@@ -51,12 +51,18 @@ diff -ruN a/none/tests/Makefile.am b/none/tests/Makefile.am
  	fdleak_cmsg.stderr.exp fdleak_cmsg.vgtest \
  	fdleak_cmsg_xml.stderr.exp-ppc64le \
  	fdleak_cmsg_xml.stderr.exp fdleak_cmsg_xml.vgtest \
+diff -ruN a/none/tests/fdleak_cat.vgtest b/none/tests/fdleak_cat.vgtest
+--- a/none/tests/fdleak_cat.vgtest
++++ b/none/tests/fdleak_cat.vgtest
+@@ -1,3 +1,4 @@
+ prog: /bin/cat
+ vgopts: -q --track-fds=yes
+ args: /dev/null
++stderr_filter: filter_fdleak
 diff -ruN a/none/tests/fdleak_cat.stderr.exp b/none/tests/fdleak_cat.stderr.exp
 --- /dev/null
 +++ b/none/tests/fdleak_cat.stderr.exp
-@@ -0,0 +1,10 @@
-+
-+
+@@ -0,0 +1,8 @@
 +FILE DESCRIPTORS: 3 open (1 inherited) at exit.
 +Open file descriptor ...:
 +   ...

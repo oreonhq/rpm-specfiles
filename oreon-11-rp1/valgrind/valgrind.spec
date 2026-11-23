@@ -26,6 +26,7 @@ Patch2: valgrind-3.9.0-ldso-supp.patch
 Patch3: valgrind-3.26.0-some-stack-protector.patch
 Patch4: valgrind-3.26.0-some-Wl-z-now.patch
 Patch5: valgrind-3.28.0-check.patch
+Patch6: valgrind-3.28.0-gdb-fsbase.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make
@@ -160,7 +161,7 @@ CFLAGS="$(echo " %{optflags} " | sed -e 's/ -fstack-protector\([-a-z]*\) / /g' -
 %else
 CFLAGS="$(echo " %{optflags} " | sed -e 's/ -fstack-protector\([-a-z]*\) / /g' -e 's/ -O[0-9s] / /g' -e 's/ -fno-omit-frame-pointer / /g' -e 's/ -mno-omit-leaf-frame-pointer / /g' -e 's/ -fstack-clash-protection / /g' -e 's/ -fcf-protection\(=[[:alnum:]_.+-]*\)\{0,1\} / /g' -e 's/ -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9] / /g')"
 %endif
-CFLAGS="$CFLAGS -fomit-frame-pointer -fno-stack-protector -U_FORTIFY_SOURCE"
+CFLAGS="$CFLAGS -fno-stack-protector -U_FORTIFY_SOURCE"
 export CFLAGS
 CXXFLAGS="$CFLAGS"
 export CXXFLAGS
@@ -197,7 +198,10 @@ LD_SHOW_AUXV=1 /bin/true
 ./vg-in-place --error-exitcode=1 /bin/true --help
 %make_build CFLAGS="" CXXFLAGS="" LDFLAGS="" check
 export PYTHONCOERCECLOCALE=0
-make regtest
+if ! make regtest; then
+  find . -name '*.diff' -size +0c -print -exec cat {} +
+  exit 1
+fi
 
 %files
 %license COPYING
