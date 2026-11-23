@@ -174,6 +174,11 @@ BuildRequires:  coreutils
 BuildRequires:  libmount-devel
 BuildRequires:  libfdisk-devel
 BuildRequires:  libpwquality-devel
+%if %{without bootstrap}
+BuildRequires:  cryptsetup-devel
+%endif
+BuildRequires:  p11-kit-devel
+BuildRequires:  qrencode-devel
 BuildRequires:  libxcrypt-devel
 BuildRequires:  pam-devel
 BuildRequires:  libselinux-devel
@@ -184,7 +189,6 @@ BuildRequires:  rpmdevtools
 BuildRequires:  package-notes >= 0.20
 %endif
 %if %{with full_features}
-BuildRequires:  cryptsetup-devel
 BuildRequires:  systemd-rpm-macros
 %endif
 
@@ -248,7 +252,6 @@ BuildRequires:  libseccomp-devel
 BuildRequires:  meson >= 0.43
 BuildRequires:  gettext
 %if %{with full_features}
-BuildRequires:  qrencode-devel
 BuildRequires:  iptables-devel
 BuildRequires:  python3dist(pillow)
 BuildRequires:  firewalld-filesystem
