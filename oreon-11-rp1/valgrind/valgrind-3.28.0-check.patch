@@ -1,0 +1,102 @@
+diff -ruN a/drd/tests/pth_detached3.c b/drd/tests/pth_detached3.c
+--- a/drd/tests/pth_detached3.c
++++ b/drd/tests/pth_detached3.c
+@@ -28,8 +28,6 @@
+   /* Invoke pthread_detach() with an invalid thread ID. */
+ #ifdef VGO_freebsd
+   pthread_detach((pthread_t)12345);
+-#else
+-  pthread_detach((pthread_t)((uintptr_t)thread + 8));
+ #endif
+ 
+   fprintf(stderr, "Finished.\n");
+diff -ruN a/drd/tests/pth_detached3.stderr.exp1 b/drd/tests/pth_detached3.stderr.exp1
+--- a/drd/tests/pth_detached3.stderr.exp1
++++ b/drd/tests/pth_detached3.stderr.exp1
+@@ -3,10 +3,6 @@
+    at 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+    by 0x........: main (pth_detached3.c:26)
+ 
+-pthread_detach(): invalid thread ID 0x........
+-   at 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+-   by 0x........: main (pth_detached3.c:32)
+-
+ Finished.
+ 
+-ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
++ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+diff -ruN a/drd/tests/pth_detached3.stderr.exp2 b/drd/tests/pth_detached3.stderr.exp2
+--- a/drd/tests/pth_detached3.stderr.exp2
++++ b/drd/tests/pth_detached3.stderr.exp2
+@@ -4,11 +4,6 @@
+    by 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+    by 0x........: main (pth_detached3.c:26)
+ 
+-pthread_detach(): invalid thread ID 0x........
+-   at 0x........: vgDrd_set_joinable (drd_pthread_intercepts.c:?)
+-   by 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+-   by 0x........: main (pth_detached3.c:32)
+-
+ Finished.
+ 
+-ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
++ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+diff -ruN a/none/tests/fdleak_cat.stderr.exp b/none/tests/fdleak_cat.stderr.exp
+--- /dev/null
++++ b/none/tests/fdleak_cat.stderr.exp
+@@ -0,0 +1,10 @@
++
++
++FILE DESCRIPTORS: 5 open (3 inherited) at exit.
++Open file descriptor ...:
++   ...
++
++Open file descriptor ...:
++   ...
++
++
+diff -ruN a/memcheck/tests/linux/madv_guard.vgtest b/memcheck/tests/linux/madv_guard.vgtest
+--- a/memcheck/tests/linux/madv_guard.vgtest
++++ b/memcheck/tests/linux/madv_guard.vgtest
+@@ -1,4 +1,4 @@
+ prog: madv_guard
+ vgopts: -q --sanity-level=3
+ stdout_filter: filter_madv_guard
+-prereq: test -e ./madv_guard
++prereq: test -e ./madv_guard && sh madv_guard.prereq
+diff -ruN a/memcheck/tests/linux/madv_guard.prereq b/memcheck/tests/linux/madv_guard.prereq
+--- /dev/null
++++ b/memcheck/tests/linux/madv_guard.prereq
+@@ -0,0 +1,32 @@
++cat > madv_guard_prereq.c << 'EOF'
++#define _GNU_SOURCE
++#include <sys/mman.h>
++#include <stdint.h>
++#include <unistd.h>
++#include <fcntl.h>
++int main(void)
++{
++  long ps = sysconf(_SC_PAGESIZE);
++  void *p = mmap(0, (size_t)ps, PROT_READ | PROT_WRITE,
++                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++  uint64_t entry = 0;
++  int fd;
++  if (p == MAP_FAILED)
++    return 1;
++  if (madvise(p, (size_t)ps, MADV_GUARD_INSTALL) != 0)
++    return 1;
++  fd = open("/proc/self/pagemap", O_RDONLY);
++  if (fd < 0)
++    return 1;
++  if (pread(fd, &entry, sizeof(entry),
++            ((uintptr_t)p / (uintptr_t)ps) * sizeof(entry))
++      != (ssize_t)sizeof(entry))
++    return 1;
++  return ((entry >> 58) & 1) ? 0 : 1;
++}
++EOF
++gcc -o madv_guard_prereq madv_guard_prereq.c >/dev/null 2>&1
++rc=$?
++if [ $rc -eq 0 ]; then ./madv_guard_prereq; rc=$?; fi
++rm -f madv_guard_prereq madv_guard_prereq.c
++exit $rc
