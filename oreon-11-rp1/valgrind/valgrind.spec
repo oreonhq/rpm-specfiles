@@ -27,6 +27,7 @@ Patch3: valgrind-3.26.0-some-stack-protector.patch
 Patch4: valgrind-3.26.0-some-Wl-z-now.patch
 Patch5: valgrind-3.28.0-check.patch
 Patch6: valgrind-3.28.0-gdb-fsbase.patch
+Patch7: valgrind-3.28.0-aarch64-skip-broken-regtests.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make
