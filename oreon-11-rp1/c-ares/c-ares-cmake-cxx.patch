@@ -1,0 +1,45 @@
+diff -ruN a/cmake/EnableWarnings.cmake b/cmake/EnableWarnings.cmake
+--- a/cmake/EnableWarnings.cmake	2026-10-19 19:31:51.000000000 -0700
++++ b/cmake/EnableWarnings.cmake	2026-11-22 15:57:14.962306935 -0800
+@@ -199,6 +199,10 @@
+ 	endforeach()
+ 
+ 	foreach(lang C CXX)
++		if(NOT lang IN_LIST ${langs_var})
++			# untouched so enable_language(CXX) still loads CXXFLAGS
++			continue()
++		endif()
+ 		foreach (config IN LISTS ${configs_var})
+ 			string(TOUPPER "${config}" config)
+ 			if (config STREQUAL "NONE")
+diff -ruN a/test/CMakeLists.txt b/test/CMakeLists.txt
+--- a/test/CMakeLists.txt	2026-10-19 19:31:51.000000000 -0700
++++ b/test/CMakeLists.txt	2026-11-22 15:57:14.962380554 -0800
+@@ -11,6 +11,27 @@
+ find_package(Threads)
+ find_package(GTest REQUIRED)
+ 
++# gtest exports /usr/include as SYSTEM. clang then misses stdlib.h on include_next
++foreach(_gtest_tgt GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
++  if(NOT TARGET ${_gtest_tgt})
++    continue()
++  endif()
++  foreach(_prop INTERFACE_INCLUDE_DIRECTORIES INTERFACE_SYSTEM_INCLUDE_DIRECTORIES)
++    get_target_property(_dirs ${_gtest_tgt} ${_prop})
++    if(NOT _dirs)
++      continue()
++    endif()
++    set(_keep)
++    foreach(_dir ${_dirs})
++      if(_dir IN_LIST CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES)
++        continue()
++      endif()
++      list(APPEND _keep "${_dir}")
++    endforeach()
++    set_property(TARGET ${_gtest_tgt} PROPERTY ${_prop} ${_keep})
++  endforeach()
++endforeach()
++
+ IF (CMAKE_VERSION VERSION_LESS "3.23.0")
+   Message("GoogleTest found, cmake version too old to verify GMock, look for errors...")
+ ELSE ()
