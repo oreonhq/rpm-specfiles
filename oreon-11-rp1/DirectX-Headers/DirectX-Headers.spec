@@ -25,6 +25,7 @@ Summary:        Official Direct3D 12 headers
 License:        MIT
 URL:            https://github.com/microsoft/DirectX-Headers
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Patch0:         DirectX-Headers-mingw-d3d12.patch
 
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  meson
@@ -90,7 +91,9 @@ done
 
 %meson_build
 
-%mingw_meson
+%mingw_meson \
+ %{?!_with_test:-Dbuild-test=false}
+
 %mingw_ninja
 
 
