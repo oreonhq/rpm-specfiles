@@ -13,6 +13,7 @@ Summary: Apache Portable Runtime Utility library
 License: Apache-2.0
 URL: https://apr.apache.org/
 Source0: https://archive.apache.org/dist/apr/apr-util-%{version}.tar.bz2
+Patch0001: 0001-apu-config-no-runpath-in-the-installed-link-libtool-fallback.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: clang
@@ -38,7 +39,7 @@ Headers and libraries for building against apr-util.
 
 %prep
 %oreon_sha256
-%autosetup -n apr-util-%{version}
+%autosetup -p1 -n apr-util-%{version}
 
 %build
 export CC=clang
