@@ -49,6 +49,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+cd /
 PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import dulwich._objects, dulwich._pack, dulwich._diff_tree'
 
 %files -f %{_builddir}/%{name}.files
