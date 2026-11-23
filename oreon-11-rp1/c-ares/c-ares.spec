@@ -55,7 +55,7 @@ Headers and libraries for %{name}.
 
 %check
 gcc -O2 -o cares-test-dns %{SOURCE1}
-./cares-test-dns 53 > cares-test-dns.log 2>&1 &
+./cares-test-dns 15353 > cares-test-dns.log 2>&1 &
 echo $! > cares-test-dns.pid
 ready=0
 for _ in 1 2 3 4 5 6 7 8 9 10; do
@@ -65,8 +65,11 @@ for _ in 1 2 3 4 5 6 7 8 9 10; do
   fi
   sleep 0.1
 done
-test "$ready" = 1
-printf 'nameserver 127.0.0.1\noptions timeout:1 attempts:1\n' > cares-test-resolv.conf
+if test "$ready" != 1; then
+  cat cares-test-dns.log
+  exit 1
+fi
+printf 'nameserver 127.0.0.1:15353\noptions timeout:1 attempts:1\n' > cares-test-resolv.conf
 export CARES_TEST_RESOLV="$PWD/cares-test-resolv.conf"
 %ctest
 kill "$(cat cares-test-dns.pid)" || :

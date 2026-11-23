@@ -171,14 +171,18 @@ int main(int argc, char **argv)
 	struct sockaddr_in addr;
 
 	fd = socket(AF_INET, SOCK_DGRAM, 0);
-	if (fd < 0)
+	if (fd < 0) {
+		perror("socket");
 		return 1;
+	}
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = htonl(0x7f000001);
 	addr.sin_port = htons((unsigned short)port);
-	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) != 0)
+	if (bind(fd, (struct sockaddr *)&addr, sizeof(addr)) != 0) {
+		perror("bind");
 		return 1;
+	}
 	fprintf(stderr, "ready\n");
 	fflush(stderr);
 	for (;;) {
