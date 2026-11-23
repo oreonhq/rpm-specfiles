@@ -41,13 +41,23 @@ diff -ruN a/drd/tests/pth_detached3.stderr.exp2 b/drd/tests/pth_detached3.stderr
  
 -ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
 +ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+diff -ruN a/none/tests/Makefile.am b/none/tests/Makefile.am
+--- a/none/tests/Makefile.am
++++ b/none/tests/Makefile.am
+@@ -143,5 +143,6 @@
+ 	fcntl_setown.vgtest \
+ 	fdleak_cat.vgtest \
++	fdleak_cat.stderr.exp \
+ 	fdleak_cmsg.stderr.exp fdleak_cmsg.vgtest \
+ 	fdleak_cmsg_xml.stderr.exp-ppc64le \
+ 	fdleak_cmsg_xml.stderr.exp fdleak_cmsg_xml.vgtest \
 diff -ruN a/none/tests/fdleak_cat.stderr.exp b/none/tests/fdleak_cat.stderr.exp
 --- /dev/null
 +++ b/none/tests/fdleak_cat.stderr.exp
 @@ -0,0 +1,10 @@
 +
 +
-+FILE DESCRIPTORS: 5 open (3 inherited) at exit.
++FILE DESCRIPTORS: 3 open (1 inherited) at exit.
 +Open file descriptor ...:
 +   ...
 +
