@@ -1,0 +1,29 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: [PATCH] test3300: wait for the detached worker in release builds
+
+The last pool in unit3300 is destroyed without a join, so its worker
+is detached and still running. Only DEBUGBUILD waited for it to end,
+so a release build returns from main with the worker alive and
+valgrind reports its pthread TLS as possibly lost.
+
+Wait in every build.
+---
+--- a/tests/unit/unit3300.c
++++ b/tests/unit/unit3300.c
+@@ -142,13 +142,13 @@
+   Curl_thrdpool_destroy(tpool, FALSE);
+   fail_unless(ctx.returned < ctx.total, "pool-e returned all");
+   fail_unless(ctx.taken < ctx.total, "pool-e took all");
+-#ifdef DEBUGBUILD
+   /* pool thread notices destruction and should immediately abort.
+    * No memory leak should be reported. if the wait is too short on
+    * a slow system, thread sanitizer freaks out as memdebug
+-   * is called by threads after main thread shut down. */
++   * is called by threads after main thread shut down. Release builds
++   * need the wait too, or valgrind sees the detached worker still alive
++   * at exit and its TLS as possibly lost. */
+   curlx_wait_ms(1000);
+-#endif
+ 
+   UNITTEST_END_SIMPLE
+ }

@@ -30,6 +30,7 @@ Source2: mykey.asc
 Patch0001:        0001-prevent-multilib-conflicts-on-the-curl-config-script.patch
 Patch0003:        0003-conncache-poll-an-idle-connection-for-pending-input-.patch
 Patch0010:        0010-ci-setup-packit.patch
+Patch0011:        0011-test3300-wait-for-the-detached-worker-in-release-builds.patch
 
 Provides: curl-full = %{version}-%{release}
 # do not fail when trying to install curl-minimal after drop
