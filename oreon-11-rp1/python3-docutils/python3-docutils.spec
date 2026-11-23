@@ -8,11 +8,12 @@
 
 Name: python3-docutils
 Version: 0.22.4
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Docutils -- Python Documentation Utilities
 License: BSD License
 URL: https://pypi.org/project/docutils/
 Source0: https://files.pythonhosted.org/packages/ae/b6/03bb70946330e88ffec97aefd3ea75ba575cb2e762061e0e62a213befee8/docutils-0.22.4.tar.gz
+Patch0001: 0001-build-with-flit_core-4.patch
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
@@ -28,7 +29,7 @@ Docutils -- Python Documentation Utilities
 
 %prep
 %oreon_sha256
-%autosetup -n docutils-0.22.4
+%autosetup -p1 -n docutils-0.22.4
 
 %build
 python3 -m build --wheel --no-isolation
