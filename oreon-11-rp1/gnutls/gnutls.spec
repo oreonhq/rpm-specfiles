@@ -347,9 +347,6 @@ rm -f lib/minitasn1/*.c lib/minitasn1/*.h
 
 echo "SYSTEM=NORMAL" >> tests/system.prio
 
-CCASFLAGS="$CCASFLAGS -Wa,--generate-missing-build-notes=yes"
-export CCASFLAGS
-
 %if %{with fips}
 eval $(sed -n 's/^\(\(NAME\|VERSION_ID\)=.*\)/OS_\1/p' /etc/os-release)
 export FIPS_MODULE_NAME="$OS_NAME ${OS_VERSION_ID%%.*} %name"
