@@ -10,6 +10,13 @@ diff -ruN a/drd/tests/pth_detached3.c b/drd/tests/pth_detached3.c
  #endif
  
    fprintf(stderr, "Finished.\n");
+diff -ruN a/drd/tests/tls_threads.vgtest b/drd/tests/tls_threads.vgtest
+--- a/drd/tests/tls_threads.vgtest
++++ b/drd/tests/tls_threads.vgtest
+@@ -1,2 +1,2 @@
+ prog: ../../helgrind/tests/tls_threads
+-vgopts: -q
++vgopts: -q --sim-hints=no-nptl-pthread-stackcache
 diff -ruN a/drd/tests/pth_detached3.stderr.exp1 b/drd/tests/pth_detached3.stderr.exp1
 --- a/drd/tests/pth_detached3.stderr.exp1
 +++ b/drd/tests/pth_detached3.stderr.exp1
