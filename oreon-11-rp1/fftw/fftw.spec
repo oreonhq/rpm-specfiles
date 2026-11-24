@@ -19,7 +19,7 @@
 %bcond_with openmpi
 %else
 %if 0%{?oreon}
-%bcond_with openmpi
+%bcond_without openmpi
 %else
 %bcond_without openmpi
 %endif
