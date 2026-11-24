@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 78cf1c283795312a7fa31c73eb7f7f556b48374adc484f10ad5a3c0bcb59264e
+%global source0_hash 68c320fe3391096a9f2d870170edf1b67dac8af1d0e51c0c9e5343807f114287
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -16,7 +16,7 @@
 
 Summary: Qt6 - Qt 5 Compatibility Libraries
 Name:    qt6-%{qt_module}
-Version: 6.12.0
+Version: 6.11.2
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
