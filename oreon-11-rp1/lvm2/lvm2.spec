@@ -48,6 +48,7 @@ URL: https://sourceware.org/lvm2
 Source0:        https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
 
 BuildRequires: make
+BuildRequires:  oreon-rpm-macros
 BuildRequires: gcc
 %if %{enable_testsuite}
 BuildRequires: gcc-c++
@@ -92,7 +93,6 @@ BuildRequires: device-mapper-persistent-data >= %{persistent_data_version}
 %endif
 %if %{enable_lockd_sanlock}
 BuildRequires: sanlock-devel >= %{sanlock_version}
-BuildRequires:  oreon-rpm-macros
 %endif
 Requires: %{name}-libs = %{?epoch}:%{version}-%{release}
 Requires(post): (system-release >= %{system_release_version} if system-release)
