@@ -1,0 +1,59 @@
+From 190c9f7c53e8b6865204bb0ae1d1e6a9d6c21d65 Mon Sep 17 00:00:00 2001
+Message-ID: <190c9f7c53e8b6865204bb0ae1d1e6a9d6c21d65.1793467150.git.github@sicherha.de>
+From: orielhaim <orielhaim2@gmail.com>
+Date: Mon, 5 Oct 2026 22:22:37 +0300
+Subject: [PATCH] Update cpp_demangle to 0.5.1
+
+---
+ Cargo.lock           | 4 ++--
+ Cargo.toml           | 2 +-
+ src/util/demangle.rs | 4 +---
+ 3 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 60fb12890..2cbc9b97b 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -64,9 +64,9 @@ checksum = "3d52eff69cd5e647efe296129160853a42795992097e8af39800e1060caeea9b"
+ 
+ [[package]]
+ name = "cpp_demangle"
+-version = "0.4.5"
++version = "0.5.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f2bb79cb74d735044c972aae58ed0aaa9a837e85b01106a54c39e42e97f62253"
++checksum = "0667304c32ea56cb4cd6d2d7c0cfe9a2f8041229db8c033af7f8d69492429def"
+ dependencies = [
+  "cfg-if",
+ ]
+diff --git a/Cargo.toml b/Cargo.toml
+index 32dbb68e1..07c4ef40d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -29,7 +29,7 @@ mold = { path = "." }
+ [dependencies]
+ blake3 = "1.8.7"
+ bstr = "1"
+-cpp_demangle = "0.4"
++cpp_demangle = "0.5.1"
+ crc32fast = "1"
+ flate2 = { version = "1", default-features = false, features = ["zlib"] }
+ getrandom = "0.4.3"
+diff --git a/src/util/demangle.rs b/src/util/demangle.rs
+index 46c720d07..e819c19e7 100644
+--- a/src/util/demangle.rs
++++ b/src/util/demangle.rs
+@@ -5,9 +5,7 @@ pub fn demangle_cpp(name: &[u8]) -> Option<String> {
+     if !name.starts_with(b"_Z") {
+         return None;
+     }
+-    let sym = cpp_demangle::Symbol::new(name).ok()?;
+-    let options = cpp_demangle::DemangleOptions::default();
+-    sym.demangle(&options).ok()
++    cpp_demangle::Symbol::new(name).ok()?.demangle().ok()
+ }
+ 
+ /// Demangles a Rust symbol name in either the legacy or the v0 scheme.
+-- 
+2.56.0
+

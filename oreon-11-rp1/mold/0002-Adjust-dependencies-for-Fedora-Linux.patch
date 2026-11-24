@@ -1,0 +1,47 @@
+From 9ca791777805e579678b4a9c546a63fb3f1b3104 Mon Sep 17 00:00:00 2001
+Message-ID: <9ca791777805e579678b4a9c546a63fb3f1b3104.1793482779.git.github@sicherha.de>
+From: Christoph Erhardt <github@sicherha.de>
+Date: Sat, 31 Oct 2026 18:19:02 +0100
+Subject: [PATCH] Adjust dependencies for Fedora Linux
+
+Relax `uuid` to 1.26.1, which is the version available in Fedora and
+EPEL.
+
+Use the official upstream `mimalloc` crate instead of mold's fork. The
+fork bundles mimalloc 3.5.3, which fixes a crash on sparc64. Since that
+architecture is not supported by Fedora Linux, it makes no difference in
+practice.
+---
+ Cargo.toml     | 2 +-
+ cli/Cargo.toml | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 07c4ef40d..6b02d649e 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -42,7 +42,7 @@ memmap2 = "0.9"
+ portable-atomic = "1"
+ rayon = "1"
+ rustc-demangle = "0.1"
+-uuid = { version = "1.27", default-features = false, features = ["v4"] }
++uuid = { version = "1.26.1", default-features = false, features = ["v4"] }
+ xxhash-rust = { version = "0.8", features = ["xxh3"] }
+ zstd = "0.13"
+ 
+diff --git a/cli/Cargo.toml b/cli/Cargo.toml
+index f9dfe9fda..5f8270457 100644
+--- a/cli/Cargo.toml
++++ b/cli/Cargo.toml
+@@ -16,7 +16,7 @@ path = "integration.rs"
+ harness = false
+ 
+ [dependencies]
+-mimalloc = { git = "https://github.com/rui314/mimalloc_rust", rev = "3979460494f1cd1e7f936cb8e10f41e927c9f698" }
++mimalloc = "0.1.52"
+ mold.workspace = true
+ mold-target-x86_64 = { path = "../arch/x86_64", optional = true }
+ mold-target-i386 = { path = "../arch/i386", optional = true }
+-- 
+2.56.0
+
