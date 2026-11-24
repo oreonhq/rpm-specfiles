@@ -1,0 +1,12 @@
+debuginfo:
+  ignore:
+    # Debug symbols are present in BPF modules as it is inherited
+    # from the BPF it self
+    - /usr/libexec/pcp/pmdas/bpf/modules/*.so
+    # Ignore debug symbols related to testsuite on i686
+    - /usr/lib/debug/var/lib/pcp/testsuite/{*,*/{*,*/{*,*/*}}}debug
+annocheck:
+  ignore:
+    # Ignore hardening of pcp testsuite files
+    - /usr/lib*/libpcp_fault.so*
+    - /var/lib/pcp/testsuite/perfevent/perfevent_coverage

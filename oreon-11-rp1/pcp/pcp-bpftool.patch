@@ -1,0 +1,28 @@
+commit 3e1a35a9357b1790ee69f545bf6732e1ba68f1f3
+Author: Yaakov Selkowitz <yselkowi@redhat.com>
+Date:   Wed Oct 14 11:10:27 2026 -0400
+
+    mirror: add u128 to linux/types.h
+    
+    This corresponds to kernel commit 224d80c584d3016cb8d83d1c33914fdd3508aa8c
+    and libbpf commit f90a9c487d7542d91fa584b83b6a624a4fbeb341,
+    and is necessary for building on aarch64 with latest kernel UAPI headers.
+    
+    Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+
+diff --git a/vendor/github.com/libbpf/bpftool/include/linux/types.h b/vendor/github.com/libbpf/bpftool/include/linux/types.h
+index d2df5ed..f5ee0ed 100644
+--- a/vendor/github.com/libbpf/bpftool/include/linux/types.h
++++ b/vendor/github.com/libbpf/bpftool/include/linux/types.h
+@@ -10,6 +10,11 @@
+ #include <asm/types.h>
+ #include <asm/posix_types.h>
+ 
++#ifdef __SIZEOF_INT128__
++typedef unsigned __int128 __u128 __attribute__((aligned(16)));
++typedef __u128 u128;
++#endif
++
+ typedef uint64_t u64;
+ typedef __u32 u32;
+ typedef __u16 u16;
