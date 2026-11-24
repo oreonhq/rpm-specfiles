@@ -22,7 +22,6 @@ Patch1:         dconf-override.patch
 BuildRequires: oreon-rpm-macros
 BuildRequires: clang
 BuildRequires: gcc
-BuildRequires:  clang
 BuildRequires:  gtk-doc
 BuildRequires:  meson
 BuildRequires:  pkgconfig(bash-completion)
@@ -49,7 +48,7 @@ development using dconf.
 
 %prep
 %oreon_sha256
-%autosetup -p1 -n %{name}-%{gnome_tarball_version}
+%autosetup -p1
 
 %build
 %meson -Dgtk_doc=true -Dsystemduserunitdir=%{_userunitdir}
