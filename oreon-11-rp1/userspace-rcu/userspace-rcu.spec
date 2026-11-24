@@ -5,7 +5,7 @@
 
 Name: userspace-rcu
 Version: 0.15.7
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Userspace RCU implementation
 License: LGPL-2.1-or-later
 URL: https://liburcu.org/
@@ -46,7 +46,7 @@ find %{buildroot} -name '*.la' -delete
 %oreon_make check
 
 %files
-%license LICENSE
+%license LICENSE.md LICENSES lgpl-relicensing.md
 %doc ChangeLog README.md
 %{_libdir}/liburcu*.so.*
 
