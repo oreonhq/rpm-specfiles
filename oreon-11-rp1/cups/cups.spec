@@ -12,7 +12,7 @@
 Name:           cups
 Epoch:          1
 Version:        2.4.20
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        CUPS printing system
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://openprinting.github.io/cups/
@@ -112,6 +112,7 @@ clients through the cups-lpd helper.
     --disable-static \
     --enable-relro \
     --enable-dbus \
+    --with-dbusdir=%{_sysconfdir}/dbus-1 \
     --enable-libusb \
     --enable-acl \
     --enable-gssapi \
@@ -204,7 +205,6 @@ systemd-tmpfiles --create %{_tmpfilesdir}/cups.conf 2>/dev/null || :
 %{_datadir}/cups/usb
 %{_datadir}/applications/cups.desktop
 %{_datadir}/icons/hicolor/*/apps/cups.png
-%{_datadir}/icons/hicolor/*/apps/cups.svg
 %{_datadir}/locale/*/cups_*.po
 %{_mandir}/man1/cancel.1*
 %{_mandir}/man1/cups.1*
