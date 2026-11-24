@@ -1,0 +1,100 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 4c480818e9839cf03ca9c9cecfe4bc864a779cca742a3479a47d33f40579ff90
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%global pypi_name rtslib_fb
+%global upstream_name rtslib-fb
+
+Name:           python-rtslib
+Version:        2.2.4
+Release:        %{autorelease}
+Summary:        API for Linux kernel LIO SCSI target
+License:        Apache-2.0
+URL:            https://github.com/open-iscsi/%{upstream_name}
+Source0:        %{url}/archive/v%{version}/%{upstream_name}-%{version}.tar.gz
+Patch0:         0001-disable-xen_pvscsi.patch
+
+BuildArch:      noarch
+BuildRequires: oreon-rpm-macros
+BuildRequires:  python3-devel
+BuildRequires:  systemd-rpm-macros
+
+%global _description %{expand:
+API for generic Linux SCSI kernel target. Includes the 'target'
+service and targetctl tool for restoring configuration.}
+
+%description %_description
+
+%package -n python3-rtslib
+Summary:        %{summary}
+Requires:       python3-kmod
+
+%description -n python3-rtslib %_description
+
+%package -n target-restore
+Summary:          Systemd service for targetcli/rtslib
+Requires:         python3-rtslib = %{version}-%{release}
+Requires:         systemd
+
+%description -n target-restore
+Systemd service to restore the LIO kernel target settings
+on system restart.
+
+%prep
+%oreon_sha256
+%autosetup -p1 -n %{upstream_name}-%{version}
+
+%generate_buildrequires
+export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
+%pyproject_buildrequires
+
+%build
+export SETUPTOOLS_SCM_PRETEND_VERSION=%{version}
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l 'rtslib*'
+
+mkdir -p %{buildroot}%{_mandir}/man8/
+mkdir -p %{buildroot}%{_mandir}/man5/
+mkdir -p %{buildroot}%{_unitdir}
+mkdir -p %{buildroot}%{_sysconfdir}/target/backup
+mkdir -p %{buildroot}%{_localstatedir}/target/pr
+mkdir -p %{buildroot}%{_localstatedir}/target/alua
+install -m 644 systemd/target.service %{buildroot}%{_unitdir}/target.service
+install -m 644 doc/targetctl.8 %{buildroot}%{_mandir}/man8/
+install -m 644 doc/saveconfig.json.5 %{buildroot}%{_mandir}/man5/
+
+%check
+%pyproject_check_import
+
+%post -n target-restore
+%systemd_post target.service
+
+%preun -n target-restore
+%systemd_preun target.service
+
+%postun -n target-restore
+%systemd_postun_with_restart target.service
+
+%files -n python3-rtslib -f %{pyproject_files}
+%doc README.md doc/getting_started.md
+
+%files -n target-restore
+%{_bindir}/targetctl
+%{_unitdir}/target.service
+%dir %{_sysconfdir}/target
+%dir %{_sysconfdir}/target/backup
+%dir %{_localstatedir}/target
+%dir %{_localstatedir}/target/pr
+%dir %{_localstatedir}/target/alua
+%{_mandir}/man8/targetctl.8*
+%{_mandir}/man5/saveconfig.json.5*
+
+%changelog
+%autochangelog
