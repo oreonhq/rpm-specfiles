@@ -25,11 +25,7 @@
 
 %bcond_without alsa
 %bcond_without vulkan
-%if 0%{?oreon}
-%bcond gstreamer 0
-%else
 %bcond gstreamer 1
-%endif
 
 %if 0%{?rhel} && 0%{?rhel} < 9
 %bcond_with pulse
