@@ -9,7 +9,7 @@
 
 Name: python3-cryptography
 Version: 50.0.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Cryptographic recipes and primitives
 License: Apache-2.0 OR BSD-3-Clause
 URL: https://pypi.org/project/cryptography/
@@ -30,7 +30,6 @@ BuildRequires: pkgconfig(libgit2)
 BuildRequires: rust
 BuildRequires: cargo
 Requires: python3
-Provides: python3dist(cryptography) = %{version}
 Requires: python3-cffi
 
 %description
