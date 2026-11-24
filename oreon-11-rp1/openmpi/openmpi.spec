@@ -29,12 +29,17 @@
 %endif
 %endif
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel}
 %bcond_with orangefs
+%bcond_with sphinx
+%else
+%if 0%{?oreon}
+%bcond_without orangefs
 %bcond_with sphinx
 %else
 %bcond_without orangefs
 %bcond_without sphinx
+%endif
 %endif
 
 %ifarch x86_64
