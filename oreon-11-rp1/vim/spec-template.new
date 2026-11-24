@@ -1,0 +1,41 @@
+# SPEC file overview:
+# https://wiki.oreonhq.com/docs/packaging/
+# Oreon packaging guidelines:
+# https://wiki.oreonhq.com/docs/packaging/specs
+
+
+Name:
+Version:
+Release: 0%{?dist}
+Summary:
+
+License:
+URL:
+Source0:
+
+BuildRequires:
+Requires:
+
+%description
+
+
+%prep
+%setup -q
+
+
+%build
+%configure
+make %{?_smp_mflags}
+
+
+%install
+%make_install
+
+
+%files
+%doc
+%license
+
+
+
+%changelog
