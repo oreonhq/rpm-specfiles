@@ -13,11 +13,7 @@ A library that provides symbolic constant support. It includes collections and
 constants with text, numeric, and bit flag values. Originally
 twisted.python.constants from the Twisted project.}
 
-%if 0%{?oreon}
-%bcond bootstrap 1
-%else
 %bcond bootstrap 0
-%endif
 
 Name:           python-%{srcname}
 Version:        23.10.4
