@@ -2,6 +2,8 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 1dd5567b315e19cf4cfb2c32931e535fd65b326960a8770f351d7655439b1eb8
+%global source20_hash 59cdcaf255add4721de38eb411d4ecfe779356b61fb671aee63c7dec78054c2b
+%global source21_hash f4a8d27429458a529148f90ebafcd1ae9b1968fa323f9e5e40d579a5c8c0288f
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -543,12 +545,8 @@ ExclusiveArch:  %{exclusive_arches}
 
 Source0: https://github.com/openjdk/jdk%{featurever}u/archive/refs/tags/%{vcstag}.tar.gz#/openjdk-%{vcstag}.tar.gz
 
-%global seed_x86_64_hash 59cdcaf255add4721de38eb411d4ecfe779356b61fb671aee63c7dec78054c2b
-%global seed_aarch64_hash f4a8d27429458a529148f90ebafcd1ae9b1968fa323f9e5e40d579a5c8c0288f
-%if %{with bootstrap}
 Source20: https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-x64_bin.tar.gz
 Source21: https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-aarch64_bin.tar.gz
-%endif
 
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
@@ -928,11 +926,11 @@ fi
 %if %{use_seed_bootjdk}
 %ifarch x86_64
 seedtarball=%{SOURCE20}
-seedhash=%{seed_x86_64_hash}
+seedhash=%{source20_hash}
 %else
 %ifarch aarch64
 seedtarball=%{SOURCE21}
-seedhash=%{seed_aarch64_hash}
+seedhash=%{source21_hash}
 %else
 %{error:no seed boot jdk for %{_arch}}
 %endif
