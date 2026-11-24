@@ -1,0 +1,25 @@
+diff -rU4 xmlstarlet-1.7.0--orig/doc/doc.mk xmlstarlet-1.7.0/doc/doc.mk
+--- xmlstarlet-1.7.0--orig/doc/doc.mk	2026-09-07 10:59:46.000000000 +0200
++++ xmlstarlet-1.7.0/doc/doc.mk	2026-10-05 22:08:17.442169536 +0200
+@@ -30,9 +30,9 @@
+ 
+ .xml.html:
+ 	$(V_DOCBOOK)$(EDIT_XML) $< | $(XSLTPROC) $(DOCBOOK_PARAMS) \
+   --stringparam html.stylesheet html.css \
+-  http://docbook.sourceforge.net/release/xsl-ns/current/html/docbook.xsl \
++  $(DOCBOOK_DIR)/html/docbook.xsl \
+   - > $@
+ 
+ .xml.fo:
+ 	$(V_DOCBOOK)$(EDIT_XML) $< | $(XSLTPROC) $(DOCBOOK_PARAMS) $(srcdir)/doc/xmlstar-fodoc-style.xsl - > $@
+@@ -55,9 +55,9 @@
+   http://docbook.sourceforge.net/release/xsl-ns/current/html/chunkfast.xsl -
+ 
+ $(manpage): $(manpage_src)
+ 	 $(V_DOCBOOK)$(EDIT_XML) $< | $(XSLTPROC) -o $@ \
+-	  http://docbook.sourceforge.net/release/xsl-ns/current/manpages/docbook.xsl \
++	  $(DOCBOOK_DIR)/manpages/docbook.xsl \
+ 	  -
+ 
+ $(txtguide): $(txtguide_src) $(usage_texts)
+ 	$(AM_V_GEN)srcdir=$(srcdir) SED=$(SED) transform='$(program_transform_name)' $< ./xml > $@

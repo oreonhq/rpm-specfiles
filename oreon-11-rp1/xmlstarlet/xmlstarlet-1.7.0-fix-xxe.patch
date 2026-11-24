@@ -1,0 +1,64 @@
+diff -rU4 xmlstarlet-1.7.0--orig/examples/tests.mk xmlstarlet-1.7.0/examples/tests.mk
+--- xmlstarlet-1.7.0--orig/examples/tests.mk	2026-09-07 10:59:46.000000000 +0200
++++ xmlstarlet-1.7.0/examples/tests.mk	2026-10-05 22:37:29.857976197 +0200
+@@ -111,9 +111,10 @@
+ 	@$(MAKE) TESTS="$(QUICK_TESTS)" check
+ 
+ XFAIL_TESTS =\
+ examples/bigxml-dtd\
+-examples/ed-namespace
++examples/ed-namespace\
++examples/external-entity
+ 
+ if !HAVE_EXSLT_XPATH_REGISTER
+ XFAIL_TESTS += examples/exslt-ed
+ endif
+diff -rU4 xmlstarlet-1.7.0--orig/src/trans.c xmlstarlet-1.7.0/src/trans.c
+--- xmlstarlet-1.7.0--orig/src/trans.c	2026-09-07 10:59:46.000000000 +0200
++++ xmlstarlet-1.7.0/src/trans.c	2026-10-05 21:57:08.156082631 +0200
+@@ -139,8 +139,12 @@
+         options &= ~(XML_PARSE_DTDLOAD | XML_PARSE_DTDATTR);
+     if (ops->noblanks)
+         options |= XML_PARSE_NOBLANKS;
+ 
++    /* Disable entity expansion to prevent XXE attacks */
++    options &= ~XML_PARSE_NOENT;
++    options |= XML_PARSE_NONET;
++
+     /*
+      * Compile XSLT Sylesheet
+      */
+     style = xmlstarReadFile((const char *) xsl, NULL, options);
+diff -rU4 xmlstarlet-1.7.0--orig/src/xml_C14N.c xmlstarlet-1.7.0/src/xml_C14N.c
+--- xmlstarlet-1.7.0--orig/src/xml_C14N.c	2026-09-07 10:59:46.000000000 +0200
++++ xmlstarlet-1.7.0/src/xml_C14N.c	2026-10-05 22:26:22.602096226 +0200
+@@ -55,10 +55,10 @@
+      * attributes and resolve all character and entities references
+      */
+ 
+     doc = xmlstarReadFile(xml_filename, NULL,
+-        XML_PARSE_NOENT | XML_PARSE_DTDLOAD |
+-        XML_PARSE_DTDATTR | (nonet? XML_PARSE_NONET:0));
++        XML_PARSE_DTDLOAD |
++        XML_PARSE_DTDATTR | XML_PARSE_NONET);
+     if (doc == NULL) {
+         fprintf(stderr, "Error: unable to parse file \"%s\"\n", xml_filename);
+         return(EXIT_BAD_FILE);
+     }
+diff -rU4 xmlstarlet-1.7.0--orig/src/xml_select.c xmlstarlet-1.7.0/src/xml_select.c
+--- xmlstarlet-1.7.0--orig/src/xml_select.c	2026-09-07 10:59:46.000000000 +0200
++++ xmlstarlet-1.7.0/src/xml_select.c	2026-10-05 21:58:17.540331722 +0200
+@@ -715,11 +715,11 @@
+ 
+     selInitOptions(&ops);
+     xsltInitOptions(&xsltOps);
+     start = selParseOptions(&ops, argc, argv);
+-    xml_options |= XML_PARSE_NOENT; /* substitute entities */
++    /* XML_PARSE_NOENT removed to prevent XXE attacks */
+     xml_options |= XML_PARSE_DTDATTR; /* use default attrib values */
+-    xml_options |= ops.nonet? XML_PARSE_NONET : 0;
++    xml_options |= XML_PARSE_NONET;
+     xml_options |= ops.noblanks? XML_PARSE_NOBLANKS : 0;
+     xsltOps.nonet = ops.nonet;
+     xsltOps.noblanks = ops.noblanks;
+     xsltInitLibXml(&xsltOps);
