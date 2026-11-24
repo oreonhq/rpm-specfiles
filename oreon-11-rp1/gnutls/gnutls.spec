@@ -107,6 +107,7 @@ BuildRequires: unbound-devel
 BuildRequires: unbound-libs
 %endif
 BuildRequires: make gtk-doc
+BuildRequires:  oreon-rpm-macros
 
 %if %{with mingw}
 BuildRequires:  mingw32-cpp
@@ -125,7 +126,6 @@ BuildRequires:  mingw64-libtasn1 >= 4.3
 BuildRequires:  mingw64-readline
 BuildRequires:  mingw64-zlib
 BuildRequires:  mingw64-nettle >= 3.6
-BuildRequires:  oreon-rpm-macros
 %endif
 
 URL: http://www.gnutls.org/
