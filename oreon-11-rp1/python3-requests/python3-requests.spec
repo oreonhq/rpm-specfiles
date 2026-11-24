@@ -25,6 +25,7 @@ BuildRequires: python3-idna
 BuildRequires: python3-urllib3
 BuildRequires: python3-certifi
 Requires: python3
+Provides: python3dist(requests) = %{version}
 Requires: python3-charset-normalizer
 Requires: python3-idna
 Requires: python3-urllib3
