@@ -83,7 +83,7 @@ packages: glib2, sysprof, libffi, libxml2, expat, pcre2, ncurses, readline, sqli
 [x11]
 summary: the x11 client libraries we actually build
 maintainer: Brandon Lester
-packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans, pixman, cairo, fontconfig, freetype, xcb-util, xcb-util-cursor, xcb-util-image, xcb-util-keysyms, xcb-util-renderutil, xcb-util-wm, libxkbcommon, xkeyboard-config, mesa, libXext, libXrender, libICE, libSM, libXfixes, libXi, libXrandr, libXinerama, libXt, libXtst, libXdamage, libxshmfence, libXxf86vm, libpciaccess, libdrm, libglvnd, wayland, wayland-protocols, libdisplay-info, DirectX-Headers, libva, xorg-x11-util-macros, libXcomposite, libXcursor
+packages: libX11, libXau, libXdmcp, libxcb, xcb-proto, xorgproto, xtrans, pixman, cairo, fontconfig, freetype, xcb-util, xcb-util-cursor, xcb-util-image, xcb-util-keysyms, xcb-util-renderutil, xcb-util-wm, libxkbcommon, xkeyboard-config, mesa, libXext, libXrender, libICE, libSM, libXfixes, libXi, libXrandr, libXinerama, libXt, libXtst, libXdamage, libxshmfence, libXxf86vm, libpciaccess, libdrm, libglvnd, wayland, wayland-protocols, libdisplay-info, DirectX-Headers, libva, xorg-x11-util-macros, libXcomposite, libXcursor, libepoxy
 
 [graphics]
 summary: text layout and image loading libraries
