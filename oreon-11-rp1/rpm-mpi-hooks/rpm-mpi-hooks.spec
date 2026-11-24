@@ -19,6 +19,7 @@ License:        MIT
 BuildArch:      noarch
 
 Source0:        mpi.attr
+BuildRequires:  oreon-rpm-macros
 Source1:        mpilibsymlink.attr
 Source2:        mpi.prov
 Source3:        mpi.req
