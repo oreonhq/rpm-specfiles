@@ -5,7 +5,7 @@
 
 Name: userspace-rcu
 Version: 0.15.7
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Userspace RCU implementation
 License: LGPL-2.1-or-later
 URL: https://liburcu.org/
@@ -55,7 +55,6 @@ find %{buildroot} -name '*.la' -delete
 %{_includedir}/urcu*.h
 %{_libdir}/liburcu*.so
 %{_libdir}/pkgconfig/liburcu*.pc
-%{_mandir}/man3/*.3*
 
 %changelog
 %autochangelog
