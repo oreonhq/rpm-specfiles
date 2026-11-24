@@ -8,7 +8,7 @@
 
 %global somajor 1
 %if 0%{?oreon}
-%bcond bootstrap 1
+%bcond bootstrap 0
 %else
 %bcond bootstrap 0
 %endif
