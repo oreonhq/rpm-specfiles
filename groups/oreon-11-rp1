@@ -98,4 +98,4 @@ packages: procps-ng, iproute, socat, man-db, nano, htop, iotop-c, fastfetch, tmu
 [desktop]
 summary: the graphical session and apps on it
 maintainer: sk1lld
-packages: qt6-qtshadertools, qt6-qtlanguageserver, qt6-qtdeclarative, qt6-qttools, hicolor-icon-theme, at-spi2-core, gtk3, dejavu-fonts, adwaita-icon-theme-legacy, adwaita-icon-theme, gtk2
+packages: qt6-qtshadertools, qt6-qtlanguageserver, qt6-qtdeclarative, qt6-qttools, hicolor-icon-theme, at-spi2-core, gtk3, dejavu-fonts, adwaita-icon-theme-legacy, adwaita-icon-theme, gtk2, qt6-qtwayland
