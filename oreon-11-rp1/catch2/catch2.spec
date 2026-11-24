@@ -10,7 +10,7 @@
 
 Name:           catch2
 Version:        2.13.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Modern C++ header-only test framework
 License:        BSL-1.0
 URL:            https://github.com/catchorg/Catch2
@@ -27,7 +27,6 @@ Catch2 is a multi-paradigm automated test framework for C++.
 %package devel
 Summary:        Development files for %{name}
 Provides:       cmake(Catch2) = %{version}
-Provides:       catch-devel = %{version}-%{release}
 Requires:       libstdc++-devel
 
 %description devel
