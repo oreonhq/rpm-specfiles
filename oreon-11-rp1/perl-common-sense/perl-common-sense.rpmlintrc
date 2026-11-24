@@ -1,0 +1,9 @@
+# Perl language
+addFilter("spelling-error \('qw',")
+
+# Perl features
+addFilter("spelling-error \('(eval(bytes)?|fc|unicode)',")
+
+# Perl warnings
+addFilter("spelling-error \('(inplace|printf)',")
+
