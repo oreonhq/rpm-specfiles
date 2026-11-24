@@ -6,7 +6,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
-%if 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?rhel} > 9
 %bcond_with gtk2
 %else
 %bcond_without gtk2
