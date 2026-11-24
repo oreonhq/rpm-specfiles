@@ -408,6 +408,13 @@ files_run() {
     sort -u "$devel_out.globs" >> "$devel_out"
     rm -f "$devel_out.globs"
   fi
+  find "$destdir" -type d \( -name '*.dist-info' -o -name '*.egg-info' \) | sort | while read -r dpath; do
+    rel=${dpath#"$destdir"}
+    case "$rel" in
+      */share/licenses/*) continue ;;
+    esac
+    printf '%%dir %s\n' "$rel" >> "$out"
+  done
 }
 
 case $cmd in
