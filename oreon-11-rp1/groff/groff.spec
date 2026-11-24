@@ -76,6 +76,7 @@ Requires(postun): /usr/sbin/update-alternatives
 Requires(preun): /usr/sbin/update-alternatives
 
 BuildRequires: gcc, gcc-c++
+BuildRequires:  oreon-rpm-macros
 BuildRequires: bison, texinfo
 BuildRequires: git
 BuildRequires: perl-generators
@@ -133,7 +134,6 @@ Summary: Parts of the groff formatting system that require X Windows System
 Requires: groff-base = %{version}-%{release}
 BuildRequires: libXaw-devel, libXmu-devel
 BuildRequires: make
-BuildRequires:  oreon-rpm-macros
 Provides: groff-gxditview = %{version}-%{release}
 Obsoletes: groff-gxditview < 1.20.1
 
