@@ -8,7 +8,7 @@
 
 Name: python3-requests
 Version: 2.34.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Python HTTP for Humans.
 License: Apache-2.0
 URL: https://pypi.org/project/requests/
@@ -25,7 +25,6 @@ BuildRequires: python3-idna
 BuildRequires: python3-urllib3
 BuildRequires: python3-certifi
 Requires: python3
-Provides: python3dist(requests) = %{version}
 Requires: python3-charset-normalizer
 Requires: python3-idna
 Requires: python3-urllib3
