@@ -1,0 +1,22 @@
+# Not real spelling errors
+#   - "trunc", "eucl", "qsort", "snprintf" are C function names
+#   - "va" and "args" are from "va_args"
+#   - "sprintfs" refers to "the various flavors of sprintf functions"
+#   - "ryg" is a username/handle
+#   - "Doesn" is from "Doesn’t"
+#   - "zlib" is a library name
+#   - "Ogg" is a format
+#   - "init" is short for "initializer"
+#   - "stdlib" is short for "the C standard library"
+#   - "awesomest" is an informal variant of "most awesome"
+addFilter(r"spelling-error \('([Mm]etapackage|[Pp]arser|[Ss]hader|[Rr]oadmap)s?',")
+addFilter(r"spelling-error \('([Rr]eachability|([Tt]|[Uu]nt)raversable)',")
+addFilter(r"spelling-error \('([Tt]ypesafe|[Dd]oesn|[Bb]andlimited|[Mm]orphable)',")
+addFilter(r"spelling-error \('(trunc|eucl|qsort|snprintf|va|args|sprintfs)',")
+addFilter(r"spelling-error \('(ryg|zlib|[Ii]nit|stdlib|[Aa]wesomest|Ogg)',")
+addFilter(r"spelling-error \('([Ww]aveform|[Rr]escale|([Uu]p|[Dd]own)sample)s?',")
+addFilter(r"spelling-error \('([Ee]mbeddable|[Rr]asterize|[Aa]ntialiasing)',")
+# All documentation is in the -doc subpackage.
+addFilter(r" no-documentation$")
+# Consistency with upstream is more important.
+addFilter(r" description-shorter-than-summary")
