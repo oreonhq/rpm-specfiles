@@ -8,7 +8,7 @@
 
 Name:          python-libarchive-c
 Version:       5.3
-Release:       2%{?dist}
+Release:       3%{?dist}
 Summary:       Python interface to libarchive
 License:       CC0-1.0
 URL:           https://github.com/Changaco/python-libarchive-c
@@ -19,6 +19,7 @@ URL:           https://github.com/Changaco/python-libarchive-c
 
 Source:        https://github.com/Changaco/python-libarchive-c/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch:         0001-Allow-rmd160-digest-to-be-missing-in-tests.patch
+Patch1:        python-libarchive-c-5.3-libarchive-3.8-tests.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: libarchive-devel
