@@ -8,7 +8,7 @@
 
 Name:          python-libarchive-c
 Version:       5.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       Python interface to libarchive
 License:       CC0-1.0
 URL:           https://github.com/Changaco/python-libarchive-c
@@ -57,8 +57,7 @@ Requires:      libarchive
 %{_fixperms} %{buildroot}
 
 %check
-%{?el7:export LANG=en_US.UTF-8}
-pytest-%{python3_version} -s -vv tests %{?el7:-k "not test_check_archiveentry_using_python_testtar"}
+%pytest -s -vv tests
 
 %global _docdir_fmt %{name}
 
