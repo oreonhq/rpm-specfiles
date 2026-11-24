@@ -1,0 +1,299 @@
+diff --git a/src/udp_engine.cpp b/src/udp_engine.cpp
+index 397b6115..b9774ada 100644
+--- a/src/udp_engine.cpp
++++ b/src/udp_engine.cpp
+@@ -8,6 +8,7 @@
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ #include <arpa/inet.h>
++#include <netdb.h>
+ #ifdef ZMQ_HAVE_VXWORKS
+ #include <sockLib.h>
+ #endif
+@@ -334,10 +335,15 @@ void zmq::udp_engine_t::terminate ()
+     delete this;
+ }
+ 
+-void zmq::udp_engine_t::sockaddr_to_msg (zmq::msg_t *msg_,
++bool zmq::udp_engine_t::sockaddr_to_msg (zmq::msg_t *msg_,
+                                          const sockaddr_in *addr_)
+ {
+-    const char *const name = inet_ntoa (addr_->sin_addr);
++    char name[NI_MAXHOST];
++    const int name_rc =
++      getnameinfo (reinterpret_cast<const sockaddr *> (addr_), sizeof (*addr_),
++                   name, sizeof name, NULL, 0, NI_NUMERICHOST);
++    if (name_rc != 0)
++        return false;
+ 
+     char port[6];
+     const int port_len =
+@@ -360,6 +366,8 @@ void zmq::udp_engine_t::sockaddr_to_msg (zmq::msg_t *msg_,
+     memcpy (address, port, static_cast<size_t> (port_len));
+     address += port_len;
+     *address = 0;
++
++    return true;
+ }
+ 
+ int zmq::udp_engine_t::resolve_raw_address (const char *name_, size_t length_)
+@@ -388,6 +396,11 @@ int zmq::udp_engine_t::resolve_raw_address (const char *name_, size_t length_)
+     const std::string addr_str (name_, delimiter - name_);
+     const std::string port_str (delimiter + 1, name_ + length_ - delimiter - 1);
+ 
++    if (addr_str.empty ()) {
++        errno = EINVAL;
++        return -1;
++    }
++
+     //  Parse the port number (0 is not a valid port).
+     const uint16_t port = static_cast<uint16_t> (atoi (port_str.c_str ()));
+     if (port == 0) {
+@@ -395,10 +408,33 @@ int zmq::udp_engine_t::resolve_raw_address (const char *name_, size_t length_)
+         return -1;
+     }
+ 
+-    _raw_address.sin_family = AF_INET;
+-    _raw_address.sin_port = htons (port);
+-    _raw_address.sin_addr.s_addr = inet_addr (addr_str.c_str ());
++    struct addrinfo hints;
++    memset (&hints, 0, sizeof hints);
++    hints.ai_family = AF_INET;
++    hints.ai_socktype = SOCK_DGRAM;
++    hints.ai_protocol = IPPROTO_UDP;
++    hints.ai_flags = AI_NUMERICHOST;
++
++    struct addrinfo *result = NULL;
++    const int gai_rc = getaddrinfo (addr_str.c_str (), NULL, &hints, &result);
++    if (gai_rc != 0) {
++        errno = gai_rc == EAI_MEMORY ? ENOMEM : EINVAL;
++        return -1;
++    }
+ 
++    if (result == NULL || result->ai_addr == NULL
++        || result->ai_family != AF_INET
++        || static_cast<size_t> (result->ai_addrlen) < sizeof (_raw_address)) {
++        if (result != NULL)
++            freeaddrinfo (result);
++        errno = EINVAL;
++        return -1;
++    }
++
++    memcpy (&_raw_address, result->ai_addr, sizeof (_raw_address));
++    freeaddrinfo (result);
++
++    _raw_address.sin_port = htons (port);
+     if (_raw_address.sin_addr.s_addr == INADDR_NONE) {
+         errno = EINVAL;
+         return -1;
+@@ -542,7 +578,11 @@ void zmq::udp_engine_t::in_event ()
+ 
+     if (_options.raw_socket) {
+         zmq_assert (in_address.ss_family == AF_INET);
+-        sockaddr_to_msg (&msg, reinterpret_cast<sockaddr_in *> (&in_address));
++        if (!sockaddr_to_msg (&msg,
++                              reinterpret_cast<sockaddr_in *> (&in_address))) {
++            error (connection_error);
++            return;
++        }
+ 
+         body_size = nbytes;
+         body_offset = 0;
+diff --git a/src/udp_engine.hpp b/src/udp_engine.hpp
+index 94e00354..40f7b2d3 100644
+--- a/src/udp_engine.hpp
++++ b/src/udp_engine.hpp
+@@ -49,7 +49,7 @@ class udp_engine_t ZMQ_FINAL : public io_object_t, public i_engine
+ 
+   private:
+     int resolve_raw_address (const char *name_, size_t length_);
+-    static void sockaddr_to_msg (zmq::msg_t *msg_, const sockaddr_in *addr_);
++    static bool sockaddr_to_msg (zmq::msg_t *msg_, const sockaddr_in *addr_);
+ 
+     static int set_udp_reuse_address (fd_t s_, bool on_);
+     static int set_udp_reuse_port (fd_t s_, bool on_);
+diff --git a/tests/test_dgram.cpp b/tests/test_dgram.cpp
+index 939af27c..6fcb627c 100644
+--- a/tests/test_dgram.cpp
++++ b/tests/test_dgram.cpp
+@@ -5,6 +5,11 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <string>
++
++#if !defined ZMQ_HAVE_WINDOWS
++#include <netdb.h>
++#endif
+ 
+ SETUP_TEARDOWN_TESTCONTEXT
+ 
+@@ -14,6 +19,23 @@ void str_send_to (void *s_, const char *content_, const char *address_)
+     send_string_expect_success (s_, content_, 0);
+ }
+ 
++static void assert_raw_datagram_received (void *s_,
++                                          const char *content_,
++                                          const char *address_)
++{
++    char received_address[64] = {0};
++    char received_content[64] = {0};
++
++    TEST_ASSERT_EQUAL_INT (
++      strlen (address_) + 1,
++      zmq_recv (s_, received_address, sizeof received_address, 0));
++    TEST_ASSERT_EQUAL_STRING (address_, received_address);
++    TEST_ASSERT_EQUAL_INT (
++      strlen (content_),
++      zmq_recv (s_, received_content, sizeof received_content, 0));
++    TEST_ASSERT_EQUAL_STRING (content_, received_content);
++}
++
+ void str_recv_from (void *s_, char **ptr_content_, char **ptr_address_)
+ {
+     *ptr_address_ = s_recv (s_);
+@@ -69,6 +91,99 @@ void test_roundtrip ()
+     test_context_socket_close (listener);
+ }
+ 
++void test_invalid_raw_addresses_are_dropped ()
++{
++    static const char *const invalid_addresses[] = {
++      "localhost:5559", "not-an-address:5559", "2001:db8::1:5559", ":5559",
++      "255.255.255.255:5559"};
++
++    void *sender = test_context_socket (ZMQ_DGRAM);
++    void *listener = test_context_socket (ZMQ_DGRAM);
++
++    TEST_ASSERT_SUCCESS_ERRNO (zmq_bind (listener, ENDPOINT_4));
++    TEST_ASSERT_SUCCESS_ERRNO (zmq_bind (sender, ENDPOINT_5));
++
++    int timeout = 250;
++    TEST_ASSERT_SUCCESS_ERRNO (
++      zmq_setsockopt (listener, ZMQ_RCVTIMEO, &timeout, sizeof (timeout)));
++
++    char buffer[64];
++    for (size_t i = 0;
++         i < sizeof (invalid_addresses) / sizeof (invalid_addresses[0]); ++i) {
++        str_send_to (sender, test_question, invalid_addresses[i]);
++        TEST_ASSERT_FAILURE_ERRNO (
++          EAGAIN, zmq_recv (listener, buffer, sizeof buffer, 0));
++    }
++
++    str_send_to (sender, test_answer, "127.0.0.1:5559");
++    assert_raw_datagram_received (listener, test_answer, "127.0.0.1:5560");
++
++    test_context_socket_close (sender);
++    test_context_socket_close (listener);
++}
++
++void test_legacy_numeric_addresses ()
++{
++    static const char *const legacy_addresses[] = {"127.1", "0177.0.0.1",
++                                                   "0x7f000001"};
++    bool supported[sizeof (legacy_addresses) / sizeof (legacy_addresses[0])];
++    size_t supported_count = 0;
++    void *sender = test_context_socket (ZMQ_DGRAM);
++    void *listener = test_context_socket (ZMQ_DGRAM);
++
++    for (size_t i = 0;
++         i < sizeof (legacy_addresses) / sizeof (legacy_addresses[0]); ++i) {
++        struct addrinfo hints;
++        memset (&hints, 0, sizeof hints);
++        hints.ai_family = AF_INET;
++        hints.ai_flags = AI_NUMERICHOST;
++
++        struct addrinfo *result = NULL;
++        supported[i] =
++          getaddrinfo (legacy_addresses[i], NULL, &hints, &result) == 0
++          && result != NULL && result->ai_addr != NULL
++          && result->ai_family == AF_INET
++          && static_cast<size_t> (result->ai_addrlen)
++               >= sizeof (struct sockaddr_in)
++          && reinterpret_cast<struct sockaddr_in *> (result->ai_addr)
++                 ->sin_addr.s_addr
++               == htonl (INADDR_LOOPBACK);
++        if (result != NULL)
++            freeaddrinfo (result);
++        if (supported[i])
++            ++supported_count;
++    }
++
++    if (supported_count == 0) {
++        test_context_socket_close (sender);
++        test_context_socket_close (listener);
++        TEST_IGNORE_MESSAGE (
++          "the platform numeric resolver accepts no tested legacy IPv4 form");
++    }
++
++    TEST_ASSERT_SUCCESS_ERRNO (zmq_bind (listener, ENDPOINT_4));
++    TEST_ASSERT_SUCCESS_ERRNO (zmq_bind (sender, ENDPOINT_5));
++
++    int timeout = 1000;
++    TEST_ASSERT_SUCCESS_ERRNO (
++      zmq_setsockopt (listener, ZMQ_RCVTIMEO, &timeout, sizeof (timeout)));
++
++    for (size_t i = 0;
++         i < sizeof (legacy_addresses) / sizeof (legacy_addresses[0]); ++i) {
++        if (!supported[i])
++            continue;
++
++        const std::string destination =
++          std::string (legacy_addresses[i]) + ":5559";
++        str_send_to (sender, test_question, destination.c_str ());
++        assert_raw_datagram_received (listener, test_question,
++                                      "127.0.0.1:5560");
++    }
++
++    test_context_socket_close (sender);
++    test_context_socket_close (listener);
++}
++
+ int main (void)
+ {
+     setup_test_environment ();
+@@ -76,5 +191,7 @@ int main (void)
+     UNITY_BEGIN ();
+     RUN_TEST (test_connect_fails);
+     RUN_TEST (test_roundtrip);
++    RUN_TEST (test_invalid_raw_addresses_are_dropped);
++    RUN_TEST (test_legacy_numeric_addresses);
+     return UNITY_END ();
+ }
+diff --git a/tests/testutil.cpp b/tests/testutil.cpp
+index a75b9e92..5db438c5 100644
+--- a/tests/testutil.cpp
++++ b/tests/testutil.cpp
+@@ -339,16 +339,25 @@ int test_inet_pton (int af_, const char *src_, void *dst_)
+     if (af_ == AF_INET) {
+         struct in_addr *ip4addr = (struct in_addr *) dst_;
+ 
+-        ip4addr->s_addr = inet_addr (src_);
+-
+-        //  INADDR_NONE is -1 which is also a valid representation for IP
+-        //  255.255.255.255
+-        if (ip4addr->s_addr == INADDR_NONE
+-            && strcmp (src_, "255.255.255.255") != 0) {
++        struct addrinfo hints;
++        memset (&hints, 0, sizeof hints);
++        hints.ai_family = AF_INET;
++        hints.ai_flags = AI_NUMERICHOST;
++
++        struct addrinfo *result = NULL;
++        if (getaddrinfo (src_, NULL, &hints, &result) != 0 || result == NULL
++            || result->ai_addr == NULL || result->ai_family != AF_INET
++            || static_cast<size_t> (result->ai_addrlen)
++                 < sizeof (struct sockaddr_in)) {
++            if (result != NULL)
++                freeaddrinfo (result);
+             return 0;
+         }
+ 
+-        //  Success
++        ip4addr->s_addr =
++          reinterpret_cast<struct sockaddr_in *> (result->ai_addr)
++            ->sin_addr.s_addr;
++        freeaddrinfo (result);
+         return 1;
+     } else {
+         //  Not supported.
