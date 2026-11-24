@@ -30,6 +30,7 @@ BuildRequires: pkgconfig(libgit2)
 BuildRequires: rust
 BuildRequires: cargo
 Requires: python3
+Provides: python3dist(cryptography) = %{version}
 Requires: python3-cffi
 
 %description
