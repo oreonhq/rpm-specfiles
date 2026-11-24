@@ -14,6 +14,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
+Provides: python3dist(pytest) = %{version}
 BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
