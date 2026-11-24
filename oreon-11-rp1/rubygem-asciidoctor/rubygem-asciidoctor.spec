@@ -11,7 +11,7 @@
 
 Name:           rubygem-%{gem_name}
 Version:        2.0.26
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        AsciiDoc text processor and publishing toolchain
 License:        MIT
 URL:            https://asciidoctor.org
@@ -22,6 +22,7 @@ BuildArch:      noarch
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  ruby
 BuildRequires:  rubygems-devel
+BuildRequires:  rubygem(rdoc)
 BuildRequires:  rubygem(logger)
 
 Requires:       ruby(release)
