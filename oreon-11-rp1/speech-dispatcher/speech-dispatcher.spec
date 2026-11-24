@@ -7,7 +7,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
-%if 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?rhel} > 9
 %global festival_backend 0
 %else
 %global festival_backend 1
@@ -15,7 +15,7 @@
 
 Name:          speech-dispatcher
 Version:       0.12.1
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       To provide a high-level device independent layer for speech synthesis
 
 License:       GPL-2.0-or-later AND LGPL-2.1-only OR LGPL-2.0-only
