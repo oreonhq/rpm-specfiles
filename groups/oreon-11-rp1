@@ -93,7 +93,7 @@ packages: fribidi, harfbuzz, pango, gdk-pixbuf2, libgd, ghostscript, poppler-dat
 [admin-tools]
 summary: things a person runs on a booted system
 maintainer: Brandon Lester
-packages: procps-ng, iproute, socat, man-db, nano, htop, iotop-c, fastfetch, tmux, git, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot, e2fsprogs, hostname, bc, words, less, time, psmisc, bpftool, hwinfo
+packages: procps-ng, iproute, socat, man-db, nano, htop, iotop-c, fastfetch, tmux, git, lvm2, kmod, device-mapper, cryptsetup, pciutils, usbutils, lm_sensors, dmidecode, sysstat, strace, tcpdump, nmap, iftop, libpcap, fakeroot, e2fsprogs, hostname, bc, words, less, time, psmisc, bpftool, hwinfo, ntfs-3g
 
 [desktop]
 summary: the graphical session and apps on it
