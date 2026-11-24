@@ -62,6 +62,7 @@ Obsoletes: python2-rpm < %{version}-%{release}
 # XXX generally assumed to be installed but make it explicit as rpm
 # is a bit special...
 BuildRequires: redhat-rpm-config >= 94
+BuildRequires: rpm-build
 BuildRequires: systemd-rpm-macros
 BuildRequires: gcc gcc-c++ make
 BuildRequires: cmake >= 3.18
@@ -76,6 +77,7 @@ BuildRequires: gettext-devel
 BuildRequires: ncurses-devel
 BuildRequires: bzip2-devel >= 0.9.0c-2
 BuildRequires: lua-devel >= 5.1
+BuildRequires: lua-rpm-macros
 BuildRequires: libcap-devel
 BuildRequires: libacl-devel
 %if %{with xz}

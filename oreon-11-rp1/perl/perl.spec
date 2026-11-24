@@ -125,7 +125,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          %{perl_epoch}
 Version:        5.44.0
 # release number must be even higher, because dual-lived modules will be broken otherwise
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Practical Extraction and Report Language
 Url:            https://www.perl.org/
 Source0:        https://www.cpan.org/src/5.0/perl-%{version}.tar.xz
@@ -1463,7 +1463,7 @@ The easiest and the best alternative is to write your script in UTF-8.
 Summary:        Character encodings in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Epoch:          4
-Version:        3.21
+Version:        3.24
 Requires:       %{name}-Encode = %{epoch}:%{version}-%{release}
 Recommends:     perl-devel
 %if %{defined perl_bootstrap}

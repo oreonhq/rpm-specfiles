@@ -1,0 +1,25 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: [PATCH] apu-config: no runpath in the installed --link-libtool fallback
+
+libaprutil-1.la is not shipped, so an installed apu-1-config answers
+--link-libtool with -L$libdir -R$libdir. libtool turns the -R into a
+RUNPATH of /usr/lib64 in every library linked against apr-util, which
+check-rpaths rejects. Emit the same flags as --link-ld instead.
+---
+--- a/apu-config.in	2026-11-23 15:17:12.508171075 -0800
++++ b/apu-config.in	2026-11-23 15:17:12.540170863 -0800
+@@ -175,10 +175,10 @@
+     if test -f "$LA_FILE"; then
+         flags="$flags $LA_FILE"
+     elif test "$location" = "installed"; then
+-        ### avoid using -L if libdir is a "standard" location like /usr/lib
+-        # Since the user is specifying they are linking with libtool, we
+-        # *know* that -R will be recognized by libtool.
+-        flags="$flags -L$libdir -R$libdir -l$APRUTIL_LIBNAME"
++        # The .la file is not installed. Do not hand libtool -R$libdir,
++        # it would hardcode the system libdir as a runpath into every
++        # consumer.
++        flags="$flags -L$libdir -l$APRUTIL_LIBNAME"
+     else
+         flags="$flags $LA_FILE"
+     fi

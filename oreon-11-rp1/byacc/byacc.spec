@@ -10,18 +10,18 @@
 
 Name: byacc
 Version: 2.0.%{byaccdate}
-Release: 1%{?dist}
+Release: 4%{?dist}
 Summary: Berkeley Yacc LALR parser generator
 License: LicenseRef-Oreon-Public-Domain
 URL: https://invisible-island.net/byacc/byacc.html
-Source0: https://invisible-island.net/archives/byacc/byacc-%{byaccdate}.tgz
+Source0: https://invisible-mirror.net/archives/byacc/byacc-%{byaccdate}.tgz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: make
 
 Provides: /usr/bin/yacc
-Conflicts: bison < 1:2.0
+Conflicts: bison < 2.0
 
 %description
 Berkeley Yacc is an LALR(1) parser generator.
@@ -36,6 +36,8 @@ Berkeley Yacc is an LALR(1) parser generator.
 
 %install
 %make_install
+ln -s yacc %{buildroot}%{_bindir}/byacc
+echo '.so man1/yacc.1' > %{buildroot}%{_mandir}/man1/byacc.1
 
 %check
 %make_build check

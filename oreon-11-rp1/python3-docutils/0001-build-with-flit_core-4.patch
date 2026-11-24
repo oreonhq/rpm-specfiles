@@ -1,0 +1,18 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: [PATCH] build with flit_core 4
+
+flit_core 4 no longer reads [tool.flit.metadata]; docutils already uses
+the [project] table. flit's 4.0 release notes say such projects can
+raise the cap from <4 to <5.
+---
+--- a/pyproject.toml	2026-11-23 15:26:46.101529959 -0800
++++ b/pyproject.toml	2026-11-23 15:26:46.105529840 -0800
+@@ -3,7 +3,7 @@
+ # Use flit as a build backend (https://flit.pypa.io/)
+ # Build with (https://build.pypa.io/)
+ [build-system]
+-requires = ["flit_core>=3.11,<4"]
++requires = ["flit_core>=3.11,<5"]
+ build-backend = "flit_core.buildapi"
+ 
+ # Project metadata

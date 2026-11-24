@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 154b120dd897d6411a55e5a2833044807eaf31a61412df601384be6fd101ed8f
+%global source4_hash 20261d2771b9a052abfa3d8fab1aa62be05791a010281c566f9073bf0e644538
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -9,7 +10,7 @@
 
 Name: docbook-utils
 Version: 0.6.15
-Release: 1%{?dist}
+Release: 5%{?dist}
 Summary: Shell scripts for managing DocBook documents
 License: GPL-2.0-or-later
 URL: https://github.com/devexp-db/docbook-utils
@@ -17,6 +18,7 @@ Source0: https://github.com/devexp-db/docbook-utils/releases/download/v%{version
 Source1: db2html
 Source2: gdp-both.dsl
 Source3: docbook2man-spec.pl
+Source4: https://www.oasis-open.org/docbook/sgml/3.1/docbk31.zip
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
@@ -24,6 +26,8 @@ BuildRequires: perl-generators
 BuildRequires: perl-SGMLSpm
 BuildRequires: openjade
 BuildRequires: docbook-style-dsssl
+BuildRequires: sgml-common
+BuildRequires: python3
 BuildRequires: make
 
 Requires: docbook-style-dsssl >= 1.72
@@ -56,10 +60,25 @@ Script for converting DocBook documents to PDF.
 
 %prep
 %oreon_sha256
+echo '%{source4_hash}  %{SOURCE4}' | sha256sum -c -
 %autosetup
+mkdir -p sgml-dtd-3.1
+python3 -m zipfile -e %{SOURCE4} sgml-dtd-3.1
 
 %build
 ./configure --prefix=%{_prefix} --mandir=%{_mandir} --libdir=%{_libdir}
+iso=$(readlink -f %{_datadir}/sgml/sgml-iso-entities-8879.1986/catalog)
+jade=$(readlink -f %{_datadir}/sgml/openjade-*/catalog)
+dsssl=$(readlink -f %{_datadir}/sgml/docbook/dsssl-stylesheets/catalog)
+test -f "$iso"
+test -f "$jade"
+test -f "$dsssl"
+test -f "$PWD/sgml-dtd-3.1/docbook.cat"
+cat="$iso:$jade:$dsssl:$PWD/sgml-dtd-3.1/docbook.cat"
+sed -i "s|/etc/sgml/catalog|$cat|g" doc/man/Makefile doc/HTML/Makefile
+touch doc/man/Makefile doc/HTML/Makefile
+grep -q "$iso" doc/man/Makefile
+grep -q "$iso" doc/HTML/Makefile
 %make_build
 
 %install
@@ -73,7 +92,7 @@ ln -s jw.1.gz %{buildroot}%{_mandir}/man1/docbook2txt.1
 rm -f %{buildroot}%{_bindir}/db2html
 install -p -m 755 %{SOURCE1} %{buildroot}%{_bindir}/db2html
 install -p -m 644 %{SOURCE2} %{buildroot}%{_datadir}/sgml/docbook/utils-%{version}/docbook-utils.dsl
-install -p -m 755 %{SOURCE3} %{buildroot}%{_datadir}/sgml/docbook/utils-%{version}/helpers/docbook2man-spec.pl
+install -p -m 644 %{SOURCE3} %{buildroot}%{_datadir}/sgml/docbook/utils-%{version}/helpers/docbook2man-spec.pl
 rm -rf %{buildroot}/tmp
 
 %check
@@ -106,6 +125,10 @@ test -x %{buildroot}%{_bindir}/db2html
 %{_mandir}/*/docbook2txt.*
 %{_mandir}/*/jw.*
 %{_mandir}/*/sgmldiff.*
+%{_mandir}/*/docbook2man-spec.pl.*
+%{_mandir}/*/docbook2texi-spec.pl.*
+%{_mandir}/*/backend-spec.*
+%{_mandir}/*/frontend-spec.*
 
 %files pdf
 %{_bindir}/docbook2pdf

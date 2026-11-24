@@ -20,6 +20,17 @@ repo_gpgcheck=0
 enabled=1
 enabled_metadata=1
 
+[copr:copr.fedorainfracloud.org:brandonlester:wine-oreon-10]
+name=Copr repo for wine-oreon-10 owned by brandonlester
+baseurl=https://download.copr.fedorainfracloud.org/results/brandonlester/wine-oreon-10/fedora-45-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/brandonlester/wine-oreon-10/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+
 [baseos-debuginfo]
 name=Oreon $releasever - BaseOS - Debug
 mirrorlist=https://mirrors.almalinux.org/mirrorlist/$releasever/baseos-debug

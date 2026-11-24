@@ -9,7 +9,7 @@
 
 Name:           oreon-release
 Version:        %{major}.%{minor}
-Release:        11%{?dist}.0
+Release:        12%{?dist}.0
 Summary:        %{distro} release files
 License:        GPL-2.0-or-later
 URL:            https://oreonproject.org/oreon-10

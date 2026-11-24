@@ -8,7 +8,7 @@
 
 Name: python3-python-discovery
 Version: 1.9.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Discover Python interpreters
 License: MIT
 URL: https://pypi.org/project/python-discovery/
@@ -16,6 +16,7 @@ Source0: https://files.pythonhosted.org/packages/68/55/70b46fae646bc6f5cb5e82569
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-build
 BuildRequires: python3-installer
@@ -40,7 +41,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import python_discovery'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import python_discovery'
 
 %files -f %{_builddir}/%{name}.files
 

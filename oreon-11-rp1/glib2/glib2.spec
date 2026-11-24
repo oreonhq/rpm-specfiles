@@ -8,7 +8,7 @@
 %oreon_bootstrap
 Name:           glib2
 Version:        2.90.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A library of handy utility functions
 
 License:        LGPL-2.1-or-later
@@ -30,7 +30,9 @@ BuildRequires:  libselinux-devel
 BuildRequires:  meson
 BuildRequires:  systemtap-sdt-devel
 BuildRequires:  systemtap-sdt-dtrace
+%if %{without bootstrap}
 BuildRequires:  pkgconfig(gi-docgen)
+%endif
 BuildRequires:  pkgconfig(libelf)
 BuildRequires:  pkgconfig(libffi)
 BuildRequires:  pkgconfig(libpcre2-8)
@@ -41,7 +43,9 @@ BuildRequires:  pkgconfig(sysprof-capture-4)
 %endif
 BuildRequires:  pkgconfig(zlib)
 BuildRequires:  python3-devel
+%if %{without bootstrap}
 BuildRequires:  /usr/bin/g-ir-scanner
+%endif
 BuildRequires:  /usr/bin/rst2man
 
 # Dependencies for tests
@@ -53,7 +57,7 @@ BuildRequires:  /usr/bin/update-desktop-database
 # static glib2 without depending on a static build of GnuTLS as well. This will
 # ensure we notice if the GnuTLS soname bumps, so that we can update our patch.
 BuildRequires:  gnutls
-BuildRequires:  oreon-rpm-macros
+BuildRequires:  oreon-rpm-macros >= 1-14
 %if 0%{?__isa_bits} == 64
 Requires: libgnutls.so.30()(64bit)
 %else
@@ -87,18 +91,22 @@ Conflicts: gobject-introspection-devel < 1.79.1
 %description devel
 The glib2-devel package includes the header files for the GLib library.
 
+%if %{without bootstrap}
 %package doc
 Summary: A library of handy utility functions
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description doc
 The glib2-doc package includes documentation for the GLib library.
+%endif
 
 %package static
 Summary: glib static
 Requires: %{name}-devel = %{version}-%{release}
 Requires: pcre2-static
+%if %{with sysprof}
 Requires: sysprof-capture-static
+%endif
 
 %description static
 The %{name}-static subpackage contains static libraries for %{name}.
@@ -119,10 +127,21 @@ the functionality of the installed glib2 package.
 %build
 %meson \
     -Dglib_debug=disabled \
-    -Ddocumentation=true \
     -Dinstalled_tests=true \
     -Dgnutls=true \
     --default-library=both \
+%if %{without bootstrap}
+    -Ddocumentation=true \
+    -Dintrospection=enabled \
+%else
+    -Ddocumentation=false \
+    -Dintrospection=disabled \
+%endif
+%if %{with sysprof}
+    -Dsysprof=enabled \
+%else
+    -Dsysprof=disabled \
+%endif
     %{nil}
 %meson_build
 
@@ -165,6 +184,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_libdir}/libgobject-2.0.so.0*
 %{_libdir}/libgio-2.0.so.0*
 %{_libdir}/libgirepository-2.0.so.0*
+%if %{without bootstrap}
 %dir %{_libdir}/girepository-1.0
 %{_libdir}/girepository-1.0/GIRepository-3.0.typelib
 %{_libdir}/girepository-1.0/GLib-2.0.typelib
@@ -173,6 +193,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_libdir}/girepository-1.0/GObject-2.0.typelib
 %{_libdir}/girepository-1.0/Gio-2.0.typelib
 %{_libdir}/girepository-1.0/GioUnix-2.0.typelib
+%endif
 %dir %{_datadir}/bash-completion
 %dir %{bash_completions_dir}
 %{bash_completions_dir}/gapplication
@@ -238,6 +259,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_mandir}/man1/glib-compile-resources.1*
 %{_mandir}/man1/gresource.1*
 %{_datadir}/gdb/
+%if %{without bootstrap}
 %dir %{_datadir}/gir-1.0
 %{_datadir}/gir-1.0/GIRepository-3.0.gir
 %{_datadir}/gir-1.0/GLib-2.0.gir
@@ -246,9 +268,11 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/gir-1.0/GObject-2.0.gir
 %{_datadir}/gir-1.0/Gio-2.0.gir
 %{_datadir}/gir-1.0/GioUnix-2.0.gir
+%endif
 %{_datadir}/gettext/
 %{_datadir}/systemtap/
 
+%if %{without bootstrap}
 %files doc
 %{_datadir}/doc/gio-2.0/
 %{_datadir}/doc/gio-unix-2.0/
@@ -257,6 +281,7 @@ glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
 %{_datadir}/doc/glib-unix-2.0/
 %{_datadir}/doc/gmodule-2.0/
 %{_datadir}/doc/gobject-2.0/
+%endif
 
 %files static
 %{_libdir}/libgio-2.0.a

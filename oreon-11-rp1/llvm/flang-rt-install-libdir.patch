@@ -1,0 +1,13 @@
+--- a/flang-rt/cmake/modules/AddFlangRT.cmake
++++ b/flang-rt/cmake/modules/AddFlangRT.cmake
+@@ -397,8 +397,8 @@
+         )
+ 
+       install(TARGETS ${tgtname}
+-          ARCHIVE DESTINATION "${RUNTIMES_INSTALL_RESOURCE_LIB_PATH}"
+-          LIBRARY DESTINATION "${RUNTIMES_INSTALL_RESOURCE_LIB_PATH}"
++          ARCHIVE DESTINATION "${FLANG_RT_INSTALL_RESOURCE_LIB_PATH}"
++          LIBRARY DESTINATION "${FLANG_RT_INSTALL_RESOURCE_LIB_PATH}"
+         )
+     endif ()
+ 

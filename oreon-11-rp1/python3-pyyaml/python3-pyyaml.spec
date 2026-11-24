@@ -16,12 +16,14 @@ Source0: https://files.pythonhosted.org/packages/05/8e/961c0007c59b8dd7729d542c6
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-setuptools
 BuildRequires: python3-cython
 BuildRequires: gcc
 BuildRequires: libyaml-devel
+BuildRequires: pyproject-rpm-macros >= 1.24.0-2
 Requires: python3
 Requires: libyaml
 
@@ -40,6 +42,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
+cd /
 PYTHONPATH=%{buildroot}%{python3_sitearch}:%{buildroot}%{python3_sitelib} python3 -c 'import yaml'
 
 %files -f %{_builddir}/%{name}.files

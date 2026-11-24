@@ -9,7 +9,7 @@
 
 Name: docbook-style-xsl
 Version: 1.79.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: DocBook XSL stylesheets
 License: DocBook
 URL: https://github.com/docbook/xslt10-stylesheets
@@ -18,6 +18,8 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 Requires: docbook-dtds
+Requires: libxml2
+Requires: xml-common
 Provides: docbook-xsl = %{version}-%{release}
 
 %description
@@ -32,8 +34,7 @@ XSL stylesheets that turn DocBook XML into man pages and HTML.
 %install
 mkdir -p %{buildroot}%{_datadir}/sgml/docbook/xsl-stylesheets
 cp -a * %{buildroot}%{_datadir}/sgml/docbook/xsl-stylesheets/
-mkdir -p %{buildroot}/etc/xml
-cat > %{buildroot}/etc/xml/catalog <<'EOF'
+cat > %{buildroot}%{_datadir}/sgml/docbook/xsl-stylesheets/oreon-catalog.xml <<'EOF'
 <?xml version="1.0"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
   <rewriteURI uriStartString="http://docbook.sourceforge.net/release/xsl/current" rewritePrefix="file:///usr/share/sgml/docbook/xsl-stylesheets"/>
@@ -47,8 +48,19 @@ cat > %{buildroot}/etc/xml/catalog <<'EOF'
 </catalog>
 EOF
 
+%post
+xmlcatalog --noout --add nextCatalog "" \
+  file://%{_datadir}/sgml/docbook/xsl-stylesheets/oreon-catalog.xml \
+  %{_sysconfdir}/xml/catalog
+
+%postun
+if [ "$1" -eq 0 ]; then
+  xmlcatalog --noout --del \
+    file://%{_datadir}/sgml/docbook/xsl-stylesheets/oreon-catalog.xml \
+    %{_sysconfdir}/xml/catalog || :
+fi
+
 %files
-/etc/xml/catalog
 %{_datadir}/sgml/docbook/xsl-stylesheets/
 
 %changelog

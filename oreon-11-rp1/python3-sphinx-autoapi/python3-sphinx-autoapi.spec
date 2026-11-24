@@ -1,5 +1,5 @@
 # Copyright (C) 2026 Oreon HQ
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 0b2a47beac401c5fe437fbcd41c650c6cdc072234e576f56ef04456805bddabf
 
@@ -48,7 +48,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import autoapi'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import autoapi'
 
 %files -f %{_builddir}/%{name}.files
 

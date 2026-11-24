@@ -6,6 +6,9 @@
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
+%if %{with bootstrap}
+%undefine _include_gdb_index
+%endif
 %define __debug_install_post %{__find_debuginfo} -j1 %{?_missing_build_ids_terminate_build:--strict-build-id} %{?_no_recompute_build_ids:-n} %{?_include_minidebuginfo:-m} %{?_include_gdb_index:-i} %{?_unique_build_ids:--build-id-seed "%{VERSION}-%{RELEASE}"} %{?_unique_debug_names:--unique-debug-suffix "-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_unique_debug_srcs:--unique-debug-src-base "%{name}-%{VERSION}-%{RELEASE}.%{_arch}"} %{?_find_debuginfo_dwz_opts} %{?_find_debuginfo_opts} %{?_find_debuginfo_vendor_opts} %{?_debugsource_packages:-S debugsourcefiles.list} "%{builddir}/%{?buildsubdir}"
 # ======================
 # Bootstrap conditionals
@@ -295,6 +298,7 @@ BuildRequires: ncurses-devel
 BuildRequires: openssl-devel
 BuildRequires: pkgconfig
 BuildRequires: python-rpm-macros
+BuildRequires: python-srpm-macros
 BuildRequires: readline-devel
 BuildRequires: oreon-rpm-config
 BuildRequires: oreon-rpm-macros
@@ -309,9 +313,13 @@ BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: /usr/bin/dtrace
 
+%if %{without bootstrap}
+BuildRequires: gdb
+BuildRequires: source-highlight
+%endif
+
 %if %{with tests}
 BuildRequires: gcc-c++
-BuildRequires: gdb
 BuildRequires: glibc-all-langpacks
 BuildRequires: tzdata
 %endif
@@ -662,8 +670,7 @@ Requires: %{pkgname}-libs%{?_isa} = %{version}-%{release}
 # But we want them when packages BuildRequire python3-devel
 Requires: (python-rpm-macros if rpm-build)
 Requires: (python3-rpm-macros if rpm-build)
-# from pyproject-srpm-macros instead.
-Requires: (pyproject-rpm-macros if rpm-build)
+Requires: (pyproject-srpm-macros if rpm-build)
 
 %unversioned_obsoletes_of_python3_X_if_main devel
 
@@ -1388,7 +1395,7 @@ find . -name "*~" -exec rm -f {} \;
 # The clamp_source_mtime module is only guaranteed to exist on Fedoras that enabled this option:
 %if 0%{?clamp_mtime_to_source_date_epoch}
 LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
-PYTHONPATH="%{_rpmconfigdir}/redhat" \
+PYTHONPATH="%{_rpmconfigdir}/oreon:%{_rpmconfigdir}/redhat" \
 %{buildroot}%{_bindir}/python%{pybasever} -s -B -m clamp_source_mtime %{buildroot}%{pylibdir} %{?with_freethreading_build:%{buildroot}%{pylibdir_freethreading}} %{buildroot}%{_datadir}/gdb/auto-load
 %endif
 # compileall CMD line options:
@@ -1839,7 +1846,9 @@ CheckPython freethreading
 
 %files -n %{pkgname}-tkinter
 %{pylibdir}/tkinter
+%if %{with tk}
 %{dynload_dir}/_tkinter.%{SOABI_optimized}.so
+%endif
 %{pylibdir}/turtle.py
 %{pylibdir}/__pycache__/turtle*%{bytecode_suffixes}
 %dir %{pylibdir}/turtledemo
@@ -1899,7 +1908,9 @@ CheckPython freethreading
 # Analog of the libs, test, and tkinter extension modules:
 %extension_modules %{dynload_dir} %{SOABI_debug}
 %extension_modules_test %{dynload_dir} %{SOABI_debug}
+%if %{with tk}
 %{dynload_dir}/_tkinter.%{SOABI_debug}.so
+%endif
 
 # Analog of the -devel subpackage's files:
 %{pylibdir}/config-%{LDVERSION_debug}-%{platform_triplet}/
@@ -1996,7 +2007,9 @@ CheckPython freethreading
 
 %files -n python%{pybasever}-freethreading-tkinter
 %{pylibdir_freethreading}/tkinter/
+%if %{with tk}
 %{dynload_dir_freethreading}/_tkinter.%{SOABI_freethreading}.so
+%endif
 %{pylibdir_freethreading}/turtle.py
 %{pylibdir_freethreading}/__pycache__/turtle*%{bytecode_suffixes}
 %dir %{pylibdir_freethreading}/turtledemo/
@@ -2029,7 +2042,9 @@ CheckPython freethreading
 # Analog of the libs, test, and tkinter extension modules:
 %extension_modules %{dynload_dir_freethreading} %{SOABI_freethreading_debug}
 %extension_modules_test %{dynload_dir_freethreading} %{SOABI_freethreading_debug}
+%if %{with tk}
 %{dynload_dir_freethreading}/_tkinter.%{SOABI_freethreading_debug}.so
+%endif
 
 # Analog of the -devel subpackage's files:
 %{pylibdir_freethreading}/config-%{LDVERSION_freethreading_debug}-%{platform_triplet}/

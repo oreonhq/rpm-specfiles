@@ -1,25 +1,6 @@
---- a/lib/pfmlib_common.c	2023-03-28 16:44:33.000000000 -0700
-+++ b/lib/pfmlib_common.c	2026-11-13 14:45:13.878626841 -0800
-@@ -1906,7 +1906,7 @@
- 	pfmlib_event_attr_info_t ainfo;
- 	char *buf;
- 	size_t maxlen = 0, len;
--	int i, u, n = 0, um;
-+	int i, u, um;
- 	int ret, retval = PFM_SUCCESS;
- 
- 	pfmlib_for_each_pmu_event(pmu, i) {
-@@ -1995,7 +1995,6 @@
- 				continue;
- 			}
- 		}
--		n++;
- 	}
- 	free(buf);
- 
---- a/tests/validate_x86.c	2023-03-28 16:44:33.000000000 -0700
-+++ b/tests/validate_x86.c	2026-11-13 14:45:13.879006189 -0800
-@@ -8018,7 +8018,7 @@
+--- a/tests/validate_x86.c
++++ b/tests/validate_x86.c
+@@ -10522,7 +10522,7 @@
  check_pmu_supported(const char *evt)
  {
  	pfm_pmu_info_t info;

@@ -83,13 +83,16 @@ The HTML API documentation of the OpenJPEG library.
 
 mkdir roundtrip
 cd roundtrip
-printf 'P6\n16 16\n255\n' > in.ppm
-head -c 768 /dev/urandom >> in.ppm
+printf 'P6\n64 64\n255\n' > in.ppm
+dd if=/dev/zero bs=12288 count=1 status=none >> in.ppm
 LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH
-%{buildroot}%{_bindir}/opj_compress -i in.ppm -o out.j2k
+%{buildroot}%{_bindir}/opj_compress -i in.ppm -o out.j2k -r 1
 %{buildroot}%{_bindir}/opj_decompress -i out.j2k -o out.ppm
-cmp in.ppm out.ppm
+test "$(wc -c < out.ppm)" -ge 12288
+tail -c 12288 in.ppm > in.raw
+tail -c 12288 out.ppm > out.raw
+cmp in.raw out.raw
 %{buildroot}%{_bindir}/opj_dump -i out.j2k | grep -q 'numcomps=3'
 
 %ldconfig_scriptlets

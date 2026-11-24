@@ -14,7 +14,7 @@
 
 Name:           jsoncpp
 Version:        1.9.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        JSON library implemented in C++
 License:        MIT OR LicenseRef-Public-Domain
 URL:            https://github.com/open-source-parsers/jsoncpp

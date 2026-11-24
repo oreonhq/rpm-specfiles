@@ -8,7 +8,7 @@
 
 Name: python3-requests
 Version: 2.34.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Python HTTP for Humans.
 License: Apache-2.0
 URL: https://pypi.org/project/requests/
@@ -45,7 +45,8 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -c 'import requests'
+cd /
+PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -c 'import requests'
 
 %files -f %{_builddir}/%{name}.files
 

@@ -6,7 +6,7 @@
 
 Name: lua-srpm-macros
 Version: 1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: SRPM macros for Lua packages
 License: MIT
 URL: https://www.lua.org/
@@ -14,6 +14,7 @@ BuildArch: noarch
 Source0: macros.lua-srpm
 Source1: LICENSE
 Requires: rpm
+Provides: lua-rpm-macros = %{version}-%{release}
 
 BuildRequires: oreon-rpm-macros
 

@@ -1,0 +1,140 @@
+diff -ruN a/libs/regex/example/snippets/regex_grep_example_1.cpp b/libs/regex/example/snippets/regex_grep_example_1.cpp
+--- a/libs/regex/example/snippets/regex_grep_example_1.cpp	2026-11-21 13:36:10.833788844 -0800
++++ b/libs/regex/example/snippets/regex_grep_example_1.cpp	2026-11-21 13:36:10.833830959 -0800
+@@ -89,7 +89,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_grep_example_2.cpp b/libs/regex/example/snippets/regex_grep_example_2.cpp
+--- a/libs/regex/example/snippets/regex_grep_example_2.cpp	2026-11-21 13:36:10.833893459 -0800
++++ b/libs/regex/example/snippets/regex_grep_example_2.cpp	2026-11-21 13:36:10.833928748 -0800
+@@ -85,7 +85,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_grep_example_3.cpp b/libs/regex/example/snippets/regex_grep_example_3.cpp
+--- a/libs/regex/example/snippets/regex_grep_example_3.cpp	2026-11-21 13:36:10.833979609 -0800
++++ b/libs/regex/example/snippets/regex_grep_example_3.cpp	2026-11-21 13:36:10.834012197 -0800
+@@ -112,7 +112,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_grep_example_4.cpp b/libs/regex/example/snippets/regex_grep_example_4.cpp
+--- a/libs/regex/example/snippets/regex_grep_example_4.cpp	2026-11-21 13:36:10.834063189 -0800
++++ b/libs/regex/example/snippets/regex_grep_example_4.cpp	2026-11-21 13:36:10.834096512 -0800
+@@ -106,7 +106,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(is.rdbuf()->in_avail());
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_iterator_example.cpp b/libs/regex/example/snippets/regex_iterator_example.cpp
+--- a/libs/regex/example/snippets/regex_iterator_example.cpp	2026-11-21 13:36:10.834324078 -0800
++++ b/libs/regex/example/snippets/regex_iterator_example.cpp	2026-11-21 13:36:10.834355150 -0800
+@@ -72,7 +72,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_merge_example.cpp b/libs/regex/example/snippets/regex_merge_example.cpp
+--- a/libs/regex/example/snippets/regex_merge_example.cpp	2026-11-21 13:36:10.834152687 -0800
++++ b/libs/regex/example/snippets/regex_merge_example.cpp	2026-11-21 13:36:10.834186648 -0800
+@@ -42,7 +42,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_replace_example.cpp b/libs/regex/example/snippets/regex_replace_example.cpp
+--- a/libs/regex/example/snippets/regex_replace_example.cpp	2026-11-21 13:36:10.834240542 -0800
++++ b/libs/regex/example/snippets/regex_replace_example.cpp	2026-11-21 13:36:10.834275184 -0800
+@@ -42,7 +42,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_search_example.cpp b/libs/regex/example/snippets/regex_search_example.cpp
+--- a/libs/regex/example/snippets/regex_search_example.cpp	2026-11-21 13:36:10.834403046 -0800
++++ b/libs/regex/example/snippets/regex_search_example.cpp	2026-11-21 13:36:10.834434333 -0800
+@@ -85,7 +85,9 @@
+ {
+    s.erase();
+    if(is.bad()) return;
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_split_example_2.cpp b/libs/regex/example/snippets/regex_split_example_2.cpp
+--- a/libs/regex/example/snippets/regex_split_example_2.cpp	2026-11-21 13:36:10.834481501 -0800
++++ b/libs/regex/example/snippets/regex_split_example_2.cpp	2026-11-21 13:36:10.834540857 -0800
+@@ -33,7 +33,9 @@
+    //
+    // attempt to grow string buffer to match file size,
+    // this doesn't always work...
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {
+diff -ruN a/libs/regex/example/snippets/regex_token_iterator_eg_2.cpp b/libs/regex/example/snippets/regex_token_iterator_eg_2.cpp
+--- a/libs/regex/example/snippets/regex_token_iterator_eg_2.cpp	2026-11-21 13:36:10.834590464 -0800
++++ b/libs/regex/example/snippets/regex_token_iterator_eg_2.cpp	2026-11-21 13:36:10.834625171 -0800
+@@ -32,7 +32,9 @@
+    //
+    // attempt to grow string buffer to match file size,
+    // this doesn't always work...
+-   s.reserve(static_cast<std::string::size_type>(is.rdbuf()->in_avail()));
++   std::streamsize avail = is.rdbuf()->in_avail();
++   if(avail > 0)
++      s.reserve(static_cast<std::string::size_type>(avail));
+    char c;
+    while(is.get(c))
+    {

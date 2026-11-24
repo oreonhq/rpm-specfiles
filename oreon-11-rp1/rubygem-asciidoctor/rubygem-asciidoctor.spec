@@ -25,6 +25,7 @@ BuildRequires:  rubygems-devel
 
 Requires:       ruby(release)
 Requires:       ruby(rubygems)
+Requires:       rubygem(logger)
 Provides:       asciidoctor = %{version}-%{release}
 Provides:       rubygem(%{gem_name}) = %{version}
 

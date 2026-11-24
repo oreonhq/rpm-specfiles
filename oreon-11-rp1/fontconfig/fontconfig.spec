@@ -11,7 +11,7 @@
 
 Name: fontconfig
 Version: 2.18.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Font configuration and customization library
 License: HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
 URL: https://fontconfig.org
@@ -90,6 +90,7 @@ done
 
 %install
 %meson_install
+mkdir -p %{buildroot}%{_fontbasedir}
 
 install -p -m 0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/fonts/conf.d
 ln -s %{_fontconfig_templatedir}/25-unhint-nonlatin.conf %{buildroot}%{_fontconfig_confdir}/

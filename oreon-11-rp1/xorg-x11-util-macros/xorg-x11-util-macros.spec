@@ -9,7 +9,7 @@
 
 Name: xorg-x11-util-macros
 Version: 1.20.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: X.Org X11 Autotools macros
 License: MIT
 URL: https://www.x.org/
@@ -45,7 +45,6 @@ test -f %{buildroot}%{_datadir}/pkgconfig/xorg-macros.pc
 %{_datadir}/aclocal/*.m4
 %{_datadir}/pkgconfig/xorg-macros.pc
 %{_datadir}/util-macros/
-%{_mandir}/man1/*
 
 %changelog
 %autochangelog

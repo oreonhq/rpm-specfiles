@@ -12,7 +12,7 @@
 
 Name:		libffi
 Version:        3.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:	A portable foreign function interface library
 # No license change for 3.5.2
 # No license change for 3.5.1
@@ -143,8 +143,7 @@ install -m644 %{SOURCE2} $RPM_BUILD_ROOT%{_includedir}/ffitarget.h
 %files
 %license LICENSE
 %doc README.md
-%{_libdir}/libffi.so.8
-%{_libdir}/libffi.so.8.2.0
+%{_libdir}/libffi.so.8*
 
 %files devel
 %{_libdir}/pkgconfig/*.pc

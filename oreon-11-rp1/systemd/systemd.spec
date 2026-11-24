@@ -47,15 +47,10 @@
 # Build with OBS-specific quirks
 %bcond obs       0
 
-# When bootstrap, libcryptsetup is disabled
-# but auto-features causes many options to be turned on
-# that depend on libcryptsetup (e.g. libcryptsetup-plugins, homed)
-%if %{with bootstrap}
-%global __meson_auto_features disabled
 # If we're building for upstream, don't unconditionally enable all
 # new features as new features might be introduced for which we're
 # missing build dependencies.
-%elif %{with upstream}
+%if %{with upstream}
 %global __meson_auto_features auto
 %endif
 
@@ -174,6 +169,11 @@ BuildRequires:  coreutils
 BuildRequires:  libmount-devel
 BuildRequires:  libfdisk-devel
 BuildRequires:  libpwquality-devel
+BuildRequires:  cryptsetup-devel
+BuildRequires:  p11-kit-devel
+BuildRequires:  qrencode-devel
+BuildRequires:  pcre2-devel
+BuildRequires:  glib2-devel
 BuildRequires:  libxcrypt-devel
 BuildRequires:  pam-devel
 BuildRequires:  libselinux-devel
@@ -184,7 +184,6 @@ BuildRequires:  rpmdevtools
 BuildRequires:  package-notes >= 0.20
 %endif
 %if %{with full_features}
-BuildRequires:  cryptsetup-devel
 BuildRequires:  systemd-rpm-macros
 %endif
 
@@ -237,21 +236,17 @@ BuildRequires:  gawk
 BuildRequires:  hostname
 BuildRequires:  python3
 BuildRequires:  python3-devel
-BuildRequires:  python3dist(jinja2)
-BuildRequires:  python3dist(lxml)
-BuildRequires:  python3dist(pefile)
-BuildRequires:  python3dist(pytest)
+BuildRequires:  python3-jinja2
+BuildRequires:  python3-lxml
+BuildRequires:  python3-pefile
+BuildRequires:  python3-pytest
 %if 0%{?want_bootloader}
-BuildRequires:  python3dist(pyelftools)
+BuildRequires:  python3-pyelftools
 %endif
 BuildRequires:  libseccomp-devel
 BuildRequires:  meson >= 0.43
 BuildRequires:  gettext
-%ifarch %{valgrind_arches}
-BuildRequires:  valgrind-devel
-%endif
 %if %{with full_features}
-BuildRequires:  qrencode-devel
 BuildRequires:  iptables-devel
 BuildRequires:  python3dist(pillow)
 BuildRequires:  firewalld-filesystem
@@ -300,7 +295,7 @@ Provides:       system-setup-keyboard = 0.9
 Obsoletes:      systemd-sysv < 206
 Provides:       systemd-sysv = 206
 Conflicts:      initscripts < 9.56.1
-Conflicts:      oreon-release < 23-0.12
+Conflicts:      oreon-release < 11
 BuildRequires:  setup >= 2.15.0-3
 BuildRequires:  python3
 Conflicts:      setup < 2.15.0-3
@@ -511,9 +506,9 @@ Requires:       (systemd-boot if %{shrink:(
         filesystem(riscv64) or
         filesystem(loongarch64)
 )})
-Requires:       python3dist(pefile)
+Requires:       python3-pefile
 Requires:       python3dist(zstandard)
-Requires:       python3dist(cryptography)
+Requires:       python3-cryptography
 Recommends:     python3dist(pillow)
 
 # for tests
@@ -845,7 +840,15 @@ CONFIGURE_OPTS=(
         -Dgcrypt=disabled
         -Daudit=enabled
         -Delfutils=enabled
+        -Dlibcrypt=enabled
+        -Dlibmount=enabled
+        -Dlibarchive=enabled
+        -Dpcre2=enabled
+        -Dglib=enabled
+        -Ddbus=enabled
+        -Dimportd=enabled
         -Dlibcryptsetup=%[%{with bootstrap}?"disabled":"enabled"]
+        -Dlibcryptsetup-plugins=%[%{with bootstrap}?"disabled":"enabled"]
         -Drepart=enabled
         -Dpwquality=enabled
         -Dqrencode=%[0?"disabled":"enabled"]

@@ -9,7 +9,7 @@
 
 Name: iso-codes
 Version: 4.20.1
-Release: 1%{?dist}
+Release: 3%{?dist}
 Summary: ISO code lists and translations
 License: LGPL-2.1-or-later
 URL: https://salsa.debian.org/iso-codes-team/iso-codes
@@ -18,7 +18,8 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gettext
-BuildRequires: make
+BuildRequires: meson
+BuildRequires: ninja-build
 BuildRequires: python3
 
 %description
@@ -30,18 +31,17 @@ ISO code lists with translations.
 %autosetup -n iso-codes-v%{version}
 
 %build
-%configure
-%make_build
+%meson
+%meson_build
 
 %install
-%make_install
+%meson_install
 
 %check
-%make_build check
+%meson_test
 
 %files
-%license LICENSE COPYING
-%doc ChangeLog README.md
+%doc README.md
 %{_datadir}/iso-codes/
 %{_datadir}/xml/iso-codes/
 %{_datadir}/locale/*/LC_MESSAGES/*

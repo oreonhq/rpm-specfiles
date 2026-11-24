@@ -1,0 +1,16 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: [PATCH] build with flit_core 4
+
+flit_core 4 no longer reads [tool.flit.metadata]; tomli-w already uses
+the [project] table. flit's 4.0 release notes say such projects can
+raise the cap from <4 to <5.
+---
+--- a/pyproject.toml	2026-11-23 15:20:07.234904929 -0800
++++ b/pyproject.toml	2026-11-23 15:20:07.234904929 -0800
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["flit_core>=3.2.0,<4"]
++requires = ["flit_core>=3.2.0,<5"]
+ build-backend = "flit_core.buildapi"
+ 
+ [project]

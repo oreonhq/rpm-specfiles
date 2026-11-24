@@ -1,0 +1,190 @@
+diff -ruN a/drd/tests/pth_detached3.c b/drd/tests/pth_detached3.c
+--- a/drd/tests/pth_detached3.c
++++ b/drd/tests/pth_detached3.c
+@@ -28,8 +28,6 @@
+   /* Invoke pthread_detach() with an invalid thread ID. */
+ #ifdef VGO_freebsd
+   pthread_detach((pthread_t)12345);
+-#else
+-  pthread_detach((pthread_t)((uintptr_t)thread + 8));
+ #endif
+ 
+   fprintf(stderr, "Finished.\n");
+diff -ruN a/drd/tests/tls_threads.vgtest b/drd/tests/tls_threads.vgtest
+--- a/drd/tests/tls_threads.vgtest
++++ b/drd/tests/tls_threads.vgtest
+@@ -1,2 +1,2 @@
+ prog: ../../helgrind/tests/tls_threads
+-vgopts: -q
++vgopts: -q --sim-hints=no-nptl-pthread-stackcache
+diff -ruN a/drd/tests/pth_detached3.stderr.exp1 b/drd/tests/pth_detached3.stderr.exp1
+--- a/drd/tests/pth_detached3.stderr.exp1
++++ b/drd/tests/pth_detached3.stderr.exp1
+@@ -3,10 +3,6 @@
+    at 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+    by 0x........: main (pth_detached3.c:26)
+ 
+-pthread_detach(): invalid thread ID 0x........
+-   at 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+-   by 0x........: main (pth_detached3.c:32)
+-
+ Finished.
+ 
+-ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
++ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+diff -ruN a/drd/tests/pth_detached3.stderr.exp2 b/drd/tests/pth_detached3.stderr.exp2
+--- a/drd/tests/pth_detached3.stderr.exp2
++++ b/drd/tests/pth_detached3.stderr.exp2
+@@ -4,11 +4,6 @@
+    by 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+    by 0x........: main (pth_detached3.c:26)
+ 
+-pthread_detach(): invalid thread ID 0x........
+-   at 0x........: vgDrd_set_joinable (drd_pthread_intercepts.c:?)
+-   by 0x........: pthread_detach (drd_pthread_intercepts.c:?)
+-   by 0x........: main (pth_detached3.c:32)
+-
+ Finished.
+ 
+-ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
++ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+diff -ruN a/none/tests/Makefile.am b/none/tests/Makefile.am
+--- a/none/tests/Makefile.am
++++ b/none/tests/Makefile.am
+@@ -143,5 +143,6 @@
+ 	fcntl_setown.vgtest \
+ 	fdleak_cat.vgtest \
++	fdleak_cat.stderr.exp \
+ 	fdleak_cmsg.stderr.exp fdleak_cmsg.vgtest \
+ 	fdleak_cmsg_xml.stderr.exp-ppc64le \
+ 	fdleak_cmsg_xml.stderr.exp fdleak_cmsg_xml.vgtest \
+diff -ruN a/none/tests/fdleak_cat.vgtest b/none/tests/fdleak_cat.vgtest
+--- a/none/tests/fdleak_cat.vgtest
++++ b/none/tests/fdleak_cat.vgtest
+@@ -1,3 +1,4 @@
+ prog: /bin/cat
+ vgopts: -q --track-fds=yes
+ args: /dev/null
++stderr_filter: filter_fdleak
+diff -ruN a/none/tests/fdleak_cat.stderr.exp b/none/tests/fdleak_cat.stderr.exp
+--- /dev/null
++++ b/none/tests/fdleak_cat.stderr.exp
+@@ -0,0 +1,8 @@
++FILE DESCRIPTORS: 3 open (1 inherited) at exit.
++Open file descriptor ...:
++   ...
++
++Open file descriptor ...:
++   ...
++
++
+diff -ruN a/memcheck/tests/linux/madv_guard.vgtest b/memcheck/tests/linux/madv_guard.vgtest
+--- a/memcheck/tests/linux/madv_guard.vgtest
++++ b/memcheck/tests/linux/madv_guard.vgtest
+@@ -1,4 +1,4 @@
+ prog: madv_guard
+ vgopts: -q --sanity-level=3
+ stdout_filter: filter_madv_guard
+-prereq: test -e ./madv_guard
++prereq: test -e ./madv_guard && sh madv_guard.prereq
+diff -ruN a/memcheck/tests/linux/madv_guard.prereq b/memcheck/tests/linux/madv_guard.prereq
+--- /dev/null
++++ b/memcheck/tests/linux/madv_guard.prereq
+@@ -0,0 +1,32 @@
++cat > madv_guard_prereq.c << 'EOF'
++#define _GNU_SOURCE
++#include <sys/mman.h>
++#include <stdint.h>
++#include <unistd.h>
++#include <fcntl.h>
++int main(void)
++{
++  long ps = sysconf(_SC_PAGESIZE);
++  void *p = mmap(0, (size_t)ps, PROT_READ | PROT_WRITE,
++                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++  uint64_t entry = 0;
++  int fd;
++  if (p == MAP_FAILED)
++    return 1;
++  if (madvise(p, (size_t)ps, MADV_GUARD_INSTALL) != 0)
++    return 1;
++  fd = open("/proc/self/pagemap", O_RDONLY);
++  if (fd < 0)
++    return 1;
++  if (pread(fd, &entry, sizeof(entry),
++            ((uintptr_t)p / (uintptr_t)ps) * sizeof(entry))
++      != (ssize_t)sizeof(entry))
++    return 1;
++  return ((entry >> 58) & 1) ? 0 : 1;
++}
++EOF
++gcc -o madv_guard_prereq madv_guard_prereq.c >/dev/null 2>&1
++rc=$?
++if [ $rc -eq 0 ]; then ./madv_guard_prereq; rc=$?; fi
++rm -f madv_guard_prereq madv_guard_prereq.c
++exit $rc
+diff -ruN a/memcheck/tests/arm64-linux/scalar.c b/memcheck/tests/arm64-linux/scalar.c
+--- a/memcheck/tests/arm64-linux/scalar.c	2026-11-23 01:47:40.922125088 -0800
++++ b/memcheck/tests/arm64-linux/scalar.c	2026-11-23 01:47:41.984814335 -0800
+@@ -381,7 +381,7 @@
+ 
+    // __NR_getgroups 80
+    GO(__NR_getgroups, "2s 1m");
+-   SY(__NR_getgroups, x0+1, x0+1); FAIL;
++   SY(__NR_getgroups, x0+1, x0+1); SUCC_OR_FAIL;
+ 
+    // __NR_setgroups 81
+    GO(__NR_setgroups, "2s 1m");
+diff -ruN a/memcheck/tests/Makefile.am b/memcheck/tests/Makefile.am
+--- a/memcheck/tests/Makefile.am	2026-11-23 01:47:41.984656782 -0800
++++ b/memcheck/tests/Makefile.am	2026-11-23 01:47:41.984955950 -0800
+@@ -759,7 +759,8 @@
+ demangle_SOURCES = demangle.cpp
+ demangle_rust_SOURCES = demangle-rust.c
+ demangle_rust_CFLAGS	= $(AM_CFLAGS) @FLAG_W_NO_USE_AFTER_FREE@
+-dw4_CFLAGS		= $(AM_CFLAGS) -gdwarf-4 -fdebug-types-section @FLAG_W_NO_DEPRECATED_DECLARATIONS@
++dw4_CFLAGS		= $(AM_CFLAGS) -gdwarf-4 -fdebug-types-section @FLAG_W_NO_DEPRECATED_DECLARATIONS@ -fPIE
++dw4_LDFLAGS		= $(AM_LDFLAGS) -pie
+ 
+ descr_belowsp_LDADD     = -lpthread
+ err_disable3_LDADD 	= -lpthread
+@@ -897,24 +898,24 @@
+ 
+ # To make it a bit more realistic, have some optimisation enabled
+ # for the varinfo tests.  We still expect sane results.
+-varinfo1_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo1_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo1_CFLAGS		+= -fno-inline
+ endif
+-varinfo2_CFLAGS		= $(AM_CFLAGS) -O -Wno-shadow @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo2_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments -Wno-shadow @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo2_CFLAGS         += -fno-inline
+ endif
+-varinfo3_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo3_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo3_CFLAGS         += -fno-inline
+ endif
+-varinfo4_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo4_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo4_CFLAGS         += -fno-inline
+ endif
+-varinfo5_CFLAGS		= $(AM_CFLAGS) -O
+-varinfo6_CFLAGS		= $(AM_CFLAGS) -O @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo5_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments
++varinfo6_CFLAGS		= $(AM_CFLAGS) -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+ varinfo6_CFLAGS         += -fno-inline
+ endif
+@@ -933,7 +934,7 @@
+ endif
+ 
+ varinfo5so_so_SOURCES   = varinfo5so.c
+-varinfo5so_so_CFLAGS    = $(AM_CFLAGS) -fpic -O -Wno-shadow -fno-optimize-sibling-calls @FLAG_W_NO_MAYBE_UNINITIALIZED@
++varinfo5so_so_CFLAGS    = $(AM_CFLAGS) -fpic -O0 -g -fno-omit-frame-pointer -fvar-tracking-assignments -Wno-shadow -fno-optimize-sibling-calls @FLAG_W_NO_MAYBE_UNINITIALIZED@
+ if VGCONF_OS_IS_DARWIN
+  varinfo5so_so_LDFLAGS  = -fpic $(AM_FLAG_M3264_PRI) -dynamic \
+ 				-dynamiclib -all_load

@@ -10,11 +10,16 @@ Summary: Binary hardening annotation tools
 License: GPL-3.0-or-later AND LGPL-2.0-or-later AND GFDL-1.3-or-later
 URL: https://sourceware.org/annobin/
 Source0: https://nickc.fedorapeople.org/annobin-%{version}.tar.xz
+Patch0: annobin-13.33-unused-string-notes.patch
+Patch1: annobin-always-config-h.patch
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: autoconf
+BuildRequires: automake
 BuildRequires: elfutils-devel
 BuildRequires: elfutils-libelf-devel
 BuildRequires: gcc
+BuildRequires: libtool
 BuildRequires: make
 BuildRequires: rpm-devel
 
@@ -29,22 +34,23 @@ The GCC plugin is supplied by the matching GCC build.
 
 %prep
 %oreon_sha256
-%autosetup -n annobin-%{version}
-touch aclocal.m4 gcc-plugin/config.h.in
-touch configure */configure Makefile.in */Makefile.in doc/annobin.info
+%autosetup -n annobin-%{version} -p1
+autoreconf -fiv
 
 %build
-%oreon_configure \
+%configure \
     --without-debuginfod \
     --with-gcc-plugin=no \
     --with-clang-plugin=no \
     --with-llvm-plugin=no \
     --without-tests
-%oreon_make
+test -f gcc-plugin/config.h
+%make_build
 
 %install
-%oreon_make_install
+%make_install
 find %{buildroot} -name '*.la' -delete
+rm -f %{buildroot}%{_libdir}/libannocheck.a
 %oreon_filelist
 
 %check

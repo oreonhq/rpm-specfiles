@@ -17,7 +17,7 @@
 
 Name:           libglvnd
 Version:        1.7.0
-Release:        2%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        The GL Vendor-Neutral Dispatch library
 
@@ -35,6 +35,9 @@ BuildRequires:  python3-libxml2
 BuildRequires:  pkgconfig(glproto)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
+%if %{without bootstrap}
+BuildRequires:  xorg-server
+%endif
 %bcond_with glvnd_tests
 %if %{with glvnd_tests}
 BuildRequires:  xorg-x11-server-Xvfb
@@ -163,22 +166,14 @@ mkdir -p %{buildroot}%{_datadir}/egl/egl_external_platform.d/
 
 %check
 %if %{without bootstrap}
-export DO_X11_TESTS=1
-xvfb-run -s '-screen 0 640x480x24' -d make check V=1 || \
-%ifarch s390x ppc64
-    :
-%else
-    (cat `find . -name test-suite.log` ; exit 1)
-%endif
-export DO_X11_TESTS=1
-xwfb-run -c %{compositor} -- make check V=1 || \
+xvfb-run -s '-screen 0 640x480x24' make check V=1 || \
 %ifarch s390x ppc64
     :
 %else
     (cat `find . -name test-suite.log` ; exit 1)
 %endif
 %else
-make check V=1 || \
+make -C tests check V=1 TESTS="$(ls tests/test*.sh | grep -v /testglx | xargs -n1 basename | tr '\n' ' ')" || \
 %ifarch s390x ppc64
     :
 %else

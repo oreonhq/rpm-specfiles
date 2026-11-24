@@ -80,7 +80,6 @@ BuildRequires: perl-generators
 BuildRequires: perl-interpreter
 BuildRequires: unixODBC-devel
 BuildRequires: cracklib-devel
-BuildRequires: systemd
 BuildRequires: systemd-rpm-macros
 %if %{with argon2}
 BuildRequires: libsodium-devel
@@ -210,10 +209,9 @@ popd
 %build
 
 %set_build_flags
-# enable experimental support for LDAP over UDP (LDAP_CONNECTIONLESS)
-export CFLAGS="${CFLAGS} ${LDFLAGS} -Wl,--as-needed -Wl,-z,now -DLDAP_CONNECTIONLESS"
-# disable legacy hash algorithm
-export CFLAGS="${CFLAGS} -DOPENSSL_NO_MD2"
+export CPPFLAGS="${CPPFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2"
+export CFLAGS="${CFLAGS} -DLDAP_CONNECTIONLESS -DOPENSSL_NO_MD2"
+export LDFLAGS="${LDFLAGS} -Wl,--as-needed -Wl,-z,now"
 
 pushd openldap-%{version}
 %configure \
@@ -264,7 +262,7 @@ find . -name Makefile -exec sed -i \
 popd
 
 pushd openldap-ppolicy-check-password-%{check_password_version}
-%make_build LDAP_INC="-I../openldap-%{version}/include \
+%make_build CC=%{__cc} LDAP_INC="-I../openldap-%{version}/include \
  -I../openldap-%{version}/servers/slapd \
  -I../openldap-%{version}/build-servers/include"
 popd

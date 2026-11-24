@@ -1,0 +1,125 @@
+--- a/coregrind/m_gdbserver/valgrind-low-amd64.c	2025-10-20 08:03:18.000000000 -0700
++++ b/coregrind/m_gdbserver/valgrind-low-amd64.c	2026-11-22 22:14:40.744013280 -0800
+@@ -116,7 +116,9 @@
+   { "ymm12h", 5888, 128 },
+   { "ymm13h", 6016, 128 },
+   { "ymm14h", 6144, 128 },
+-  { "ymm15h", 6272, 128 }
++  { "ymm15h", 6272, 128 },
++  { "fs_base", 6400, 64 },
++  { "gs_base", 6464, 64 }
+ };
+ static const char *expedite_regs[] = { "rbp", "rsp", "rip", 0 };
+ #define max_num_regs (sizeof (regs) / sizeof (regs[0]))
+@@ -297,6 +299,8 @@
+    case 71: VG_(transfer) (&amd64->guest_YMM13[4], buf, dir, size, mod); break;
+    case 72: VG_(transfer) (&amd64->guest_YMM14[4], buf, dir, size, mod); break;
+    case 73: VG_(transfer) (&amd64->guest_YMM15[4], buf, dir, size, mod); break;
++   case 74: VG_(transfer) (&amd64->guest_FS_CONST, buf, dir, size, mod); break;
++   case 75: VG_(transfer) (&amd64->guest_GS_CONST, buf, dir, size, mod); break;
+    default: vg_assert(0);
+    }
+ }
+@@ -364,7 +368,7 @@
+    if (have_avx())
+       dyn_num_regs = max_num_regs;
+    else
+-      dyn_num_regs = max_num_regs - 16; // remove the AVX "high" registers.
++      dyn_num_regs = max_num_regs - 18; // ymm high, fs_base, gs_base
+    target->num_regs = dyn_num_regs;
+    set_register_cache (regs, dyn_num_regs);
+    gdbserver_expedite_regs = expedite_regs;
+--- a/coregrind/m_gdbserver/amd64-avx-linux.xml	2023-01-07 06:48:49.000000000 -0800
++++ b/coregrind/m_gdbserver/amd64-avx-linux.xml	2026-11-22 22:14:24.486684860 -0800
+@@ -15,4 +15,5 @@
+   <xi:include href="64bit-sse.xml"/>
+   <xi:include href="64bit-linux.xml"/>
+   <xi:include href="64bit-avx.xml"/>
++  <xi:include href="64bit-segments.xml"/>
+ </target>
+--- a/coregrind/Makefile.am	2026-09-15 04:51:38.000000000 -0700
++++ b/coregrind/Makefile.am	2026-11-22 22:14:25.283700961 -0800
+@@ -705,6 +705,9 @@
+ 	m_gdbserver/64bit-linux-valgrind-s1.xml \
+ 	m_gdbserver/64bit-linux-valgrind-s2.xml \
+ 	m_gdbserver/64bit-linux.xml \
++	m_gdbserver/64bit-segments.xml \
++	m_gdbserver/64bit-segments-valgrind-s1.xml \
++	m_gdbserver/64bit-segments-valgrind-s2.xml \
+ 	m_gdbserver/64bit-sse-valgrind-s1.xml \
+ 	m_gdbserver/64bit-sse-valgrind-s2.xml \
+ 	m_gdbserver/64bit-sse.xml \
+--- a/coregrind/m_gdbserver/amd64-avx-linux-valgrind.xml
++++ b/coregrind/m_gdbserver/amd64-avx-linux-valgrind.xml
+@@ -15,12 +15,15 @@
+   <xi:include href="64bit-sse.xml"/>
+   <xi:include href="64bit-linux.xml"/>
+   <xi:include href="64bit-avx.xml"/>
++  <xi:include href="64bit-segments.xml"/>
+   <xi:include href="64bit-core-valgrind-s1.xml"/>
+   <xi:include href="64bit-sse-valgrind-s1.xml"/>
+   <xi:include href="64bit-linux-valgrind-s1.xml"/>
+   <xi:include href="64bit-avx-valgrind-s1.xml"/>
++  <xi:include href="64bit-segments-valgrind-s1.xml"/>
+   <xi:include href="64bit-core-valgrind-s2.xml"/>
+   <xi:include href="64bit-sse-valgrind-s2.xml"/>
+   <xi:include href="64bit-linux-valgrind-s2.xml"/>
+   <xi:include href="64bit-avx-valgrind-s2.xml"/>
++  <xi:include href="64bit-segments-valgrind-s2.xml"/>
+ </target>
+--- /dev/null	2026-11-22 15:31:09.448706479 -0800
++++ b/coregrind/m_gdbserver/64bit-segments.xml	2026-11-22 22:14:26.169268260 -0800
+@@ -0,0 +1,12 @@
++<?xml version="1.0"?>
++<!-- Copyright (C) 2016 Free Software Foundation, Inc.
++
++     Copying and distribution of this file, with or without modification,
++     are permitted in any medium without royalty provided the copyright
++     notice and this notice are preserved.  -->
++
++<!DOCTYPE feature SYSTEM "gdb-target.dtd">
++<feature name="org.gnu.gdb.i386.segments">
++  <reg name="fs_base" bitsize="64" type="int"/>
++  <reg name="gs_base" bitsize="64" type="int"/>
++</feature>
+--- /dev/null
++++ b/coregrind/m_gdbserver/64bit-segments-valgrind-s1.xml
+@@ -0,0 +1,12 @@
++<?xml version="1.0"?>
++<!-- Copyright (C) 2016 Free Software Foundation, Inc.
++
++     Copying and distribution of this file, with or without modification,
++     are permitted in any medium without royalty provided the copyright
++     notice and this notice are preserved.  -->
++
++<!DOCTYPE feature SYSTEM "gdb-target.dtd">
++<feature name="org.gnu.gdb.i386.segments.valgrind.s1">
++  <reg name="fs_bases1" bitsize="64" type="int"/>
++  <reg name="gs_bases1" bitsize="64" type="int"/>
++</feature>
+--- /dev/null
++++ b/coregrind/m_gdbserver/64bit-segments-valgrind-s2.xml
+@@ -0,0 +1,12 @@
++<?xml version="1.0"?>
++<!-- Copyright (C) 2016 Free Software Foundation, Inc.
++
++     Copying and distribution of this file, with or without modification,
++     are permitted in any medium without royalty provided the copyright
++     notice and this notice are preserved.  -->
++
++<!DOCTYPE feature SYSTEM "gdb-target.dtd">
++<feature name="org.gnu.gdb.i386.segments.valgrind.s2">
++  <reg name="fs_bases2" bitsize="64" type="int"/>
++  <reg name="gs_bases2" bitsize="64" type="int"/>
++</feature>
+--- a/gdbserver_tests/filter_gdb.in
++++ b/gdbserver_tests/filter_gdb.in
+@@ -81,7 +81,7 @@
+ 
+ #       delete thread switches
+ /\[Switching to Thread ....\]/d
+-/\[Switching to thread [1-9] (Thread ....)\]/d
++/\[Switching to thread [1-9][0-9]* (Thread ....)\]/d
+ 
+ #       delete thread exiting
+ /\[Thread .... exited\]/d

@@ -9,13 +9,13 @@
 
 Name: graphviz
 Version: 15.1.1
-Release: 2%{?dist}
+Release: 6%{?dist}
 Summary: Graph Visualization Tools
 License: EPL-1.0
 URL: https://www.graphviz.org/
 Source0: https://gitlab.com/api/v4/projects/graphviz%2Fgraphviz/packages/generic/graphviz-releases/%{version}/graphviz-%{version}.tar.xz
 
-BuildRequires: oreon-rpm-macros
+BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: make
@@ -54,7 +54,6 @@ Headers and libraries for graphviz.
 %autosetup
 
 %build
-./autogen.sh
 %if %{with bootstrap}
 %configure --disable-static --without-gdk-pixbuf --without-gtk --without-pangocairo --without-gdk --disable-python3
 %else
@@ -65,24 +64,25 @@ Headers and libraries for graphviz.
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/*.la
+cp -p AUTHORS CHANGELOG.md README.md %{buildroot}%{_docdir}/%{name}/
 
 %check
 %make_build check
 
 %files
-%license LICENSE
-%doc AUTHORS CHANGELOG.md README.md
+%license COPYING
+%{_docdir}/%{name}/
 %{_bindir}/*
 %{_libdir}/libcdt.so.*
 %{_libdir}/libcgraph.so.*
 %{_libdir}/libgvc.so.*
 %{_libdir}/libgvpr.so.*
-%{_libdir}/liblab_gamut.so.*
 %{_libdir}/libpathplan.so.*
 %{_libdir}/libxdot.so.*
 %{_libdir}/graphviz/
 %{_datadir}/graphviz/
 %{_mandir}/man1/*
+%{_mandir}/man3/*
 %{_mandir}/man7/*
 
 %files devel
@@ -91,7 +91,6 @@ rm -f %{buildroot}%{_libdir}/*.la
 %{_libdir}/libcgraph.so
 %{_libdir}/libgvc.so
 %{_libdir}/libgvpr.so
-%{_libdir}/liblab_gamut.so
 %{_libdir}/libpathplan.so
 %{_libdir}/libxdot.so
 %{_libdir}/pkgconfig/*.pc

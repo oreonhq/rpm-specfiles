@@ -88,6 +88,7 @@ useful packages too.
 # gdb-add-index also uses 'readelf' and 'objcopy', both of which are
 # in the binutils package.  (BZ 2275274)
 Requires: binutils
+Requires: source-highlight%{?_isa}
 %endif
 # endif !scl
 

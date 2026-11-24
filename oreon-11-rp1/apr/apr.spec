@@ -8,11 +8,12 @@
 
 Name: apr
 Version: 1.7.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Apache Portable Runtime library
 License: Apache-2.0
 URL: https://apr.apache.org/
 Source0: https://archive.apache.org/dist/apr/apr-%{version}.tar.bz2
+Patch0001: 0001-apr-config-no-runpath-in-the-installed-link-libtool-fallback.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: clang
@@ -31,7 +32,7 @@ Headers and libraries for building against apr.
 
 %prep
 %oreon_sha256
-%autosetup -n apr-%{version}
+%autosetup -p1 -n apr-%{version}
 
 %build
 export CC=clang

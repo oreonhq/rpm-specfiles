@@ -10,7 +10,7 @@
 
 Name:           python-%{modname}
 Version:        2.9.0.post0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        Powerful extensions to the standard datetime module
 
@@ -82,6 +82,7 @@ BuildRequires: python3dist(wheel)
 %package -n python3-%{modname}
 Summary:        %summary
 Requires:       tzdata
+Requires:       python3dist(six) >= 1.5
 
 Provides:  deprecated()
 

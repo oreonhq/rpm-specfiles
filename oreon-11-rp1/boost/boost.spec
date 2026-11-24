@@ -16,6 +16,11 @@
 %endif
 
 %bcond python3 1
+%if %{with bootstrap}
+%bcond numpy 0
+%else
+%bcond numpy 1
+%endif
 
 %ifnarch %{ix86} x86_64
 %bcond quadmath 0
@@ -33,7 +38,7 @@ Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
 Version: 1.90.0
-Release: 1%{?dist}
+Release: 4%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 %global version_enc %{lua:
@@ -99,7 +104,6 @@ BuildRequires: zlib-devel
 BuildRequires: xz-devel
 %if %{with python3}
 BuildRequires: python3-devel
-%bcond_with numpy
 %if %{with numpy}
 BuildRequires: python3-numpy
 %endif
@@ -109,6 +113,7 @@ BuildRequires: libicu-devel
 BuildRequires: libquadmath-devel
 %endif
 BuildRequires: libzstd-devel
+BuildRequires: openssl-devel
 BuildRequires: which
 
 Patch0: boost-1.81.0-build-optflags.patch
@@ -120,6 +125,8 @@ Patch6: boost-1.90-system.patch
 Patch7: boost-1.90.0-range.patch
 Patch8: boost-1.90.0-multi_index-utf8.patch
 Patch9: boost-1.90.0-bloom-utf8.patch
+Patch10: boost-histogram-visibility.patch
+Patch11: boost-1.90.0-regex-example-in-avail.patch
 
 
 %description
@@ -311,7 +318,7 @@ Summary: Standard library functions with UTF-8 API on Windows
 
 Run-time support for Boost.Nowide.
 
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 
 %package numpy3
 Summary: Run-time component of boost numpy library for Python 3
@@ -452,11 +459,14 @@ Summary: The Boost C++ headers and shared development libraries
 License: BSL-1.0 AND MIT AND (MIT OR NCSA) AND (BSL-1.0 OR MIT) AND HPND-sell-variant AND Zlib AND Apache-2.0 AND (BSL-1.0 OR Apache-2.0) AND (BSL-1.0 OR Apache-2.0 WITH LLVM-exception)
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libicu-devel%{?_isa}
+Requires: openssl-devel%{?_isa}
 %if %{with quadmath}
 Requires: libquadmath-devel%{?_isa}
 %endif
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 Requires: %{name}-numpy3%{?_isa} = %{version}-%{release}
+%endif
+%if %{with python3}
 Provides: %{name}-python3-devel = %{version}-%{release}
 Provides: %{name}-python3-devel%{?_isa} = %{version}-%{release}
 %endif
@@ -520,6 +530,11 @@ a number of significant features and is now developed independently.
 %oreon_sha256
 %autosetup -n %{toplev_dirname} -p1
 find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
+host_triple=$(%{__cxx} -dumpmachine)
+host_vendor=$(printf '%s\n' "$host_triple" | cut -d- -f2)
+host_sys=$(printf '%s\n' "$host_triple" | cut -d- -f3-)
+sed -i "s/case linux : vendor = pc ; sys = linux ;/case linux : vendor = ${host_vendor} ; sys = ${host_sys} ;/" \
+  tools/build/src/tools/clang.jam
 
 %build
 %set_build_flags
@@ -527,6 +542,11 @@ find ./boost -name '*.hpp' -perm /111 | xargs --no-run-if-empty chmod a-x
 PYTHON3_ABIFLAGS=$(/usr/bin/python3-config --abiflags)
 : PYTHON3_VERSION=%{python3_version}
 : PYTHON3_ABIFLAGS=${PYTHON3_ABIFLAGS}
+pyinc=/usr/include/python%{python3_version}${PYTHON3_ABIFLAGS}
+test -f "${pyinc}/pyconfig.h"
+printf '#include "%s/pyconfig.h"\n' "${pyinc}" > pyconfig.h
+export CPLUS_INCLUDE_PATH="${pyinc}${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="${pyinc}${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
 %endif
 
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
@@ -549,7 +569,7 @@ EOF
 ./bootstrap.sh --with-toolset=%{toolchain} --with-icu --prefix=$RPM_BUILD_ROOT%{_prefix}
 
 echo ============================= build serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -564,14 +584,27 @@ echo ============================= build serial ==================
 %endif
 	stage
 
+echo ============================= build cobalt ==================
+./b2 -q %{?_smp_mflags} \
+	--build-dir=serial \
+	--with-cobalt \
+	cxxstd=20 \
+	variant=release threading=multi debug-symbols=on pch=off \
+	stage
+
 echo ============================= build Boost.Build ==================
 (cd tools/build
- ./bootstrap.sh --with-toolset=%{toolchain} --prefix=$RPM_BUILD_ROOT%{_prefix})
+ ./bootstrap.sh %{toolchain})
 
 %check
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing -Wno-unused-local-typedefs -Wno-deprecated-declarations"
 export RPM_LD_FLAGS
-./b2 -d+2 -q %{?_smp_mflags} \
+%if %{with python3}
+pyinc=/usr/include/python%{python3_version}$(/usr/bin/python3-config --abiflags)
+export CPLUS_INCLUDE_PATH="${pyinc}${CPLUS_INCLUDE_PATH:+:$CPLUS_INCLUDE_PATH}"
+export C_INCLUDE_PATH="${pyinc}${C_INCLUDE_PATH:+:$C_INCLUDE_PATH}"
+%endif
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -590,7 +623,7 @@ export RPM_LD_FLAGS
 cd %{_builddir}/%{toplev_dirname}
 
 echo ============================= install serial ==================
-./b2 -d+2 -q %{?_smp_mflags} \
+./b2 -q %{?_smp_mflags} \
 	--without-mpi --without-graph_parallel --build-dir=serial \
 %if !%{with context}
 	--without-context --without-coroutine \
@@ -605,6 +638,16 @@ echo ============================= install serial ==================
 %if !%{with stacktrace_from_exception}
 	boost.stacktrace.from_exception=off \
 %endif
+	install
+
+echo ============================= install cobalt ==================
+./b2 -q %{?_smp_mflags} \
+	--build-dir=serial \
+	--with-cobalt \
+	cxxstd=20 \
+	--prefix=$RPM_BUILD_ROOT%{_prefix} \
+	--libdir=$RPM_BUILD_ROOT%{_libdir} \
+	variant=release threading=multi debug-symbols=on pch=off \
 	install
 
 cat > $RPM_BUILD_ROOT%{_libdir}/libboost_system.so << EOT
@@ -742,6 +785,7 @@ fi
 %license LICENSE_1_0.txt
 %{_libdir}/libboost_cobalt.so.%{sonamever}
 %{_libdir}/libboost_cobalt_io.so.%{sonamever}
+%{_libdir}/libboost_cobalt_io_ssl.so.%{sonamever}
 
 %files container
 %license LICENSE_1_0.txt
@@ -807,7 +851,7 @@ fi
 %license LICENSE_1_0.txt
 %{_libdir}/libboost_nowide.so.%{sonamever}
 
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 %files numpy3
 %license LICENSE_1_0.txt
 %{_libdir}/libboost_numpy%{python3_version_nodots}.so.%{sonamever}
@@ -893,6 +937,7 @@ fi
 %{_libdir}/libboost_chrono.so
 %{_libdir}/libboost_cobalt.so
 %{_libdir}/libboost_cobalt_io.so
+%{_libdir}/libboost_cobalt_io_ssl.so
 %{_libdir}/libboost_container.so
 %{_libdir}/libboost_contract.so
 %if %{with context}
@@ -917,7 +962,7 @@ fi
 %{_libdir}/libboost_math_c99f.so
 %{_libdir}/libboost_math_c99l.so
 %{_libdir}/libboost_nowide.so
-%if %{with python3}
+%if %{with python3} && %{with numpy}
 %{_libdir}/libboost_numpy%{python3_version_nodots}.so
 %endif
 %{_libdir}/libboost_process.so

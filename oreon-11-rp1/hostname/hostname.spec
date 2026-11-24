@@ -9,7 +9,7 @@
 
 Name:           hostname
 Version:        3.25
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Utility to set/show the host name or domain name
 License:        GPL-2.0-or-later
 URL:            https://tracker.debian.org/pkg/hostname
@@ -30,6 +30,7 @@ DNS name, and to display or set its hostname or NIS domain name.
 %prep
 %oreon_sha256
 %autosetup -n hostname -p1
+cp -p %{SOURCE1} gpl-2.0.txt
 
 %build
 %set_build_flags
@@ -57,7 +58,7 @@ fi
 
 %files
 %doc COPYRIGHT
-%license %{SOURCE1}
+%license gpl-2.0.txt
 %{_bindir}/hostname
 %{_bindir}/dnsdomainname
 %{_bindir}/domainname

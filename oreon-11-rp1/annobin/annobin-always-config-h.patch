@@ -1,0 +1,12 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -337,8 +337,8 @@
+   AC_SUBST([plugindir])
+ fi
+ 
++AC_CONFIG_HEADERS(gcc-plugin/config.h)
+ if test "$with_gcc_plugin" != no; then
+-  AC_CONFIG_HEADERS(gcc-plugin/config.h)
+   AC_CONFIG_FILES(gcc-plugin/Makefile)
+ fi
+ 

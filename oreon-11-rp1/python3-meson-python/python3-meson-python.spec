@@ -1,5 +1,5 @@
 # Copyright (C) 2026 Oreon HQ
-# SPDX-License-Identifier: MIT
+# SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 52c88628b0e5671592dc2306613fb5f6f3615fd24def059b9894f143b7f9a139
 
@@ -9,7 +9,7 @@
 
 Name: python3-meson-python
 Version: 0.22.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Meson Python build backend
 License: MIT
 URL: https://github.com/mesonbuild/meson-python
@@ -24,8 +24,11 @@ BuildRequires: python3-installer
 BuildRequires: python3-packaging
 BuildRequires: python3-pyproject-metadata
 BuildRequires: meson
+BuildRequires: patchelf
 Requires: python3
+Requires: patchelf
 Requires: python3-packaging
+Requires: python3-pyproject-metadata
 Requires: meson
 
 %description

@@ -22,14 +22,14 @@ print(string.sub(hash, 0, 16))
 }
 
 Version:        3.8.13
-Release:        2%{?dist}
+Release:        5%{?dist}
 Patch:        gnutls-3.2.7-rpath.patch
 
 # follow https://gitlab.com/gnutls/gnutls/-/issues/1443
 Patch:        gnutls-3.8.8-tests-ktls-skip-tls12-chachapoly.patch
 
 %bcond_without bootstrap
-%bcond_with dane
+%bcond_without dane
 %bcond_without fips
 %bcond_with tpm12
 %bcond_without tpm2
@@ -102,7 +102,8 @@ Recommends: trousers >= 0.3.11.2
 %endif
 
 %if %{with dane}
-BuildRequires: unbound-devel unbound-libs
+BuildRequires: unbound-devel
+BuildRequires: unbound-libs
 %endif
 BuildRequires: make gtk-doc
 
@@ -345,9 +346,6 @@ sed -i -e 's|sys_lib_dlsearch_path_spec="/lib /usr/lib|sys_lib_dlsearch_path_spe
 rm -f lib/minitasn1/*.c lib/minitasn1/*.h
 
 echo "SYSTEM=NORMAL" >> tests/system.prio
-
-CCASFLAGS="$CCASFLAGS -Wa,--generate-missing-build-notes=yes"
-export CCASFLAGS
 
 %if %{with fips}
 eval $(sed -n 's/^\(\(NAME\|VERSION_ID\)=.*\)/OS_\1/p' /etc/os-release)

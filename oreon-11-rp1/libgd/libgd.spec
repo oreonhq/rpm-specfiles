@@ -76,7 +76,11 @@ rm -f %{buildroot}%{_bindir}/*
 %endif
 
 %check
-TMPDIR=%{_builddir} %make_build check
+mkdir -p %{_builddir}/gd-tmp
+export TMPDIR=%{_builddir}/gd-tmp
+export TMP=%{_builddir}/gd-tmp
+export TEMP=%{_builddir}/gd-tmp
+%make_build check
 
 %ldconfig_scriptlets
 

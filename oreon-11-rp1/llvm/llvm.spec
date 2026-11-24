@@ -40,8 +40,8 @@ BuildRequires: oreon-rpm-macros
 %if %{with fastclang}
 %define bcond_override_default_lldb 0
 %define bcond_override_default_offload 0
-%define bcond_override_default_mlir 0
-%define bcond_override_default_flang 0
+%define bcond_override_default_mlir 1
+%define bcond_override_default_flang 1
 %define bcond_override_default_libclc 0
 %define bcond_override_default_build_bolt 0
 %define bcond_override_default_polly 0
@@ -90,8 +90,14 @@ BuildRequires: oreon-rpm-macros
 %endif
 %endif
 
-# MLIR needs nanobind/numpy/pybind11 which are not in the tree yet
-%bcond_with mlir
+%bcond_without mlir
+# bindings need numpy, numpy needs this flang
+%bcond_with mlir_python
+%if %{with mlir_python}
+%global mlir_python_toggle ON
+%else
+%global mlir_python_toggle OFF
+%endif
 
 %ifarch riscv64
 # MLIR Execution Engine doesn't quite work on riscv64, see:
@@ -102,8 +108,7 @@ BuildRequires: oreon-rpm-macros
 %endif
 
 #region flang
-# flang needs mlir which is gated off until its python deps land
-%bcond_with flang
+%bcond_without flang
 
 %if %{with flang}
 
@@ -390,7 +395,7 @@ end
 #region main package
 Name:		%{pkg_name_llvm}
 Version:        23.1.5
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:	The Low Level Virtual Machine
 
 License:	Apache-2.0 WITH LLVM-exception OR NCSA
@@ -532,6 +537,7 @@ Patch2307:        227851.patch
 # The test only accepted stale_handle.
 Patch2308:        ompd-curr-parallel-handle-check.patch
 Patch2309:        flang-rt-link-libm.patch
+Patch2310:        flang-rt-install-libdir.patch
 
 
 %if %{with fastclang}
@@ -595,10 +601,6 @@ BuildRequires:	binutils-devel
 %if %{with gold}
 BuildRequires:	binutils-gold
 %endif
-%ifarch %{valgrind_arches}
-# Enable extra functionality when run the LLVM JIT under valgrind.
-BuildRequires:	valgrind-devel
-%endif
 %if %{with libedit}
 # LLVM's LineEditor library will use libedit if it is available.
 BuildRequires:	libedit-devel
@@ -622,8 +624,7 @@ BuildRequires: libffi-devel
 BuildRequires: perl-interpreter
 BuildRequires:	perl-generators
 
-# We only need the emacs packaging macros, which are part of emacs-common.
-BuildRequires:	emacs-common
+%global _emacs_sitestartdir %{_datadir}/emacs/site-lisp/site-start.d
 
 BuildRequires:	libatomic
 
@@ -641,7 +642,7 @@ BuildRequires: perl(Term::ANSIColor)
 BuildRequires: perl(Text::ParseWords)
 BuildRequires: perl(Sys::Hostname)
 
-%if %{with mlir}
+%if %{with mlir_python}
 BuildRequires: python%{python3_pkgversion}-numpy
 BuildRequires: python%{python3_pkgversion}-pybind11
 BuildRequires: python%{python3_pkgversion}-pyyaml
@@ -1069,6 +1070,7 @@ Requires: %{pkg_name_mlir}-static%{?_isa} = %{version}-%{release}
 %description -n %{pkg_name_mlir}-devel
 MLIR development files.
 
+%if %{with mlir_python}
 %package -n python%{python3_pkgversion}-mlir
 Summary:	MLIR python bindings
 
@@ -1079,6 +1081,7 @@ Requires: %{pkg_name_llvm}-libs%{?_isa} = %{version}-%{release}
 
 %description -n python%{python3_pkgversion}-mlir
 MLIR python bindings.
+%endif
 %endif
 #endregion MLIR packages
 
@@ -1476,7 +1479,7 @@ cd llvm/utils/lit
 # Copy CFLAGS into ASMFLAGS, so -fcf-protection is used when compiling assembly files.
 export ASMFLAGS="%{build_cflags}"
 
-# We set CLANG_DEFAULT_PIE_ON_LINUX=OFF and PPC_LINUX_DEFAULT_IEEELONGDOUBLE=ON to match the
+# pie on by default, same as gcc --enable-default-pie
 
 # Disable dwz because it takes a huge amount of time to decide not to
 # optimize things.
@@ -1591,7 +1594,7 @@ popd
 %global cmake_config_args %{cmake_config_args} \\\
 	-DCLANG_BUILD_EXAMPLES:BOOL=OFF \\\
 	-DCLANG_CONFIG_FILE_SYSTEM_DIR=%{_sysconfdir}/%{pkg_name_clang}/ \\\
-	-DCLANG_DEFAULT_PIE_ON_LINUX=OFF \\\
+	-DCLANG_DEFAULT_PIE_ON_LINUX=ON \\\
 	-DCLANG_DEFAULT_UNWINDLIB=libgcc \\\
 	-DCLANG_ENABLE_ARCMT:BOOL=ON \\\
 	-DCLANG_ENABLE_STATIC_ANALYZER:BOOL=ON \\\
@@ -1710,7 +1713,7 @@ popd
         -DMLIR_INSTALL_AGGREGATE_OBJECTS=OFF \\\
         -DMLIR_LINK_MLIR_DYLIB=ON \\\
         -DMLIR_BUILD_MLIR_C_DYLIB=ON \\\
-        -DMLIR_ENABLE_BINDINGS_PYTHON:BOOL=%{mlir_jit} \\\
+        -DMLIR_ENABLE_BINDINGS_PYTHON:BOOL=%{mlir_python_toggle} \\\
         -DMLIR_ENABLE_EXECUTION_ENGINE:BOOL=%{mlir_jit}
 %endif
 #endregion mlir options
@@ -1753,7 +1756,8 @@ popd
 # See also https://llvm.org/devmtg/2025-04/slides/quick_talk/kruse_flang-rt.pdf
 %global cmake_config_args %{cmake_config_args} \\\
   -DFLANG_RT_ENABLE_SHARED:BOOL=ON \\\
-  -DFLANG_RT_ENABLE_STATIC:BOOL=ON
+  -DFLANG_RT_ENABLE_STATIC:BOOL=ON \\\
+  -DFLANG_RT_INSTALL_RESOURCE_LIB_PATH=%{_libdir}
 # The amount of RAM used per process has been set by trial and error.
 # This number may increase/decrease from time to time and may require changes.
 # We prefer to be on the safe side in order to avoid spurious errors.
@@ -2030,7 +2034,7 @@ oreon_done ${PIPESTATUS[0]}
 ) 2>&1 | oreon_ninja_filter
 oreon_done ${PIPESTATUS[0]}
 
-%if "%{mlir_jit}" == "ON"
+%if %{with mlir_python}
 (
 %cmake_build --target libMLIRPythonCAPI.so
 ) 2>&1 | oreon_ninja_filter
@@ -2109,14 +2113,6 @@ popd
 %endif
 
 %cmake_install
-
-%if %{with flang}
-# Create ld.so.conf.d entry
-mkdir -p %{buildroot}%{_sysconfdir}/ld.so.conf.d
-cat >> %{buildroot}%{_sysconfdir}/ld.so.conf.d/%{pkg_name_flang}-%{_arch}.conf << EOF
-%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}/
-EOF
-%endif
 
 popd
 
@@ -2360,7 +2356,7 @@ ln -vsf "../../../${liblldb}" %{buildroot}%{python3_sitearch}/lldb/_lldb.so
 #endregion LLDB installation
 
 #region mlir installation
-%if %{with mlir} && "%{mlir_jit}" == "ON"
+%if %{with mlir_python}
 mkdir -p %{buildroot}/%{python3_sitearch}
 mv %{buildroot}%{install_prefix}/python_packages/mlir_core/mlir %{buildroot}/%{python3_sitearch}
 # These directories should be empty now.
@@ -2484,6 +2480,7 @@ rm %{buildroot}%{install_mandir}/man1/lldb-server.1
 # symlinks. We do it this way around because symlinks between multilib packages
 # would conflict otherwise.
 move_and_replace_with_symlinks %{buildroot}%{install_bindir} %{buildroot}%{_bindir}
+ln -sfn clang %{buildroot}%{_bindir}/cc
 move_and_replace_with_symlinks %{buildroot}%{install_libdir} %{buildroot}%{_libdir}
 move_and_replace_with_symlinks %{buildroot}%{install_libexecdir} %{buildroot}%{_libexecdir}
 move_and_replace_with_symlinks %{buildroot}%{install_includedir} %{buildroot}%{_includedir}
@@ -2872,7 +2869,7 @@ export LIT_OPTS="$LIT_OPTS --max-retries-per-test=4"
 # Without this we run into a libflang_rt.runtime.so not found error.
 # See https://github.com/llvm/llvm-project/pull/150722 for why this only
 # happens when flang is found.
-export LD_LIBRARY_PATH=%{buildroot}%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}
+export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
 %endif
 
 %cmake_build --target check-openmp
@@ -3407,6 +3404,9 @@ fi
 
 %files -n %{pkg_name_clang}
 %license clang/LICENSE.TXT
+%if %{without compat_build}
+%{_bindir}/cc
+%endif
 %{expand_bins %{expand:
     clang
     clang++
@@ -3792,7 +3792,7 @@ fi
 }}
 %endif
 
-%if "%{mlir_jit}" == "ON"
+%if %{with mlir_python}
 %files -n python%{python3_pkgversion}-%{pkg_name_mlir}
 %{python3_sitearch}/mlir/
 %endif
@@ -3825,9 +3825,8 @@ fi
 %{_prefix}/lib/clang/%{maj_ver}/include/ISO_Fortran_binding.h
 
 %files -n %{pkg_name_flang}-runtime
-%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}/libflang_rt.runtime.a
-%{_prefix}/lib/clang/%{maj_ver}/lib/%{llvm_triple}/libflang_rt.runtime.so
-%config(noreplace) %{_sysconfdir}/ld.so.conf.d/%{pkg_name_flang}-%{_arch}.conf
+%{_libdir}/libflang_rt.runtime.a
+%{_libdir}/libflang_rt.runtime.so
 
 %endif
 #region flang files

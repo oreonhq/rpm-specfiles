@@ -1,14 +1,14 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 1849a238f6f396da19762269de72cb1814ab44416fa73a8686deac10b0d87a0f
+%global source0_hash e36576e0985e01027e999891e7a966c67822d40c89ef1b4c8b6e22737e3590b4
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
 
 Name: python3-pytest-mock
-Version: 3.15.1
+Version: 3.17.0
 Release: 1%{?dist}
 Summary: Thin-wrapper around mock for easier use with pytest
 License: MIT
@@ -43,7 +43,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-python3 -m pytest -q
+PYTHONPATH="%{buildroot}%{python3_sitelib}" python3 -m pytest -q
 
 %files -f %{_builddir}/%{name}.files
 

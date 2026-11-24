@@ -44,12 +44,18 @@ automake --add-missing --copy
 autoconf
 
 %build
-%configure --enable-shared --disable-static
+%configure --enable-shared --disable-static --docdir=%{_docdir}/%{name}
 %make_build
 
 %install
 %make_install
 find %{buildroot} -name '*.la' -delete
+mkdir -p %{buildroot}%{_docdir}
+if [ -d %{buildroot}/usr/doc/CUnit ]; then
+  rm -rf %{buildroot}%{_docdir}/%{name}
+  mv %{buildroot}/usr/doc/CUnit %{buildroot}%{_docdir}/%{name}
+  rmdir %{buildroot}/usr/doc 2>/dev/null || true
+fi
 
 %check
 make check
@@ -59,6 +65,8 @@ make check
 %doc AUTHORS ChangeLog NEWS README
 %{_libdir}/libcunit.so.*
 %{_datadir}/CUnit/
+%{_docdir}/%{name}/
+%{_mandir}/man3/CUnit.3*
 
 %files devel
 %{_libdir}/libcunit.so

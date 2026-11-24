@@ -1,0 +1,17 @@
+diff -ruN a/test/ares-test.h b/test/ares-test.h
+--- a/test/ares-test.h
++++ b/test/ares-test.h
+@@ -172,7 +172,12 @@
+     struct ares_options opts;
+     memset(&opts, 0, sizeof(opts));
+     opts.qcache_max_ttl = 300;
+-    int optmask         = ARES_OPT_QUERY_CACHE;
++    int optmask = ARES_OPT_QUERY_CACHE;
++    char *resolv = getenv("CARES_TEST_RESOLV");
++    if (resolv != nullptr) {
++      opts.resolvconf_path = resolv;
++      optmask |= ARES_OPT_RESOLVCONF;
++    }
+     EXPECT_EQ(ARES_SUCCESS, ares_init_options(&channel_, &opts, optmask));
+     EXPECT_NE(nullptr, channel_);
+   }

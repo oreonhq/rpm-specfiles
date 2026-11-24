@@ -8,11 +8,12 @@
 
 Name: python3-testpath
 Version: 0.6.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Test utilities for code working with files and commands
 License: BSD License
 URL: https://pypi.org/project/testpath/
 Source0: https://files.pythonhosted.org/packages/08/ad/a3e7d580902f57e31d2181563fc4088894692bb6ef79b816344f27719cdc/testpath-0.6.0.tar.gz
+Patch0001: 0001-allow-building-this-package-with-flit-core-4.patch
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
@@ -27,7 +28,7 @@ Test utilities for code working with files and commands
 
 %prep
 %oreon_sha256
-%autosetup -n testpath-0.6.0
+%autosetup -p1 -n testpath-0.6.0
 
 %build
 python3 -m build --wheel --no-isolation

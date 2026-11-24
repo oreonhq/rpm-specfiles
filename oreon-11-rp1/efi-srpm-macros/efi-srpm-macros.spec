@@ -6,7 +6,7 @@
 
 Name: efi-srpm-macros
 Version: 6
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: SRPM macros for EFI packages
 License: GPL-3.0-or-later
 URL: https://github.com/rhboot/efi-rpm-macros
@@ -27,7 +27,7 @@ SRPM macros that describe the EFI system partition and vendor directory.
 for i in macros.efi-srpm brp-boot-efi-times; do
 sed \
   -e 's,@@EFI_ESP_ROOT@@,/boot/efi,g' \
-  -e 's,@@EFI_ARCHES@@,"x86_64 aarch64",g' \
+  -e 's,@@EFI_ARCHES@@,x86_64 aarch64 %{arm} %{ix86},g' \
   -e 's,@@EFI_VENDOR@@,oreon,g' \
   -e 's,@@EFI_RPM_MACROS_VERSION@@,%{version},g' \
   -e 's,@@EFI_PRERELEASE@@,,g' \

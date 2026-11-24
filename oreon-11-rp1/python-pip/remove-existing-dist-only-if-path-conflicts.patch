@@ -90,7 +90,7 @@ index a74200a..99738cc 100644
  import logging
 +import sys
 +import sysconfig
- from collections.abc import Iterable, Iterator, Mapping, Sequence
+ from collections.abc import Callable, Iterable, Iterator, Mapping, Sequence
  from typing import (
      TYPE_CHECKING,
 @@ -674,6 +676,16 @@ class Factory:

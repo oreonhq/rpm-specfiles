@@ -55,7 +55,7 @@ Documentation files for %{name} library.
 %cmake_build
 
 pushd docs
-make html SPHINXBUILD=sphinx-build-3
+make html SPHINXBUILD=sphinx-build
 rm build/html/.buildinfo
 popd
 

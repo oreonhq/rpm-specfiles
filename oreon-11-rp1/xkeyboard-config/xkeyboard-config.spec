@@ -9,7 +9,7 @@
 
 Name:           xkeyboard-config
 Version:        2.48
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        X Keyboard Extension configuration data
 License:        MIT
 URL:            https://www.freedesktop.org/wiki/Software/XKeyboardConfig/
@@ -22,6 +22,7 @@ BuildRequires:  meson
 BuildRequires:  gettext
 BuildRequires:  libxslt
 BuildRequires:  python3
+BuildRequires:  perl-interpreter
 
 Provides:       xkeyboard-config-devel = %{version}-%{release}
 Provides:       pkgconfig(xkeyboard-config) = %{version}
@@ -49,7 +50,7 @@ including keymaps, rules, and symbols for many keyboards and layouts.
 %files -f %{name}.lang
 %license COPYING
 %doc README.md
-%{_datadir}/X11/xkb/
+%{_datadir}/X11/xkb
 %{_datadir}/xkeyboard-config-2/
 %{_datadir}/pkgconfig/xkeyboard-config.pc
 %{_datadir}/pkgconfig/xkeyboard-config-2.pc

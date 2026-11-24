@@ -12,7 +12,7 @@
 
 Name:           wayland
 Version:        1.26.0
-Release:        1%{?dist}
+Release:        4%{?dist}
 Summary:        Wayland Compositor Infrastructure
 
 License:        MIT
@@ -27,7 +27,7 @@ Patch0:         0001-doc-add-option-to-not-build-the-book.patch
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
-BuildRequires:  docbook-style-xsl
+BuildRequires:  docbook-style-xsl >= 1.79.2-2
 BuildRequires:  expat-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  libxslt
@@ -110,7 +110,12 @@ Wayland server library
 %autosetup -p1
 
 %conf
-%meson %{!?with_book:-Dbook=false}
+%meson %{!?with_book:-Dbook=false} \
+%if %{with bootstrap}
+  -Ddocumentation=false
+%else
+  -Ddocumentation=true
+%endif
 
 %build
 %meson_build
@@ -131,11 +136,15 @@ Wayland server library
 %{_datadir}/wayland/wayland-scanner.mk
 %{_datadir}/wayland/wayland.xml
 %{_datadir}/wayland/wayland.dtd
+%if %{without bootstrap}
 %{_mandir}/man3/*.3*
+%endif
 
+%if %{without bootstrap}
 %files doc
 %doc README.md
 %{_datadir}/doc/wayland/
+%endif
 
 %files -n libwayland-client
 %license COPYING

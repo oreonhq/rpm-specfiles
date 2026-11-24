@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 %global source0_hash 01932bc4f7e4c15f6b57b208224e78490d3f4af777869aaeb877a965637c8095
+%global source1_hash 6e17bc14313bf3ff12c3cc6008571befd91a7102eac49cd92384712f4c4ead1c
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -13,6 +14,7 @@ Summary: Friendly distributed version control system
 License: GPL-2.0-or-later
 URL: https://pypi.org/project/breezy/
 Source0: https://files.pythonhosted.org/packages/e4/31/8b72e0d4588dac3b0c09fb31844bddf51c512be445f733fa55c640c46fa5/breezy-3.3.25.tar.gz
+Source1: breezy-3.3.25-vendor.tar.xz
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
@@ -50,9 +52,14 @@ Friendly distributed version control system
 
 %prep
 %oreon_sha256
+echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 %autosetup -n breezy-3.3.25
+tar -xf %{SOURCE1}
+%oreon_cargo_prep vendor
 
 %build
+export CARGO_HOME=%{_builddir}/cargo-home
+mkdir -p "$CARGO_HOME"
 python3 -m build --wheel --no-isolation
 
 %install

@@ -10,7 +10,7 @@
 Name: dejagnu
 Epoch: 1
 Version: 1.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Front end for testing other programs
 License: GPL-3.0-or-later AND GFDL-1.3-or-later
 URL: https://www.gnu.org/software/dejagnu/
@@ -45,10 +45,10 @@ DejaGnu is an Expect/Tcl based framework for testing other programs.
 
 %install
 %make_install
-rm -f %{buildroot}%{_infodir}/dir
 chmod a-x %{buildroot}%{_datadir}/dejagnu/runtest.exp
 %make_install install-man
 install -D -m 644 doc/dejagnu.info %{buildroot}%{_infodir}/%{name}.info
+rm -f %{buildroot}%{_infodir}/dir
 
 %check
 TMP=$(mktemp)
