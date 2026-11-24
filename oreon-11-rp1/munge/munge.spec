@@ -1,0 +1,176 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 39c3ec6ef5604bfa206e8aa10fc05d5119040f6de4a554bc0fb98ca1aed838dc
+%global source1_hash 4b892474bfeb975ee6fce1e7e6c7bced6da0555de577ba6a934a8195cfae61c9
+%global source2_hash 027f4da27c8fef29e71aa2e6c1bccf038e2382d512c36181049b907c7769f4f1
+%global source3_hash b6682501d69db45de614140b55ed5b3346c915fb6e387c570135d4bfc2b507e2
+%global source4_hash 1227368fe983aa83883c9e53c01011e3b791249406f4fd7d047377187351fd88
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%bcond_without check
+
+Name:           munge
+Version:        0.5.18
+Release:        %{autorelease}
+Summary:        Enables uid & gid authentication across a host cluster
+
+License:        GPL-3.0-or-later AND LGPL-3.0-or-later
+URL:            https://dun.github.io/munge/
+Source0:        https://github.com/dun/munge/releases/download/munge-%{version}/munge-%{version}.tar.xz
+Source1:        https://github.com/dun/munge/releases/download/%{name}-%{version}/%{name}-%{version}.tar.xz.asc
+Source2:        https://github.com/dun.gpg
+Source3:        munge.sysusers
+Source4:        README.md
+
+BuildRequires: oreon-rpm-macros
+BuildRequires: clang
+BuildRequires: gcc
+BuildRequires:  make
+BuildRequires:  git-core
+BuildRequires:  gnupg2
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  zlib-devel
+BuildRequires:  bzip2-devel
+BuildRequires:  openssl-devel
+Requires:       munge-libs = %{version}-%{release}
+Requires:       logrotate
+
+%if %{with check}
+BuildRequires:  procps-ng
+BuildRequires:  util-linux
+%endif
+
+%{?systemd_requires}
+
+%description
+MUNGE (MUNGE Uid 'N' Gid Emporium) is an authentication service for creating
+and validating credentials. It is designed to be highly scalable for use
+in an HPC cluster environment.
+It allows a process to authenticate the UID and GID of another local or
+remote process within a group of hosts having common users and groups.
+These hosts form a security realm that is defined by a shared cryptographic
+key. Clients within this security realm can create and validate credentials
+without the use of root privileges, reserved ports, or platform-specific
+methods.
+
+%package devel
+Summary:        Development files for uid * gid authentication across a host cluster
+Requires:       munge-libs%{?_isa} = %{version}-%{release}
+
+%description devel
+Header files for developing using MUNGE.
+
+%package libs
+Summary:        Runtime libs for uid * gid authentication across a host cluster
+
+%description libs
+Runtime libraries for using MUNGE.
+
+%prep
+%oreon_sha256
+echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
+echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
+echo '%{source3_hash}  %{SOURCE3}' | sha256sum -c -
+echo '%{source4_hash}  %{SOURCE4}' | sha256sum -c -
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup -N -S git
+cp "%{SOURCE4}"  README-Oreon.md
+
+%autopatch
+
+%build
+%configure  --disable-static --with-crypto-lib=openssl --runstatedir="%{_rundir}" --with-systemdunitdir="%{_unitdir}"  --with-sysconfigdir="%{_sysconfdir}/sysconfig/" --with-logrotateddir="%{_sysconfdir}/logrotate.d/"
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+%make_build
+
+%install
+%make_install
+
+install -p -D -m 0644 %{SOURCE3} %{buildroot}%{_sysusersdir}/munge.conf
+
+rm %{buildroot}/%{_libdir}/libmunge.la
+
+chmod 700 %{buildroot}%{_var}/lib/munge %{buildroot}%{_var}/log/munge
+chmod 700 %{buildroot}%{_sysconfdir}/munge
+
+mkdir -p %{buildroot}%{_rundir}/munge
+touch %{buildroot}%{_rundir}/munge/munged.pid
+
+%check
+%if %{with check}
+%make_build check \
+    LD_LIBRARY_PATH=%{buildroot}%{_libdir} \
+    root=/tmp/munge-$$ VERBOSE=t verbose=t
+%endif
+
+%preun
+%systemd_preun munge.service
+
+%post
+%systemd_post munge.service
+
+%postun
+%systemd_postun_with_restart munge.service
+
+%ldconfig_scriptlets   libs
+
+%files
+%{_bindir}/munge
+%{_bindir}/remunge
+%{_bindir}/unmunge
+%{_sbindir}/munged
+%{_sbindir}/mungekey
+%{_mandir}/man1/munge.1.gz
+%{_mandir}/man1/remunge.1.gz
+%{_mandir}/man1/unmunge.1.gz
+%{_mandir}/man7/munge.7.gz
+%{_mandir}/man8/munged.8.gz
+%{_mandir}/man8/mungekey.8.gz
+%{_unitdir}/munge.service
+
+%attr(0700,munge,munge) %dir  %{_var}/log/munge
+%attr(0700,munge,munge) %dir  %{_var}/lib/munge
+%attr(0700,munge,munge) %dir %{_sysconfdir}/munge
+%attr(0755,munge,munge) %ghost %dir  /run/munge/
+%attr(0644,munge,munge) %ghost /run/munge/munged.pid
+
+%{_sysusersdir}/munge.conf
+%config(noreplace) %{_sysconfdir}/logrotate.d/munge
+%config(noreplace) %{_sysconfdir}/sysconfig/munge
+
+%license COPYING COPYING.LESSER
+%doc README-Oreon.md
+%doc AUTHORS
+%doc JARGON NEWS QUICKSTART README
+%doc doc
+
+%files libs
+%{_libdir}/libmunge.so.2
+%{_libdir}/libmunge.so.2.*
+
+%files devel
+%{_includedir}/munge.h
+%{_libdir}/libmunge.so
+%{_libdir}/pkgconfig/munge.pc
+%{_mandir}/man3/munge.3.gz
+%{_mandir}/man3/munge_ctx.3.gz
+%{_mandir}/man3/munge_ctx_copy.3.gz
+%{_mandir}/man3/munge_ctx_create.3.gz
+%{_mandir}/man3/munge_ctx_destroy.3.gz
+%{_mandir}/man3/munge_ctx_get.3.gz
+%{_mandir}/man3/munge_ctx_set.3.gz
+%{_mandir}/man3/munge_ctx_strerror.3.gz
+%{_mandir}/man3/munge_decode.3.gz
+%{_mandir}/man3/munge_encode.3.gz
+%{_mandir}/man3/munge_enum.3.gz
+%{_mandir}/man3/munge_enum_int_to_str.3.gz
+%{_mandir}/man3/munge_enum_is_valid.3.gz
+%{_mandir}/man3/munge_enum_str_to_int.3.gz
+%{_mandir}/man3/munge_strerror.3.gz
+
+%changelog
+%autochangelog
