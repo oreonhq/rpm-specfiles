@@ -12,7 +12,7 @@
 Name:           cups
 Epoch:          1
 Version:        2.4.20
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        CUPS printing system
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://openprinting.github.io/cups/
@@ -27,6 +27,7 @@ Patch0:         cups-2.4.20-testhttp-localhost.patch
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  gcc
 BuildRequires:  make
+BuildRequires:  hostname
 BuildRequires:  gnupg2
 BuildRequires:  pkgconfig
 BuildRequires:  systemd-rpm-macros
@@ -113,6 +114,7 @@ clients through the cups-lpd helper.
     --enable-relro \
     --enable-dbus \
     --with-dbusdir=%{_sysconfdir}/dbus-1 \
+    --with-pkgconfpath=%{_libdir}/pkgconfig \
     --enable-libusb \
     --enable-acl \
     --enable-gssapi \
