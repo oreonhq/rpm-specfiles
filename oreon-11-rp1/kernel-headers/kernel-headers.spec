@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash b11b6df8295e8e991ff040b71aaa4994a8b55caa23b6b092907f195b5840fd1f
+%global source0_hash 8183d475a76a0faffa92d6cd500af421f589dfd0300a0f1060bb875e11d45723
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -12,8 +12,8 @@
 %global released_kernel 1
 
 # define buildid .local
-%define specversion 7.3.4
-%define tarfile_release 7.3.4
+%define specversion 7.3.6
+%define tarfile_release 7.3.6
 # This is needed to do merge window version magic
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 300%{?buildid}%{?dist}
@@ -25,7 +25,7 @@ Name: kernel-headers
 Summary: Header files for the Linux kernel for use by glibc
 License: ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-2-Clause) AND ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-3-Clause) AND ((GPL-2.0-only WITH Linux-syscall-note) OR CDDL-1.0) AND ((GPL-2.0-only WITH Linux-syscall-note) OR Linux-OpenIB) AND ((GPL-2.0-only WITH Linux-syscall-note) OR MIT) AND ((GPL-2.0-or-later WITH Linux-syscall-note) OR BSD-3-Clause) AND ((GPL-2.0-or-later WITH Linux-syscall-note) OR MIT) AND BSD-3-Clause AND (GPL-1.0-or-later WITH Linux-syscall-note) AND GPL-2.0-only AND (GPL-2.0-only WITH Linux-syscall-note) AND (GPL-2.0-or-later WITH Linux-syscall-note) AND (LGPL-2.0-or-later WITH Linux-syscall-note) AND (LGPL-2.1-only WITH Linux-syscall-note) AND (LGPL-2.1-or-later WITH Linux-syscall-note) AND MIT
 URL: http://www.kernel.org/
-Version:        7.3.4
+Version:        7.3.6
 Release:        1%{?dist}
 # This is a tarball with headers from the kernel, which should be created
 # using create_headers_tarball.sh provided in the kernel source package.
