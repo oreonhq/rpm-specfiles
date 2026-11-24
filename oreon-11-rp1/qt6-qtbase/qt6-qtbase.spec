@@ -11,13 +11,14 @@
 
 Name: qt6-qtbase
 Version: 6.11.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Qt6 - QtBase components
 License: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
 URL: https://www.qt.io/
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/qtbase-everywhere-src-%{version}.tar.xz
 
 BuildRequires: oreon-rpm-macros
+BuildRequires: clang
 BuildRequires: qt6-srpm-macros
 BuildRequires: cmake
 BuildRequires: ninja-build
@@ -86,6 +87,19 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description gui
 Qt6 GUI platform plugins and related libraries.
+
+
+%package static
+Summary: Static library files for %{name}
+Requires: %{name}-devel%{?_isa} = %{version}-%{release}
+Requires: pkgconfig(fontconfig)
+Requires: pkgconfig(glib-2.0)
+Requires: pkgconfig(libinput)
+Requires: pkgconfig(xkbcommon)
+Requires: pkgconfig(zlib)
+
+%description static
+%{summary}.
 
 %prep
 %oreon_sha256
@@ -157,6 +171,38 @@ export CTEST_OUTPUT_ON_FAILURE=1
 %{_libdir}/cmake/Qt6*/
 %{_libdir}/pkgconfig/Qt6*.pc
 %{_libdir}/pkgconfig/Qt6.pc
+
+
+%exclude %{_libdir}/cmake/Qt6DeviceDiscoverySupportPrivate
+%exclude %{_libdir}/cmake/Qt6FbSupportPrivate
+%exclude %{_libdir}/cmake/Qt6InputSupportPrivate
+%exclude %{_libdir}/cmake/Qt6KmsSupportPrivate
+%exclude %{_includedir}/qt6/QtDeviceDiscoverySupport
+%exclude %{_includedir}/qt6/QtFbSupport
+%exclude %{_includedir}/qt6/QtInputSupport
+%exclude %{_includedir}/qt6/QtKmsSupport
+
+%files static
+%dir %{_libdir}/cmake/Qt6DeviceDiscoverySupportPrivate
+%{_libdir}/cmake/Qt6DeviceDiscoverySupportPrivate/*.cmake
+%{_includedir}/qt6/QtDeviceDiscoverySupport
+%{_libdir}/libQt6DeviceDiscoverySupport.*a
+%{_libdir}/libQt6DeviceDiscoverySupport.prl
+%dir %{_libdir}/cmake/Qt6FbSupportPrivate
+%{_libdir}/cmake/Qt6FbSupportPrivate/*.cmake
+%{_includedir}/qt6/QtFbSupport
+%{_libdir}/libQt6FbSupport.*a
+%{_libdir}/libQt6FbSupport.prl
+%dir %{_libdir}/cmake/Qt6InputSupportPrivate
+%{_libdir}/cmake/Qt6InputSupportPrivate/*.cmake
+%{_includedir}/qt6/QtInputSupport
+%{_libdir}/libQt6InputSupport.*a
+%{_libdir}/libQt6InputSupport.prl
+%dir %{_libdir}/cmake/Qt6KmsSupportPrivate
+%{_libdir}/cmake/Qt6KmsSupportPrivate/*.cmake
+%{_includedir}/qt6/QtKmsSupport
+%{_libdir}/libQt6KmsSupport.*a
+%{_libdir}/libQt6KmsSupport.prl
 
 %changelog
 %autochangelog
