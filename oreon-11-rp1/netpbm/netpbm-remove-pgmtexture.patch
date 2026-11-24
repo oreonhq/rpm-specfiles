@@ -1,0 +1,87 @@
+diff -urNp '--exclude=.git' a/analyzer/Makefile b/analyzer/Makefile
+--- a/analyzer/Makefile	2026-05-15 09:01:34.196030441 +0200
++++ b/analyzer/Makefile	2026-05-15 09:01:52.621677235 +0200
+@@ -32,7 +32,6 @@ PORTBINARIES = \
+ MATHBINARIES = \
+   pamsharpmap \
+   pamsharpness \
+-  pgmtexture \
+   pnmpsnr \
+ 
+ BINARIES = $(PORTBINARIES) $(MATHBINARIES)
+diff -urNp '--exclude=.git' a/doc/copyright_summary b/doc/copyright_summary
+--- a/doc/copyright_summary	2026-05-15 09:01:34.036898939 +0200
++++ b/doc/copyright_summary	2026-05-15 09:01:54.562668347 +0200
+@@ -197,7 +197,6 @@ pgmnoise:      (A) 1993      Frank Neuma
+ pgmnorm:       (A) 1989-1991 Jef Poskanzer
+ pgmramp:       (A) 1989      Jef Poskanzer
+ pgmslice:      (C) 2000      Jos Dingjan <jos@tuatha.org>
+-pgmtexture:    (A) 1991      Texas Agricultural Experiment Station, James Darrell McCauley
+ pgmtofs:       (A) 1991      Jef Poskanzer
+ pgmtolispm:    (A) 1991      Jamie Zawinski and Jef Poskanzer
+ pgmtopbm:      (A) 1989      Jef Poskanzer
+diff -urNp '--exclude=.git' a/test/all-in-place.ok b/test/all-in-place.ok
+--- a/test/all-in-place.ok	2026-05-15 09:01:34.067337742 +0200
++++ b/test/all-in-place.ok	2026-05-15 09:01:56.600659014 +0200
+@@ -188,7 +188,6 @@ pgmminkowski: ok
+ pgmmorphconv: ok
+ pgmnoise: ok
+ pgmramp: ok
+-pgmtexture: ok
+ pgmtofs: ok
+ pgmtolispm: ok
+ pgmtopbm: ok
+diff -urNp '--exclude=.git' a/test/all-in-place.test b/test/all-in-place.test
+--- a/test/all-in-place.test	2026-05-15 09:01:34.044166591 +0200
++++ b/test/all-in-place.test	2026-05-15 09:01:55.608663558 +0200
+@@ -234,7 +234,6 @@ ordinary_testprogs="\
+   pgmmorphconv \
+   pgmnoise \
+   pgmramp \
+-  pgmtexture \
+   pgmtofs \
+   pgmtolispm \
+   pgmtopbm \
+diff -urNp '--exclude=.git' a/test/stdin-pgm1.ok b/test/stdin-pgm1.ok
+--- a/test/stdin-pgm1.ok	2026-05-15 09:01:34.087957464 +0200
++++ b/test/stdin-pgm1.ok	2026-05-15 09:02:09.771568182 +0200
+@@ -5,7 +5,6 @@ pgmenhance: 0 0 0 0
+ pgmhist: 0 0 0 0
+ pgmmedian: 0 0 0 0
+ pgmminkowski: 0 0 0 0
+-pgmtexture: 0 0 0 0
+ pgmtopbm -th : 0 0 0 0
+ pgmtoppm rgb:00/00/00 : 0 0 0 0
+ rawtopgm -headerskip 11 3 3 : 0 0 0 0
+diff -urNp '--exclude=.git' a/test/stdin-pgm1.test b/test/stdin-pgm1.test
+--- a/test/stdin-pgm1.test	2026-05-15 09:01:34.097214844 +0200
++++ b/test/stdin-pgm1.test	2026-05-15 09:02:04.135624507 +0200
+@@ -1,6 +1,6 @@
+ #! /bin/sh
+ # This script tests: pgmabel pgmbentley pgmdeshadow pgmenhance pgmhist
+-# This script tests: pgmmedian pgmminkowski pgmtexture pgmtopbm pgmtoppm
++# This script tests: pgmmedian pgmminkowski pgmtopbm pgmtoppm
+ # This script tests: rawtopgm
+ # Also requires: pgmmake
+ 
+@@ -21,7 +21,6 @@ for testprog in  \
+         pgmhist \
+         pgmmedian \
+         pgmminkowski \
+-        pgmtexture \
+         "pgmtopbm -th " \
+         "pgmtoppm rgb:00/00/00 " \
+ 	"rawtopgm -headerskip 11 3 3 "
+diff -urNp '--exclude=.git' a/userguide/directory.html b/userguide/directory.html
+--- a/userguide/directory.html	2026-05-15 09:01:34.113493034 +0200
++++ b/userguide/directory.html	2026-05-15 09:02:11.550549009 +0200
+@@ -1004,9 +1004,6 @@ These all work on the Netpbm formats as
+ <dt><b><a href="pamgetcolor.html">pamgetcolor</a></b>
+ <dd>display the average colors from specified regions in an image
+ 
+-<dt><b><a href="pgmtexture.html">pgmtexture</a></b>
+-<dd>calculate textural features on a PGM image
+-
+ <dt><b><a href="pamsharpness.html">pamsharpness</a></b>
+ <dd>measure the sharpness of an image
+ 
