@@ -19,11 +19,7 @@
 %if 0%{?fedora}
 %global enable_lirc 1
 %endif
-%if 0%{?oreon}
-%global enable_gstreamer 0
-%else
 %global enable_gstreamer 1
-%endif
 
 %global _hardened_build 1
 
