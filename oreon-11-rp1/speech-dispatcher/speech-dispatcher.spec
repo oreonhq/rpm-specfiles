@@ -7,7 +7,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
-%if 0%{?rhel} > 9
+%if 0%{?rhel} > 9 || 0%{?oreon}
 %global festival_backend 0
 %else
 %global festival_backend 1
