@@ -1,0 +1,37 @@
+diff -rupN --no-dereference geos-3.15.0/include/geos/algorithm/distance/DiscreteHausdorffDistance.h geos-3.15.0-new/include/geos/algorithm/distance/DiscreteHausdorffDistance.h
+--- geos-3.15.0/include/geos/algorithm/distance/DiscreteHausdorffDistance.h	2026-09-01 15:37:08.000000000 +0200
++++ geos-3.15.0-new/include/geos/algorithm/distance/DiscreteHausdorffDistance.h	2026-09-03 10:49:38.701308435 +0200
+@@ -144,13 +144,7 @@ public:
+         {}
+ 
+         void
+-        filter_ro(const geom::CoordinateXY* pt) override
+-        {
+-            minPtDist.initialize();
+-            DistanceToPoint::computeDistance(geom, *pt,
+-                                             minPtDist);
+-            maxPtDist.setMaximum(minPtDist);
+-        }
++        filter_ro(const geom::CoordinateXY* pt) override;
+ 
+         const PointPairDistance&
+         getMaxPointDistance() const
+diff -rupN --no-dereference geos-3.15.0/src/algorithm/distance/DiscreteHausdorffDistance.cpp geos-3.15.0-new/src/algorithm/distance/DiscreteHausdorffDistance.cpp
+--- geos-3.15.0/src/algorithm/distance/DiscreteHausdorffDistance.cpp	2026-09-01 15:37:08.000000000 +0200
++++ geos-3.15.0-new/src/algorithm/distance/DiscreteHausdorffDistance.cpp	2026-09-03 10:49:38.702637991 +0200
+@@ -32,6 +32,15 @@ namespace algorithm { // geos.algorithm
+ namespace distance { // geos.algorithm.distance
+ 
+ void
++DiscreteHausdorffDistance::MaxPointDistanceFilter::filter_ro(const geom::CoordinateXY* pt)
++{
++    minPtDist.initialize();
++    DistanceToPoint::computeDistance(geom, *pt,
++                                        minPtDist);
++    maxPtDist.setMaximum(minPtDist);
++}
++
++void
+ DiscreteHausdorffDistance::MaxDensifiedByFractionDistanceFilter::filter_ro(
+     const geom::CoordinateSequence& seq, std::size_t index)
+ {
