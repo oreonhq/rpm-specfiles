@@ -53,3 +53,5 @@ __pycache__/
 !oreon-11-rp1/mtdev/mtdev-1.1.6.tar.bz2
 !oreon-11-rp1/assimp/assimp-6.0.6-free.tar.xz
 !oreon-11-rp1/openexr/tests.zip
+!oreon-11-rp1/jpegxl/testdata-0.11.2.tar.gz
+!oreon-11-rp1/jpegxl/third_party-0.11.2.tar.gz
