@@ -1,0 +1,42 @@
+diff -up babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt_error.i.hpp.swig45 babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt_error.i.hpp
+--- babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt_error.i.hpp.swig45	2026-07-27 17:08:20.369540786 +0200
++++ babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt_error.i.hpp	2026-07-27 17:08:20.373384418 +0200
+@@ -19,7 +19,7 @@ static PyObject *bt_bt2_format_bt_error_
+                               BT_COMMON_COLOR_WHEN_NEVER);
+     BT_ASSERT(error_cause_str);
+ 
+-    py_error_cause_str = PyString_FromString(error_cause_str);
++    py_error_cause_str = PyUnicode_FromString(error_cause_str);
+ 
+     g_free(error_cause_str);
+ 
+@@ -35,7 +35,7 @@ static PyObject *bt_bt2_format_bt_error(
+                                 BT_COMMON_COLOR_WHEN_NEVER);
+     BT_ASSERT(error_str);
+ 
+-    py_error_str = PyString_FromString(error_str);
++    py_error_str = PyUnicode_FromString(error_str);
+ 
+     g_free(error_str);
+ 
+diff -up babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt.i.swig45 babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt.i
+--- babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt.i.swig45	2026-07-27 17:08:20.368540764 +0200
++++ babeltrace2-2.1.2/src/bindings/python/bt2/bt2/native_bt.i	2026-07-27 17:08:20.372876381 +0200
+@@ -62,7 +62,7 @@ typedef uint64_t bt_listener_id;
+  *
+  * We initialize the output parameter `temp_value` to an invalid but non-zero
+  * pointer value.  This is to make sure we don't rely on its initial value in
+- * the epilogue (where we call SWIG_Python_str_FromChar).  When they fail,
++ * the epilogue (where we call PyUnicode_FromString).  When they fail,
+  * functions on which we apply this typemap don't guarantee that the value of
+  * `temp_value` will be unchanged or valid.
+  */
+@@ -73,7 +73,7 @@ typedef uint64_t bt_listener_id;
+ %typemap(argout) (const char **) {
+ 	if (*$1) {
+ 		/* SWIG_AppendOutput() steals the created object */
+-		$result = SWIG_AppendOutput($result, SWIG_Python_str_FromChar(*$1));
++		$result = SWIG_AppendOutput($result, PyUnicode_FromString(*$1));
+ 	} else {
+ 		/* SWIG_AppendOutput() steals Py_None */
+ 		Py_INCREF(Py_None);

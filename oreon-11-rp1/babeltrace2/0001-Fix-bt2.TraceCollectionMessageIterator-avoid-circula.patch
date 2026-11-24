@@ -1,0 +1,213 @@
+From 1ee7d592a3d4ea525f221be43301e2fed9807d45 Mon Sep 17 00:00:00 2001
+From: Philippe Proulx <eeppeliteloop@gmail.com>
+Date: Tue, 18 Nov 2025 14:40:34 -0500
+Subject: [PATCH 1/3] Fix: bt2.TraceCollectionMessageIterator: avoid circular
+ reference
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+OBSERVED ISSUE
+━━━━━━━━━━━━━━
+A `bt2.TraceCollectionMessageIterator` instance isn't deterministically
+garbage-collected when losing its last reference.
+
+This means the graph and all its components (and their resources,
+including file descriptors) stay alive until a cyclic garbage
+collection occurs.
+
+For example, consider this simple script:
+
+    import os
+    import bt2
+
+    def _event_count(trace_path):
+        msg_iter = bt2.TraceCollectionMessageIterator(trace_path)
+        event_count = 0
+
+        for msg in msg_iter:
+            event_count += isinstance(msg, bt2._EventMessageConst)
+
+        return event_count
+
+    def _main():
+        for i in range(100):
+            print(f"Iteration #{i + 1}")
+
+            fd_count = len(os.listdir(f'/proc/{os.getpid()}/fd'))
+
+            print(f'  {fd_count} FDs')
+            print(f'  {_event_count("/path/to/trace")} event records')
+            print()
+
+    _main()
+
+Result:
+
+    Iteration #1
+      4 FDs
+      64 event records
+
+    Iteration #2
+      7 FDs
+      64 event records
+
+    Iteration #3
+      10 FDs
+      64 event records
+
+    ✂️ ✂️ ✂️
+
+    Iteration #94
+      283 FDs
+      64 event records
+
+    Iteration #95
+      286 FDs
+      64 event records
+
+    Iteration #96
+      7 FDs
+      64 event records
+
+    Iteration #97
+      10 FDs
+      64 event records
+
+    ✂️ ✂️ ✂️
+
+The number of FDs keeps incrementing, until there's a cyclic GC which
+breaks the cycles.
+
+This works here, but add more data stream files and you quickly run into
+some "Too many open files" error.
+
+CAUSE
+━━━━━
+Consider how `bt2.TraceCollectionMessageIterator` (TCMI) works before
+this patch:
+
+1. `bt2.TraceCollectionMessageIterator` creates a `bt2.Graph` instance
+   and stores it as `self._graph`.
+
+2. The TCMI registers itself as a listener:
+
+       self._graph.add_port_added_listener(self._graph_port_added)
+
+3. The graph stores this bound method in `self._listener_partials`.
+
+4. The bound TCMI method (self._graph_port_added()) keeps a reference
+   back to the TCMI instance.
+
+Result:
+
+    ┌──────────────────────────────────────────────────────────────────┐
+    ↓                                                                  │
+    TCMI → `_graph` → `_listener_partials` → self._graph_port_added() ─┘
+
+There's your cycle.
+
+SOLUTION
+━━━━━━━━
+Use a `weakref.WeakMethod` (available since Python 3.4) to wrap
+self._graph_port_added() to break the cycle.
+
+This is also logically safe because we really only need this listener
+during the _build_graph() phase.
+
+Removing the listener would also work, but there's no
+bt2.Graph.remove_port_added_listener() currently.
+
+With this patch:
+
+    Iteration #1
+      4 FDs
+      64 event records
+
+    Iteration #2
+      4 FDs
+      64 event records
+
+    Iteration #3
+      4 FDs
+      64 event records
+
+    ✂️ ✂️ ✂️
+
+    Iteration #98
+      4 FDs
+      64 event records
+
+    Iteration #99
+      4 FDs
+      64 event records
+
+    Iteration #100
+      4 FDs
+      64 event records
+
+KNOWN DRAWBACKS
+━━━━━━━━━━━━━━━
+None.
+
+Signed-off-by: Philippe Proulx <eeppeliteloop@gmail.com>
+Change-Id: Ifa37efe01dd445d53fedd862689bb4e6efc8f244
+Reviewed-on: https://review.lttng.org/c/babeltrace/+/15673
+Reviewed-by: Simon Marchi <simon.marchi@efficios.com>
+Tested-by: jenkins <jenkins@lttng.org>
+Reviewed-on: https://review.lttng.org/c/babeltrace/+/16675
+Reviewed-by: Jérémie Galarneau <jeremie.galarneau@efficios.com>
+CI-Build: Jérémie Galarneau <jeremie.galarneau@efficios.com>
+---
+ .../bt2/trace_collection_message_iterator.py  | 21 ++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/src/bindings/python/bt2/bt2/trace_collection_message_iterator.py b/src/bindings/python/bt2/bt2/trace_collection_message_iterator.py
+index 1d15e50ca..62c9707ed 100644
+--- a/src/bindings/python/bt2/bt2/trace_collection_message_iterator.py
++++ b/src/bindings/python/bt2/bt2/trace_collection_message_iterator.py
+@@ -3,6 +3,7 @@
+ # Copyright (c) 2017 Philippe Proulx <pproulx@efficios.com>
+ 
+ import numbers
++import weakref
+ import datetime
+ import itertools
+ from collections import namedtuple
+@@ -507,6 +508,24 @@ class TraceCollectionMessageIterator(bt2_message_iterator._MessageIterator):
+ 
+         self._graph.connect_ports(port_to_muxer, self._get_free_muxer_input_port())
+ 
++    def _add_port_added_listener(self):
++        # This prevents the circular reference between
++        # `TraceCollectionMessageIterator` and `Graph` that would
++        # otherwise prevent garbage collection due to __del__() methods
++        # in the `_SharedObject` inheritance chain.
++        weak_method = weakref.WeakMethod(self._graph_port_added)
++
++        def port_added_listener(component, port):
++            method = weak_method()
++
++            if method is None:
++                # Object was garbage-collected: nothing to do
++                return
++
++            return method(component, port)
++
++        self._graph.add_port_added_listener(port_added_listener)
++
+     def _graph_port_added(self, component, port):
+         if not self._connect_ports:
+             return
+@@ -550,7 +569,7 @@ class TraceCollectionMessageIterator(bt2_message_iterator._MessageIterator):
+ 
+     def _build_graph(self):
+         self._graph = bt2_graph.Graph(self._get_greatest_operative_mip_version())
+-        self._graph.add_port_added_listener(self._graph_port_added)
++        self._add_port_added_listener()
+         self._muxer_comp = self._create_muxer()
+ 
+         if self._begin_ns is not None or self._end_ns is not None:
+-- 
+2.53.0
+
