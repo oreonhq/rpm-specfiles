@@ -12,7 +12,7 @@
 Summary: Dynamic analysis tools to detect memory or thread bugs and profile
 Name: valgrind
 Version: 3.28.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Epoch: 1
 License: GPL-3.0-or-later AND bzip2-1.0.6 AND (GPL-3.0-or-later AND LGPL-2.0-or-later) AND (GPL-3.0-or-later AND ISC) AND (GPL-3.0-or-later AND Unlicense) AND (GPL-3.0-or-later AND Zlib) AND (GPL-3.0-or-later WITH GCC-exception-2.0) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-3.0-or-later AND BSD-3-Clause) AND (GPL-3.0-or-later AND (MIT OR NCSA)) AND CMU-Mach AND (GPL-3.0-or-later AND X11 AND BSD-3-Clause) AND X11 AND (GPL-2.0-or-later WITH Autoconf-exception-generic) AND (GPL-3.0-or-later WITH Autoconf-exception-generic-3.0) AND FSFULLR AND FSFAP AND FSFUL AND FSFULLRWD
 URL: https://www.valgrind.org/
@@ -28,6 +28,7 @@ Patch4: valgrind-3.26.0-some-Wl-z-now.patch
 Patch5: valgrind-3.28.0-check.patch
 Patch6: valgrind-3.28.0-gdb-fsbase.patch
 Patch7: valgrind-3.28.0-aarch64-skip-broken-regtests.patch
+Patch8: valgrind-3.28.0-varinfo5-clang.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: make
