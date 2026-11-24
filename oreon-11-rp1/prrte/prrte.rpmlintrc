@@ -1,0 +1,7 @@
+# "openpmix" and "prte" are project/product names, not spelling errors.
+addFilter(r"spelling-error .* (openpmix|prte)")
+
+# pcc is a symlink to pmixcc, which is provided by pmix-tools
+# (a Requires of prrte-devel). rpmlint only looks at this package's
+# own file list, so it cannot see that the target is satisfied.
+addFilter(r"dangling-symlink /usr/lib64/openmpi/bin/pcc /usr/bin/pmixcc")

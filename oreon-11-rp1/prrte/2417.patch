@@ -1,0 +1,29 @@
+From 79a3186a6291f5c34502f6345de7ec4df98b6824 Mon Sep 17 00:00:00 2001
+From: Ralph Castain <rhc@pmix.org>
+Date: Sun, 15 Mar 2026 13:05:29 -0600
+Subject: [PATCH] Protect against missing object types
+
+Indicate an object type isn't present by including a '-'
+in for the number of objects of that type in the signature.
+
+Signed-off-by: Ralph Castain <rhc@pmix.org>
+---
+ src/hwloc/hwloc_base_util.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/hwloc/hwloc_base_util.c b/src/hwloc/hwloc_base_util.c
+index 3f904bdc28..9afebbb7dc 100644
+--- a/src/hwloc/hwloc_base_util.c
++++ b/src/hwloc/hwloc_base_util.c
+@@ -1647,6 +1647,11 @@ static char* construct_range(char **vals)
+     int n, cnt;
+     char buf[4096], **ans = NULL, *str;
+ 
++    if (NULL == vals) {
++        str = strdup("-");
++        return str;
++    }
++
+     cnt = 1;
+     for (n=0; NULL != vals[n]; n++) {
+         if (NULL == vals[n+1]) {
