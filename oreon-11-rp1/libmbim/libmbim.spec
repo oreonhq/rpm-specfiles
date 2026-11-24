@@ -1,0 +1,91 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 2671244f03325bf6633a69ae8931be223c32e08beac6b2e147b4b768fe5e4684
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+Name: libmbim
+Version: 1.34.0
+Release: 1%{?dist}
+Summary: Support library for the Mobile Broadband Interface Model protocol
+License: LGPL-2.1-or-later
+URL: https://gitlab.freedesktop.org/mobile-broadband/libmbim/
+Source0:        https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/%{version}/%{name}-%{version}.tar.bz2
+
+BuildRequires: oreon-rpm-macros
+BuildRequires: meson >= 0.53
+BuildRequires: clang
+BuildRequires: glib2-devel >= 2.56
+BuildRequires: gobject-introspection-devel
+BuildRequires: gtk-doc
+BuildRequires: pkgconfig
+BuildRequires: python3
+BuildRequires: help2man
+
+%description
+This package contains the libraries that make it easier to use MBIM
+functionality from applications that use glib.
+
+%package devel
+Summary: Header files for adding MBIM support to applications that use glib
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: glib2-devel%{?_isa}
+Requires: pkgconfig
+
+%description devel
+This package contains the header and pkg-config files for developing
+applications using MBIM functionality from applications that use glib.
+
+%package utils
+Summary: Utilities to use the MBIM protocol from the command line
+Requires: %{name}%{?_isa} = %{version}-%{release}
+License: GPL-2.0-or-later
+
+%description utils
+This package contains the utilities that make it easier to use MBIM
+functionality from the command line.
+
+%prep
+%oreon_sha256
+%autosetup -p1
+
+%build
+%meson -Dgtk_doc=true -Dbash_completion=false
+%meson_build
+
+%install
+%meson_install
+find %{buildroot}%{_datadir}/gtk-doc |xargs touch --reference meson.build
+mkdir -p %{buildroot}%{_datadir}/bash-completion/completions
+cp -a src/mbimcli/mbimcli %{buildroot}%{_datadir}/bash-completion/completions/
+
+%check
+%meson_test
+
+%ldconfig_scriptlets
+
+%files
+%license LICENSES/LGPL-2.1-or-later.txt
+%doc NEWS AUTHORS README.md
+%{_libdir}/libmbim-glib.so.4*
+%{_libdir}/girepository-1.0/Mbim-1.0.typelib
+
+%files devel
+%{_includedir}/libmbim-glib/
+%{_libdir}/pkgconfig/mbim-glib.pc
+%{_libdir}/libmbim-glib.so
+%{_datadir}/gtk-doc/html/libmbim-glib/
+%{_datadir}/gir-1.0/Mbim-1.0.gir
+
+%files utils
+%license LICENSES/GPL-2.0-or-later.txt
+%{_bindir}/mbimcli
+%{_bindir}/mbim-network
+%{_datadir}/bash-completion
+%{_libexecdir}/mbim-proxy
+%{_mandir}/man1/mbim*
+
+%changelog
+%autochangelog

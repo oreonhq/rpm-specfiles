@@ -58,7 +58,7 @@ packages: texlive-base, texlive
 [networking]
 summary: http, ssh, dns names, and the libraries under them
 maintainer: Brandon Lester
-packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2, openldap, cyrus-sasl, libpsl, publicsuffix-list, libidn2, libunistring, rsync, libmicrohttpd, stunnel, bind, unbound, userspace-rcu, iputils, lynx, wireless-regdb, mobile-broadband-provider-info
+packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2, openldap, cyrus-sasl, libpsl, publicsuffix-list, libidn2, libunistring, rsync, libmicrohttpd, stunnel, bind, unbound, userspace-rcu, iputils, lynx, wireless-regdb, mobile-broadband-provider-info, libmbim
 
 [services]
 summary: pid 1, dbus, cron, logging
