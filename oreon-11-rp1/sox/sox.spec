@@ -1,0 +1,152 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 895e81fc7710e5bc02000bf337ef5f90171fa7ebfeb27575f3a2709e2be6329b
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%global forgeurl    https://codeberg.org/sox_ng/sox_ng
+%global commit      6edd3b3ae204908101a8c1bd54903971e0393b4d
+
+Name:           sox
+Version:        14.9.0
+Summary:        Audio processing utility
+License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-only AND BSD-3-Clause AND MIT
+
+%if 0%{?buildtag:1}
+%forgemeta
+%global build_id %{lua:print((rpm.expand("%{buildtag}"):gsub("^%.copr", "")))}
+Release:        %{autorelease}
+%else
+Release:        1%{?dist}
+%forgemeta
+%endif
+
+URL:            %{forgeurl}
+Source0:        %{commit}.tar.gz
+Patch0:         opus-format-security.patch
+Patch1:         sox-fix-curl-argv-overflow.patch
+
+BuildRequires: oreon-rpm-macros
+BuildRequires: clang
+BuildRequires: gcc
+BuildRequires:  bc
+BuildRequires:  make
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  alsa-lib-devel
+BuildRequires:  fftw-devel
+BuildRequires:  file-devel
+BuildRequires:  flac-devel
+BuildRequires:  gsm-devel
+BuildRequires:  ladspa-devel
+BuildRequires:  lame-devel
+BuildRequires:  libao-devel
+BuildRequires:  libebur128-devel
+BuildRequires:  libid3tag-devel
+BuildRequires:  libmad-devel
+BuildRequires:  libpng-devel
+BuildRequires:  libsndfile-devel
+BuildRequires:  libtool-ltdl-devel
+BuildRequires:  libvorbis-devel
+BuildRequires:  libopusenc-devel
+BuildRequires:  opusfile-devel
+BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  speex-devel
+BuildRequires:  speexdsp-devel
+BuildRequires:  twolame-devel
+BuildRequires:  wavpack-devel
+
+%description
+SoX (Sound eXchange) is a command-line audio file format converter and effects
+processor. This package is based on SoX_ng, the actively maintained fork of
+the original SoX codebase. It provides the traditional sox, soxi, play and rec
+command names, as well as the native sox_ng, soxi_ng, play_ng and rec_ng names.
+
+%package devel
+Summary:        Development files for SoX
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Headers, libraries, pkg-config data and manual pages for developing software
+against SoX and SoX_ng.
+
+%prep
+%oreon_sha256
+%forgeautosetup -p1
+
+cp -p libdolbyb/COPYING COPYING.libdolbyb
+cp -p libebur128/COPYING COPYING.libebur128
+
+%build
+autoreconf -fiv
+
+export found_libebur128=yes
+
+%configure \
+    --enable-replace \
+    --disable-static \
+    --with-distro=Fedora \
+    --with-dyn-default \
+    --without-dolbyb \
+    --without-lpc10
+
+%make_build
+
+%install
+%make_install
+
+find %{buildroot} -name '*.la' -delete
+
+%check
+sed -i 's/ ima lpc10 prc/ ima prc/' \
+    test/convert-number-of-channels/run
+
+export LD_LIBRARY_PATH="$PWD/src/.libs:"
+%make_build check
+
+%files
+%license COPYING COPYING.libdolbyb COPYING.libebur128 libgsm/COPYRIGHT
+%doc AUTHORS ChangeLog README.md
+%{_bindir}/play
+%{_bindir}/play_ng
+%{_bindir}/rec
+%{_bindir}/rec_ng
+%{_bindir}/sox
+%{_bindir}/sox_ng
+%{_bindir}/soxi
+%{_bindir}/soxi_ng
+%{_libdir}/libsox_ng.so.*
+%dir %{_libdir}/sox_ng
+%{_libdir}/sox_ng/libsox_ng_fmt_*.so
+%{_mandir}/man1/play.1*
+%{_mandir}/man1/play_ng.1*
+%{_mandir}/man1/rec.1*
+%{_mandir}/man1/rec_ng.1*
+%{_mandir}/man1/sox.1*
+%{_mandir}/man1/sox_ng.1*
+%{_mandir}/man1/soxi.1*
+%{_mandir}/man1/soxi_ng.1*
+%{_mandir}/man7/soxeffect.7*
+%{_mandir}/man7/soxeffect_ng.7*
+%{_mandir}/man7/soxformat.7*
+%{_mandir}/man7/soxformat_ng.7*
+
+%files devel
+%{_includedir}/sox.h
+%{_includedir}/sox_ng.h
+%{_libdir}/libsox.so
+%{_libdir}/libsox_ng.so
+%{_libdir}/pkgconfig/sox.pc
+%{_libdir}/pkgconfig/sox_ng.pc
+%{_mandir}/man3/libsox.3*
+%{_mandir}/man3/libsox_ng.3*
+%{_mandir}/man3/libsoxeffect.3*
+%{_mandir}/man3/libsoxeffect_ng.3*
+%{_mandir}/man3/libsoxformat.3*
+%{_mandir}/man3/libsoxformat_ng.3*
+
+%changelog
+%autochangelog

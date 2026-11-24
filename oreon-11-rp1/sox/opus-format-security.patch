@@ -1,0 +1,23 @@
+From a56fd840ca9a2d88d6c0ff1edcabaebd7ab2869a Mon Sep 17 00:00:00 2001
+From: Sebastian Ramacher <sebastian@ramacher.at>
+Date: Thu, 19 Nov 2026 21:08:15 +0100
+Subject: [PATCH] Fix 'format not a string literal and no format arguments
+ [-Werror=format-security]'
+
+---
+ src/opus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/opus.c b/src/opus.c
+index 78466e35..afa8cf10 100644
+--- a/src/opus.c
++++ b/src/opus.c
+@@ -376,7 +376,7 @@ static size_t write_samples(sox_format_t * ft, const sox_sample_t *buf, size_t l
+     int retval = ope_encoder_write_float(vb->ope, vb->oe_input,
+                                          len / ft->signal.channels);
+     if (retval < 0) {
+-      lsx_fail(ope_strerror(retval));
++      lsx_fail("%s", ope_strerror(retval));
+       return 0;
+     }
+   }

@@ -1,0 +1,8 @@
+diff --git a/src/formats.c b/src/formats.c
+--- a/src/formats.c
++++ b/src/formats.c
+@@ -663,3 +663,3 @@
+-    char * command_argv[8];
++    char * command_argv[9];
+     unsigned i, j;
+ 
