@@ -30,11 +30,7 @@
 %bcond webrtc %[ %{defined fedora} || 0%{?rhel} >= 10 || 0%{?oreon} ]
 %bcond webrtc1 %[ %{with webrtc} && ! (0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon}) ]
 %ifnarch s390x
-%if 0%{?oreon}
-%bcond dc1394 0
-%else
-%bcond dc1394 %{defined fedora}
-%endif
+%bcond dc1394 %[ %{defined fedora} || 0%{?oreon} ]
 %bcond ldac %[ %{defined fedora} || 0%{?oreon} ]
 %endif
 %ifnarch %{ix86} riscv64 s390x
