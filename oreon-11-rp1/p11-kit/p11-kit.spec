@@ -24,6 +24,7 @@ Source3:        trust-extract-compat
 Source4:        p11-kit-client.service
 
 BuildRequires:  gcc
+BuildRequires:  oreon-rpm-macros
 BuildRequires:  libtasn1-devel >= 2.3
 BuildRequires:  libffi-devel
 BuildRequires:  gettext
@@ -51,7 +52,6 @@ BuildRequires:  mingw64-gcc
 BuildRequires:  mingw64-binutils
 BuildRequires:  mingw64-libffi
 BuildRequires:  mingw64-libtasn1
-BuildRequires:  oreon-rpm-macros
 %endif
 
 
