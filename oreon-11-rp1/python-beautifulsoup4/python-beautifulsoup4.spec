@@ -6,7 +6,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
-%if 0%{?rhel} > 11 || 0%{?oreon}
+%if 0%{?rhel} > 11
 %bcond soupsieve 0
 %bcond tests 0
 %else
