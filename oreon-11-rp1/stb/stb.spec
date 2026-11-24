@@ -11,10 +11,10 @@
 
 %bcond stb_include 0
 %bcond stb_image_resize 1
-%bcond stb_sprintf %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el10} ]
-%bcond doc %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el10} ]
-%bcond devel_metapackage %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el10} ]
-%bcond mlpack_arched_dep %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el9} ]
+%bcond stb_sprintf %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el10} || %{defined oreon} ]
+%bcond doc %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el10} || %{defined oreon} ]
+%bcond devel_metapackage %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el10} || %{defined oreon} ]
+%bcond mlpack_arched_dep %[ %{defined fc45} || %{defined fc44} || %{defined fc43} || %{defined el9} || %{defined oreon} ]
 
 Name:           stb
 %global snapinfo ^%{snapdate}.%{sub %{commit} 1 7}
