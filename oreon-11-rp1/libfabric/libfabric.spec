@@ -24,7 +24,6 @@ URL:            https://github.com/ofiwg/libfabric
 Source0:        https://github.com/ofiwg/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
 
 %if %{__remake_config}
-BuildRequires: oreon-rpm-macros
 BuildRequires: clang
 BuildRequires: gcc
 BuildRequires:  automake
@@ -32,6 +31,7 @@ BuildRequires:  autoconf
 BuildRequires:  libtool
 %endif
 BuildRequires:  make
+BuildRequires:  oreon-rpm-macros
 BuildRequires:  libnl3-devel
 %ifnarch %{arm}
 BuildRequires:  libibverbs-devel
