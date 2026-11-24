@@ -1,0 +1,14 @@
+--- vapoursynth-R79/src/core/float16_helper.h	2026-08-07 10:48:01.000000000 +0200
++++ vapoursynth-R79/src/core/float16_helper.h	2026-08-10 11:44:16.851849594 +0200
+@@ -31,7 +31,10 @@
+ // Without hardware support the compiler emits __truncsfhf2 / __extendhfsf2
+ // soft-float builtins, which are not linked under clang-cl + lld-link -- so
+ // there we fall back to explicit bit manipulation instead.
+-#if (defined(__clang__) || defined(__GNUC__)) && (defined(__F16C__) || (!defined(__x86_64__) && !defined(__i386__)))
++// Not every non-x86 target has the type at all: PowerPC has no _Float16, and
++// the compiler rejects it outright. __FLT16_MANT_DIG__ is predefined only
++// where _Float16 is actually available, so test for that as well.
++#if (defined(__clang__) || defined(__GNUC__)) && defined(__FLT16_MANT_DIG__) && (defined(__F16C__) || (!defined(__x86_64__) && !defined(__i386__)))
+ #  define VS_HAVE_NATIVE_FLOAT16 1
+ #else
+ #  define VS_HAVE_NATIVE_FLOAT16 0
