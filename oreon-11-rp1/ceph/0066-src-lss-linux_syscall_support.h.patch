@@ -1,0 +1,21 @@
+--- ceph-21.1.0/src/lss/linux_syscall_support.h.orig	2026-07-21 16:44:58.567709280 -0400
++++ ceph-21.1.0/src/lss/linux_syscall_support.h	2026-07-21 16:46:45.498991029 -0400
+@@ -3461,6 +3461,7 @@
+       LSS_RETURN(int, __ret, __err);
+     }
+   #elif defined(__s390__)
++    #define __NR__socketcall  __NR_socketcall
+     #undef  LSS_REG
+     #define LSS_REG(r, a) register unsigned long __r##r __asm__("r"#r) = (unsigned long) a
+     #undef  LSS_BODY
+--- ceph-21.1.0/CMakeLists.txt.orig	2026-07-22 07:00:30.106561925 -0400
++++ ceph-21.1.0/CMakeLists.txt	2026-07-22 07:01:16.814626456 -0400
+@@ -558,7 +558,7 @@
+ # enable breakpad unless win32 or power
+ # ppc64le port tracked in https://issues.chromium.org/issues/41479970
+ CMAKE_DEPENDENT_OPTION(WITH_BREAKPAD "Build with Google Breakpad crash reporter" ON
+-  "NOT (WIN32 OR CMAKE_SYSTEM_PROCESSOR MATCHES ppc64le)" OFF)
++  "NOT (WIN32 OR CMAKE_SYSTEM_PROCESSOR MATCHES ppc64le OR CMAKE_SYSTEM_PROCESSOR MATCHES s390x)" OFF)
+ if(WITH_BREAKPAD)
+   set(HAVE_BREAKPAD ON)
+   message("-- Enabled Google Breakpad crash reporter")

@@ -1,0 +1,11 @@
+--- ceph-21.2.0/src/CMakeLists.txt.orig	2026-11-10 14:01:11.005483717 -0500
++++ ceph-21.2.0/src/CMakeLists.txt	2026-11-10 14:02:44.222875681 -0500
+@@ -1026,7 +1026,7 @@
+   # Find Protobuf installation
+   # Looks for protobuf-config.cmake file installed by Protobuf's cmake installation.
+   option(protobuf_MODULE_COMPATIBLE TRUE)
+-  find_package(Protobuf REQUIRED)
++  find_package(Protobuf CONFIG REQUIRED)
+ 
+   set(_REFLECTION grpc++_reflection)
+   if(CMAKE_CROSSCOMPILING)

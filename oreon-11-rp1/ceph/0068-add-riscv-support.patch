@@ -1,0 +1,68 @@
+diff -uNr a/src/seastar/include/seastar/core/cacheline.hh b/src/seastar/include/seastar/core/cacheline.hh
+--- a/src/seastar/include/seastar/core/cacheline.hh	2026-03-02 05:59:04.000000000 -0500
++++ b/src/seastar/include/seastar/core/cacheline.hh	2026-08-13 15:55:18.480648218 -0400
+@@ -36,6 +36,8 @@
+     128;
+ #elif defined(__aarch64__)
+     128; // from Linux, may vary among different microarchitetures?
++#elif defined(__riscv)
++    64;
+ #else
+ #error "cache_line_size not defined for this architecture"
+ #endif
+diff -uNr a/src/seastar/include/seastar/core/memory.hh b/src/seastar/include/seastar/core/memory.hh
+--- a/src/seastar/include/seastar/core/memory.hh	2026-03-02 05:59:04.000000000 -0500
++++ b/src/seastar/include/seastar/core/memory.hh	2026-08-13 15:55:18.480759427 -0400
+@@ -137,6 +137,8 @@
+     1 << 21; // 2M
+ #elif defined(__PPC__)
+     1 << 24; // 16M
++#elif defined(__riscv)
++    1 << 21; // 2M
+ #else
+ #error "Huge page size is not defined for this architecture"
+ #endif
+diff -uNr a/src/seastar/include/seastar/util/spinlock.hh b/src/seastar/include/seastar/util/spinlock.hh
+--- a/src/seastar/include/seastar/util/spinlock.hh	2026-03-02 05:59:04.000000000 -0500
++++ b/src/seastar/include/seastar/util/spinlock.hh	2026-08-13 15:55:18.480825251 -0400
+@@ -64,6 +64,16 @@
+     __asm__ volatile("yield");
+ }
+ 
++#elif defined(__riscv)
++
++[[gnu::always_inline]]
++inline void cpu_relax() {
++    // Zihintpause `pause` hint, encoded directly so old assemblers without
++    // Zihintpause support still build. On cores that don't implement the hint
++    // it decodes as a NOP.
++    __asm__ volatile(".int 0x0100000F" : : : "memory");
++}
++
+ #else
+ 
+ [[gnu::always_inline]]
+diff -uNr a/src/seastar/src/core/reactor.cc b/src/seastar/src/core/reactor.cc
+--- a/src/seastar/src/core/reactor.cc	2026-03-02 05:59:04.000000000 -0500
++++ b/src/seastar/src/core/reactor.cc	2026-08-13 15:55:18.481060273 -0400
+@@ -4145,6 +4145,8 @@
+         ip = uc->uc_mcontext.gregs[REG_RIP];
+ #elif defined(__aarch64__)
+         ip = uc->uc_mcontext.pc;
++#elif defined(__riscv)
++        ip = uc->uc_mcontext.__gregs[REG_PC];
+ #else
+         ip = 0xBAD;
+ #endif
+diff -uNr a/src/seastar/src/core/thread.cc b/src/seastar/src/core/thread.cc
+--- a/src/seastar/src/core/thread.cc	2026-03-02 05:59:04.000000000 -0500
++++ b/src/seastar/src/core/thread.cc	2026-08-13 15:55:18.481286589 -0400
+@@ -300,6 +300,8 @@
+     asm(".cfi_undefined x30");
+ #elif defined(__s390x__)
+     asm(".cfi_undefined %r14");
++#elif defined(__riscv)
++    asm(".cfi_undefined ra");
+ #else
+     #warning "Backtracing from seastar threads may be broken"
+ #endif
