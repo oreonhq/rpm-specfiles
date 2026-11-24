@@ -68,7 +68,7 @@ Provides: %{name}%{?_isa} = %{_hdf5_compat_version}
 
 %global with_mpich %{undefined flatpak}
 %if 0%{?oreon}
-%global with_openmpi 0
+%global with_openmpi 1
 %else
 %if 0%{?fedora} >= 40
 %ifarch %{ix86}
