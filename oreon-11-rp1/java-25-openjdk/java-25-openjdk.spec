@@ -1306,7 +1306,7 @@ BuildRequires: desktop-file-utils
 BuildRequires: elfutils-devel
 BuildRequires: gdb
 # for modyfying build-id in clashing binaries
-BuildRequires: /usr/bin/gcc
+BuildRequires: clang
 BuildRequires: /usr/bin/objcopy
 BuildRequires: /usr/bin/readelf
 # Requirement for setting and nss.fips.cfg
@@ -1319,9 +1319,6 @@ BuildRequires: unzip
 BuildRequires: javapackages-filesystem
 # 2025a required as of JDK-8347965
 BuildRequires: tzdata-java >= 2025a
-# Earlier versions have a bug in tree vectorization on PPC
-BuildRequires: gcc >= 4.8.3-8
-
 %if %{with_systemtap}
 BuildRequires: systemtap-sdt-devel
 %endif
@@ -1994,7 +1991,7 @@ for suffix in %{build_loop} ; do
         ls -l $libjsvml
         echo "#include <stdio.h>" > a.c
         echo "int main(void) {  printf(\"$libjsvml\"); }" >> a.c
-        gcc a.c -o exe
+        %{__cc} a.c -o exe
         readelf -n  exe | grep "Build ID"
         readelf -n  $libjsvml | grep "Build ID"
         objcopy --dump-section .note.gnu.build-id=id exe
