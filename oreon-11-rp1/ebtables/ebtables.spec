@@ -23,6 +23,7 @@ BuildRequires:		autoconf
 BuildRequires:		automake
 BuildRequires:		libtool
 BuildRequires:		clang
+BuildRequires:		gcc
 BuildRequires:		make
 
 %description
