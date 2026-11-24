@@ -6,7 +6,7 @@
 
 Name: efi-srpm-macros
 Version: 6
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: SRPM macros for EFI packages
 License: GPL-3.0-or-later
 URL: https://github.com/rhboot/efi-rpm-macros
@@ -18,6 +18,14 @@ BuildRequires: oreon-rpm-macros
 
 %description
 SRPM macros that describe the EFI system partition and vendor directory.
+
+%package -n efi-filesystem
+Summary: The basic directory layout for EFI machines
+Requires: filesystem
+
+%description -n efi-filesystem
+The efi-filesystem package contains the basic directory layout for EFI
+machine bootloaders and tools.
 
 %prep
 %autosetup -n efi-rpm-macros-%{version} -p1
@@ -41,11 +49,20 @@ mkdir -p %{buildroot}%{_rpmmacrodir}
 mkdir -p %{buildroot}%{_rpmconfigdir}
 install -m 644 macros.efi-srpm %{buildroot}%{_rpmmacrodir}/macros.efi-srpm
 install -m 755 brp-boot-efi-times %{buildroot}%{_rpmconfigdir}/brp-boot-efi-times
+install -d -m 0700 %{buildroot}/boot/efi/EFI/BOOT
+install -d -m 0700 %{buildroot}/boot/efi/EFI/oreon
 
 %files
 %license LICENSE
 %{_rpmmacrodir}/macros.efi-srpm
 %{_rpmconfigdir}/brp-boot-efi-times
+
+%files -n efi-filesystem
+%defattr(0700,root,root,-)
+%dir /boot/efi
+%dir /boot/efi/EFI
+%dir /boot/efi/EFI/BOOT
+%dir /boot/efi/EFI/oreon
 
 %changelog
 %autochangelog
