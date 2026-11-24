@@ -27,6 +27,7 @@ Summary:   Build-stage rpm automation for fonts packages
 License:   GPL-3.0-or-later
 URL:       https://docs.fedoraproject.org/en-US/packaging-guidelines/FontsPolicy/
 Source0:   fonts-rpm-macros-%{version}.tar.gz
+BuildRequires:  oreon-rpm-macros
 Patch0:    0001-avoid-assigning-to-const-lua-variable.patch
 
 Requires:  fonts-srpm-macros = %{?epoch:%{epoch}:}%{version}-%{release}
