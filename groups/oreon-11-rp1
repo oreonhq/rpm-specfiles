@@ -23,7 +23,7 @@ packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, 
 [shell-and-users]
 summary: login, shells, core unix tools
 maintainer: Brandon Lester
-packages: bash, bash-completion, coreutils, util-linux, shadow-utils, pam, sudo, acl, attr, cracklib, libpwquality, authselect, console-setup, kbd
+packages: bash, bash-completion, coreutils, util-linux, shadow-utils, pam, sudo, acl, attr, cracklib, libpwquality, authselect, console-setup, kbd, zsh
 
 [compression]
 summary: archives and the libraries that implement them
