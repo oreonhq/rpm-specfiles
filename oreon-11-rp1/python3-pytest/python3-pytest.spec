@@ -5,7 +5,7 @@
 
 Name: python3-pytest
 Version: 9.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: pytest: simple powerful testing with Python
 License: MIT
 URL: https://pypi.org/project/pytest/
@@ -14,7 +14,7 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
-Provides: python3dist(pytest) = %{version}
+BuildRequires: python3-devel
 BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
