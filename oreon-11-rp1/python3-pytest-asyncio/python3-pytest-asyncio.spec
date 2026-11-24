@@ -9,7 +9,7 @@
 
 Name: python3-pytest-asyncio
 Version: 1.5.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Pytest support for asyncio
 License: Apache-2.0
 URL: https://github.com/pytest-dev/pytest-asyncio
@@ -44,7 +44,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-PYTHONPATH="%{buildroot}%{python3_sitelib}" python3 -m pytest -q
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH="%{buildroot}%{python3_sitelib}" python3 -m pytest -q
 
 %files -f %{_builddir}/%{name}.files
 
