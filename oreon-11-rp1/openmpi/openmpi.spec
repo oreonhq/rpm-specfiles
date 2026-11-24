@@ -91,9 +91,7 @@ Obsoletes:      %{name}-java-devel < %{version}-%{release}
 BuildRequires:  libevent-devel
 BuildRequires:  libfabric-devel
 %ifnarch s390x
-%if ! 0%{?oreon}
 BuildRequires:  papi-devel
-%endif
 %endif
 %if %{with orangefs}
 BuildRequires:  orangefs-devel
