@@ -1,0 +1,3 @@
+# Reference to a similar module
+addFilter("spelling-error \('NoWarnings',")
+addFilter("spelling-error \('nowarnings',")
