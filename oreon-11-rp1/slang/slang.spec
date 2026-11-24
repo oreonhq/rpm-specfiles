@@ -9,7 +9,7 @@
 
 Name: slang
 Version: 2.3.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Shared library for the S-Lang extension language
 License: GPL-2.0-or-later
 URL: https://www.jedsoft.org/slang/
@@ -17,6 +17,7 @@ Source0: https://www.jedsoft.org/releases/slang/slang-%{version}.tar.bz2
 Source1: slang-%{version}.tar.bz2.asc
 Source2: gpgkey-64083373E9E1DE997EBBE7784B82D0B82930237D.gpg
 Patch0: slang-sighuptest.patch
+Patch1: slang-2.3.3-drop-undefined-SLang_Rline_Quit.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
