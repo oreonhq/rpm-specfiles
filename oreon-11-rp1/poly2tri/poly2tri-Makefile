@@ -1,0 +1,36 @@
+CXX = g++
+CFLAGS ?= -O2 -g -pipe -Wall
+
+LIBS = -lGL
+
+INCLUDE = 	-I.
+
+SMOKE_INCLUDE ?= -I.
+SMOKE_LIBDIR ?= .
+SMOKE_LIB ?= libpoly2tri.so.1.0
+
+TARGETS = \
+	common/shapes \
+	sweep/advancing_front \
+	sweep/cdt \
+	sweep/sweep \
+	sweep/sweep_context \
+
+.PHONY: all smoke check clean
+
+all: libpoly2tri.so.1.0
+
+libpoly2tri.so.1.0: $(patsubst %,%.o, $(TARGETS))
+	$(CXX) $(LDFLAGS) -shared -Wl,-soname,libpoly2tri.so.1.0 $^ $(LIBS) -o $@
+
+smoke: smoke.cc libpoly2tri.so.1.0
+	$(CXX) $(CFLAGS) $(LDFLAGS) $(SMOKE_INCLUDE) -o $@ $< $(SMOKE_LIBDIR)/$(SMOKE_LIB)
+
+check: smoke
+	LD_LIBRARY_PATH=$(SMOKE_LIBDIR) ./smoke
+
+%.o: %.cc
+	$(CXX) $(CFLAGS) $(INCLUDE) -c -fPIC $< -o $@
+
+clean:
+	rm -f */*.o libpoly2tri.so* smoke
