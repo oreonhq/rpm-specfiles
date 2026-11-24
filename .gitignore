@@ -47,3 +47,4 @@ __pycache__/
 !oreon-10/**/*.tgz
 !oreon-10/**/*.txz
 !oreon-10/**/*.zip
+!oreon-11-rp1/netpbm/netpbm-11.14.tar.xz
