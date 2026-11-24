@@ -1,0 +1,217 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash f0b3d4eccd683c964ea7df2b929a71c991b3f37c18710431b685948aaef9fec2
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%if 0%{?oreon}
+%bcond_with selinux
+%else
+%bcond_without selinux
+%endif
+%global selinux_variants targeted
+%global selinuxtype targeted
+%global selinux_package_dir %{_datadir}/selinux/packages
+
+%global logdir %{_localstatedir}/log/%{name}
+%global modulename %{name}
+
+Name:           cepces
+Version:        0.5.0
+Release:        %{autorelease}
+Summary:        Certificate Enrollment through CEP/CES
+
+License:        GPL-3.0-or-later
+URL:            https://github.com/openSUSE/%{name}
+Source0:        https://github.com/openSUSE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires: oreon-rpm-macros
+BuildRequires:  python3dist(pytest)
+BuildRequires:  python3dist(pyasn1)
+
+Requires:       python%{python3_pkgversion}-%{name} = %{version}-%{release}
+%if %{with selinux}
+Requires:       (%{name}-selinux if selinux-policy-%{selinuxtype})
+%endif
+
+Recommends:     logrotate
+
+Supplements:    %{name}-certmonger = %{version}-%{release}
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%description
+cepces is an application for enrolling certificates through CEP and CES.
+It requires certmonger to operate.
+
+Only simple deployments using Microsoft Active Directory Certificate Services
+have been tested.
+
+%package -n python%{python3_pkgversion}-%{name}
+Summary:        Python part of %{name}
+Requires:       krb5-libs
+Requires(pre):  krb5-libs
+Requires(post): krb5-libs
+Recommends:     keyutils
+Recommends:     pinentry
+Recommends:     (pinentry-qt6 if plasma-workspace)
+
+%description -n python%{python3_pkgversion}-%{name}
+%{name} is an application for enrolling certificates through CEP and CES.
+This package provides the Python part for CEP and CES interaction.
+
+%package certmonger
+Summary:        certmonger integration for %{name}
+Requires(pre):  %{name} = %{version}-%{release}
+Requires:       certmonger
+
+%description certmonger
+Installing %{name}-certmonger adds %{name} as a CA configuration.
+Uninstall revert the action.
+
+%if %{with selinux}
+%package selinux
+Summary:        SELinux support for %{name}
+
+BuildRequires:  selinux-policy-devel
+
+Requires:       %{name} = %{version}-%{release}
+Requires:       selinux-policy-%{selinuxtype}
+Requires(post): selinux-policy-%{selinuxtype}
+
+%description selinux
+SELinux support for %{name}
+%endif
+
+%package user-enroll
+Summary:        User Certificate Enrollment
+Requires:       python%{python3_pkgversion}-%{name} = %{version}-%{release}
+Requires:       python%{python3_pkgversion}-pyasn1
+
+%description user-enroll
+CLI tools for requesting certificates on demand as a user to get User
+Certificates.
+
+%prep
+%oreon_sha256
+%autosetup -p1
+
+%build
+%pyproject_wheel
+
+%if %{with selinux}
+for SELINUXVARIANT in %{selinux_variants}; do
+    make %{?_smp_mflags} -C selinux clean all
+    mv -v selinux/%{modulename}.pp selinux/%{modulename}-${SELINUXVARIANT}.pp
+done
+%endif
+
+%install
+%pyproject_install
+%pyproject_save_files %{name}
+
+install -d -m0755 %{buildroot}%{logdir}
+
+%if %{with selinux}
+rm -fv selinux-files.txt
+
+for SELINUXVARIANT in %{selinux_variants}; do
+    install -d -m 755 %{buildroot}%{selinux_package_dir}/${SELINUXVARIANT}
+    bzip2 selinux/%{modulename}-${SELINUXVARIANT}.pp
+    MODULE_PATH=%{selinux_package_dir}/${SELINUXVARIANT}/%{modulename}.pp.bz2
+    install -p -m 644 selinux/%{name}-${SELINUXVARIANT}.pp.bz2 \
+      %{buildroot}${MODULE_PATH}
+
+    echo ${MODULE_PATH} >> selinux-files.txt
+done
+%endif
+
+install -d -m 0755 %{buildroot}%{_bindir}
+install -m 0755 bin/cepces-user %{buildroot}%{_bindir}/cepces-user
+install -m 0755 bin/cepces-user-autoenroll %{buildroot}%{_bindir}/cepces-user-autoenroll
+
+install -d -m 0755 %{buildroot}%{_sysconfdir}/%{name}/
+install -m 644  conf/cepces.conf.dist  %{buildroot}%{_sysconfdir}/%{name}/cepces.conf
+install -m 644  conf/logging.conf.dist %{buildroot}%{_sysconfdir}/%{name}/logging.conf
+
+install -d -m 0755 %{buildroot}%{_sysconfdir}/logrotate.d
+cat <<EOF>%{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+/var/log/%{name}/*.log {
+    compress
+    delaycompress
+    missingok
+    rotate 4
+}
+EOF
+
+%check
+%pyproject_check_import
+%pytest
+
+%if %{with selinux}
+%pre selinux
+for SELINUXVARIANT in %{selinux_variants}; do
+    %selinux_relabel_pre -s ${SELINUXVARIANT}
+done
+
+%post selinux
+for SELINUXVARIANT in %{selinux_variants}; do
+    MODULE_PATH=%{selinux_package_dir}/${SELINUXVARIANT}/%{modulename}.pp.bz2
+    %selinux_modules_install -s ${SELINUXVARIANT} ${MODULE_PATH}
+done
+
+%postun selinux
+if [ $1 -eq 0 ]; then
+    for SELINUXVARIANT in %{selinux_variants}; do
+        %selinux_modules_uninstall -s ${SELINUXVARIANT} %{modulename}
+    done
+fi
+
+%posttrans selinux
+for SELINUXVARIANT in %{selinux_variants}; do
+    %selinux_relabel_post -s ${SELINUXVARIANT}
+done
+%endif
+
+%post certmonger
+if [[ "$1" == "1" ]]; then
+    getcert add-ca -c %{name} \
+      -e "%{_libexecdir}/certmonger/%{name}-submit --install" >/dev/null || :
+fi
+
+%preun certmonger
+if [[ "$1" == "0" ]]; then
+    getcert remove-ca -c %{name} >/dev/null || :
+fi
+
+%files
+%doc README.rst
+%dir %{_sysconfdir}/%{name}/
+%config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
+%config(noreplace) %{_sysconfdir}/%{name}/logging.conf
+%attr(0700,-,-) %dir %{logdir}
+%dir %{_sysconfdir}/logrotate.d
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+
+%files -n python%{python3_pkgversion}-%{name} -f %{pyproject_files}
+%license LICENSE
+
+%files certmonger
+%{_libexecdir}/certmonger/%{name}-submit
+
+%if %{with selinux}
+%files selinux -f selinux-files.txt
+%endif
+
+%files user-enroll
+%doc README.rst
+%{_bindir}/cepces-user
+%{_bindir}/cepces-user-autoenroll
+
+%changelog
+%autochangelog
