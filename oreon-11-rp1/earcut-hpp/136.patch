@@ -1,0 +1,29 @@
+From 99cef86716b50e4fe529b6c0aae3e994758848c9 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 9 Sep 2026 07:34:30 +0100
+Subject: [PATCH] Include `type_traits` header for `std::decay`
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Don’t rely on indirect/implicit inclusion via other standard-library
+headers.
+
+This minor omission was originally pointed out by Copilot in
+https://github.com/skogler/mapbox_earcut_python/pull/32.
+---
+ include/mapbox/earcut.hpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/mapbox/earcut.hpp b/include/mapbox/earcut.hpp
+index 84f8bd5..1f8b6da 100644
+--- a/include/mapbox/earcut.hpp
++++ b/include/mapbox/earcut.hpp
+@@ -7,6 +7,7 @@
+ #include <cstdint>
+ #include <limits>
+ #include <memory>
++#include <type_traits>
+ #include <utility>
+ #include <vector>
+ 
