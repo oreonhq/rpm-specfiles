@@ -639,7 +639,8 @@ BuildRequires: desktop-file-utils
 BuildRequires: elfutils-devel
 BuildRequires: file
 BuildRequires: fontconfig-devel
-BuildRequires: gcc >= 4.8.3-8
+BuildRequires: clang
+BuildRequires: llvm
 BuildRequires: gcc-c++
 BuildRequires: libstdc++-static
 BuildRequires: gdb
@@ -1059,6 +1060,7 @@ function buildjdk() {
     --with-lcms=${link_opt} \
     --with-harfbuzz=${link_opt} \
     --with-stdc++lib=${libc_link_opt} \
+    --with-toolchain-type=clang \
     --with-extra-cxxflags="$EXTRA_CPP_FLAGS" \
     --with-extra-cflags="$EXTRA_CFLAGS" \
     --with-extra-ldflags="%{ourldflags}" \
@@ -1280,12 +1282,15 @@ function packagejdk() {
 
 packFullPatchedSources
 
-  GCC=$(which gcc)
+export CC=%{__cc}
+export CXX=%{__cxx}
+export AR=llvm-ar
+export NM=llvm-nm
 
 echo "Building %{SOURCE11}"
 mkdir %{miscinstalloutputdir}
 mkdir %{altjavaoutputdir}
-LD_LIBRARY_PATH="${LIBPATH}" ${GCC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt_java_name} %{SOURCE11}
+LD_LIBRARY_PATH="${LIBPATH}" ${CC} ${EXTRA_CFLAGS} -o %{altjavaoutputdir}/%{alt_java_name} %{SOURCE11}
 
 echo "Building %{newjavaver}-%{buildver}, pre=%{ea_designator}, opt=%{lts_designator}"
 
