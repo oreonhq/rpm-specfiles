@@ -3,12 +3,10 @@
 
 Name:           oreon-rpm-macros
 Version:        1
-Release:        16%{?dist}
+Release:        17%{?dist}
 Summary:        Build macros for Oreon packages
 License:        MIT
 URL:            https://github.com/oreonhq/rpm-specfiles
-
-# %global         source0_hash disabled-for-now
 
 Source0:        macros.oreon
 Source1:        oreon-build
@@ -35,7 +33,6 @@ Requires:       python3
 File lists and dependency generation for Python packages.
 
 %prep
-# echo "%{source0_hash}  %{SOURCE0}" | sha256sum -c -
 
 %build
 :
@@ -44,7 +41,6 @@ File lists and dependency generation for Python packages.
 install -D -p -m 644 %{SOURCE0} %{buildroot}%{_rpmconfigdir}/macros.d/macros.oreon
 install -D -p -m 755 %{SOURCE1} %{buildroot}%{_libexecdir}/oreon-rpm-macros/oreon-build
 install -D -p -m 755 %{SOURCE2} %{buildroot}%{_libexecdir}/oreon-rpm-macros/oreon-gpgverify
-%{_libexecdir}/gpgverify
 ln -s oreon-rpm-macros/oreon-gpgverify %{buildroot}%{_libexecdir}/gpgverify
 install -D -p -m 755 %{SOURCE6} %{buildroot}%{_libexecdir}/oreon-rpm-macros/oreon-bootstrap
 install -D -p -m 755 %{SOURCE3} %{buildroot}%{_libexecdir}/oreon-rpm-macros/oreon-pyfiles
@@ -55,6 +51,7 @@ install -D -p -m 755 %{SOURCE5} %{buildroot}%{_rpmconfigdir}/oreon/oreon-pythond
 %dir %{_libexecdir}/oreon-rpm-macros
 %{_libexecdir}/oreon-rpm-macros/oreon-build
 %{_libexecdir}/oreon-rpm-macros/oreon-gpgverify
+%{_libexecdir}/gpgverify
 %{_libexecdir}/oreon-rpm-macros/oreon-bootstrap
 %{_rpmconfigdir}/macros.d/macros.oreon
 %dir %{_rpmconfigdir}/oreon
