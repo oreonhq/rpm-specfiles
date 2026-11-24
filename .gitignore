@@ -56,3 +56,4 @@ __pycache__/
 !oreon-11-rp1/jpegxl/testdata-0.11.2.tar.gz
 !oreon-11-rp1/jpegxl/third_party-0.11.2.tar.gz
 !oreon-11-rp1/net-tools/net-tools-2.0.20160912git.tar.xz
+!oreon-11-rp1/rust-rav1e/rav1e-0.8.1-vendor.tar.xz
