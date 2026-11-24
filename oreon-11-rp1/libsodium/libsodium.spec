@@ -47,6 +47,7 @@ Source1:        https://download.libsodium.org/libsodium/releases/libsodium-%{ve
 BuildRequires: minisign
 %endif
 BuildRequires: gcc
+BuildRequires:  oreon-rpm-macros
 BuildRequires: make
 
 %if %{with mingw}
@@ -55,7 +56,6 @@ BuildRequires: mingw32-gcc
 
 BuildRequires: mingw64-gcc
 BuildRequires: mingw64-filesystem
-BuildRequires:  oreon-rpm-macros
 %endif
 
 # manage update from 3rd party repository
