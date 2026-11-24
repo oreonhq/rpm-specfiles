@@ -24,9 +24,7 @@ BuildRequires: gcc-c++
 BuildRequires:  meson
 BuildRequires:  glad2
 BuildRequires:  lcms2-devel
-%if ! 0%{?oreon}
 BuildRequires:  libdovi-devel
-%endif
 BuildRequires:  libepoxy-devel
 %if %{with unwind}
 BuildRequires:  libunwind-devel
@@ -70,10 +68,6 @@ developing applications that use %{name}.
 %meson \
  -Dd3d11=disabled \
  -Ddemos=False \
-%if 0%{?oreon}
- -Ddovi=disabled \
- -Dlibdovi=disabled \
-%endif
 %if %{with unwind}
  -Dunwind=enabled
 %else
