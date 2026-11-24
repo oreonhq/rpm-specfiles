@@ -1,0 +1,53 @@
+From 6ca02445937a6a7c930c262d1325ec15fdb0324a Mon Sep 17 00:00:00 2001
+From: Tom Most <twm@freecog.net>
+Date: Thu, 2 Mar 2023 06:22:38 -0800
+Subject: [PATCH] Support the <wbr> element (#395)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Co-authored-by: Łukasz Langa <lukasz@langa.pl>
+
+diff --git a/html5lib/constants.py b/html5lib/constants.py
+index fe3e237c..11184e0d 100644
+--- a/html5lib/constants.py
++++ b/html5lib/constants.py
+@@ -571,7 +571,8 @@
+     "col",
+     "input",
+     "source",
+-    "track"
++    "track",
++    "wbr",
+ ])
+ 
+ cdataElements = frozenset(['title', 'textarea'])
+diff --git a/html5lib/filters/sanitizer.py b/html5lib/filters/sanitizer.py
+index 684f2172..f7ac8d9b 100644
+--- a/html5lib/filters/sanitizer.py
++++ b/html5lib/filters/sanitizer.py
+@@ -129,6 +129,7 @@
+     (namespaces['html'], 'ul'),
+     (namespaces['html'], 'var'),
+     (namespaces['html'], 'video'),
++    (namespaces['html'], 'wbr'),
+     (namespaces['mathml'], 'maction'),
+     (namespaces['mathml'], 'math'),
+     (namespaces['mathml'], 'merror'),
+diff --git a/html5lib/tests/test_sanitizer.py b/html5lib/tests/test_sanitizer.py
+index 9deed6f5..a6cbd798 100644
+--- a/html5lib/tests/test_sanitizer.py
++++ b/html5lib/tests/test_sanitizer.py
+@@ -55,6 +55,12 @@ def test_data_uri_disallowed_type():
+     assert expected == sanitized
+ 
+ 
++def test_wbr_allowed():
++    sanitized = sanitize_html('<wbr>')
++    expected = '<wbr/>'
++    assert expected == sanitized
++
++
+ def param_sanitizer():
+     for ns, tag_name in sanitizer.allowed_elements:
+         if ns != constants.namespaces["html"]:

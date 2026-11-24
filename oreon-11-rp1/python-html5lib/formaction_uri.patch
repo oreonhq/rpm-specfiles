@@ -1,0 +1,24 @@
+From 7443c80ccba8954ba60ae1866bd2f0221b20d07b Mon Sep 17 00:00:00 2001
+From: Lumir Balhar <lbalhar@redhat.com>
+Date: Tue, 16 Jun 2026 11:29:15 +0200
+Subject: [PATCH] Add formaction to attributes with URI
+
+---
+ html5lib/filters/sanitizer.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/html5lib/filters/sanitizer.py b/html5lib/filters/sanitizer.py
+index 92c88cc..adec1f4 100644
+--- a/html5lib/filters/sanitizer.py
++++ b/html5lib/filters/sanitizer.py
+@@ -534,6 +534,7 @@ attr_val_is_uri = frozenset((
+     (None, 'dynsrc'),
+     (None, 'lowsrc'),
+     (None, 'ping'),
++    (None, 'formaction'),
+     (namespaces['xlink'], 'href'),
+     (namespaces['xml'], 'base'),
+ ))
+-- 
+2.54.0
+
