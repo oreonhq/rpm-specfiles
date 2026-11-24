@@ -35,11 +35,7 @@ Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 %global enable_jack 1
 %global enable_portaudio 1
 %endif
-%if 0%{?oreon}
-%global enable_pulse 0
-%else
 %global enable_pulse 1
-%endif
 
 %global _summary %{summary}
 
