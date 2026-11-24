@@ -9,13 +9,14 @@
 Version:        2.15.1
 
 Name:		jansson
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:	C library for encoding, decoding and manipulating JSON data
 
 License:	MIT AND LicenseRef-Oreon-Public-Domain
 URL:		https://github.com/akheron/jansson
 Source0:        https://github.com/akheron/jansson/archive/v%{version}/jansson-%{version}.tar.gz
 Source10:       https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-3.0.4.tar.gz
+Patch0:         jansson-2.15.1-lld-symver.patch
 
 
 BuildRequires:	gcc
