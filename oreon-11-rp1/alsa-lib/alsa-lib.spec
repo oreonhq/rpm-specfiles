@@ -15,7 +15,7 @@
 
 Name:           alsa-lib
 Version:        %{version_alsa_lib}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        The Advanced Linux Sound Architecture (ALSA) library
 License:        LGPL-2.1-or-later
 URL:            https://www.alsa-project.org/
@@ -91,7 +91,6 @@ contains alsa-lib configuration of SoC topology.
 %autosetup -p1
 
 %build
-%define _lto_cflags -flto -ffat-lto-objects -flto-partition=none
 
 autoreconf -vif
 %configure --disable-aload --with-plugindir=%{_libdir}/alsa-lib --disable-alisp
