@@ -1,0 +1,220 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 90e389caad285ca4946461d56d1c115e56bcbb5141d9038050282af91064fbc7
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%global somajor 1
+%if 0%{?oreon}
+%bcond bootstrap 1
+%else
+%bcond bootstrap 0
+%endif
+
+%if 0%{?rhel} && 0%{?rhel} <= 9
+%bcond av1 0
+%else
+%bcond av1 1
+%endif
+
+%if 0%{?rhel} && 0%{?rhel} <= 10
+%bcond pixbuf_loader 1
+%else
+%bcond pixbuf_loader 0
+%endif
+
+Name:           libheif
+Version:        1.23.7
+Release:        %{autorelease}
+Summary:        HEIF and AVIF file format decoder and encoder
+
+License:        LGPL-3.0-or-later and MIT
+URL:            https://github.com/strukturag/libheif
+Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Patch0:         libheif-multilib-plugin-dir.patch
+
+BuildRequires: oreon-rpm-macros
+BuildRequires: clang
+BuildRequires: gcc-c++
+BuildRequires:  cmake
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(aom)
+BuildRequires:  pkgconfig(dav1d)
+BuildRequires:  pkgconfig(libbrotlidec)
+BuildRequires:  pkgconfig(libjpeg)
+BuildRequires:  pkgconfig(libopenjp2)
+BuildRequires:  pkgconfig(libpng)
+BuildRequires:  pkgconfig(libtiff-4)
+BuildRequires:  pkgconfig(openjph) >= 0.18.0
+%if !%{with bootstrap}
+BuildRequires:  pkgconfig(sdl2)
+%endif
+BuildRequires:  pkgconfig(zlib)
+%ifnarch %{ix86}
+BuildRequires:  pkgconfig(openh264)
+%endif
+
+%if %{with av1}
+BuildRequires:  pkgconfig(libsharpyuv)
+BuildRequires:  pkgconfig(rav1e)
+BuildRequires:  pkgconfig(SvtAv1Enc)
+%endif
+
+%if %{without pixbuf_loader}
+Obsoletes:      heif-pixbuf-loader < 1.20.2-5
+%endif
+
+Recommends:     %{name}-ffmpeg%{_isa}
+
+%description
+libheif is an ISO/IEC 23008-12:2017 HEIF and AVIF (AV1 Image File Format)
+file format decoder and encoder.
+
+%files
+%license COPYING
+%doc README.md
+%{_libdir}/%{name}.so.%{somajor}{,.*}
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/%{name}-aomdec.so
+%{_libdir}/%{name}/%{name}-aomenc.so
+%{_libdir}/%{name}/%{name}-dav1d.so
+%{_libdir}/%{name}/%{name}-j2kdec.so
+%{_libdir}/%{name}/%{name}-j2kenc.so
+%{_libdir}/%{name}/%{name}-jpegdec.so
+%{_libdir}/%{name}/%{name}-jpegenc.so
+%{_libdir}/%{name}/%{name}-jphenc.so
+%ifnarch %{ix86}
+%{_libdir}/%{name}/%{name}-openh264dec.so
+%endif
+%if %{with av1}
+%{_libdir}/%{name}/%{name}-rav1e.so
+%{_libdir}/%{name}/%{name}-svtenc.so
+%endif
+
+%if !%{with bootstrap}
+%package        ffmpeg
+Summary:        FFmpeg plugin that enables hardware accelerated decoding of HEIF files
+License:        MIT
+BuildRequires:  pkgconfig(libavcodec)
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Conflicts:      %{name} < 1.23.4-5
+Obsoletes:      %{name} < 1.23.4-5
+
+%description    ffmpeg
+The FFMPEG decoding plugin is an alternative decoder for all HEIF codecs and
+can make use of hardware decoders.
+
+%files ffmpeg
+%{_libdir}/%{name}/%{name}-ffmpegdec.so
+%endif
+
+%if %{with pixbuf_loader}
+%if !%{with bootstrap}
+%package -n     heif-pixbuf-loader
+Summary:        HEIF image loader for GTK+ applications
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       gdk-pixbuf2%{?_isa}
+
+%description -n heif-pixbuf-loader
+This package provides a plugin to load HEIF files in GTK+ applications.
+
+%files -n heif-pixbuf-loader
+%{_libdir}/gdk-pixbuf-2.0/*/loaders/libpixbufloader-heif.so
+%endif
+%endif
+
+%package        tools
+Summary:        Tools for manipulating HEIF files
+License:        MIT
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       shared-mime-info
+
+%description    tools
+This package provides tools for manipulating HEIF files.
+
+%files tools
+%{_bindir}/heif-*
+%{_mandir}/man1/heif-*
+%{_datadir}/thumbnailers/heif.thumbnailer
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+%files devel
+%{_includedir}/%{name}/
+%{_libdir}/cmake/%{name}/
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/%{name}.so
+
+%prep
+%oreon_sha256
+%autosetup -p1
+rm -rf third-party/
+
+%build
+%cmake \
+ -GNinja \
+ -DBUILD_SHARED_LIBS=ON \
+ -DBUILD_TESTING=ON \
+ -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF \
+ -DENABLE_PLUGIN_LOADING=ON \
+ -DPLUGIN_DIRECTORY=%{_libdir}/%{name} \
+ -DWITH_AOM_DECODER=ON \
+ -DWITH_AOM_DECODER_PLUGIN=ON \
+ -DWITH_AOM_ENCODER=ON \
+ -DWITH_AOM_ENCODER_PLUGIN=ON \
+ -DWITH_DAV1D=ON \
+ -DWITH_DAV1D_PLUGIN=ON \
+ -DWITH_EXAMPLES=ON \
+%if !%{with bootstrap}
+ -DWITH_FFMPEG_DECODER=ON \
+ -DWITH_FFMPEG_DECODER_PLUGIN=ON \
+%endif
+ -DWITH_JPEG_DECODER=ON \
+ -DWITH_JPEG_DECODER_PLUGIN=ON \
+ -DWITH_JPEG_ENCODER=ON \
+ -DWITH_JPEG_ENCODER_PLUGIN=ON \
+ -DWITH_LIBSHARPYUV=ON \
+ -DWITH_OpenJPEG_DECODER=ON \
+ -DWITH_OpenJPEG_DECODER_PLUGIN=ON \
+ -DWITH_OpenJPEG_ENCODER=ON \
+ -DWITH_OpenJPEG_ENCODER_PLUGIN=ON \
+ -DWITH_OPENJPH_ENCODER=ON \
+ -DWITH_OPENJPH_ENCODER_PLUGIN=ON \
+%ifnarch %{ix86}
+ -DWITH_OpenH264_DECODER=ON \
+ -DWITH_OpenH264_DECODER_PLUGIN=ON \
+%endif
+%if %{with av1}
+ -DWITH_RAV1E=ON \
+ -DWITH_RAV1E_PLUGIN=ON \
+ -DWITH_SvtEnc=ON \
+ -DWITH_SvtEnc_PLUGIN=ON \
+%endif
+%if %{with bootstrap}
+ -DWITH_EXAMPLE_HEIF_VIEW=OFF \
+%endif
+ -DWITH_UNCOMPRESSED_CODEC=ON \
+%if %{without pixbuf_loader}
+ -DWITH_GDK_PIXBUF=OFF \
+%endif
+ -Wno-dev
+
+%cmake_build
+
+%install
+%cmake_install
+
+%check
+%ctest
+
+%changelog
+%autochangelog
