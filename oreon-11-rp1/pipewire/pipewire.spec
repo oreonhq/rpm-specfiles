@@ -67,7 +67,7 @@
 %endif
 %endif
 
-%if 0%{?oreon} || (0%{?rhel} && 0%{?rhel} < 11) || (0%{?fedora} && 0%{?fedora} < 36) || ("%{_arch}" == "s390x") || ("%{_arch}" == "ppc64le")
+%if (0%{?rhel} && 0%{?rhel} < 11) || (0%{?fedora} && 0%{?fedora} < 36) || ("%{_arch}" == "s390x") || ("%{_arch}" == "ppc64le")
 %bcond_with libcamera_plugin
 %else
 %bcond_without libcamera_plugin
