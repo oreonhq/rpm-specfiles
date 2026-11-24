@@ -1,0 +1,11 @@
+diff -rupN --no-dereference gdal-3.13.3-fedora/CMakeLists.txt gdal-3.13.3-fedora-new/CMakeLists.txt
+--- gdal-3.13.3-fedora/CMakeLists.txt	2026-08-18 11:13:59.000000000 +0200
++++ gdal-3.13.3-fedora-new/CMakeLists.txt	2026-08-21 09:32:49.678909633 +0200
+@@ -1,6 +1,7 @@
+ # CMake4GDAL project is distributed under MIT license. See accompanying file LICENSE.txt.
+ include(cmake/helpers/GdalCMakeMinimumRequired.cmake)
+ cmake_minimum_required(VERSION ${GDAL_CMAKE_VERSION_MIN}...${GDAL_CMAKE_VERSION_MAX})
++cmake_policy(SET CMP0190 OLD)
+ 
+ project(gdal LANGUAGES C CXX)
+ 
