@@ -1,0 +1,81 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 548480f58589a54b72d18833b755b15ffbd567e3187249d74e2e1f8f99f22fb4
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%global tarball_version %(echo %{version} | tr '~' '.')
+
+Name:           adwaita-icon-theme-legacy
+Version:        46.2
+Release:        1%{?dist}
+Summary:        Full-color icons for the Adwaita icon theme
+
+License:        LGPL-3.0-only OR CC-BY-SA-3.0
+URL:            https://gitlab.gnome.org/GNOME/adwaita-icon-theme-legacy
+Source0:        https://download.gnome.org/sources/%{name}/46/%{name}-%{tarball_version}.tar.xz
+BuildArch:      noarch
+
+BuildRequires: oreon-rpm-macros
+BuildRequires:  meson
+BuildRequires:  /usr/bin/gtk-update-icon-cache
+
+Provides:       adwaita-legacy-icon-theme = %{version}-%{release}
+
+%description
+This package contains the full color Adwaita icons for the Adwaita icon theme
+used by the GNOME desktop.
+
+%package        devel
+Summary:        Development files for %{name}
+Requires:       %{name} = %{version}-%{release}
+
+Provides:       adwaita-legacy-icon-theme-devel = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains the pkgconfig file for
+developing applications that use %{name}.
+
+%prep
+%oreon_sha256
+%autosetup -p1 -n %{name}-%{tarball_version}
+
+%build
+%meson
+%meson_build
+
+%install
+%meson_install
+
+rm -rf %{buildroot}%{_licensedir}/adwaita-icon-theme
+
+find %{buildroot} -name ".placeholder" -delete
+find %{buildroot} -name ".empty" -delete
+
+touch %{buildroot}%{_datadir}/icons/AdwaitaLegacy/.icon-theme.cache
+
+%transfiletriggerin -- %{_datadir}/icons/AdwaitaLegacy
+gtk-update-icon-cache --force %{_datadir}/icons/AdwaitaLegacy &>/dev/null || :
+
+%transfiletriggerpostun -- %{_datadir}/icons/AdwaitaLegacy
+gtk-update-icon-cache --force %{_datadir}/icons/AdwaitaLegacy &>/dev/null || :
+
+%files
+%license COPYING*
+%dir %{_datadir}/icons/AdwaitaLegacy/
+%{_datadir}/icons/AdwaitaLegacy/8x8/
+%{_datadir}/icons/AdwaitaLegacy/16x16/
+%{_datadir}/icons/AdwaitaLegacy/22x22/
+%{_datadir}/icons/AdwaitaLegacy/24x24/
+%{_datadir}/icons/AdwaitaLegacy/32x32/
+%{_datadir}/icons/AdwaitaLegacy/48x48/
+%{_datadir}/icons/AdwaitaLegacy/index.theme
+%ghost %{_datadir}/icons/AdwaitaLegacy/.icon-theme.cache
+
+%files devel
+%{_datadir}/pkgconfig/%{name}.pc
+
+%changelog
+%autochangelog
