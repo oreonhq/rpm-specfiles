@@ -3,7 +3,7 @@
 [rpm-and-base]
 summary: the release itself, rpm, and the packages every other spec assumes exist
 maintainer: Brandon Lester
-packages: filesystem, setup, rpm, rpm-sequoia, tree-pkg, chkconfig, oreon-release, oreon-defense, oreon-rpm-config, oreon-rpm-macros, ca-certificates, hwdata, tzdata
+packages: filesystem, setup, rpm, rpm-sequoia, tree-pkg, chkconfig, oreon-release, oreon-defense, oreon-rpm-config, oreon-rpm-macros, ca-certificates, hwdata, tzdata, oreon-logos
 
 [srpm-macros]
 summary: macros imported into other specs. a mistake here breaks the whole tree
