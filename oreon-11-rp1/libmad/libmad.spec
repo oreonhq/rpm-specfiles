@@ -1,0 +1,117 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash e32320a010e3cc00bfa66e0cde523a969313cddfd81e07ec4e3ef06d10ad3fe0
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%if 0%{?oreon}
+%bcond mingw 0
+%else
+%bcond mingw %{undefined rhel}
+%endif
+
+Name:          libmad
+Version:       0.16.5
+Release:        %{autorelease}
+Summary:       MPEG audio decoder library
+License:       GPL-2.0-or-later
+URL:           https://codeberg.org/tenacityteam/libmad
+Source0:       %{url}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+BuildRequires: oreon-rpm-macros
+BuildRequires: clang
+BuildRequires: gcc-c++
+BuildRequires: cmake
+%if %{with mingw}
+BuildRequires:  mingw32-filesystem
+BuildRequires:  mingw32-gcc-c++
+BuildRequires:  mingw32-libtiff
+BuildRequires:  mingw64-filesystem
+BuildRequires:  mingw64-gcc-c++
+BuildRequires:  mingw64-libtiff
+%endif
+
+%description
+MAD is a high-quality MPEG audio decoder. It currently supports MPEG-1
+and the MPEG-2 extension to Lower Sampling Frequencies, as well as the
+so-called MPEG 2.5 format. All three audio layers (Layer I, Layer II,
+and Layer III a.k.a. MP3) are fully implemented.
+
+%package devel
+Summary:       MPEG audio decoder library development files
+Requires:      %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+%{summary}.
+
+%if %{with mingw}
+%package -n mingw32-%{name}
+Summary:       MinGW Windows %{name} library
+BuildArch:     noarch
+
+%description -n mingw32-%{name}
+%{summary}.
+
+%package -n mingw64-%{name}
+Summary:       MinGW Windows %{name} library
+BuildArch:     noarch
+
+%description -n mingw64-%{name}
+%{summary}.
+
+%{?mingw_debug_package}
+%endif
+
+%prep
+%oreon_sha256
+%autosetup -p1 -n %{name}
+
+%build
+%cmake -DOPTIMIZE=ACCURACY
+%cmake_build
+%if %{with mingw}
+%mingw_cmake -DCMAKE_DLL_NAME_WITH_SOVERSION=ON
+%mingw_make_build
+%endif
+
+%install
+%cmake_install
+rm -v %{buildroot}%{_libdir}/libmad.a
+%if %{with mingw}
+%mingw_make_install
+rm -v %{buildroot}{%{mingw32_libdir},%{mingw64_libdir}}/libmad.a
+%mingw_debug_install_post
+%endif
+
+%files
+%doc CHANGES CREDITS README.md TODO
+%license COPYING COPYRIGHT
+%{_libdir}/libmad.so.0{,.*}
+
+%files devel
+%{_libdir}/libmad.so
+%{_libdir}/cmake/mad/
+%{_libdir}/pkgconfig/mad.pc
+%{_includedir}/mad.h
+
+%if %{with mingw}
+%files -n mingw32-%{name}
+%license COPYING COPYRIGHT
+%{mingw32_bindir}/%{name}-0.dll
+%{mingw32_libdir}/%{name}.dll.a
+%{mingw32_libdir}/cmake/mad/
+%{mingw32_libdir}/pkgconfig/mad.pc
+%{mingw32_includedir}/mad.h
+
+%files -n mingw64-%{name}
+%license COPYING COPYRIGHT
+%{mingw64_bindir}/%{name}-0.dll
+%{mingw64_libdir}/%{name}.dll.a
+%{mingw64_libdir}/cmake/mad/
+%{mingw64_libdir}/pkgconfig/mad.pc
+%{mingw64_includedir}/mad.h
+%endif
+
+%changelog
+%autochangelog
