@@ -1,0 +1,11 @@
+--- a/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Any.pm	2026-11-24 02:01:40.495406181 -0800
++++ b/cpan/ExtUtils-MakeMaker/lib/ExtUtils/MM_Any.pm	2026-11-24 02:01:40.511506662 -0800
+@@ -3061,7 +3061,7 @@
+         or die "Failed to opendir '$header_dir' to find header files: $!";
+ 
+     # we need to use a temporary here as the sort in scalar context would have undefined results.
+-    my @perl_headers= sort grep { /\.h\z/ } readdir($dh);
++    my @perl_headers= sort grep { /\.h\z/ && !/\A\./ } readdir($dh);
+ 
+     closedir $dh;
+ 
