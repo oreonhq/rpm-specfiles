@@ -1,0 +1,27 @@
+From 1d91d9cd2f2509ec3d2fd800259046979f5b63e5 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Mon, 19 Oct 2026 12:32:54 +0100
+Subject: [PATCH] Use the full version as the SOVERSION
+
+This assumes that ABI is likely to be broken any time, including in patch
+releases.
+
+If this is a good assumption, then this change fixes
+https://github.com/google/benchmark/issues/2340.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 698e1ff50..f313b5585 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -126,7 +126,7 @@ message(STATUS "Google Benchmark version: ${VERSION}, normalized to ${NORMALIZED
+ 
+ # The version of the libraries
+ set(GENERIC_LIB_VERSION ${NORMALIZED_VERSION})
+-string(SUBSTRING ${NORMALIZED_VERSION} 0 1 GENERIC_LIB_SOVERSION)
++set(GENERIC_LIB_SOVERSION ${NORMALIZED_VERSION})
+ 
+ # Import our CMake modules
+ include(AddCXXCompilerFlag)

@@ -1,0 +1,6 @@
+# Not real spelling errors
+addFilter(r" spelling-error \('(([Mm]icrobenchmark)s?|[Bb]enchmarking)',")
+# There is really no documentation specific to the -devel package
+addFilter(r"^google-benchmark-devel.*: W: no-documentation$")
+# Removed without replacement
+addFilter(r" obsolete-not-provided google-benchmark-doc$")
