@@ -11,11 +11,7 @@
 %else
 %bcond_without gtk2
 %endif
-%if 0%{?oreon}
-%bcond gstreamer 0
-%else
 %bcond gstreamer 1
-%endif
 
 Name: libcanberra
 Version: 0.30
