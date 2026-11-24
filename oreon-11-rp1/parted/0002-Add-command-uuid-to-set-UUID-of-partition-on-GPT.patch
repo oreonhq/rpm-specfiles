@@ -1,0 +1,302 @@
+From 6d64356bf8f26118447f1e0a1c3723d66ab84bdc Mon Sep 17 00:00:00 2001
+From: Arvin Schnell <aschnell@suse.de>
+Date: Tue, 17 Nov 2026 10:50:14 +0100
+Subject: [PATCH 2/4] Add command uuid to set UUID of partition on GPT.
+
+This adds a new libparted function (ped_partition_set_uuid) and UI
+(uuid) to set the UUID of a GPT partition.
+
+NOTE: This changes interactive use since the uuid and units commands
+both start with 'u'. The full command, or unique prefix, needs to be
+used. During non-interactive use the 'u' shorthand is forced to mean
+units in order to maintain backwards compatibility.
+
+Signed-off-by: Brian C. Lane <bcl@redhat.com>
+---
+ doc/C/parted.8           |  4 +++
+ doc/parted.texi          | 20 +++++++++++++
+ include/parted/disk.in.h |  2 ++
+ libparted/disk.c         | 18 +++++++++++
+ libparted/labels/gpt.c   | 20 +++++++++++++
+ parted/command.c         |  2 +-
+ parted/command.h         |  2 +-
+ parted/parted.c          | 65 +++++++++++++++++++++++++++++++++++++++-
+ parted/ui.c              |  3 +-
+ 9 files changed, 132 insertions(+), 4 deletions(-)
+
+diff --git a/doc/C/parted.8 b/doc/C/parted.8
+index e3e73076..42f2d75e 100644
+--- a/doc/C/parted.8
++++ b/doc/C/parted.8
+@@ -138,6 +138,10 @@ On MS-DOS set the type aka. partition id of \fIpartition\fP to
+ \fIid\fP. The \fIid\fP is a value between "0x01" and "0xff". On GPT
+ the type-uuid of \fIpartition\fP to \fIuuid\fP.
+ .TP
++.B uuid \fIpartition\fP \fIuuid\fP
++Set the UUID of \fIpartition\fP to \fIuuid\fP. This will only work if
++the disk label supports it (currently GPT).
++.TP
+ .B disk_set \fIflag\fP \fIstate\fP
+ Change a \fIflag\fP on the disk to \fIstate\fP. A flag can be either "on" or
+ "off".  Some or all of these flags will be available, depending on what disk
+diff --git a/doc/parted.texi b/doc/parted.texi
+index 644705ae..77bef265 100644
+--- a/doc/parted.texi
++++ b/doc/parted.texi
+@@ -469,6 +469,7 @@ GNU Parted provides the following commands:
+ * toggle::
+ * type::
+ * unit::
++* uuid::
+ @end menu
+ 
+ Note that after version 2.4, the following commands were removed:
+@@ -1202,6 +1203,25 @@ Number  Start   End     Size    Type      File system  Flags
+ 
+ @end deffn
+ 
++@node uuid
++@subsection uuid
++@cindex uuid, command description
++@cindex command description, uuid
++
++@deffn Command uuid @var{number} @var{uuid}
++
++Set the UUID of partition @var{number} to @var{uuid}. This will only work
++if the disk label supports it (currently GPT). The @var{uuid} is a
++36-character string in standard UUID format.
++
++Example:
++
++@example
++(parted) @kbd{uuid 1 12345678-abcd-1234-abcd-1234567890ab}
++@end example
++
++@end deffn
++
+ @node Related information
+ @chapter Related information
+ @cindex further reading
+diff --git a/include/parted/disk.in.h b/include/parted/disk.in.h
+index 3c69877b..789ddfb3 100644
+--- a/include/parted/disk.in.h
++++ b/include/parted/disk.in.h
+@@ -267,6 +267,7 @@ struct _PedDiskOps {
+         int (*partition_set_type_uuid) (PedPartition* part, const uint8_t* uuid);
+         uint8_t* (*partition_get_type_uuid) (const PedPartition* part);
+ 
++        int (*partition_set_uuid) (PedPartition* part, const uint8_t* uuid);
+         uint8_t* (*partition_get_uuid) (const PedPartition* part);
+ 
+         int (*partition_align) (PedPartition* part,
+@@ -379,6 +380,7 @@ extern uint8_t ped_partition_get_type_id (const PedPartition* part);
+ extern int ped_partition_set_type_uuid (PedPartition* part, const uint8_t* uuid);
+ extern uint8_t* ped_partition_get_type_uuid (const PedPartition* part);
+ 
++extern int ped_partition_set_uuid (PedPartition* part, const uint8_t* uuid);
+ extern uint8_t* ped_partition_get_uuid (const PedPartition* part);
+ 
+ extern int ped_partition_is_busy (const PedPartition* part);
+diff --git a/libparted/disk.c b/libparted/disk.c
+index 2939a3a4..e0cf3d96 100644
+--- a/libparted/disk.c
++++ b/libparted/disk.c
+@@ -1679,6 +1679,24 @@ ped_partition_get_type_uuid (const PedPartition *part)
+         return part->disk->type->ops->partition_get_type_uuid (part);
+ }
+ 
++/**
++ * Set the part-uuid of the partition \p part. This will only work if the disk label
++ * supports it.
++ */
++int
++ped_partition_set_uuid (PedPartition *part, const uint8_t* uuid)
++{
++        PED_ASSERT (part != NULL);
++        PED_ASSERT (part->disk != NULL);
++        PED_ASSERT (ped_partition_is_active (part));
++
++        if (!_assert_partition_uuid_feature (part->disk->type))
++                return 0;
++
++        PED_ASSERT (part->disk->type->ops->partition_set_uuid != NULL);
++        return part->disk->type->ops->partition_set_uuid (part, uuid);
++}
++
+ /**
+  * Get the uuid of the partition \p part. This will only work if the disk label
+  * supports it.
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index ac40ec82..d63482f5 100644
+--- a/libparted/labels/gpt.c
++++ b/libparted/labels/gpt.c
+@@ -1809,6 +1809,25 @@ gpt_partition_get_type_uuid (const PedPartition *part)
+   return buf;
+ }
+ 
++
++static int
++gpt_partition_set_uuid (PedPartition *part, const uint8_t *uuid)
++{
++  GPTPartitionData *gpt_part_data = part->disk_specific;
++
++  efi_guid_t* part_uuid = &gpt_part_data->uuid;
++  memcpy(part_uuid, uuid, sizeof (efi_guid_t));
++
++  /* part_uuid is always LE, while uint8_t is always kind of BE */
++
++  part_uuid->time_low = PED_SWAP32(part_uuid->time_low);
++  part_uuid->time_mid = PED_SWAP16(part_uuid->time_mid);
++  part_uuid->time_hi_and_version = PED_SWAP16(part_uuid->time_hi_and_version);
++
++  return 1;
++}
++
++
+ static uint8_t*
+ gpt_partition_get_uuid (const PedPartition *part)
+ {
+@@ -1926,6 +1945,7 @@ static PedDiskOps gpt_disk_ops =
+   partition_get_type_id:	NULL,
+   partition_set_type_uuid:	gpt_partition_set_type_uuid,
+   partition_get_type_uuid:	gpt_partition_get_type_uuid,
++  partition_set_uuid:	        gpt_partition_set_uuid,
+   partition_get_uuid:		gpt_partition_get_uuid,
+   disk_set_flag:		gpt_disk_set_flag,
+   disk_get_flag:		gpt_disk_get_flag,
+diff --git a/parted/command.c b/parted/command.c
+index b5fb3994..e7b65246 100644
+--- a/parted/command.c
++++ b/parted/command.c
+@@ -72,7 +72,7 @@ command_register (Command** list, Command* cmd)
+ }
+ 
+ Command*
+-command_get (Command** list, char* name)
++command_get (Command** list, const char* name)
+ {
+ 	int		i;
+ 	int		partial_match = -1;
+diff --git a/parted/command.h b/parted/command.h
+index 966d96d6..3db5985d 100644
+--- a/parted/command.h
++++ b/parted/command.h
+@@ -39,7 +39,7 @@ extern Command* command_create (const StrList* names,
+ extern void command_destroy (Command* cmd);
+ void command_register (Command** list, Command* cmd);
+ 
+-extern Command* command_get (Command** list, char* name);
++extern Command* command_get (Command** list, const char* name);
+ extern StrList* command_get_names (Command** list);
+ extern void command_print_summary (Command* cmd);
+ extern void command_print_help (Command* cmd);
+diff --git a/parted/parted.c b/parted/parted.c
+index 1f639d59..80a45e38 100644
+--- a/parted/parted.c
++++ b/parted/parted.c
+@@ -178,6 +178,7 @@ static const char* device_msg =       N_("DEVICE is usually /dev/hda or /dev/sda
+ static const char* name_msg =         N_("NAME is any word you want\n");
+ static const char* type_msg =         N_("TYPE_ID is a value between 0x01 and 0xff, "
+                 "TYPE_UUID is a UUID\n");
++static const char* uuid_msg =         N_("UUID is a UUID\n");
+ 
+ static const char* copyright_msg = N_(
+ "Copyright (C) 1998 - 2006 Free Software Foundation, Inc.\n"
+@@ -1014,6 +1015,60 @@ error:
+         return 0;
+ }
+ 
++static int
++do_partition_uuid (PedDevice** dev, PedDisk** diskp)
++{
++        if (!*diskp)
++                *diskp = ped_disk_new (*dev);
++        if (!*diskp)
++                goto error;
++
++        if (!ped_disk_type_check_feature((*diskp)->type, PED_DISK_TYPE_PARTITION_UUID)) {
++                ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
++                                     _("%s disk labels do not support partition uuid."),
++                                     (*diskp)->type->name);
++                goto error;
++        }
++
++        PedPartition* part = NULL;
++        if (!command_line_get_partition (_("Partition number?"), *diskp, &part))
++                goto error;
++
++        uint8_t* part_uuid = ped_partition_get_uuid (part);
++        if (!part_uuid)
++                goto error;
++
++        static char buf[UUID_STR_LEN];
++        uuid_unparse_lower (part_uuid, buf);
++        free (part_uuid);
++
++        char* input = command_line_get_word (_("Partition uuid?"), buf, NULL, 0);
++        if (!input)
++                goto error;
++
++        uuid_t tmp;
++        if (uuid_parse (input, tmp) != 0 || uuid_is_null (tmp)) {
++                ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
++                                     _("Invalid uuid."));
++                goto error_free_input;
++        }
++
++        if (!ped_partition_set_uuid (part, tmp))
++                goto error_free_input;
++
++        free (input);
++
++        if (!ped_disk_commit (*diskp))
++                goto error;
++        return 1;
++
++error_free_input:
++        free (input);
++error:
++        return 0;
++}
++
++
+ static char*
+ partition_print_flags (PedPartition const *part)
+ {
+@@ -2512,10 +2567,18 @@ command_register (commands, command_create (
+         str_list_create_unique ("type", _("type"), NULL),
+         do_type,
+         str_list_create (
+-_("type NUMBER TYPE-ID or TYPE-UUID         type set TYPE-ID or TYPE-UUID of partition NUMBER"),
++_("type NUMBER TYPE-ID or TYPE-UUID         set TYPE-ID or TYPE-UUID of partition NUMBER"),
+ NULL),
+         str_list_create (_(number_msg), _(type_msg), NULL), 1));
+ 
++command_register (commands, command_create (
++        str_list_create_unique ("uuid", _("uuid"), NULL),
++        do_partition_uuid,
++        str_list_create (
++_("uuid NUMBER UUID                         set UUID of partition NUMBER"),
++NULL),
++        str_list_create (_(number_msg), _(uuid_msg), NULL), 1));
++
+ command_register (commands, command_create (
+         str_list_create_unique ("unit", _("unit"), NULL),
+         do_unit,
+diff --git a/parted/ui.c b/parted/ui.c
+index 3d491a24..5e7932c1 100644
+--- a/parted/ui.c
++++ b/parted/ui.c
+@@ -1679,7 +1679,8 @@ non_interactive_mode (PedDevice** dev, PedDisk **disk, Command* cmd_list[],
+                 if (!word)
+                         break;
+ 
+-                cmd = command_get (commands, word);
++                /* keep compatibility of abbreviation "u" for "unit" and not "uuid" */
++                cmd = command_get (commands, strcmp (word, "u") == 0 ? "unit" : word);
+                 free (word);
+                 if (!cmd) {
+                         help_msg ();
+-- 
+2.56.1
+

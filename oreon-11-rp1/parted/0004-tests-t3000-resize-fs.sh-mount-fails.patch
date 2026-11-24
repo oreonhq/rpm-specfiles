@@ -1,0 +1,37 @@
+From 35909e6ae55fdfbde03c449a0ca170dda6bbbd3b Mon Sep 17 00:00:00 2001
+From: "Brian C. Lane" <bcl@redhat.com>
+Date: Mon, 16 Nov 2026 16:54:33 -0800
+Subject: [PATCH 4/4] tests: t3000-resize-fs.sh mount fails
+
+Running the test suite on Fedora 45 and the mount after making the fat32
+filesystem fails with:
+
+mount /dev/sdb1 /root/parted/tests/gt-t3000-resize-fs.sh.zUu3/mnt
+mount: /root/parted/tests/gt-t3000-resize-fs.sh.zUu3/mnt: wrong fs type, bad option, bad superblock on /dev/sdb1, missing codepage or helper program, or other error.
+       dmesg(1) may have more information after failed mount system call.
+
+Adding a call to wait_for_dev_to_appear_ fixes it so that it
+consistently passes. I could not see it remove the partition, either in
+udev event monitoring, or adding debugging to the test script, but it
+consistently fails without waiting.
+---
+ tests/t3000-resize-fs.sh | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/tests/t3000-resize-fs.sh b/tests/t3000-resize-fs.sh
+index 00518422..33703da3 100755
+--- a/tests/t3000-resize-fs.sh
++++ b/tests/t3000-resize-fs.sh
+@@ -86,6 +86,9 @@ for fs_type in $FSTYPES; do
+   # create the file system
+   $mkfs_cmd ${dev}1 || fail=1
+ 
++  # Make sure the partition is there
++  wait_for_dev_to_appear_ ${dev}1
++
+   # create 500 deep directory tree with longest name 4000 characters
+   # to catch core dump in libparted/fs/r/fat/count.c flag_traverse_dir()
+   # overflowing 512 byte file_name local buffer.
+-- 
+2.56.1
+

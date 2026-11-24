@@ -1,0 +1,176 @@
+From 75e5c53c8577f62c1d26ed8e32b6d794b37b07a3 Mon Sep 17 00:00:00 2001
+From: Arvin Schnell <aschnell@suse.de>
+Date: Tue, 17 Nov 2026 10:50:15 +0100
+Subject: [PATCH 3/4] tests: Added tests for setting disk and partition uuid
+
+Signed-off-by: Brian C. Lane <bcl@redhat.com>
+---
+ tests/Makefile.am                    |  2 +
+ tests/t0920-uuid-gpt.sh              | 90 ++++++++++++++++++++++++++++
+ tests/t0921-uuid-gpt-reproducible.sh | 44 ++++++++++++++
+ 3 files changed, 136 insertions(+)
+ create mode 100755 tests/t0920-uuid-gpt.sh
+ create mode 100755 tests/t0921-uuid-gpt-reproducible.sh
+
+diff --git a/tests/Makefile.am b/tests/Makefile.am
+index e6bc912a..addcd295 100644
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -44,6 +44,8 @@ TESTS = \
+   t0901-type-gpt-invalid.sh \
+   t0910-type-dos.sh \
+   t0911-type-dos-invalid.sh \
++  t0920-uuid-gpt.sh \
++  t0921-uuid-gpt-reproducible.sh \
+   t1100-busy-label.sh \
+   t1101-busy-partition.sh \
+   t1102-loop-label.sh \
+diff --git a/tests/t0920-uuid-gpt.sh b/tests/t0920-uuid-gpt.sh
+new file mode 100755
+index 00000000..a190b430
+--- /dev/null
++++ b/tests/t0920-uuid-gpt.sh
+@@ -0,0 +1,90 @@
++#!/bin/sh
++
++# Test disk_uuid and uuid commands with GPT label
++
++# Copyright (C) 2026 Free Software Foundation, Inc.
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
++# (at your option) any later version.
++
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++. "${srcdir=.}/init.sh"; path_prepend_ ../parted
++
++require_512_byte_sector_size_
++
++dev=loop-file
++
++# create image
++truncate --size 50MiB "$dev" || fail=1
++
++# create gpt label and one partition
++parted --script "$dev" mklabel gpt > out 2>&1 || fail=1
++parted --script "$dev" mkpart "test1" ext4 10% 20% > out 2>&1 || fail=1
++
++# set disk uuid and partition uuid
++parted --script "$dev" disk_uuid "351df77b-cfce-40fe-8fb2-3fb09ea36b4f" || fail=1
++parted --script "$dev" uuid 1 "f92e01b5-be06-4e95-8957-e97db3be2db1" || fail=1
++
++# print with json format (without replacing UUIDs since they are deterministic)
++parted --script --json "$dev" unit s print > out 2>&1 || fail=1
++
++cat <<EOF > exp || fail=1
++{
++   "disk": {
++      "path": "loop-file",
++      "size": "102400s",
++      "model": "",
++      "transport": "file",
++      "logical-sector-size": 512,
++      "physical-sector-size": 512,
++      "label": "gpt",
++      "uuid": "351df77b-cfce-40fe-8fb2-3fb09ea36b4f",
++      "max-partitions": 128,
++      "partitions": [
++         {
++            "number": 1,
++            "start": "10240s",
++            "end": "20479s",
++            "size": "10240s",
++            "type": "primary",
++            "type-uuid": "0fc63daf-8483-4772-8e79-3d69d8477de4",
++            "uuid": "f92e01b5-be06-4e95-8957-e97db3be2db1",
++            "name": "test1"
++         }
++      ]
++   }
++}
++EOF
++
++# remove full path of device from actual output
++mv out o2 && sed "s,\"/.*/$dev\",\"$dev\"," o2 > out || fail=1
++
++# check for expected output
++compare exp out || fail=1
++
++# test invalid UUIDs
++parted --script "$dev" disk_uuid "invalid-uuid" && fail=1
++parted --script "$dev" disk_uuid "00000000-0000-0000-0000-000000000000" && fail=1
++parted --script "$dev" uuid 1 "invalid-uuid" && fail=1
++parted --script "$dev" uuid 1 "00000000-0000-0000-0000-000000000000" && fail=1
++
++# test non-existent partition
++parted --script "$dev" uuid 2 "704cee3d-3d76-4450-8ed7-3b283325a526" && fail=1
++
++# test unsupported label (msdos)
++dev_msdos=loop-msdos
++truncate --size 20MiB "$dev_msdos" || fail=1
++parted --script "$dev_msdos" disk_uuid "67261cd9-da45-437e-a57c-c2250d0a1aa1" && fail=1
++parted --script "$dev_msdos" mklabel msdos mkpart primary ext4 1MiB 5MiB || fail=1
++parted --script "$dev_msdos" uuid 1 "14a812a3-0633-4069-bd19-79eb6f8fe8b1" && fail=1
++
++Exit $fail
+diff --git a/tests/t0921-uuid-gpt-reproducible.sh b/tests/t0921-uuid-gpt-reproducible.sh
+new file mode 100755
+index 00000000..f96c8682
+--- /dev/null
++++ b/tests/t0921-uuid-gpt-reproducible.sh
+@@ -0,0 +1,44 @@
++#!/bin/sh
++
++# Test reproducible GPT creation using disk_uuid and uuid commands
++
++# Copyright (C) 2026 Free Software Foundation, Inc.
++
++# This program is free software; you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation; either version 3 of the License, or
++# (at your option) any later version.
++
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++
++. "${srcdir=.}/init.sh"; path_prepend_ ../parted
++
++require_512_byte_sector_size_
++
++sha256sum --version >/dev/null 2>&1 || skip_ "sha256sum is required for this test"
++
++dev=loop-file
++
++# create zeroed image
++truncate --size 50MiB "$dev" || fail=1
++
++# create gpt label, two partition, and set all UUIDs
++parted --script "$dev" mklabel gpt \
++       disk_uuid "d812fb48-9902-49a1-856a-eee66da8b826" || fail=1
++parted --script "$dev" mkpart "test1" ext4 2048s 10239s \
++       uuid 1 "7b492910-2456-4e62-80aa-0d877df63323" || fail=1
++parted --script "$dev" mkpart "test2" ext4 10240s 20479s \
++       uuid 2 "207d63b5-f9ec-4240-aa00-2fce00656723" || fail=1
++
++# verify exact sha256 checksum for reproducible builds
++sha256sum "$dev" > out || fail=1
++echo "837f295e07a0f0333b142ceb3f6a94d67c7312862615ebd272941c6ad3eb4cdd  $dev" > exp || fail=1
++compare exp out || fail=1
++
++Exit $fail
+-- 
+2.56.1
+

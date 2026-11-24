@@ -1,0 +1,247 @@
+From f62bd31043d359e080db7919f05bcf2fe46b7284 Mon Sep 17 00:00:00 2001
+From: Arvin Schnell <aschnell@suse.de>
+Date: Tue, 17 Nov 2026 10:50:13 +0100
+Subject: [PATCH 1/4] Add command disk_uuid to set UUID of disk on GPT.
+
+This adds a new libparted function (ped_disk_set_uuid) and UI
+(disk_uuid) to set the disk UUID on GPT disklabels.
+
+Signed-off-by: Brian C. Lane <bcl@redhat.com>
+---
+ doc/C/parted.8           |  4 +++
+ doc/parted.texi          | 20 ++++++++++++++
+ include/parted/disk.in.h |  4 +++
+ libparted/disk.c         | 16 +++++++++++
+ libparted/labels/gpt.c   | 20 ++++++++++++++
+ parted/parted.c          | 60 ++++++++++++++++++++++++++++++++++++++++
+ 6 files changed, 124 insertions(+)
+
+diff --git a/doc/C/parted.8 b/doc/C/parted.8
+index 40e6212d..e3e73076 100644
+--- a/doc/C/parted.8
++++ b/doc/C/parted.8
+@@ -147,6 +147,10 @@ boot flag on the GPT's protective MBR partition.
+ .B disk_toggle \fIflag\fP
+ Toggle the state of the disk \fIflag\fP.
+ .TP
++.B disk_uuid \fIuuid\fP
++Set the UUID of the disk to \fIuuid\fP. This will only work if the disk
++label supports it (currently GPT).
++.TP
+ .B version
+ Display version information and a copyright message.
+ .RE
+diff --git a/doc/parted.texi b/doc/parted.texi
+index 10a576bc..644705ae 100644
+--- a/doc/parted.texi
++++ b/doc/parted.texi
+@@ -454,6 +454,7 @@ GNU Parted provides the following commands:
+ * align-check::
+ * disk_set::
+ * disk_toggle::
++* disk_uuid::
+ * help::
+ * mklabel::
+ * mkpart::
+@@ -540,6 +541,25 @@ Set the PMBR's boot flag.
+ Toggle the state of the disk flag.
+ @end deffn
+ 
++@node disk_uuid
++@subsection disk_uuid
++@cindex disk_uuid, command description
++@cindex command description, disk_uuid
++
++@deffn Command disk_uuid @var{uuid}
++
++Set the UUID of the disk to @var{uuid}. This will only work if the disk
++label supports it (currently GPT). The @var{uuid} is a 36-character string in
++standard UUID format.
++
++Example:
++
++@example
++(parted) @kbd{disk_uuid 12345678-abcd-1234-abcd-1234567890ab}
++@end example
++
++@end deffn
++
+ @node help
+ @subsection help
+ @cindex help, command description
+diff --git a/include/parted/disk.in.h b/include/parted/disk.in.h
+index e2ee7cab..3c69877b 100644
+--- a/include/parted/disk.in.h
++++ b/include/parted/disk.in.h
+@@ -231,7 +231,10 @@ struct _PedDiskOps {
+         int (*disk_is_flag_available) (
+                 const PedDisk *disk,
+                 PedDiskFlag flag);
++
++        int (*disk_set_uuid) (PedDisk* disk, const uint8_t* uuid);
+         uint8_t* (*disk_get_uuid) (const PedDisk* disk);
++
+         /** \todo add label guessing op here */
+ 
+         /* partition operations */
+@@ -337,6 +340,7 @@ extern int ped_disk_set_flag(PedDisk *disk, PedDiskFlag flag, int state);
+ extern int ped_disk_get_flag(const PedDisk *disk, PedDiskFlag flag);
+ extern int ped_disk_is_flag_available(const PedDisk *disk, PedDiskFlag flag);
+ 
++extern int ped_disk_set_uuid (PedDisk* disk, const uint8_t* uuid);
+ extern uint8_t* ped_disk_get_uuid (const PedDisk* disk);
+ 
+ extern const char *ped_disk_flag_get_name(PedDiskFlag flag);
+diff --git a/libparted/disk.c b/libparted/disk.c
+index f1da6c44..2939a3a4 100644
+--- a/libparted/disk.c
++++ b/libparted/disk.c
+@@ -906,6 +906,22 @@ _assert_disk_uuid_feature (const PedDiskType* disk_type)
+         return 1;
+ }
+ 
++/**
++ * Set the uuid of the disk \p disk. This will only work if the disk label
++ * supports it.
++ */
++int
++ped_disk_set_uuid (PedDisk *disk, const uint8_t* uuid)
++{
++        PED_ASSERT (disk != NULL);
++
++        if (!_assert_disk_uuid_feature (disk->type))
++                return 0;
++
++        PED_ASSERT (disk->type->ops->disk_set_uuid != NULL);
++        return disk->type->ops->disk_set_uuid (disk, uuid);
++}
++
+ /**
+  * Get the uuid of the disk \p disk. This will only work if the disk label
+  * supports it.
+diff --git a/libparted/labels/gpt.c b/libparted/labels/gpt.c
+index 5a48b9bb..ac40ec82 100644
+--- a/libparted/labels/gpt.c
++++ b/libparted/labels/gpt.c
+@@ -1578,6 +1578,25 @@ gpt_disk_is_flag_available(const PedDisk *disk, PedDiskFlag flag)
+     }
+ }
+ 
++
++static int
++gpt_disk_set_uuid (PedDisk *disk, const uint8_t *uuid)
++{
++  GPTDiskData *gpt_disk_data = disk->disk_specific;
++
++  efi_guid_t* disk_uuid = &gpt_disk_data->uuid;
++  memcpy(disk_uuid, uuid, sizeof (efi_guid_t));
++
++  /* disk_uuid is always LE, while uint8_t is always kind of BE */
++
++  disk_uuid->time_low = PED_SWAP32(disk_uuid->time_low);
++  disk_uuid->time_mid = PED_SWAP16(disk_uuid->time_mid);
++  disk_uuid->time_hi_and_version = PED_SWAP16(disk_uuid->time_hi_and_version);
++
++  return 1;
++}
++
++
+ static uint8_t*
+ gpt_disk_get_uuid (const PedDisk *disk)
+ {
+@@ -1911,6 +1930,7 @@ static PedDiskOps gpt_disk_ops =
+   disk_set_flag:		gpt_disk_set_flag,
+   disk_get_flag:		gpt_disk_get_flag,
+   disk_is_flag_available:	gpt_disk_is_flag_available,
++  disk_set_uuid:		gpt_disk_set_uuid,
+   disk_get_uuid:		gpt_disk_get_uuid,
+ 
+   PT_op_function_initializers (gpt)
+diff --git a/parted/parted.c b/parted/parted.c
+index f86619f7..1f639d59 100644
+--- a/parted/parted.c
++++ b/parted/parted.c
+@@ -161,6 +161,7 @@ static const char* number_msg = N_(
+ static const char* label_type_msg_start = N_("LABEL-TYPE is one of: ");
+ static const char* flag_msg_start =   N_("FLAG is one of: ");
+ static const char* disk_flag_msg_start =   N_("FLAG is one of: ");
++static const char* disk_uuid_msg =    N_("UUID is a UUID\n");
+ static const char* unit_msg_start =   N_("UNIT is one of: ");
+ static const char* min_or_opt_msg = N_("desired alignment: minimum or optimal");
+ static const char* part_type_msg =    N_("PART-TYPE is one of: primary, logical, "
+@@ -2066,6 +2067,57 @@ error:
+   return 0;
+ }
+ 
++
++static int
++do_disk_uuid(PedDevice** dev, PedDisk** diskp)
++{
++        if (!*diskp)
++                *diskp = ped_disk_new (*dev);
++        if (!*diskp)
++                goto error;
++
++        if (!ped_disk_type_check_feature((*diskp)->type, PED_DISK_TYPE_DISK_UUID)) {
++                ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
++                                     _("%s disk labels do not support disk uuid."),
++                                     (*diskp)->type->name);
++                goto error;
++        }
++
++        uint8_t* disk_uuid = ped_disk_get_uuid (*diskp);
++        if (!disk_uuid)
++                goto error;
++
++        static char buf[UUID_STR_LEN];
++        uuid_unparse_lower (disk_uuid, buf);
++        free (disk_uuid);
++
++        char* input = command_line_get_word (_("Disk uuid?"), buf, NULL, 0);
++        if (!input)
++                goto error;
++
++        uuid_t tmp;
++        if (uuid_parse (input, tmp) != 0 || uuid_is_null (tmp)) {
++                ped_exception_throw (PED_EXCEPTION_ERROR, PED_EXCEPTION_CANCEL,
++                                     _("Invalid uuid."));
++                goto error_free_input;
++        }
++
++        if (!ped_disk_set_uuid (*diskp, tmp))
++                goto error_free_input;
++
++        free (input);
++
++        if (!ped_disk_commit (*diskp))
++                goto error;
++        return 1;
++
++error_free_input:
++        free (input);
++error:
++        return 0;
++}
++
++
+ static int
+ do_disk_set (PedDevice** dev, PedDisk** diskp)
+ {
+@@ -2430,6 +2482,14 @@ _("disk_toggle [FLAG]                       toggle the state of FLAG on "
+ NULL),
+         str_list_create (disk_flag_msg, NULL), 1));
+ 
++command_register (commands, command_create (
++        str_list_create_unique ("disk_uuid", _("disk_uuid"), NULL),
++        do_disk_uuid,
++        str_list_create (
++_("disk_uuid UUID                           set UUID of disk"),
++NULL),
++        str_list_create (disk_uuid_msg, NULL), 1));
++
+ command_register (commands, command_create (
+ 		str_list_create_unique ("set", _("set"), NULL),
+ 		do_set,
+-- 
+2.56.1
+
