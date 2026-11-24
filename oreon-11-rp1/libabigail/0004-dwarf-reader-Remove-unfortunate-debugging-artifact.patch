@@ -1,0 +1,47 @@
+From d5fcf4f0c4a05ad4893f6025fa6fceeb232d411c Mon Sep 17 00:00:00 2001
+From: Dodji Seketeli <dodji@seketeli.org>
+Date: Mon, 2 Nov 2026 15:51:57 +0100
+Subject: [PATCH] dwarf-reader: Remove unfortunate debugging artifact
+
+get_translation_unit_die_for_die still has an artifact of a debugging
+session that I forgot to remove.  Oh well.
+
+Removed thus.
+
+	* src/abg-dwarf-reader.cc (get_translation_unit_die_for_die):
+	Remove now useless ancient debugging cruft.
+
+Signed-off-by: Dodji Seketeli <dodji@seketeli.org>
+---
+ src/abg-dwarf-reader.cc | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/src/abg-dwarf-reader.cc b/src/abg-dwarf-reader.cc
+index cb3a2064..136a6682 100644
+--- a/src/abg-dwarf-reader.cc
++++ b/src/abg-dwarf-reader.cc
+@@ -533,21 +533,6 @@ get_translation_unit_die_for_die(const Dwarf_Die* die,
+ 				 Dwarf_Die& cu_die)
+ {
+   ABG_ASSERT(dwarf_diecu(const_cast<Dwarf_Die*>(die), &cu_die, 0, 0));
+-
+-  Dwarf_Die *testing_die = const_cast<Dwarf_Die*>(die);
+-  if (dwarf_dieoffset(testing_die) == 0xf9)
+-    {
+-      if (dwarf_dieoffset(&cu_die) != 0xb)
+-        {
+-          std::cerr << "Got CU DIE offset "
+-		    << std::hex
+-		    <<dwarf_dieoffset(&cu_die)
+-		    << " in lieu of "
+-		    << 0xf9
+-		    << std::endl;
+-          ABG_ASSERT_NOT_REACHED;
+-        }
+-    }
+   return true;
+ }
+ 
+-- 
+2.55.0
+

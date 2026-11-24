@@ -1,0 +1,42 @@
+From cf48c7a3b419363dd6abf552286170b5aef99592 Mon Sep 17 00:00:00 2001
+From: Dodji Seketeli <dodji@seketeli.org>
+Date: Mon, 2 Nov 2026 15:25:32 +0100
+Subject: [PATCH] dwarf-reader: Canonicalize void type
+
+The dwarf-reader is sometimes erroneously using the void type without
+canonicalizing it.  Oops.  Fixed thus.
+
+	* src/abg-dwarf-reader.cc (build_typedef_type, build_var_decl):
+	Use build_ir_node_for_void_type instead of getting the void type
+	directly from the environment.
+
+Signed-off-by: Dodji Seketeli <dodji@seketeli.org>
+---
+ src/abg-dwarf-reader.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/abg-dwarf-reader.cc b/src/abg-dwarf-reader.cc
+index 43d57588..cb3a2064 100644
+--- a/src/abg-dwarf-reader.cc
++++ b/src/abg-dwarf-reader.cc
+@@ -13490,7 +13490,7 @@ build_typedef_type(reader&				rdr,
+       if (!die_die_attribute(die, DW_AT_type, underlying_type_die))
+ 	// A typedef DIE with no underlying type means a typedef to
+ 	// void type.
+-	utype = rdr.env().get_void_type();
++	utype = is_type(build_ir_node_for_void_type(rdr, tu_ctxt));
+ 
+       if (!utype)
+ 	utype =
+@@ -13638,7 +13638,7 @@ build_var_decl(reader&				rdr,
+   die_loc_and_name(die, tu_ctxt, loc, name, linkage_name);
+ 
+   if (!type && result && !result->get_type())
+-    type = rdr.env().get_void_type();
++    type = is_type(build_ir_node_for_void_type(rdr, tu_ctxt));
+ 
+   if (!result)
+     result.reset(new var_decl(name, type, loc, linkage_name));
+-- 
+2.55.0
+

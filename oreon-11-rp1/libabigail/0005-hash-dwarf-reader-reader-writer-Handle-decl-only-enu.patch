@@ -1,0 +1,186 @@
+From e3dd2aeb4aa4744abcfb47e8c8d052b0413b5712 Mon Sep 17 00:00:00 2001
+From: Dodji Seketeli <dodji@seketeli.org>
+Date: Mon, 2 Nov 2026 17:30:26 +0100
+Subject: [PATCH] hash,dwarf-reader,reader,writer: Handle decl-only enums with
+ size
+
+Some DWARVES can express a non-resolved decl-only enum that has size
+information.  In that case, the ABIXML writer forgets to emit the size
+information and only emits the decl-only-ness.  That can lead to
+spurious self-comparison changes related to loss of size information.
+Fixed thus.  The patch also fixes some related issues I came across
+while reading the code.
+
+	* src/abg-dwarf-reader.cc (get_opaque_version_of_type): Set
+	decl-only-ness for opaque enums.
+	* src/abg-hash.cc (enum_type_decl::hash::operator()(const
+	enum_type_decl& t)): Hash the definition of the decl-only enums.
+	* src/abg-reader.cc (build_enum_type_decl): Read size information
+	on decl-only enums.
+	* src/abg-writer.cc (write_common_type_info): Look through
+	decl-only types and emit size information even for decl-only
+	types.
+	* tests/data/test-read-btf/test1.o.abi: Adjust.
+	* tests/data/test-read-dwarf/PR22015-libboost_iostreams.so.abi:
+	Likewise.
+	* tests/data/test-read-dwarf/PR22122-libftdc.so.abi: Likewise.
+	* tests/data/test-read-dwarf/PR27700/test-PR27700.abi: Likewise.
+
+Signed-off-by: Dodji Seketeli <dodji@seketeli.org>
+---
+ src/abg-dwarf-reader.cc                                  | 1 +
+ src/abg-hash.cc                                          | 3 +--
+ src/abg-reader.cc                                        | 9 +++++++++
+ src/abg-writer.cc                                        | 6 ++++--
+ tests/data/test-read-btf/test1.o.abi                     | 4 ++--
+ .../test-read-dwarf/PR22015-libboost_iostreams.so.abi    | 6 +++---
+ tests/data/test-read-dwarf/PR22122-libftdc.so.abi        | 2 +-
+ tests/data/test-read-dwarf/PR27700/test-PR27700.abi      | 2 +-
+ 8 files changed, 22 insertions(+), 11 deletions(-)
+
+diff --git a/src/abg-dwarf-reader.cc b/src/abg-dwarf-reader.cc
+index 136a6682..0add1af7 100644
+--- a/src/abg-dwarf-reader.cc
++++ b/src/abg-dwarf-reader.cc
+@@ -14090,6 +14090,7 @@ get_opaque_version_of_type(reader&				rdr,
+ 							    underlying_type,
+ 							    enumeratorz,
+ 							    linkage_name));
++	  enum_type->set_is_declaration_only(true);
+ 	  enum_type->set_is_artificial(die_is_artificial(type_die));
+ 	  enum_type = is_enum_type(rdr.maybe_associate_die_to_type(type_die,
+ 								   enum_type));
+diff --git a/src/abg-hash.cc b/src/abg-hash.cc
+index a25f0579..1df0f34f 100644
+--- a/src/abg-hash.cc
++++ b/src/abg-hash.cc
+@@ -949,8 +949,7 @@ enum_type_decl::hash::operator()(const enum_type_decl& t) const
+   if (t.get_is_declaration_only() && t.get_definition_of_declaration())
+     {
+       enum_type_decl_sptr e = is_enum_type(t.get_definition_of_declaration());
+-
+-      hash_t v = hash_as_basic_then_ptr_ref_or_typedef_type(e);
++      hash_t v = operator()(*e);
+       return v;
+     }
+ 
+diff --git a/src/abg-reader.cc b/src/abg-reader.cc
+index 9d48142c..475aa8ce 100644
+--- a/src/abg-reader.cc
++++ b/src/abg-reader.cc
+@@ -5817,10 +5817,19 @@ build_enum_type_decl(reader&	rdr,
+       return result;
+     }
+ 
++  size_t size_in_bits = 0, alignment_in_bits = 0;
++  read_size_and_alignment(node, size_in_bits, alignment_in_bits);
++
+   enum_type_decl_sptr t(new enum_type_decl(name, loc,
+ 					   underlying_type,
+ 					   enums, linkage_name));
+ 
++  if (size_in_bits || alignment_in_bits)
++    {
++      t->set_size_in_bits(size_in_bits);
++      t->set_alignment_in_bits(alignment_in_bits);
++    }
++
+   t->set_is_anonymous(is_anonymous);
+   t->set_is_artificial(is_artificial);
+   t->set_is_declaration_only(is_decl_only);
+diff --git a/src/abg-writer.cc b/src/abg-writer.cc
+index b8828c8a..8a0803db 100644
+--- a/src/abg-writer.cc
++++ b/src/abg-writer.cc
+@@ -2179,13 +2179,15 @@ write_common_type_info(const type_base_sptr& t,
+ 		       write_context& ctxt,
+ 		       const string& id)
+ {
+-  decl_base_sptr d = is_decl(t);
++  decl_base_sptr d = look_through_decl_only(is_decl(t));
+ 
+   ostream& o = ctxt.get_ostream();
+ 
+   write_is_non_reachable(t, o);
+ 
+-  if (!d || (d && !d->get_is_declaration_only()))
++  if (!d || (d && (!d->get_is_declaration_only()
++		   || t->get_size_in_bits()
++		   || t->get_alignment_in_bits())))
+     {
+       if (!is_qualified_type(t) && !is_array_type(t))
+ 	write_size_and_alignment(t, o);
+diff --git a/tests/data/test-read-btf/test1.o.abi b/tests/data/test-read-btf/test1.o.abi
+index d4ce4238..6c97ac27 100644
+--- a/tests/data/test-read-btf/test1.o.abi
++++ b/tests/data/test-read-btf/test1.o.abi
+@@ -10,10 +10,10 @@
+       <parameter type-id='type-id-4' name='u'/>
+       <return type-id='type-id-2'/>
+     </function-type>
+-    <class-decl name='S' is-struct='yes' visibility='default' is-declaration-only='yes' hash='0ace7ede05bd13a4' id='type-id-6'/>
++    <class-decl name='S' is-struct='yes' visibility='default' size-in-bits='48' is-declaration-only='yes' hash='0ace7ede05bd13a4' id='type-id-6'/>
+     <typedef-decl name='S' type-id='type-id-6' size-in-bits='48' hash='0ace7ede05bd13a4' id='type-id-1'/>
+     <typedef-decl name='U' type-id='type-id-7' size-in-bits='56' hash='6f9ec0aef70234cb' id='type-id-3'/>
+-    <union-decl name='U' visibility='default' is-declaration-only='yes' hash='6f9ec0aef70234cb' id='type-id-7'/>
++    <union-decl name='U' visibility='default' size-in-bits='56' is-declaration-only='yes' hash='6f9ec0aef70234cb' id='type-id-7'/>
+   </abi-types>
+   <abi-instr address-size='64'>
+       <function-decl name='fn0' type-id='type-id-5' mangled-name='fn0' visibility='default' binding='global' size-in-bits='64' elf-symbol-id='fn0'/>
+diff --git a/tests/data/test-read-dwarf/PR22015-libboost_iostreams.so.abi b/tests/data/test-read-dwarf/PR22015-libboost_iostreams.so.abi
+index 212dc905..50a5f5b3 100644
+--- a/tests/data/test-read-dwarf/PR22015-libboost_iostreams.so.abi
++++ b/tests/data/test-read-dwarf/PR22015-libboost_iostreams.so.abi
+@@ -604,12 +604,12 @@
+     </namespace-decl>
+     <namespace-decl name='std'>
+       <namespace-decl name='__cxx11'>
+-        <class-decl name='basic_string&lt;char,std::char_traits&lt;char&gt;,std::allocator&lt;char&gt;&gt;' visibility='default' is-declaration-only='yes' hash='35ad60ae8262b955' id='type-id-125'/>
++        <class-decl name='basic_string&lt;char,std::char_traits&lt;char&gt;,std::allocator&lt;char&gt;&gt;' visibility='default' size-in-bits='256' is-declaration-only='yes' hash='35ad60ae8262b955' id='type-id-125'/>
+       </namespace-decl>
+     </namespace-decl>
+     <namespace-decl name='std'>
+       <namespace-decl name='__cxx11'>
+-        <class-decl name='basic_string&lt;wchar_t,std::char_traits&lt;wchar_t&gt;,std::allocator&lt;wchar_t&gt;&gt;' visibility='default' is-declaration-only='yes' hash='6e5702fb5aff44b2' id='type-id-126'/>
++        <class-decl name='basic_string&lt;wchar_t,std::char_traits&lt;wchar_t&gt;,std::allocator&lt;wchar_t&gt;&gt;' visibility='default' size-in-bits='256' is-declaration-only='yes' hash='6e5702fb5aff44b2' id='type-id-126'/>
+       </namespace-decl>
+     </namespace-decl>
+     <namespace-decl name='std'>
+@@ -1121,7 +1121,7 @@
+     </namespace-decl>
+     <namespace-decl name='boost'>
+       <namespace-decl name='exception_detail'>
+-        <class-decl name='error_info_container' is-struct='yes' visibility='default' is-declaration-only='yes' hash='601e009fb79edd8d' id='type-id-10'/>
++        <class-decl name='error_info_container' is-struct='yes' visibility='default' size-in-bits='64' is-declaration-only='yes' hash='601e009fb79edd8d' id='type-id-10'/>
+       </namespace-decl>
+     </namespace-decl>
+     <namespace-decl name='boost'>
+diff --git a/tests/data/test-read-dwarf/PR22122-libftdc.so.abi b/tests/data/test-read-dwarf/PR22122-libftdc.so.abi
+index 4c55a340..a2febebc 100644
+--- a/tests/data/test-read-dwarf/PR22122-libftdc.so.abi
++++ b/tests/data/test-read-dwarf/PR22122-libftdc.so.abi
+@@ -328,7 +328,7 @@
+     <type-decl name='char' size-in-bits='8' hash='65b2d157027b431a' id='type-id-29'/>
+     <pointer-type-def type-id='type-id-29' size-in-bits='64' hash='cdcd419d6a95ce45' id='type-id-30'/>
+     <namespace-decl name='mongo'>
+-      <class-decl name='Client' visibility='default' is-declaration-only='yes' hash='7a6018eb0eb115ad' id='type-id-31'/>
++      <class-decl name='Client' visibility='default' size-in-bits='960' is-declaration-only='yes' hash='7a6018eb0eb115ad' id='type-id-31'/>
+     </namespace-decl>
+     <namespace-decl name='std'>
+       <namespace-decl name='__cxx11'>
+diff --git a/tests/data/test-read-dwarf/PR27700/test-PR27700.abi b/tests/data/test-read-dwarf/PR27700/test-PR27700.abi
+index 20639095..c5f502db 100644
+--- a/tests/data/test-read-dwarf/PR27700/test-PR27700.abi
++++ b/tests/data/test-read-dwarf/PR27700/test-PR27700.abi
+@@ -3,7 +3,7 @@
+     <elf-symbol name='foo' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes'/>
+   </elf-function-symbols>
+   <abi-types>
+-    <enum-decl name='foo' size-in-bits='32' alignment-in-bits='32' hash='e8c620d1af7ae9ae' id='022218d8'>
++    <enum-decl name='foo' size-in-bits='32' alignment-in-bits='32' is-declaration-only='yes' hash='e8c620d1af7ae9ae' id='022218d8'>
+       <underlying-type type-id='9cac1fee'/>
+     </enum-decl>
+     <pointer-type-def type-id='022218d8' size-in-bits='64' hash='62a9ec05c7f5eb06' id='8750e847'/>
+-- 
+2.55.0
+

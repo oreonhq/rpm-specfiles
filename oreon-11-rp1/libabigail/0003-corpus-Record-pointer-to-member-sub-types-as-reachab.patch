@@ -1,0 +1,42 @@
+From f682125258c4a464330840c7687e94ada6a900a0 Mon Sep 17 00:00:00 2001
+From: Dodji Seketeli <dodji@seketeli.org>
+Date: Mon, 2 Nov 2026 15:42:25 +0100
+Subject: [PATCH] corpus: Record pointer-to-member sub-types as reachable
+
+It seems like the reachable_types_marker pass forgets to properly
+record sub-types of pointer-to-member types as reachable.  Oops.
+Fixed thus.
+
+	* src/abg-corpus.cc
+	(reachable_types_marker::maybe_record_subtypes_as_reachable):
+	Handle pointer-to-member types.
+
+Signed-off-by: Dodji Seketeli <dodji@seketeli.org>
+---
+ src/abg-corpus.cc | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/abg-corpus.cc b/src/abg-corpus.cc
+index cb796b14..e5e747a3 100644
+--- a/src/abg-corpus.cc
++++ b/src/abg-corpus.cc
+@@ -1189,6 +1189,16 @@ public:
+ 	  if (abi->record_type_as_reachable_from_public_interfaces(*p))
+ 	    maybe_record_subtypes_as_reachable(p.get(), rec_types);
+       }
++    else if (auto ptr = is_ptr_to_mbr_type(examplar_type))
++      {
++	if (auto member_type = ptr->get_member_type())
++	  if (abi->record_type_as_reachable_from_public_interfaces(*member_type))
++	    maybe_record_subtypes_as_reachable(member_type.get(), rec_types);
++
++	if (auto containing_type = ptr->get_containing_type())
++	  if (abi->record_type_as_reachable_from_public_interfaces(*containing_type))
++	    maybe_record_subtypes_as_reachable(containing_type.get(), rec_types);
++      }
+     else if (auto q = is_qualified_type(examplar_type))
+       {
+ 	if (auto u = q->get_underlying_type())
+-- 
+2.55.0
+
