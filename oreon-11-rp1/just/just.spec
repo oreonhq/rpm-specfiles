@@ -43,6 +43,8 @@ tar -xf %{SOURCE1}
 install -D -p -m 755 target/release/just %{buildroot}%{_bindir}/just
 
 %check
+export XDG_RUNTIME_DIR="$(mktemp -d)"
+chmod 700 "$XDG_RUNTIME_DIR"
 %oreon_cargo_test
 
 %files
