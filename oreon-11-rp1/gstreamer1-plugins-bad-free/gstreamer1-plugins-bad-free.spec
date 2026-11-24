@@ -24,7 +24,7 @@
 %else
 %bcond extras %{defined fedora}
 %endif
-%bcond opencv %{defined fedora}
+%bcond opencv %[ %{defined fedora} || 0%{?oreon} ]
 %bcond openh264 %[ %{defined fedora} || 0%{?oreon} ]
 %bcond svtav1 %[ %{defined fedora} || 0%{?oreon} ]
 %bcond webrtc %[ %{defined fedora} || 0%{?rhel} >= 10 || 0%{?oreon} ]
