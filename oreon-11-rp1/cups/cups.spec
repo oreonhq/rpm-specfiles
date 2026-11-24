@@ -12,7 +12,7 @@
 Name:           cups
 Epoch:          1
 Version:        2.4.20
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        CUPS printing system
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://openprinting.github.io/cups/
@@ -166,6 +166,15 @@ systemd-tmpfiles --create %{_tmpfilesdir}/cups.conf 2>/dev/null || :
 
 %ldconfig_scriptlets libs
 
+%post lpd
+%systemd_post cups-lpd.socket
+
+%preun lpd
+%systemd_preun cups-lpd.socket
+
+%postun lpd
+%systemd_postun_with_restart cups-lpd.socket
+
 %files
 %license LICENSE NOTICE
 %doc README.md CHANGES.md CREDITS.md
@@ -178,6 +187,7 @@ systemd-tmpfiles --create %{_tmpfilesdir}/cups.conf 2>/dev/null || :
 %{_unitdir}/cups.service
 %{_unitdir}/cups.socket
 %{_unitdir}/cups.path
+%{_unitdir}/system-cups.slice
 %{_tmpfilesdir}/cups.conf
 %{_bindir}/cancel
 %{_bindir}/cupstestppd
@@ -188,7 +198,17 @@ systemd-tmpfiles --create %{_tmpfilesdir}/cups.conf 2>/dev/null || :
 %{_bindir}/lpr
 %{_bindir}/lprm
 %{_bindir}/lpstat
-%{_sbindir}/*
+%{_sbindir}/cupsaccept
+%{_sbindir}/cupsctl
+%{_sbindir}/cupsd
+%{_sbindir}/cupsdisable
+%{_sbindir}/cupsenable
+%{_sbindir}/cupsfilter
+%{_sbindir}/cupsreject
+%{_sbindir}/lpadmin
+%{_sbindir}/lpc
+%{_sbindir}/lpinfo
+%{_sbindir}/lpmove
 %{cupslibdir}/backend/*
 %{cupslibdir}/cgi-bin
 %{cupslibdir}/command
@@ -264,6 +284,8 @@ systemd-tmpfiles --create %{_tmpfilesdir}/cups.conf 2>/dev/null || :
 %{_mandir}/man1/ppd*.1*
 %{_mandir}/man5/ppdcfile.5*
 %{_mandir}/man7/backend.7*
+%{_mandir}/man7/filter.7*
+%{_mandir}/man7/notifier.7*
 
 %files ipptool
 %{_bindir}/ipptool
