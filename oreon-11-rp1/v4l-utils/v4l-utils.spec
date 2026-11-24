@@ -6,11 +6,7 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
-%if 0%{?oreon}
-%bcond qt 0
-%else
-%bcond qt %[%{undefined rhel} || 0%{?rhel} < 10]
-%endif
+%bcond qt %[%{undefined rhel} || 0%{?rhel} < 10 || 0%{?oreon}]
 
 %define with_dvb 1
 
@@ -35,7 +31,7 @@ BuildRequires:  meson >= 0.56
 BuildRequires:  perl-interpreter
 %if %{with qt}
 BuildRequires:  desktop-file-utils
-%if 0%{?fedora} < 41 || 0%{?rhel}
+%if (0%{?fedora} < 41 || 0%{?rhel}) && !0%{?oreon}
 BuildRequires:  qt5-qtbase-devel
 %else
 BuildRequires:  qt6-qtbase-devel
