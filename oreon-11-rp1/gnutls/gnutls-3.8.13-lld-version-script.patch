@@ -1,0 +1,22 @@
+--- gnutls-3.8.13.orig/m4/ld-version-script.m4
++++ gnutls-3.8.13/m4/ld-version-script.m4
+@@ -40,7 +40,7 @@
+         global: sym;
+ } VERS_1;
+ EOF
+-           AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[]])],
++           AC_LINK_IFELSE([AC_LANG_PROGRAM([[int sym;]], [[]])],
+              [gl_cv_sys_ld_version_script=yes])])
+         rm -f conftest.map
+         LDFLAGS=$saved_LDFLAGS])
+--- gnutls-3.8.13.orig/lib/libgnutls.map
++++ gnutls-3.8.13/lib/libgnutls.map
+@@ -1533,8 +1533,6 @@
+ 	_gnutls_rsa_pms_set_version;
+ 	_gnutls_record_set_default_version;
+ 	_gnutls_hello_set_default_version;
+-	# Internal symbols needed by tests/gc:
+-	_gnutls_pbkdf2_sha1;
+ 	# Internal symbols needed by tests/mpi:
+ 	_gnutls_mpi_ops;
+ 	_gnutls_mpi_log;
