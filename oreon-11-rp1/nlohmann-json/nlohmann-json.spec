@@ -12,7 +12,7 @@
 
 Name:           nlohmann-json
 Version:        3.12.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        JSON for Modern C++
 License:        MIT
 URL:            https://github.com/nlohmann/json
@@ -62,9 +62,7 @@ echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 %doc README.md
 %{_includedir}/nlohmann
 %{_datadir}/cmake/nlohmann_json
-%{_libdir}/cmake/nlohmann_json
 %{_datadir}/pkgconfig/nlohmann_json.pc
-%{_libdir}/pkgconfig/nlohmann_json.pc
 
 %changelog
 %autochangelog
