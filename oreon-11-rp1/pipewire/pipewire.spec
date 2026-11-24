@@ -45,8 +45,8 @@
 %else
 %bcond_without jackserver_plugin
 %if 0%{?oreon}
-%bcond_with libmysofa
-%bcond_with lv2
+%bcond_without libmysofa
+%bcond_without lv2
 %bcond_with roc
 %bcond_with ffado
 %bcond_with onnx
