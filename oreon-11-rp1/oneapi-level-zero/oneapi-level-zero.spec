@@ -1,0 +1,102 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 5856f6ff3ad465f8ea5dc7b7dc4f8b3d436d826f2751f91896d204b638fdc0d9
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+%global srcname level-zero
+%global _lto_cflags %nil
+
+Name:           oneapi-%{srcname}
+Version:        1.34.0
+Release:        %{autorelease}
+Summary:        OneAPI Level Zero Specification Headers and Loader
+
+License:        MIT
+URL:            https://github.com/oneapi-src/%{srcname}
+Source:         %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+
+ExclusiveArch:  x86_64
+
+BuildRequires: oreon-rpm-macros
+BuildRequires:  chrpath
+BuildRequires:  clang
+BuildRequires:  cmake
+BuildRequires:  help2man
+
+Recommends:     %{name}-zello_world
+
+%description
+The objective of the oneAPI Level-Zero Application Programming Interface
+(API) is to provide direct-to-metal interfaces to offload accelerator
+devices. Its programming interface can be tailored to any device needs
+and can be adapted to support broader set of languages features such as
+function pointers, virtual functions, unified memory,
+and I/O capabilities.
+
+%package        devel
+Summary:        The oneAPI Level Zero Specification Headers and Loader development package
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+The %{name}-devel package contains library and header files for
+developing applications that use %{name}.
+
+%package        zello_world
+Summary:        The oneAPI Level Zero quick test package with zello_world binary
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    zello_world
+The %{name}-zello_world package contains a zello_world binary which is capable of a quick test
+of the oneAPI Level-Zero driver and dumping out the basic device and driver characteristics.
+
+%prep
+%oreon_sha256
+%autosetup -p1 -n %{srcname}-%{version}
+
+%build
+%cmake
+%cmake_build
+
+%install
+%cmake_install
+mkdir -p %{buildroot}%{_bindir}/
+install -p -m 755 ./%{_vpath_builddir}/bin/zello_world %{buildroot}%{_bindir}/zello_world
+chrpath --delete %{buildroot}%{_bindir}/zello_world
+
+install -d '%{buildroot}%{_mandir}/man1'
+for cmd in %{buildroot}%{_bindir}/*
+do
+  LD_LIBRARY_PATH='%{buildroot}%{_libdir}' \
+      help2man \
+      --no-info --no-discard-stderr --version-string='%{version}' \
+      --output="%{buildroot}%{_mandir}/man1/$(basename "${cmd}").1" \
+      "${cmd}"
+done
+
+%files
+%license LICENSE
+%doc README.md SECURITY.md
+%{_libdir}/libze_loader.so.%{version}
+%{_libdir}/libze_loader.so.1
+%{_libdir}/libze_validation_layer.so.%{version}
+%{_libdir}/libze_validation_layer.so.1
+%{_libdir}/libze_tracing_layer.so.%{version}
+%{_libdir}/libze_tracing_layer.so.1
+
+%files zello_world
+%{_bindir}/zello_world
+%{_mandir}/man1/zello_world.1.gz
+
+%files devel
+%{_includedir}/level_zero
+%{_libdir}/libze_loader.so
+%{_libdir}/libze_validation_layer.so
+%{_libdir}/libze_tracing_layer.so
+%{_libdir}/pkgconfig/libze_loader.pc
+%{_libdir}/pkgconfig/%{srcname}.pc
+
+%changelog
+%autochangelog
