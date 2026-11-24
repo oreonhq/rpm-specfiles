@@ -1,0 +1,69 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 5057365f847253e0e275871441e10ff7846c8322a5d88e1e187d326de1cd8d00
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+Summary: X.Org X11 libXss runtime library
+Name: libXScrnSaver
+Version: 1.2.5
+Release: 1%{?dist}
+License: X11
+URL: http://www.x.org
+
+Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+
+BuildRequires: oreon-rpm-macros
+BuildRequires: clang
+BuildRequires: make
+BuildRequires: xorg-x11-util-macros
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: pkgconfig
+BuildRequires: xorg-x11-proto-devel
+BuildRequires: libX11-devel
+BuildRequires: libXext-devel
+
+%description
+X.Org X11 libXss runtime library
+
+%package devel
+Summary: X.Org X11 libXScrnSaver development package
+Requires: %{name} = %{version}-%{release}
+
+%description devel
+X.Org X11 libXss development package
+
+%prep
+%oreon_sha256
+%setup -q
+
+%build
+autoreconf -v --install --force
+export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
+%configure --disable-static
+make %{?_smp_mflags}
+
+%install
+make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
+find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
+
+%ldconfig_post
+%ldconfig_postun
+
+%files
+%doc COPYING README.md ChangeLog
+%{_libdir}/libXss.so.1
+%{_libdir}/libXss.so.1.0.0
+
+%files devel
+%{_libdir}/libXss.so
+%{_libdir}/pkgconfig/xscrnsaver.pc
+%{_mandir}/man3/*.3*
+%{_includedir}/X11/extensions/scrnsaver.h
+
+%changelog
+%autochangelog
