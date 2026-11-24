@@ -12,7 +12,7 @@
 Name:           cups
 Epoch:          1
 Version:        2.4.20
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        CUPS printing system
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://openprinting.github.io/cups/
@@ -22,6 +22,7 @@ Source2:        gpgkey-7082A0A50A2E92640F3880E0E4522DCC9B246FF7.gpg
 Source3:        cups-lpd.socket
 Source4:        cups-lpd@.service
 Source5:        cups-tmpfiles.conf
+Patch0:         cups-2.4.20-testhttp-localhost.patch
 
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  gcc

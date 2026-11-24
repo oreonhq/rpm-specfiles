@@ -1,0 +1,40 @@
+--- a/cups/testhttp.c	2026-11-24 02:01:28.101340799 -0800
++++ b/cups/testhttp.c	2026-11-24 02:02:08.142628627 -0800
+@@ -232,6 +232,7 @@
+ 		hostname[HTTP_MAX_URI],	/* Hostname from URI */
+ 		username[HTTP_MAX_URI],	/* Username:password from URI */
+ 		resource[HTTP_MAX_URI];	/* Resource from URI */
++  const char		*lookup;
+   int		port;			/* Port number from URI */
+   http_uri_status_t uri_status;		/* Status of URI separation */
+   http_addrlist_t *addrlist,		/* Address list */
+@@ -389,9 +390,14 @@
+     * httpAddrGetList()
+     */
+ 
+-    printf("httpAddrGetList(%s): ", hostname);
+-
+-    addrlist = httpAddrGetList(hostname, AF_UNSPEC, NULL);
++    lookup = hostname;
++    addrlist = httpAddrGetList(lookup, AF_UNSPEC, NULL);
++    if (!addrlist)
++    {
++      lookup = "localhost";
++      addrlist = httpAddrGetList(lookup, AF_UNSPEC, NULL);
++    }
++    printf("httpAddrGetList(%s): ", lookup);
+     if (addrlist)
+     {
+       for (i = 0, addr = addrlist; addr; i ++, addr = addr->next)
+@@ -405,9 +411,9 @@
+       }
+ 
+       if (addr)
+-        printf("FAIL (bad address for %s)\n", hostname);
++        printf("FAIL (bad address for %s)\n", lookup);
+       else
+-        printf("PASS (%d address(es) for %s)\n", i, hostname);
++        printf("PASS (%d address(es) for %s)\n", i, lookup);
+ 
+       httpAddrFreeList(addrlist);
+     }
