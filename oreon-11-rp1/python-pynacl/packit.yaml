@@ -1,0 +1,17 @@
+
+upstream_project_url: https://github.com/pyca/pynacl
+
+# Upstream tags are v-prefixed (v3.7, v3.6, ...)
+upstream_tag_template: "v{version}"
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+
+  - job: koji_build
+    trigger: commit
+    allowed_pr_authors: ["packit"]
+    dist_git_branches:
+      - fedora-rawhide
