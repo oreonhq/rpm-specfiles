@@ -9,7 +9,7 @@
 
 Name: python3-pytest-mock
 Version: 3.17.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Thin-wrapper around mock for easier use with pytest
 License: MIT
 URL: https://github.com/pytest-dev/pytest-mock/
@@ -24,6 +24,7 @@ BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
 BuildRequires: python3-wheel
 BuildRequires: python3-pytest
+BuildRequires: python3-pytest-asyncio
 
 Requires: python3-pytest
 
