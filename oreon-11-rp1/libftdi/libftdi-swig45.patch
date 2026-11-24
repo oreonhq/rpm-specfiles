@@ -1,0 +1,21 @@
+diff -up libftdi1-1.5/python/ftdi1.i.swig45 libftdi1-1.5/python/ftdi1.i
+--- libftdi1-1.5/python/ftdi1.i.swig45	2026-07-28 09:34:18.344364413 +0200
++++ libftdi1-1.5/python/ftdi1.i	2026-07-28 09:34:18.347364489 +0200
+@@ -91,7 +91,7 @@ char * str2charp_size(PyObject* pyObj, i
+ "read_data(context) -> (return_code, buf)"
+ %enddef
+ %feature("autodoc", ftdi_read_data_docstring) ftdi_read_data;
+-%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyInt_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
++%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyLong_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
+ %typemap(argout,noblock=1) (unsigned char *buf, int size) {
+         if(result<0)
+                 $2=0;
+@@ -136,7 +136,7 @@ char * str2charp_size(PyObject* pyObj, i
+     int ftdi_get_eeprom_value(struct ftdi_context *ftdi, enum ftdi_eeprom_value value_name, int* value);
+ %clear int* value;
+ 
+-%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyInt_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
++%typemap(in,numinputs=1) (unsigned char *buf, int size) %{ $2 = PyLong_AsLong($input);$1 = (unsigned char*)malloc($2*sizeof(char)); %}
+ %typemap(argout,noblock=1) (unsigned char *buf, int size) {
+         if(result<0)
+                 $2=0;
