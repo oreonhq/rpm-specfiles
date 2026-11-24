@@ -1,0 +1,196 @@
+# Copyright (C) 2026 Oreon HQ
+# SPDX-License-Identifier: GPL-2.0-or-later
+
+%global source0_hash 8ad24aa9ff13c0edf3efc2573d90e85cf8b5ce7e82c08042574c1591f9d91eaa
+%global source1_hash 98f45344d1e5b7724b97b3239b46e8f3108789f5d756cb10fde9e1b9aece3657
+%global source2_hash 76fbde2d996f9e38d8f33abf6409b448ae556ad0f226ba7155b103eb7365c19e
+%{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
+%bcond bootstrap 0
+%oreon_bootstrap
+
+Name:          oath-toolkit
+Version:       2.6.15
+Release:       1%{?dist}
+License:       GPL-3.0-or-later
+Summary:       One-time password components
+BuildRequires: oreon-rpm-macros
+BuildRequires: clang
+BuildRequires: make
+BuildRequires: pam-devel
+BuildRequires: gtk-doc
+BuildRequires: libtool
+BuildRequires: libtool-ltdl-devel
+BuildRequires: xmlsec1-devel
+BuildRequires: xmlsec1-openssl-devel
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: openpgpverify
+Source0:       https://download.savannah.nongnu.org/releases/%{name}/%{name}-%{version}.tar.gz
+Source1:       https://download.savannah.nongnu.org/releases/%{name}/%{name}-%{version}.tar.gz.sig
+Source2:       https://keys.openpgp.org/vks/v1/by-fingerprint/B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE#/keyring.asc
+URL:           https://www.nongnu.org/oath-toolkit/
+Patch:        oath-toolkit-2.6.14-lockfile.patch
+
+%description
+The OATH Toolkit provide components for building one-time password
+authentication systems. It contains shared libraries, command line tools and a
+PAM module. Supported technologies include the event-based HOTP algorithm
+(RFC4226) and the time-based TOTP algorithm (RFC6238). OATH stands for Open
+AuTHentication, which is the organization that specify the algorithms. For
+managing secret key files, the Portable Symmetric Key Container (PSKC) format
+described in RFC6030 is supported.
+
+%package -n liboath
+Summary:          Library for OATH handling
+License:          LGPL-2.1-or-later
+Provides:         bundled(gnulib)
+
+%description -n liboath
+OATH stands for Open AuTHentication, which is the organization that
+specify the algorithms. Supported technologies include the event-based
+HOTP algorithm (RFC4226) and the time-based TOTP algorithm (RFC6238).
+
+%package -n liboath-devel
+Summary:  Development files for liboath
+License:  LGPL-2.1-or-later
+Requires: liboath%{?_isa} = %{version}-%{release}
+
+%description -n liboath-devel
+Development files for liboath.
+
+%package -n liboath-doc
+Summary:   Documentation files for liboath
+License:   LGPL-2.1-or-later
+Requires:  liboath = %{version}-%{release}
+Requires:  gtk-doc
+BuildArch: noarch
+
+%description -n liboath-doc
+Documentation files for liboath.
+
+%package -n libpskc
+Summary:          Library for PSKC handling
+License:          LGPL-2.1-or-later
+Requires:         xml-common
+Provides:         bundled(gnulib)
+
+%description -n libpskc
+Library for managing secret key files, the Portable Symmetric Key
+Container (PSKC) format described in RFC6030 is supported.
+
+%package -n libpskc-devel
+Summary:  Development files for libpskc
+License:  LGPL-2.1-or-later
+Requires: libpskc%{?_isa} = %{version}-%{release}
+
+%description -n libpskc-devel
+Development files for libpskc.
+
+%package -n libpskc-doc
+Summary:   Documentation files for libpskc
+License:   LGPL-2.1-or-later
+Requires:  libpskc = %{version}-%{release}
+Requires:  gtk-doc
+BuildArch: noarch
+
+%description -n libpskc-doc
+Documentation files for libpskc.
+
+%package -n oathtool
+Summary:  A command line tool for generating and validating OTPs
+License:  GPL-3.0-or-later
+Provides: bundled(gnulib)
+
+%description -n oathtool
+A command line tool for generating and validating OTPs.
+
+%package -n pskctool
+Summary:  A command line tool for manipulating PSKC data
+Provides: bundled(gnulib)
+Requires: xmlsec1-openssl%{?_isa}
+
+%description -n pskctool
+A command line tool for manipulating PSKC data.
+
+%package -n pam_oath
+Summary:  A PAM module for pluggable login authentication for OATH
+Requires: pam
+
+%description -n pam_oath
+A PAM module for pluggable login authentication for OATH.
+
+%prep
+%oreon_sha256
+echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
+echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
+%{openpgpverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup -p1
+
+%build
+autoreconf -fi
+%configure --with-pam-dir=%{_libdir}/security
+
+for d in liboath libpskc pam_oath
+do
+  sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' $d/libtool
+  sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' $d/libtool
+  sed -i 's| -shared | -Wl,--as-needed\0|g' $d/libtool
+done
+
+%make_build
+
+%install
+%make_install
+
+rm -f %{buildroot}%{_libdir}/*.{a,la}
+rm -f %{buildroot}%{_libdir}/security/*.la
+
+mkdir -p -m 0600 %{buildroot}%{_sysconfdir}/liboath
+
+%ldconfig_scriptlets -n liboath
+
+%ldconfig_scriptlets -n libpskc
+
+%files -n liboath
+%doc COPYING
+%attr(0600, root, root) %dir %{_sysconfdir}/liboath
+%{_libdir}/liboath.so.*
+
+%files -n liboath-devel
+%{_includedir}/liboath
+%{_libdir}/liboath.so
+%{_libdir}/pkgconfig/liboath.pc
+
+%files -n liboath-doc
+%{_mandir}/man3/oath*
+%{_datadir}/gtk-doc/html/liboath/*
+
+%files -n libpskc
+%doc libpskc/README
+%{_libdir}/libpskc.so.*
+%{_datadir}/xml/pskc
+
+%files -n libpskc-devel
+%{_includedir}/pskc
+%{_libdir}/libpskc.so
+%{_libdir}/pkgconfig/libpskc.pc
+
+%files -n libpskc-doc
+%{_mandir}/man3/pskc*
+%{_datadir}/gtk-doc/html/libpskc/*
+
+%files -n oathtool
+%doc COPYING
+%{_bindir}/oathtool
+%{_mandir}/man1/oathtool.*
+
+%files -n pskctool
+%{_bindir}/pskctool
+%{_mandir}/man1/pskctool.*
+
+%files -n pam_oath
+%doc pam_oath/README COPYING
+%{_libdir}/security/pam_oath.so
+
+%changelog
+%autochangelog
