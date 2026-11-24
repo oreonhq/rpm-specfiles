@@ -12,7 +12,7 @@
 Name:           cups
 Epoch:          1
 Version:        2.4.20
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        CUPS printing system
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://openprinting.github.io/cups/
@@ -111,6 +111,7 @@ clients through the cups-lpd helper.
 %build
 %configure \
     --disable-static \
+    --enable-debug \
     --enable-relro \
     --enable-dbus \
     --with-dbusdir=%{_sysconfdir}/dbus-1 \
@@ -136,7 +137,7 @@ clients through the cups-lpd helper.
 %make_build
 
 %install
-make BUILDROOT=%{buildroot} install
+make BUILDROOT=%{buildroot} install INSTALL_STRIP=
 rm -rf %{buildroot}/run
 rm -f %{buildroot}%{_libdir}/*.a
 mkdir -p %{buildroot}%{_datadir}/cups/banners
