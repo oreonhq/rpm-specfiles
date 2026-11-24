@@ -629,10 +629,8 @@ Patch2003: jdk8378713-c2_missing_pow_constant_folding.patch
 BuildRequires: oreon-rpm-macros
 BuildRequires: autoconf
 BuildRequires: automake
-%if %{without bootstrap}
 BuildRequires: alsa-lib-devel
 BuildRequires: cups-devel
-%endif
 BuildRequires: binutils
 BuildRequires: desktop-file-utils
 # elfutils only are OK for build without AOT
