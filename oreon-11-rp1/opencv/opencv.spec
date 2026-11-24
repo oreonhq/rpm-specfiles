@@ -21,7 +21,7 @@
 %endif
 %bcond_with     linters
 %if 0%{?oreon}
-%bcond_with     ffmpeg
+%bcond_without  ffmpeg
 %else
 %bcond_without  ffmpeg
 %endif
