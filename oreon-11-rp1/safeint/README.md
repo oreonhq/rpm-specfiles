@@ -1,0 +1,3 @@
+# safeint
+
+The safeint package
