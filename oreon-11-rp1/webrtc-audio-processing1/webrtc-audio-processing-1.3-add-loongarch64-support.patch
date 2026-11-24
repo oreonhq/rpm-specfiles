@@ -1,0 +1,26 @@
+From 461e83bb112619f2b7cbd721cfd5b48908a9b68c Mon Sep 17 00:00:00 2001
+From: Sun Haiyong <sunhaiyong@zdbr.net>
+Date: Tue, 14 Jan 2025 15:56:25 +0000
+Subject: [PATCH] webrtc-audio-processing 1.3 add loongarch64 support.
+
+---
+ webrtc/rtc_base/system/arch.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/webrtc/rtc_base/system/arch.h b/webrtc/rtc_base/system/arch.h
+index a77f2dc..774eede 100644
+--- a/webrtc/rtc_base/system/arch.h
++++ b/webrtc/rtc_base/system/arch.h
+@@ -82,6 +82,9 @@
+ #elif defined(__s390x__)
+ #define WEBRTC_ARCH_64_BITS
+ #define WEBRTC_ARCH_BIG_ENDIAN
++#elif defined(__loongarch_lp64)
++#define WEBRTC_ARCH_64_BITS
++#define WEBRTC_ARCH_LITTLE_ENDIAN
+ #else
+ #error Please add support for your architecture in rtc_base/system/arch.h
+ #endif
+-- 
+2.47.1
+
