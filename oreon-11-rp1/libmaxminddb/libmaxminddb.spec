@@ -20,6 +20,8 @@ BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
 BuildRequires:  clang
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  perl-interpreter
 BuildRequires:  perl(File::Temp)
