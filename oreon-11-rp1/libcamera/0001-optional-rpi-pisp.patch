@@ -1,0 +1,38 @@
+diff --git a/src/ipa/rpi/pisp/meson.build b/src/ipa/rpi/pisp/meson.build
+index 878e349..ec1f534 100644
+--- a/src/ipa/rpi/pisp/meson.build
++++ b/src/ipa/rpi/pisp/meson.build
+@@ -1,5 +1,9 @@
+ # SPDX-License-Identifier: CC0-1.0
+ 
++if not libpisp_dep.found()
++    subdir_done()
++endif
++
+ ipa_name = 'ipa_rpi_pisp'
+ 
+ pisp_ipa_deps = [
+diff --git a/src/libcamera/pipeline/rpi/pisp/meson.build b/src/libcamera/pipeline/rpi/pisp/meson.build
+index 178df94..3805d61 100644
+--- a/src/libcamera/pipeline/rpi/pisp/meson.build
++++ b/src/libcamera/pipeline/rpi/pisp/meson.build
+@@ -1,11 +1,18 @@
+ # SPDX-License-Identifier: CC0-1.0
+ 
++libpisp_dep = dependency('libpisp',
++                         fallback : ['libpisp', 'libpisp_dep'],
++                         required : not get_option('pipelines').contains('auto'))
++
++if not libpisp_dep.found()
++    subdir_done()
++endif
++
+ libcamera_internal_sources += files([
+     'pisp.cpp',
+ ])
+ 
+ librt = cc.find_library('rt', required : true)
+-libpisp_dep = dependency('libpisp', fallback : ['libpisp', 'libpisp_dep'])
+ 
+ libcamera_deps += [libpisp_dep, librt]
+ 
