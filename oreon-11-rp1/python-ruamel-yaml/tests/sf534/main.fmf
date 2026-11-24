@@ -1,0 +1,5 @@
+summary: Regression test for upstream ticket 534
+require: python3-ruamel-yaml
+link:
+  - verifies: https://sourceforge.net/p/ruamel-yaml/tickets/534/
+test: python3 test.py
