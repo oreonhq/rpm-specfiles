@@ -18,7 +18,7 @@ packages: gcc, binutils, glibc, gdb, llvm, elfutils, annobin, libtool, ccache, d
 [build-tools]
 summary: the tools that turn a tarball into a package
 maintainer: Brandon Lester
-packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, teckit, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, docbook-style-dsssl, openjade, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy, expect, dejagnu, asciidoc, po4a, docbook-utils, chrpath, check, desktop-file-utils, gtk-doc, beakerlib, tcl, sharutils, cscope, imake, byacc, re2c, ncompress, emacs, emacs-filesystem, rust-bindgen-cli, vim-filesystem, docbook5-style-xsl, rust-cbindgen, cargo-c, xmltoman, source-highlight, web-assets, gi-docgen
+packages: make, cmake, meson, ninja-build, autoconf, automake, m4, bison, flex, pkgconf, gperf, help2man, doxygen, scdoc, texinfo, groff, patch, diffutils, findutils, grep, sed, gawk, ed, which, gettext, teckit, gnulib-l10n, orbscli, docbook-dtds, docbook-style-xsl, docbook-style-dsssl, openjade, xmlto, itstool, yelp-xsl, yelp-tools, multilib-rpm-config, mercurial, subversion, breezy, expect, dejagnu, asciidoc, po4a, docbook-utils, chrpath, check, desktop-file-utils, gtk-doc, beakerlib, tcl, sharutils, cscope, imake, byacc, re2c, ncompress, emacs, emacs-filesystem, rust-bindgen-cli, vim-filesystem, docbook5-style-xsl, rust-cbindgen, cargo-c, xmltoman, source-highlight, web-assets, gi-docgen, cppcheck
 
 [shell-and-users]
 summary: login, shells, core unix tools
