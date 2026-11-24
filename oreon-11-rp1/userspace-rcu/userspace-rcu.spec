@@ -25,6 +25,7 @@ Provides: liburcu = %{version}-%{release}
 %package -n liburcu-devel
 Summary: Development files for userspace RCU
 Requires: %{name}%{?_isa} = %{version}-%{release}
+Provides: userspace-rcu-devel = %{version}-%{release}
 
 %description -n liburcu-devel
 Headers, libraries, and pkg-config files for developing with userspace RCU.
