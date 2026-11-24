@@ -1,0 +1,13 @@
+# All documentation is in the -doc subpackage.
+addFilter(r' no-documentation$')
+# There are a lot of weird things about mingw subpackages. It is OK for them to
+# contain compiled libraries even though the subpackages are noarch: these are
+# not native binaries for Fedora, and they do not vary by the architecture of
+# the Fedora host system.  Similarly, it is normal for mingw subpackages to
+# contain headers, static libraries, and so on.
+addFilter(r"^mingw(32|64)-freexl\..*: arch-independent-package-contains-binary-or-object")
+addFilter(r"^mingw(32|64)-freexl\..*: devel-file-in-non-devel-package /\S+\.(a|h|pc)$")
+addFilter(r"^mingw(32|64)-freexl\..*: spurious-executable-perm /\S+\.a$")
+addFilter(r"^mingw(32|64)-freexl-debuginfo\..*: only-non-binary-in-usr-lib")
+# This is spurious, from %mingw_configure.
+addFilter(r' configure-without-libdir-spec$')
