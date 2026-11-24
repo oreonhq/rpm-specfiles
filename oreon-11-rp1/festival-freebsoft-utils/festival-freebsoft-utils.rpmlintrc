@@ -1,0 +1,9 @@
+# All documentation is in the -doc subpackage.
+addFilter(r' no-documentation$')
+# Not a real spelling error:
+addFilter(r" spelling-error \('[Pp]rosodic',")
+# Intentional, with a justifying spec-file comment
+addFilter(r" no-%check-section")
+# The last upstream commit was well over a decade ago; the license text is not
+# going to be updated.
+addFilter(r" incorrect-fsf-address ")
