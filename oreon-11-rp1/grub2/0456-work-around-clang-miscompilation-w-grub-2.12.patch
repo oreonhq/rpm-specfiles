@@ -1,0 +1,39 @@
+From ecad5ed3b991d95470325b2947a71ccdfabc8f17 Mon Sep 17 00:00:00 2001
+From: Daniel Kolesa <q66@chimera-linux.org>
+Date: Sun, 21 Apr 2024 15:31:39 +0200
+Subject: [PATCH 456/461] work around clang miscompilation w/ grub 2.12
+
+---
+ grub-core/lib/syslinux_parse.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/grub-core/lib/syslinux_parse.c b/grub-core/lib/syslinux_parse.c
+index ae61a96..79eea10 100644
+--- a/grub-core/lib/syslinux_parse.c
++++ b/grub-core/lib/syslinux_parse.c
+@@ -847,6 +847,11 @@ simplify_filename (char *str)
+   *optr = '\0';
+ }
+ 
++/* aarch64-efi with clang miscompiles */
++#if defined(__aarch64__) && defined(GRUB_MACHINE_EFI)
++#pragma clang optimize off
++#endif
++
+ static grub_err_t
+ print_config (struct output_buffer *outbuf,
+ 	      struct syslinux_menu *menu,
+@@ -925,6 +930,10 @@ print_config (struct output_buffer *outbuf,
+   return err;
+ }
+ 
++#if defined(__aarch64__) && defined(GRUB_MACHINE_EFI)
++#pragma clang optimize on
++#endif
++
+ static grub_err_t
+ write_entry (struct output_buffer *outbuf,
+ 	     struct syslinux_menu *menu,
+-- 
+2.47.3
+

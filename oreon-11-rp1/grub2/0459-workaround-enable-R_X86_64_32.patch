@@ -1,0 +1,26 @@
+From 0f61fd386e140187cec0fc4e07f1ecfc04608f8c Mon Sep 17 00:00:00 2001
+From: Daniel Kolesa <q66@chimera-linux.org>
+Date: Thu, 9 Dec 2021 23:10:32 +0100
+Subject: [PATCH 459/461] workaround: enable R_X86_64_32
+
+---
+ util/grub-module-verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/util/grub-module-verifier.c b/util/grub-module-verifier.c
+index 91d9e8f..0139e94 100644
+--- a/util/grub-module-verifier.c
++++ b/util/grub-module-verifier.c
+@@ -15,7 +15,8 @@ struct grub_module_verifier_arch archs[] = {
+   { "x86_64", 8, 0, EM_X86_64, GRUB_MODULE_VERIFY_SUPPORTS_RELA, (int[]){
+       R_X86_64_64,
+       R_X86_64_PC64,
+-      /* R_X86_64_32, R_X86_64_32S are supported but shouldn't be used because of their limited range.  */
++      R_X86_64_32,
++      R_X86_64_32S,
+       -1
+     }, (int[]){
+       R_X86_64_PC32,
+-- 
+2.47.3
+
