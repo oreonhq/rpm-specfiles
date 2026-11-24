@@ -1,0 +1,50 @@
+From db731f0c4dd75e112e2abdfbe9443065742e58c3 Mon Sep 17 00:00:00 2001
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+Date: Wed, 15 Apr 2026 10:06:02 -0400
+Subject: sbverify: fix intermediate certificate verification
+
+Openssl verification of partial chains cannot be fixed by checking
+error codes in the verify callback (because the errors for
+intermediate verified OK and failed are identical).  Instead they must
+be fixed by setting the verification flag X509_V_FLAG_PARTIAL_CHAIN
+which treats any intermediate cert found as a CA.
+
+Fixes: df27a41 ("sbverify: fix verification with intermediate certificates")
+Tested-by: evilteq@anddroptable.net
+Tested-by: Steve McIntyre <steve@einval.com>
+Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
+---
+ src/sbverify.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/sbverify.c b/src/sbverify.c
+index 8f14f35..422b3e0 100644
+--- a/src/sbverify.c
++++ b/src/sbverify.c
+@@ -212,6 +212,7 @@ static int x509_verify_cb(int status, X509_STORE_CTX *ctx)
+ 
+ 	else if (err == X509_V_ERR_CERT_UNTRUSTED ||
+ 		 err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT ||
++		 err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY ||
+ 		 err == X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE) {
+ 		/* all certs given with the --cert argument are trusted */
+ 
+@@ -220,7 +221,6 @@ static int x509_verify_cb(int status, X509_STORE_CTX *ctx)
+ 	} else if (err == X509_V_ERR_CERT_HAS_EXPIRED ||
+ 		   err == X509_V_ERR_ERROR_IN_CERT_NOT_BEFORE_FIELD ||
+ 		   err == X509_V_ERR_CERT_NOT_YET_VALID ||
+-		   err == X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY ||
+ 		   err == X509_V_ERR_ERROR_IN_CERT_NOT_AFTER_FIELD)
+ 		/* UEFI explicitly allows expired certificates */
+ 		status = 1;
+@@ -246,6 +246,7 @@ int main(int argc, char **argv)
+ 
+ 	status = VERIFY_FAIL;
+ 	certs = X509_STORE_new();
++	X509_STORE_set_flags(certs, X509_V_FLAG_PARTIAL_CHAIN);
+ 	list = 0;
+ 	verbose = 0;
+ 	detached_sig_filename = NULL;
+-- 
+cgit 1.3.1-korg
+

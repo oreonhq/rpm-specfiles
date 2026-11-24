@@ -33,7 +33,7 @@ packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarch
 [crypto]
 summary: tls, gpg, and the policy that tells the rest what to use
 maintainer: Brandon Lester
-packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, sequoia-policy-config, crypto-policies, libsodium, keyutils, krb5, libxcrypt, fips-provider, fipscheck, tpm2-tss, nss, libkcapi, pesign
+packages: openssl, gnutls, libgcrypt, libgpg-error, gnupg2, gpgme, nettle, nettle3.10, libtasn1, p11-kit, sequoia-sqv, sequoia-policy-config, crypto-policies, libsodium, keyutils, krb5, libxcrypt, fips-provider, fipscheck, tpm2-tss, nss, libkcapi, pesign, sbsigntools
 
 [python]
 summary: interpreters and the python modules the build root needs
