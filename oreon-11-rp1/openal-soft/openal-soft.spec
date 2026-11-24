@@ -28,9 +28,7 @@ BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(jack)
-%if ! 0%{?oreon}
 BuildRequires:  pkgconfig(libavcodec)
-%endif
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(sdl2)
 BuildRequires:  pkgconfig(sndfile)
