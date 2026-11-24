@@ -63,7 +63,7 @@ packages: curl, openssh, nghttp2, nghttp3, ngtcp2, libssh, libssh2, wget1, wget2
 [services]
 summary: pid 1, dbus, cron, logging
 maintainer: Brandon Lester
-packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate, dbus-broker, avahi, cups, dracut, grub2, grubby, polkit, firewalld-filesystem
+packages: systemd, dbus, sdbus-cpp, cronie, crontabs, logrotate, dbus-broker, avahi, cups, dracut, grub2, grubby, polkit, firewalld-filesystem, samba
 
 [packaging-stack]
 summary: dnf and the libraries it links
