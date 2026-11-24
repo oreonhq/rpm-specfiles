@@ -98,4 +98,4 @@ packages: procps-ng, iproute, socat, man-db, nano, htop, iotop-c, fastfetch, tmu
 [desktop]
 summary: the graphical session and apps on it
 maintainer: sk1lld
-packages: qt6-qtshadertools
+packages: qt6-qtshadertools, qt6-qtlanguageserver
