@@ -1,0 +1,607 @@
+diff -up gt-0.4/utils/dim.c~ gt-0.4/utils/dim.c
+--- gt-0.4/utils/dim.c~	2004-10-02 16:05:07.000000000 +0200
++++ gt-0.4/utils/dim.c	2026-01-19 21:22:04.363274832 +0100
+@@ -13,6 +13,7 @@
+ /* #include "adagio.h" */
+ /* #include "allphase.h" */
+ 
++FILE *efopen(char *name, char *mode);
+ 
+ 
+ struct short_voice_type {
+@@ -332,7 +333,6 @@ char **argv;
+ 	extern int optind;
+ 	extern char * optarg;
+ 	int opt;
+-	FILE *efopen();
+ 
+ 	SECONDS = 0;
+ 
+@@ -360,10 +360,7 @@ char **argv;
+ #include <errno.h>
+ #include <string.h>
+ 
+-FILE *
+-efopen(name,mode)
+-char *name;
+-char *mode;
++FILE *efopen(char *name, char *mode)
+ {
+ 	FILE *f;
+ 	extern int errno;
+diff -up gt-0.4/utils/dim.c.std23 gt-0.4/utils/dim.c
+--- gt-0.4/utils/dim.c.std23	2026-01-19 21:27:00.000000000 +0100
++++ gt-0.4/utils/dim.c	2026-01-19 21:49:49.681702133 +0100
+@@ -321,7 +321,7 @@ static long last_time = 0;
+ static long last_realtime = 0;
+ static int delta_flag = 0;
+ 
+-filegetc()
++int filegetc()
+ {
+ 	return(getc(F));
+ }
+@@ -391,7 +391,7 @@ char *s;
+ }
+ 
+ void
+-txt_header(format,ntrks,ldivision)
++txt_header(int format, int ntrks, int ldivision)
+ {
+         division = ldivision; 
+ 	if (delta_flag)
+@@ -416,7 +416,7 @@ txt_trackend()
+ char *notename[12] = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+ 
+ void
+-txt_noteon(chan,pitch,vol)
++txt_noteon(int chan, int pitch, int vol)
+ {
+ 	char *drumname;
+ 
+@@ -433,7 +433,7 @@ txt_noteon(chan,pitch,vol)
+ }
+ 
+ void
+-txt_noteoff(chan,pitch,vol)
++txt_noteoff(int chan, int pitch, int vol)
+ {
+ 	char *drumname;
+ 
+@@ -450,7 +450,7 @@ txt_noteoff(chan,pitch,vol)
+ }
+ 
+ void
+-txt_pressure(chan,pitch,press)
++txt_pressure(int chan, int pitch, int press)
+ {
+ 	prtime();
+ 	printf("Pressure, chan=%d pitch=%d press=%d\n",chan+1,pitch,press);
+@@ -541,7 +541,7 @@ char *cname2[7] = {
+ #define PHASER_DEPTH 95
+ 
+ void
+-txt_parameter(chan,control,value)
++txt_parameter(int chan, int control, int value)
+ {	static int nrpn_msb, nrpn_lsb;
+ 
+ 	prtime();
+@@ -656,14 +656,14 @@ XG 	1Fh rr Variation send level of speci
+ }
+ 
+ void
+-txt_pitchbend(chan,msb,lsb)
++txt_pitchbend(int chan, int msb, int lsb)
+ {
+ 	prtime();
+ 	printf("Pitchbend, chan=%d msb=%d lsb=%d\n",chan+1,msb,lsb);
+ }
+ 
+ void
+-txt_program(chan,program)
++txt_program(int chan, int program)
+ {
+ 	prtime();
+ 	if ( (chan == 9||chan == 15) && program <= 48 && gs_drumset[program].vname )
+@@ -672,7 +672,7 @@ txt_program(chan,program)
+ }
+ 
+ void
+-txt_chanpressure(chan,press)
++txt_chanpressure(int chan, int press)
+ {
+ 	prtime();
+ 	printf("Channel pressure, chan=%d pressure=%d\n",chan+1,press);
+@@ -847,8 +847,7 @@ char *yam_variation_type[87][4] = {
+ };
+ 
+ void
+-txt_sysex(leng,mess)
+-char *mess;
++txt_sysex(int leng, char *mess)
+ {
+ 	register int id, n, c;
+ 	register unsigned char *p = mess;
+@@ -945,8 +944,7 @@ designated part to receive on (a data va
+ }
+ 
+ void
+-txt_metamisc(type,leng,mess)
+-char *mess;
++txt_metamisc(int type, int leng, char *mess)
+ {	char *p = mess;
+ 	int n, c;
+ 
+@@ -961,8 +959,7 @@ char *mess;
+ }
+ 
+ void
+-txt_metaspecial(leng,mess)
+-char *mess;
++txt_metaspecial(int leng, char *mess)
+ {	char *p = mess;
+ 	int n, c;
+ 
+@@ -977,8 +974,7 @@ char *mess;
+ }
+ 
+ void
+-txt_metatext(type,leng,mess)
+-char *mess;
++txt_metatext(int type, int leng, char *mess)
+ {
+ 	static char *ttype[] = {
+ 		NULL,
+@@ -1008,7 +1004,7 @@ char *mess;
+ }
+ 
+ void
+-txt_metaseq(num)
++txt_metaseq(int num)
+ {
+ 	prtime();
+ 	printf("Meta event, sequence number = %d\n",num);
+@@ -1022,15 +1018,14 @@ txt_metaeot()
+ }
+ 
+ void
+-txt_keysig(sf,mi)
++txt_keysig(int sf, int mi)
+ {
+ 	prtime();
+ 	printf("Key signature, sharp/flats=%d  minor=%d\n",sf,mi);
+ }
+ 
+ void
+-txt_tempo(ltempo)
+-long ltempo;
++txt_tempo(long ltempo)
+ {
+ 	tempo = ltempo;
+ 	prtime();
+@@ -1038,7 +1033,7 @@ long ltempo;
+ }
+ 
+ void
+-txt_timesig(nn,dd,cc,bb)
++txt_timesig(int nn, int dd, int cc, int bb)
+ {
+ 	int denom = 1;
+ 	int savedd = dd;
+@@ -1050,7 +1045,7 @@ txt_timesig(nn,dd,cc,bb)
+ }
+ 
+ void
+-txt_smpte(hr,mn,se,fr,ff)
++txt_smpte(int hr, int mn, int se, int fr, int ff)
+ {
+ 	prtime();
+ 	printf("SMPTE, hour=%d minute=%d second=%d frame=%d fract-frame=%d\n",
+@@ -1058,8 +1053,7 @@ txt_smpte(hr,mn,se,fr,ff)
+ }
+ 
+ void
+-txt_arbitrary(leng,mess)
+-char *mess;
++txt_arbitrary(int leng, char *mess)
+ {	char *p = mess;
+ 	int n, c;
+ 
+diff -up gt-0.4/utils/midifile.c.std23 gt-0.4/utils/midifile.c
+--- gt-0.4/utils/midifile.c.std23	2004-08-17 15:57:33.000000000 +0200
++++ gt-0.4/utils/midifile.c	2026-01-19 22:14:47.008337311 +0100
+@@ -60,7 +60,6 @@
+ #endif
+ 
+ #define NULLFUNC 0
+-#define NULL 0
+ 
+ #define THINK
+ 
+@@ -70,40 +69,39 @@
+ 
+ #include <stdio.h>
+ #include <values.h>
+-
+-char *strcpy (), *strcat ();
++#include <string.h>
+ /*void exit(), free();*/
+ 
+ /* public stuff */
+ 
+ /* Functions to be called while processing the MIDI file. */
+ int (*Mf_getc) () = NULLFUNC;
+-void (*Mf_error) () = NULLFUNC;
+-void (*Mf_header) () = NULLFUNC;
++void (*Mf_error) (char *s) = NULLFUNC;
++void (*Mf_header) (int, int, int) = NULLFUNC;
+ void (*Mf_trackstart) () = NULLFUNC;
+ void (*Mf_trackend) () = NULLFUNC;
+-void (*Mf_noteon) () = NULLFUNC;
+-void (*Mf_noteoff) () = NULLFUNC;
+-void (*Mf_pressure) () = NULLFUNC;
+-void (*Mf_parameter) () = NULLFUNC;
+-void (*Mf_pitchbend) () = NULLFUNC;
+-void (*Mf_program) () = NULLFUNC;
+-void (*Mf_chanpressure) () = NULLFUNC;
+-void (*Mf_sysex) () = NULLFUNC;
+-void (*Mf_arbitrary) () = NULLFUNC;
+-void (*Mf_metamisc) () = NULLFUNC;
+-void (*Mf_seqnum) () = NULLFUNC;
++void (*Mf_noteon) (int, int, int) = NULLFUNC;
++void (*Mf_noteoff) (int, int, int) = NULLFUNC;
++void (*Mf_pressure) (int, int, int) = NULLFUNC;
++void (*Mf_parameter) (int, int, int) = NULLFUNC;
++void (*Mf_pitchbend) (int, int, int) = NULLFUNC;
++void (*Mf_program) (int, int) = NULLFUNC;
++void (*Mf_chanpressure) (int, int) = NULLFUNC;
++void (*Mf_sysex) (int, char *) = NULLFUNC;
++void (*Mf_arbitrary) (int, char *) = NULLFUNC;
++void (*Mf_metamisc) (int, int, char *) = NULLFUNC;
++void (*Mf_seqnum) (int) = NULLFUNC;
+ void (*Mf_eot) () = NULLFUNC;
+-void (*Mf_smpte) () = NULLFUNC;
+-void (*Mf_tempo) () = NULLFUNC;
+-void (*Mf_timesig) () = NULLFUNC;
+-void (*Mf_keysig) () = NULLFUNC;
+-void (*Mf_seqspecific) () = NULLFUNC;
+-void (*Mf_text) () = NULLFUNC;
++void (*Mf_smpte) (int, int, int, int, int) = NULLFUNC;
++void (*Mf_tempo) (long) = NULLFUNC;
++void (*Mf_timesig) (int, int, int, int) = NULLFUNC;
++void (*Mf_keysig) (int, int) = NULLFUNC;
++void (*Mf_seqspecific) (int, char *) = NULLFUNC;
++void (*Mf_text) (int, int, char *) = NULLFUNC;
+ 
+ /* Functions to implement in order to write a MIDI file */
+-int (*Mf_putc) () = NULLFUNC;
+-int (*Mf_writetrack) () = NULLFUNC;
++int (*Mf_putc) (unsigned char c) = NULLFUNC;
++int (*Mf_writetrack) (int, int) = NULLFUNC;
+ int (*Mf_writetempotrack) () = NULLFUNC;
+ 
+ int Mf_nomerge = 0;		/* 1 => continue'ed system exclusives are */
+@@ -132,27 +130,24 @@ static long Mf_numbyteswritten = 0L;
+ 
+ static long readvarinum ();
+ static long read32bit ();
+-static long to32bit ();
++static long to32bit (int, int, int, int);
+ static int read16bit ();
+-static int to16bit ();
++static int to16bit (int, int);
+ static char *msg ();
+ static void readheader ();
+ static int readtrack ();
+-static void badbyte ();
+-static void metaevent ();
++static void badbyte (int);
++static void metaevent (int);
+ static void sysex ();
+-static void chanmessage ();
++static void chanmessage (int, int, int);
+ static void msginit ();
+ static int msgleng ();
+-static void msgadd ();
++static void msgadd (int);
+ static void biggermsg ();
+ static int eputc (unsigned char c);
+-
+-double mf_ticks2sec (unsigned long ticks, int division, unsigned long tempo);
+-int mf_write_meta_event ();
+-void mf_write_tempo ();
+-void mf_write_seqnum ();
+-void WriteVarLen ();
++void write32bit (unsigned long data);
++void write16bit (int data);
++void WriteVarLen (unsigned long);
+ 
+ #ifdef READ_MODS
+ #include "mp_mod.c"
+@@ -184,8 +179,7 @@ midifile ()
+ 
+ static
+ int 
+-readmt (s)			/* read through the "MThd" or "MTrk" header string */
+-     char *s;
++readmt (char *s)			/* read through the "MThd" or "MTrk" header string */
+ {
+   int n = 0;
+   char *p = s;
+@@ -495,8 +489,7 @@ old_f_realtime, delta_secs * 1600.0);
+ 
+ static
+ void 
+-badbyte (c)
+-     int c;
++badbyte (int c)
+ {
+   char buff[32];
+ 
+@@ -581,9 +574,7 @@ sysex ()
+ 
+ static
+ void 
+-chanmessage (status, c1, c2)
+-     int status;
+-     int c1, c2;
++chanmessage (int status, int c1, int c2)
+ {
+   int chan = status & 0xf;
+ 
+@@ -662,8 +653,7 @@ to32bit (int c1, int c2, int c3, int c4)
+ }
+ 
+ static int
+-to16bit (c1, c2)
+-     int c1, c2;
++to16bit (int c1, int c2)
+ {
+   return ((c1 & 0xff) << 8) + (c2 & 0xff);
+ }
+@@ -691,8 +681,7 @@ read16bit ()
+ 
+ /* static */
+ void
+-mferror (s)
+-     char *s;
++mferror (char *s)
+ {
+   if (Mf_error)
+     (*Mf_error) (s);
+@@ -730,8 +719,7 @@ msgleng ()
+ 
+ static
+ void 
+-msgadd (c)
+-     int c;
++msgadd (int c)
+ {
+   /* If necessary, allocate larger message buffer. */
+   if (Msgindex >= Msgsize)
+@@ -799,12 +787,11 @@ static int laststatus = 0;
+  *             to work with Mf_putc.
+  */
+ void
+-mfwrite (format, ntracks, division, fp)
+-     int format, ntracks, division;
+-     FILE *fp;
++mfwrite (int format, int ntracks, int division, FILE *fp)
+ {
+-  int i;
+-  void mf_write_track_chunk (), mf_write_header_chunk ();
++  int i;  
++  void mf_write_track_chunk (int which_track, FILE *fp);
++  void mf_write_header_chunk (int format, int ntracks, int division);
+ 
+   if (Mf_putc == NULLFUNC)
+     mferror ("mfmf_write() called without setting Mf_putc");
+@@ -831,14 +818,10 @@ mfwrite (format, ntracks, division, fp)
+ }
+ 
+ void
+-mf_write_track_chunk (which_track, fp)
+-     int which_track;
+-     FILE *fp;
++mf_write_track_chunk (int which_track, FILE *fp)
+ {
+   unsigned long trkhdr, trklength;
+   long offset, place_marker;
+-  void write16bit (), write32bit ();
+-
+ 
+   laststatus = 0;
+ 
+@@ -904,11 +887,9 @@ mf_write_track_chunk (which_track, fp)
+ 
+ 
+ void
+-mf_write_header_chunk (format, ntracks, division)
+-     int format, ntracks, division;
++mf_write_header_chunk (int format, int ntracks, int division)
+ {
+   unsigned long ident, length;
+-  void write16bit (), write32bit ();
+ 
+   ident = MThd;			/* Head chunk identifier                    */
+   length = 6;			/* Chunk length                             */
+@@ -942,11 +923,7 @@ mf_write_header_chunk (format, ntracks,
+  * size - The length of the meta-event data.
+  */
+ int
+-mf_write_midi_event (delta_time, type, chan, data, size)
+-     unsigned long delta_time;
+-     int chan, type;
+-     unsigned long size;
+-     char *data;
++mf_write_midi_event (unsigned long delta_time, int type, int chan, char *data, unsigned long size)
+ {
+   int i;
+   unsigned char c;
+@@ -994,10 +971,7 @@ mf_write_midi_event (delta_time, type, c
+  * size - The length of the meta-event data.
+  */
+ int 
+-mf_write_meta_event (delta_time, type, data, size)
+-     unsigned long delta_time;
+-     unsigned char *data, type;
+-     unsigned long size;
++mf_write_meta_event (unsigned long delta_time, unsigned char type, unsigned char *data, unsigned long size)
+ {
+   int i;
+ 
+@@ -1021,9 +995,7 @@ mf_write_meta_event (delta_time, type, d
+ }				/* end mf_write_meta_event */
+ 
+ void
+-mf_write_tempo (delta_time, tempo)
+-     unsigned long delta_time;
+-     unsigned long tempo;
++mf_write_tempo (unsigned long delta_time, unsigned long tempo)
+ {
+   /* Write tempo */
+   /* all tempos are written as 120 beats/minute, */
+@@ -1040,9 +1012,7 @@ mf_write_tempo (delta_time, tempo)
+ }
+ 
+ void
+-mf_write_seqnum (delta_time, seqnum)
+-     unsigned long delta_time;
+-     unsigned seqnum;
++mf_write_seqnum (unsigned long delta_time, unsigned int seqnum)
+ {
+ 
+   WriteVarLen (delta_time);
+@@ -1054,10 +1024,7 @@ mf_write_seqnum (delta_time, seqnum)
+ }
+ 
+ unsigned long
+-mf_sec2ticks (secs, division, tempo)
+-     int division;
+-     unsigned long tempo;
+-     double secs;
++mf_sec2ticks (double secs, int division, unsigned long tempo)
+ {
+   return (unsigned long) (((secs * 1000.0) / 4.0 * division) / tempo);
+ }
+@@ -1066,8 +1033,7 @@ mf_sec2ticks (secs, division, tempo)
+  * Write multi-length bytes to MIDI format files
+  */
+ void
+-WriteVarLen (value)
+-     unsigned long value;
++WriteVarLen (unsigned long value)
+ {
+   unsigned long buffer;
+ 
+@@ -1127,8 +1093,7 @@ mf_ticks2sec (ticks, division, tempo)
+  *
+  */
+ void
+-write32bit (data)
+-     unsigned long data;
++write32bit (unsigned long data)
+ {
+   eputc ((unsigned) ((data >> 24) & 0xff));
+   eputc ((unsigned) ((data >> 16) & 0xff));
+@@ -1137,8 +1102,7 @@ write32bit (data)
+ }
+ 
+ void
+-write16bit (data)
+-     int data;
++write16bit (int data)
+ {
+   eputc ((unsigned) ((data & 0xff00) >> 8));
+   eputc ((unsigned) (data & 0xff));
+@@ -1146,8 +1110,7 @@ write16bit (data)
+ 
+ /* write a single character and abort on error */
+ static int
+-eputc (c)
+-     unsigned char c;
++eputc (unsigned char c)
+ {
+   int return_val;
+ 
+diff -up gt-0.4/utils/midifile.h.std23 gt-0.4/utils/midifile.h
+--- gt-0.4/utils/midifile.h.std23	2004-08-17 15:57:33.000000000 +0200
++++ gt-0.4/utils/midifile.h	2026-01-19 22:14:44.992350031 +0100
+@@ -1,27 +1,29 @@
++#include <stdio.h>
++
+ /* definitions for MIDI file parsing code */
+ extern int (*Mf_getc)();
+-extern void (*Mf_header)();
++extern void (*Mf_header)(int, int, int);
+ extern void (*Mf_trackstart)();
+ extern void (*Mf_trackend)();
+-extern void (*Mf_noteon)();
+-extern void (*Mf_noteoff)();
+-extern void (*Mf_pressure)();
+-extern void (*Mf_parameter)();
+-extern void (*Mf_pitchbend)();
+-extern void (*Mf_program)();
+-extern void (*Mf_chanpressure)();
+-extern void (*Mf_sysex)();
+-extern void (*Mf_metamisc)();
+-extern void (*Mf_seqspecific)();
+-extern void (*Mf_seqnum)();
+-extern void (*Mf_text)();
++extern void (*Mf_noteon)(int, int, int);
++extern void (*Mf_noteoff)(int, int, int);
++extern void (*Mf_pressure)(int, int, int);
++extern void (*Mf_parameter)(int, int, int);
++extern void (*Mf_pitchbend)(int, int, int);
++extern void (*Mf_program)(int, int);
++extern void (*Mf_chanpressure)(int, int);
++extern void (*Mf_sysex)(int, char *);
++extern void (*Mf_metamisc)(int, int, char *);
++extern void (*Mf_seqspecific)(int, char *);
++extern void (*Mf_seqnum)(int);
++extern void (*Mf_text)(int, int, char *);
+ extern void (*Mf_eot)();
+-extern void (*Mf_timesig)();
+-extern void (*Mf_smpte)();
+-extern void (*Mf_tempo)();
+-extern void (*Mf_keysig)();
+-extern void (*Mf_arbitrary)();
+-extern void (*Mf_error)();
++extern void (*Mf_timesig)(int, int, int, int);
++extern void (*Mf_smpte)(int, int, int, int, int);
++extern void (*Mf_tempo)(long);
++extern void (*Mf_keysig)(int, int);
++extern void (*Mf_arbitrary)(int, char *);
++extern void (*Mf_error)(char *s);
+ extern unsigned long Mf_currtime;
+ extern unsigned long Mf_realtime;
+ extern unsigned long Mf_currtempo;
+@@ -33,19 +35,20 @@ extern int Mf_file_size;
+ #endif
+ 
+ /* definitions for MIDI file writing code */
+-extern int (*Mf_putc)();
+-extern int (*Mf_writetrack)();
++extern int (*Mf_putc)(unsigned char c);
++extern int (*Mf_writetrack)(int, int);
+ extern int (*Mf_writetempotrack)();
+ 
+ extern void midifile();
+-extern unsigned long mf_sec2ticks();
+-extern void mfwrite();
+-extern int mf_write_meta_event();
++extern unsigned long mf_sec2ticks (double secs, int division, unsigned long tempo);
++extern void mfwrite(int format, int ntracks, int division, FILE *fp);
++extern int mf_write_meta_event (unsigned long delta_time, unsigned char type,
++	unsigned char *data, unsigned long size);
+ extern int mf_write_midi_event(unsigned long delta_time, int type,
+ 	int chan, char *data, unsigned long size);
+-extern double mf_ticks2sec(unsigned long ticks,int division,unsigned long tempo);
+-extern void mf_write_tempo();
+-extern void mf_write_seqnum();
++extern double mf_ticks2sec(unsigned long ticks, int division, unsigned long tempo);
++extern void mf_write_tempo (unsigned long, unsigned long);
++extern void mf_write_seqnum (unsigned long delta_time, unsigned int seqnum);
+ extern void mfread();
+ extern void mferror(char *s);
+ 
