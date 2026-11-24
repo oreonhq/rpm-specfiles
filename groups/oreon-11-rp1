@@ -28,7 +28,7 @@ packages: bash, bash-completion, coreutils, util-linux, shadow-utils, pam, sudo,
 [compression]
 summary: archives and the libraries that implement them
 maintainer: Brandon Lester
-packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarchive, zchunk, gzip, tar, cpio, mingw-zlib, squashfs-tools
+packages: zlib, zlib-ng, zstd, xz, bzip2, lz4, lzip, zip, unzip, brotli, libarchive, zchunk, gzip, tar, cpio, mingw-zlib, squashfs-tools, 7zip
 
 [crypto]
 summary: tls, gpg, and the policy that tells the rest what to use
