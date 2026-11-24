@@ -47,9 +47,6 @@ BuildRequires:      cargo-rpm-macros
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
-%oreon_sha256
-echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
-echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 %autosetup -n %{modname}-%{version} -p1
 cp -f %{SOURCE2} src/_bcrypt/Cargo.lock
 tar -C src/_bcrypt -xf %{SOURCE1}
