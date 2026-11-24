@@ -1,0 +1,19 @@
+diff -rupN --no-dereference assimp-6.0.6/port/PyAssimp/pyassimp/helper.py assimp-6.0.6-new/port/PyAssimp/pyassimp/helper.py
+--- assimp-6.0.6/port/PyAssimp/pyassimp/helper.py	2026-11-09 21:32:25.000000000 +0100
++++ assimp-6.0.6-new/port/PyAssimp/pyassimp/helper.py	2026-11-13 11:46:44.004835733 +0100
+@@ -22,6 +22,7 @@ additional_dirs, ext_whitelist = [],[]
+ # depending on the platform we're running on.
+ if os.name=='posix':
+     additional_dirs.append('./')
++    additional_dirs.append('/usr/lib64/')
+     additional_dirs.append('/usr/lib/')
+     additional_dirs.append('/usr/lib/x86_64-linux-gnu/')
+     additional_dirs.append('/usr/lib/aarch64-linux-gnu/')
+@@ -38,6 +39,7 @@ if os.name=='posix':
+     # currently there's always a symlink called
+     # libassimp.so in /usr/local/lib.
+     ext_whitelist.append('.so')
++    ext_whitelist.append('.3')
+     # libassimp.dylib in /usr/local/lib
+     ext_whitelist.append('.dylib')
+ 
