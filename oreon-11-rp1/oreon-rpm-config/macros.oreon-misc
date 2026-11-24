@@ -46,7 +46,7 @@ oreon.writevars(macrofile,rpmvars)
 
 # gpgverify verifies signed sources. There is documentation in the script.
 %gpgverify(k:s:d:) %{lua:
-local script = rpm.expand("/usr/libexec/gpgverify ")
+local script = rpm.expand("/usr/libexec/oreon-rpm-macros/oreon-gpgverify ")
 local keyring = rpm.expand("%{-k*}")
 local signature = rpm.expand("%{-s*}")
 local data = rpm.expand("%{-d*}")
