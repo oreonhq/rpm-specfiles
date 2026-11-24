@@ -25,7 +25,7 @@
 %endif
 
 %if 0%{?oreon}
-%bcond bootstrap 1
+%bcond bootstrap 0
 %endif
 
 %if 0%{?bootstrap}
@@ -60,7 +60,7 @@
 
 Name:          gdal
 Version:       3.13.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 Summary:       GIS file format library
 License:       MIT
 URL:           http://www.gdal.org
@@ -146,6 +146,15 @@ BuildRequires: xerces-c-devel
 %else
 BuildRequires: libjpeg-turbo-devel
 BuildRequires: openssl-devel
+%endif
+
+%if 0%{?oreon}
+%if %{with_spatialite}
+BuildRequires: libspatialite-devel
+%endif
+%if 0%{?with_poppler}
+BuildRequires: poppler-devel
+%endif
 %endif
 
 %if %{with python3}
