@@ -13,7 +13,7 @@ packages: cmake-srpm-macros, efi-srpm-macros, fonts-srpm-macros, forge-srpm-macr
 [toolchain]
 summary: compilers, libc, binutils, debuggers. these are slow and they fill disks
 maintainer: Brandon Lester
-packages: gcc, binutils, glibc, gdb, llvm, elfutils, annobin, libtool, ccache, dwz, debugedit, patchelf, kernel-headers, mingw-filesystem, mingw-binutils, mingw-headers, mingw-gcc, mingw-crt, mingw-winpthreads, nasm, spirv-headers, spirv-tools, glslang, spirv-llvm-translator
+packages: gcc, binutils, glibc, gdb, llvm, elfutils, annobin, libtool, ccache, dwz, debugedit, patchelf, kernel-headers, mingw-filesystem, mingw-binutils, mingw-headers, mingw-gcc, mingw-crt, mingw-winpthreads, nasm, spirv-headers, spirv-tools, glslang, spirv-llvm-translator, dwarves
 
 [build-tools]
 summary: the tools that turn a tarball into a package
