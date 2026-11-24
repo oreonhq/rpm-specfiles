@@ -1,0 +1,49 @@
+[package]
+bin-package-name = "libdovi"
+cargo-toml-patch-comments = [
+    "drop unused, benchmark-only criterion dev-dependency",
+    "explicitly mark library as a \"cdylib\" type to fix spec generation",
+    """\
+allow roxmltree 0.21: \
+https://github.com/quietvoid/dovi_tool/commit/5e5c99a8fac353ac5becbd555c1a81909a5c4e20\
+""",
+]
+extra-files = [
+    "%{_libdir}/libdovi.so.3{,.*}",
+]
+suppress-cdylib-install-fixme = true
+
+[[package.extra-patches]]
+number = 10
+file = "dolby_vision-a8e639d.patch"
+comments = [
+    "bump to a8e639d snapshot to fix build with bitvec_helpers 4.0.0",
+]
+
+
+[features]
+enable-all = true
+
+[requires]
+build = [
+    "cargo-c",
+]
+
+[scripts]
+build.post = [
+    "%cargo_cbuild -a",
+]
+install.post = [
+    "%cargo_cinstall -a",
+    "rm %{buildroot}/%{_libdir}/libdovi.a",
+]
+
+[tests]
+skip = [
+    "rpu::generate::tests::config_with_frame_edits",
+    "xml::tests::parse",
+]
+comments = [
+    "skip tests that require files that are not included in published crates",
+]
+
