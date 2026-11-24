@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Axtens <dja@axtens.net>
+Date: Thu, 30 Jul 2020 01:31:02 +1000
+Subject: [PATCH 138/356] appended signatures: verification tests
+
+These tests are run through all_functional_test and test a range
+of commands and behaviours.
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+---
+ grub-core/Makefile.core.def | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index 230f366..0eaecca 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -2310,6 +2310,12 @@ module = {
+   enable = powerpc_ieee1275;
+ };
+ 
++module = {
++  name = appended_signature_test;
++  common = tests/appended_signature_test.c;
++  common = tests/appended_signatures.h;
++};
++
+ module = {
+   name = signature_test;
+   common = tests/signature_test.c;

@@ -1,0 +1,178 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Avnish Chouhan <avnish@linux.ibm.com>
+Date: Fri, 14 Aug 2026 12:03:16 +0530
+Subject: [PATCH 347/356] ieee1275: use namespace instead of disk for PCIe NVMe
+ boot paths
+
+The OpenFirmware binding for NVMe under IEEE 1275 mandates the device-tree
+node be named "namespace", not "disk".  The incorrect "disk" component causes
+GRUB to fail hint resolution and fall back to a full device-tree scan on every
+boot, introducing a significant delay. With PCIe NVMe disks, grub-install
+writes a wrong hint in grub.cfg.
+
+Before this fix:
+  --hint-ieee1275='ieee1275//pci@800000020000100/pci1014\,6ec@0/disk@1,gpt2'
+
+After this fix:
+  --hint-ieee1275='ieee1275//pci@800000020000100/pci1014\,6ec@0/namespace@1,gpt2'
+
+Which matches what firmware exposes, so GRUB resolves the boot device
+immediately without scanning the device tree.
+
+v2:
+
+fixed get_parent_devname() and canonicalise_disk() in obdisk.c so
+they work correctly with "namespace" paths. The obdisk code also assumed
+the final node in a storage path was always named "disk@...". After
+switching NVMe paths to "use namespace@..." this caused parent extraction
+and path canonicalisation to behave incorrectly. Replace the hard-coded
+"/disk@" handling with generic logic based on the final path component so
+both disk@ and namespace@ nodes are handled correctly.
+
+Signed-off-by: Avnish Chouhan <avnish@linux.ibm.com>
+Signed-off-by: Utkarsh Verma <uverma@linux.ibm.com>
+Reviewed-by: Leo Sandoval <lsandova@redhat.com>
+Reviewed-by: Andrew Hamilton <adhamilt@gmail.com>
+Part-of: <https://gitlab.freedesktop.org/gnu-grub/grub/-/merge_requests/219>
+---
+ grub-core/disk/ieee1275/obdisk.c | 62 ++++++++++++++++++++++----------
+ grub-core/osdep/linux/ofpath.c   |  4 +--
+ 2 files changed, 45 insertions(+), 21 deletions(-)
+
+diff --git a/grub-core/disk/ieee1275/obdisk.c b/grub-core/disk/ieee1275/obdisk.c
+index fcc39e0..b1e0e34 100644
+--- a/grub-core/disk/ieee1275/obdisk.c
++++ b/grub-core/disk/ieee1275/obdisk.c
+@@ -31,7 +31,6 @@
+ #include <grub/ieee1275/obdisk.h>
+ 
+ #define IEEE1275_DEV        "ieee1275/"
+-#define IEEE1275_DISK_ALIAS "/disk@"
+ 
+ struct disk_dev
+ {
+@@ -204,9 +203,13 @@ get_parent_devname (const char *devname)
+       return NULL;
+     }
+ 
+-  pptr = grub_strstr (parent, IEEE1275_DISK_ALIAS);
+-
+-  if (pptr != NULL)
++  /*
++   * Strip the last path component (the disk/namespace node) to obtain the
++   * parent controller path.  Use grub_strrchr so this works for any terminal
++   * node name ("disk@N", "namespace@N", etc.).
++   */
++  pptr = grub_strrchr (parent, '/');
++  if (pptr != NULL && pptr != parent)
+     *pptr = '\0';
+ 
+   return parent;
+@@ -384,21 +387,36 @@ canonicalise_disk (const char *devname)
+   if ((op) && (op->address_cells == 4))
+     {
+       char *unit_address, *real_unit_address, *real_canon;
+-      grub_size_t real_unit_str_len;
++      char *last_slash, *at_sign;
++      grub_size_t node_prefix_len, real_unit_str_len;
+ 
+-      unit_address = grub_strstr (canon, IEEE1275_DISK_ALIAS);
+-      unit_address += grub_strlen (IEEE1275_DISK_ALIAS);
++      /*
++       * Find the unit address after the final '/' separator.  This is correct
++       * for any terminal node name ("disk@N", "namespace@N", etc.) and avoids
++       * the previous hard-coded search for IEEE1275_DISK_ALIAS which would
++       * return NULL for "namespace@" paths, causing undefined behaviour on the
++       * immediately following pointer arithmetic.
++       */
++      last_slash = grub_strrchr (canon, '/');
++      if (last_slash == NULL)
++        {
++          /* No '/' — not a valid OF device path; return as-is. */
++          grub_free (parent);
++          return (canon);
++        }
+ 
+-      if (unit_address == NULL)
++      at_sign = grub_strchr (last_slash + 1, '@');
++      if (at_sign == NULL)
+         {
+-          /*
+-           * This should not be possible, but return the canonical name for
+-           * the non-disk block device.
+-           */
++          /* No '@' in the terminal component — no unit address to extract. */
+           grub_free (parent);
+           return (canon);
+         }
+ 
++      unit_address = at_sign + 1;
++      /* Length of the node name prefix including '@', e.g. "namespace@" */
++      node_prefix_len = (grub_size_t)(at_sign - last_slash);
++
+       real_unit_address = canonicalise_4cell_ua (op->ihandle, unit_address);
+ 
+       if (real_unit_address == NULL)
+@@ -411,10 +429,9 @@ canonicalise_disk (const char *devname)
+           return NULL;
+         }
+ 
+-      real_unit_str_len = grub_strlen (op->name) + sizeof (IEEE1275_DISK_ALIAS)
+-                          + grub_strlen (real_unit_address);
+-      if (grub_add (grub_strlen (op->name), sizeof (IEEE1275_DISK_ALIAS), &real_unit_str_len) ||
+-	  grub_add (real_unit_str_len, grub_strlen (real_unit_address), &real_unit_str_len))
++      /* op->name + '/' + node-prefix (e.g. "namespace@") + real_unit_address + NUL */
++      if (grub_add (grub_strlen (op->name), 1 + node_prefix_len, &real_unit_str_len) ||
++          grub_add (real_unit_str_len, grub_strlen (real_unit_address) + 1, &real_unit_str_len))
+ 	{
+ 	  grub_free (parent);
+ 	  grub_error (GRUB_ERR_OUT_OF_RANGE, N_("overflow detected while obtaining size of canonical name"));
+@@ -430,8 +447,15 @@ canonicalise_disk (const char *devname)
+ 	  return NULL;
+ 	}
+ 
+-      grub_snprintf (real_canon, real_unit_str_len, "%s/disk@%s",
+-                     op->name, real_unit_address);
++      /*
++       * Preserve the original node name prefix ("disk@", "namespace@", etc.)
++       * and replace only the unit address with the canonicalised value.
++       */
++      grub_snprintf (real_canon, real_unit_str_len, "%s/%.*s%s",
++                     op->name,
++                     (int) node_prefix_len,
++                     last_slash + 1,
++                     real_unit_address);
+ 
+       grub_free (canon);
+       canon = real_canon;
+@@ -625,7 +649,7 @@ scan_nvme_disk (const char *path)
+       return;
+     }
+ 
+-  grub_snprintf (buf, IEEE1275_MAX_PATH_LEN, "%s/disk@1", path);
++  grub_snprintf (buf, IEEE1275_MAX_PATH_LEN, "%s/namespace@1", path);
+   add_disk (buf);
+   grub_free (buf);
+ }
+diff --git a/grub-core/osdep/linux/ofpath.c b/grub-core/osdep/linux/ofpath.c
+index f636aff..8ea43ed 100644
+--- a/grub-core/osdep/linux/ofpath.c
++++ b/grub-core/osdep/linux/ofpath.c
+@@ -793,7 +793,7 @@ of_path_of_nvme(const char *sys_devname __attribute__((unused)),
+         }
+       else
+         {
+-          snprintf (disk, sizeof (disk), "/disk@1:%c", 'a' + (part - 1));
++          snprintf (disk, sizeof (disk), "/namespace@1:%c", 'a' + (part - 1));
+         }
+       free (nvmedev);
+     }
+@@ -834,7 +834,7 @@ of_path_of_nvme(const char *sys_devname __attribute__((unused)),
+         }
+       else
+         {
+-          snprintf (disk, sizeof (disk), "/disk@1");
++          snprintf (disk, sizeof (disk), "/namespace@1");
+         }
+     }
+ 

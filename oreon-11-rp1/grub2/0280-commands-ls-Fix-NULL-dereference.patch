@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: B Horn <b@horn.uk>
+Date: Sun, 12 May 2024 11:08:23 +0100
+Subject: [PATCH 280/356] commands/ls: Fix NULL dereference
+
+The grub_strrchr() may return NULL when the dirname do not contain "/".
+This can happen on broken filesystems.
+
+Reported-by: B Horn <b@horn.uk>
+Signed-off-by: B Horn <b@horn.uk>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/commands/ls.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/grub-core/commands/ls.c b/grub-core/commands/ls.c
+index c3bcb08..74d35e6 100644
+--- a/grub-core/commands/ls.c
++++ b/grub-core/commands/ls.c
+@@ -256,7 +256,18 @@ grub_ls_list_files (char *dirname, int longlist, int all, int human, int dirhdr)
+ 	    goto fail;
+ 	  ++(ctx.filename);
+ 
++<<<<<<< HEAD
+ 	  ctx.dirname = grub_strndup (dirname, ctx.filename - dirname);
++=======
++	  grub_file_close (file);
++
++	  p = grub_strrchr (dirname, '/');
++	  if (p == NULL)
++	    goto fail;
++	  ++p;
++
++	  ctx.dirname = grub_strndup (dirname, p - dirname);
++>>>>>>> ae2caaa (commands/ls: Fix NULL dereference)
+ 	  if (ctx.dirname == NULL)
+ 	    goto fail;
+ 

@@ -1,0 +1,112 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Dimitri John Ledkov <xnox@ubuntu.com>
+Date: Fri, 11 Jun 2021 13:51:20 +0200
+Subject: [PATCH 214/356] Allow chainloading EFI apps from loop mounts.
+
+Signed-off-by: Dimitri John Ledkov <Dimitri.ledkov@canonical.com>
+Signed-off-by: Robbie Harwood <rharwood@redhat.com>
+---
+ grub-core/loader/efi/chainloader.c | 24 ++++++++++++++++++++++++
+ include/grub/loopback.h            | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 include/grub/loopback.h
+
+diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
+index 9674bea..c6218b1 100644
+--- a/grub-core/loader/efi/chainloader.c
++++ b/grub-core/loader/efi/chainloader.c
+@@ -24,6 +24,7 @@
+ #include <grub/err.h>
+ #include <grub/device.h>
+ #include <grub/disk.h>
++#include <grub/loopback.h>
+ #include <grub/misc.h>
+ #include <grub/charset.h>
+ #include <grub/mm.h>
+@@ -894,6 +895,7 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
+   grub_efi_status_t status;
+   grub_efi_boot_services_t *b;
+   grub_device_t dev = 0;
++  grub_device_t orig_dev = 0;
+   grub_efi_device_path_t *dp = NULL;
+   char *filename;
+   void *boot_image = 0;
+@@ -950,6 +952,16 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
+   dev = grub_device_open (devname);
+   if (devname)
+     grub_free (devname);
++
++  /* if device is loopback, use underlying dev */
++  if (dev && dev->disk->dev->id == GRUB_DISK_DEVICE_LOOPBACK_ID)
++    {
++      struct grub_loopback *d;
++      orig_dev = dev;
++      d = dev->disk->data;
++      dev = d->file->device;
++    }
++
+   if (dev == NULL)
+     ;
+   else if (dev->disk)
+@@ -1056,6 +1068,12 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
+     }
+ #endif
+ 
++  if (orig_dev)
++    {
++      dev = orig_dev;
++      orig_dev = 0;
++    }
++
+   image_handle = grub_efi_get_last_verified_image_handle ();
+   if (image_handle == NULL)
+     {
+@@ -1126,6 +1144,12 @@ grub_cmd_chainloader (grub_command_t cmd __attribute__ ((unused)),
+ 
+  fail:
+ 
++  if (orig_dev)
++    {
++      dev = orig_dev;
++      orig_dev = 0;
++    }
++
+   if (dev)
+     grub_device_close (dev);
+ 
+diff --git a/include/grub/loopback.h b/include/grub/loopback.h
+new file mode 100644
+index 0000000..3b9a9e3
+--- /dev/null
++++ b/include/grub/loopback.h
+@@ -0,0 +1,30 @@
++/*
++ *  GRUB  --  GRand Unified Bootloader
++ *  Copyright (C) 2019  Free Software Foundation, Inc.
++ *
++ *  GRUB is free software: you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation, either version 3 of the License, or
++ *  (at your option) any later version.
++ *
++ *  GRUB is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with GRUB.  If not, see <http://www.gnu.org/licenses/>.
++ */
++
++#ifndef GRUB_LOOPBACK_HEADER
++#define GRUB_LOOPBACK_HEADER	1
++
++struct grub_loopback
++{
++  char *devname;
++  grub_file_t file;
++  struct grub_loopback *next;
++  unsigned long id;
++};
++
++#endif /* ! GRUB_LOOPBACK_HEADER */

@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Date: Sat, 6 Dec 2025 13:05:58 +0100
+Subject: [PATCH 323/356] loader/efi/linux.c: Unload image on errors
+
+Fix grub_arch_efi_linux_boot_image () not unloading the loaded image when
+allocating memory for the commandline fails.
+
+Signed-off-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+---
+ grub-core/loader/efi/linux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index a0d3531..04e58de 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -537,7 +537,7 @@ grub_arch_efi_linux_boot_image (grub_addr_t addr, grub_size_t size, char *args)
+   loaded_image->load_options =
+     grub_efi_allocate_any_pages (GRUB_EFI_BYTES_TO_PAGES (len));
+   if (!loaded_image->load_options)
+-    return grub_errno;
++      goto unload;
+ 
+   len = grub_utf8_to_utf16 (loaded_image->load_options, len,
+ 			    (grub_uint8_t *) args, args_len, NULL);

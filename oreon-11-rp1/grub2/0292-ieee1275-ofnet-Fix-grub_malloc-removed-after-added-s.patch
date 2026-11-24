@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nicolas Frayer <nfrayer@redhat.com>
+Date: Wed, 19 Mar 2025 17:39:41 +0100
+Subject: [PATCH 292/356] ieee1275/ofnet: Fix grub_malloc() removed after added
+ safe math functions
+
+grub_malloc() has been inadvertently removed from the ieee1275/ofnet
+code after it has been modified to use safe match function.
+
+Fixes: 4beeff8a (net: Use safe math macros to prevent overflows)
+
+Tested-by: Marta Lewandowska <mlewando@redhat.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+Signed-off-by: Nicolas Frayer <nfrayer@redhat.com>
+---
+ grub-core/net/drivers/ieee1275/ofnet.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/grub-core/net/drivers/ieee1275/ofnet.c b/grub-core/net/drivers/ieee1275/ofnet.c
+index d06aa96..552e423 100644
+--- a/grub-core/net/drivers/ieee1275/ofnet.c
++++ b/grub-core/net/drivers/ieee1275/ofnet.c
+@@ -468,6 +468,9 @@ search_net_devices (struct grub_ieee1275_devalias *alias)
+   ofdata->path = grub_malloc (sz);
+ 
+   if (!ofdata->path)
++
++  ofdata->path = grub_malloc(sz);
++
+     {
+       grub_print_error ();
+       return 0;

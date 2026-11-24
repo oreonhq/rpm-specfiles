@@ -1,0 +1,306 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: x <x>
+Date: Mon, 23 Nov 2026 22:21:56 -0800
+Subject: [PATCH 354/356] fix leftover rebase conflict markers
+
+---
+ grub-core/commands/ls.c     | 11 -----
+ grub-core/fs/xfs.c          |  8 ----
+ include/grub/i386/linux.h   | 84 -------------------------------------
+ include/grub/util/mkimage.h |  8 ----
+ util/grub-install-common.c  |  7 +---
+ util/grub-mkimagexx.c       | 39 -----------------
+ 6 files changed, 1 insertion(+), 156 deletions(-)
+
+diff --git a/grub-core/commands/ls.c b/grub-core/commands/ls.c
+index 74d35e6..c3bcb08 100644
+--- a/grub-core/commands/ls.c
++++ b/grub-core/commands/ls.c
+@@ -256,18 +256,7 @@ grub_ls_list_files (char *dirname, int longlist, int all, int human, int dirhdr)
+ 	    goto fail;
+ 	  ++(ctx.filename);
+ 
+-<<<<<<< HEAD
+ 	  ctx.dirname = grub_strndup (dirname, ctx.filename - dirname);
+-=======
+-	  grub_file_close (file);
+-
+-	  p = grub_strrchr (dirname, '/');
+-	  if (p == NULL)
+-	    goto fail;
+-	  ++p;
+-
+-	  ctx.dirname = grub_strndup (dirname, p - dirname);
+->>>>>>> ae2caaa (commands/ls: Fix NULL dereference)
+ 	  if (ctx.dirname == NULL)
+ 	    goto fail;
+ 
+diff --git a/grub-core/fs/xfs.c b/grub-core/fs/xfs.c
+index 7f60457..1bc4017 100644
+--- a/grub-core/fs/xfs.c
++++ b/grub-core/fs/xfs.c
+@@ -971,11 +971,7 @@ grub_xfs_iterate_dir (grub_fshelp_node_t dir,
+ 	     * Leaf and tail information are only in the data block if the number
+ 	     * of extents is 1.
+ 	     */
+-<<<<<<< HEAD
+ 	    if (grub_xfs_get_inode_nextents (&dir->inode) == 1)
+-=======
+-	    if (grub_xfs_get_inode_nextents(&dir->inode) == 1)
+->>>>>>> f23dea6 (fs/xfs: fix large extent counters incompat feature support)
+ 	      {
+ 		struct grub_xfs_dirblock_tail *tail = grub_xfs_dir_tail (dir->data, dirblock);
+ 
+@@ -1032,11 +1028,7 @@ grub_xfs_iterate_dir (grub_fshelp_node_t dir,
+ 		 * The expected number of directory entries is only tracked for the
+ 		 * single extent case.
+ 		 */
+-<<<<<<< HEAD
+ 		if (grub_xfs_get_inode_nextents (&dir->inode) == 1)
+-=======
+-		if (grub_xfs_get_inode_nextents(&dir->inode) == 1)
+->>>>>>> f23dea6 (fs/xfs: fix large extent counters incompat feature support)
+ 		  {
+ 		    /* Check if last direntry in this block is reached. */
+ 		    entries--;
+diff --git a/include/grub/i386/linux.h b/include/grub/i386/linux.h
+index 5770a6e..149fac1 100644
+--- a/include/grub/i386/linux.h
++++ b/include/grub/i386/linux.h
+@@ -426,7 +426,6 @@ struct linux_i386_kernel_header
+  */
+ struct linux_kernel_params
+ {
+-<<<<<<< HEAD
+   struct grub_screen_info screen_info;		/* 0 */
+   struct grub_apm_bios_info apm_bios_info;	/* 40 */
+   grub_uint8_t _pad2[4];			/* 54 */
+@@ -443,89 +442,6 @@ struct linux_kernel_params
+   grub_uint32_t ext_cmd_line_ptr;		/* c8 */
+   grub_uint8_t _pad4[112];			/* cc */
+   grub_uint32_t cc_blob_address;		/* 13c */
+-=======
+-  grub_uint8_t video_cursor_x;		/* 0 */
+-  grub_uint8_t video_cursor_y;
+-
+-  grub_uint16_t ext_mem;		/* 2 */
+-
+-  grub_uint16_t video_page;		/* 4 */
+-  grub_uint8_t video_mode;		/* 6 */
+-  grub_uint8_t video_width;		/* 7 */
+-
+-  grub_uint8_t padding1[0xa - 0x8];
+-
+-  grub_uint16_t video_ega_bx;		/* a */
+-
+-  grub_uint8_t padding2[0xe - 0xc];
+-
+-  grub_uint8_t video_height;		/* e */
+-  grub_uint8_t have_vga;		/* f */
+-  grub_uint16_t font_size;		/* 10 */
+-
+-  grub_uint16_t lfb_width;		/* 12 */
+-  grub_uint16_t lfb_height;		/* 14 */
+-  grub_uint16_t lfb_depth;		/* 16 */
+-  grub_uint32_t lfb_base;		/* 18 */
+-  grub_uint32_t lfb_size;		/* 1c */
+-
+-  grub_uint16_t cl_magic;		/* 20 */
+-  grub_uint16_t cl_offset;
+-
+-  grub_uint16_t lfb_line_len;		/* 24 */
+-  grub_uint8_t red_mask_size;		/* 26 */
+-  grub_uint8_t red_field_pos;
+-  grub_uint8_t green_mask_size;
+-  grub_uint8_t green_field_pos;
+-  grub_uint8_t blue_mask_size;
+-  grub_uint8_t blue_field_pos;
+-  grub_uint8_t reserved_mask_size;
+-  grub_uint8_t reserved_field_pos;
+-  grub_uint16_t vesapm_segment;		/* 2e */
+-  grub_uint16_t vesapm_offset;		/* 30 */
+-  grub_uint16_t lfb_pages;		/* 32 */
+-  grub_uint16_t vesa_attrib;		/* 34 */
+-  grub_uint32_t capabilities;		/* 36 */
+-  grub_uint32_t ext_lfb_base;		/* 3a */
+-
+-  grub_uint8_t padding3[0x40 - 0x3e];
+-
+-  grub_uint16_t apm_version;		/* 40 */
+-  grub_uint16_t apm_code_segment;	/* 42 */
+-  grub_uint32_t apm_entry;		/* 44 */
+-  grub_uint16_t apm_16bit_code_segment;	/* 48 */
+-  grub_uint16_t apm_data_segment;	/* 4a */
+-  grub_uint16_t apm_flags;		/* 4c */
+-  grub_uint32_t apm_code_len;		/* 4e */
+-  grub_uint16_t apm_data_len;		/* 52 */
+-
+-  grub_uint8_t padding4[0x60 - 0x54];
+-
+-  grub_uint32_t ist_signature;		/* 60 */
+-  grub_uint32_t ist_command;		/* 64 */
+-  grub_uint32_t ist_event;		/* 68 */
+-  grub_uint32_t ist_perf_level;		/* 6c */
+-  grub_uint64_t acpi_rsdp_addr;		/* 70 */
+-
+-  grub_uint8_t padding5[0x80 - 0x78];
+-
+-  grub_uint8_t hd0_drive_info[0x10];	/* 80 */
+-  grub_uint8_t hd1_drive_info[0x10];	/* 90 */
+-  grub_uint16_t rom_config_len;		/* a0 */
+-
+-  grub_uint8_t padding6[0xb0 - 0xa2];
+-
+-  grub_uint32_t ofw_signature;		/* b0 */
+-  grub_uint32_t ofw_num_items;		/* b4 */
+-  grub_uint32_t ofw_cif_handler;	/* b8 */
+-  grub_uint32_t ofw_idt;		/* bc */
+-
+-  grub_uint32_t ext_ramdisk_image;	/* 0xc0 */
+-  grub_uint32_t ext_ramdisk_size;	/* 0xc4 */
+-  grub_uint32_t ext_cmd_line_ptr;	/* 0xc8 */
+-
+-  grub_uint8_t padding7[0x1b8 - 0xcc];
+->>>>>>> 135aa71 (x86-efi: Allow initrd+params+cmdline allocations above 4GB.)
+ 
+   /*
+    * edid_info should be a struct with "unsigned char dummy[128]" and
+diff --git a/include/grub/util/mkimage.h b/include/grub/util/mkimage.h
+index 8079558..0d40383 100644
+--- a/include/grub/util/mkimage.h
++++ b/include/grub/util/mkimage.h
+@@ -51,20 +51,12 @@ grub_mkimage_load_image64 (const char *kernel_path,
+ 			   const struct grub_install_image_target_desc *image_target);
+ void
+ grub_mkimage_generate_elf32 (const struct grub_install_image_target_desc *image_target,
+-<<<<<<< HEAD
+ 			     int note, char *sbat, size_t appsig_size, char **core_img, size_t *core_size,
+-=======
+-			     int note, size_t appsig_size, char *sbat, char **core_img, size_t *core_size,
+->>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 			     Elf32_Addr target_addr,
+ 			     struct grub_mkimage_layout *layout);
+ void
+ grub_mkimage_generate_elf64 (const struct grub_install_image_target_desc *image_target,
+-<<<<<<< HEAD
+ 			     int note, char *sbat, size_t appsig_size, char **core_img, size_t *core_size,
+-=======
+-			     int note, size_t appsig_size, char *sbat, char **core_img, size_t *core_size,
+->>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 			     Elf64_Addr target_addr,
+ 			     struct grub_mkimage_layout *layout);
+ 
+diff --git a/util/grub-install-common.c b/util/grub-install-common.c
+index 7ac5020..b77e01a 100644
+--- a/util/grub-install-common.c
++++ b/util/grub-install-common.c
+@@ -753,12 +753,7 @@ grub_install_make_image_wrap_file (const char *dir, const char *prefix,
+ 
+   grub_util_info ("grub-mkimage --directory '%s' --prefix '%s' --output '%s'"
+ 		  " --format '%s' --compression '%s'"
+-<<<<<<< HEAD
+-		  " --appended-signature-size %zu %s %s %s %s\n",
+-=======
+-		  " --appended-signture-size %zu %s%s%s\n",
+-		  " --format '%s' --compression '%s'%s%s%s%s%s\n",
+->>>>>>> 59ad20d (tpm: Only skip TPM string PCR measurements with explicit consent)
++		  " --appended-signature-size %zu %s %s %s %s %s %s\n",
+ 		  dir, prefix, outname,
+ 		  mkimage_target, compnames[compression], appsig_size,
+ 		  note ? " --note" : "",
+diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
+index 3afc012..bcc2e9a 100644
+--- a/util/grub-mkimagexx.c
++++ b/util/grub-mkimagexx.c
+@@ -124,7 +124,6 @@ struct grub_sbat_note {
+   char name[ALIGN_UP(sizeof(GRUB_SBAT_NOTE_NAME), 4)];
+ };
+ 
+-<<<<<<< HEAD
+ #define GRUB_APPENDED_SIGNATURE_NOTE_NAME "Appended-Signature"
+ #define GRUB_APPENDED_SIGNATURE_NOTE_TYPE 0x41536967 /* "ASig" */
+ struct grub_appended_signature_note
+@@ -133,8 +132,6 @@ struct grub_appended_signature_note
+   char name[ALIGN_UP (sizeof (GRUB_APPENDED_SIGNATURE_NOTE_NAME), 4)];
+ };
+ 
+-=======
+->>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ static int
+ is_relocatable (const struct grub_install_image_target_desc *image_target)
+ {
+@@ -236,11 +233,7 @@ grub_arm_reloc_jump24 (grub_uint32_t *target, Elf32_Addr sym_addr)
+ 
+ void
+ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc *image_target,
+-<<<<<<< HEAD
+ 				    int note, char *sbat, size_t appsig_size, char **core_img, size_t *core_size,
+-=======
+-				    int note, size_t appsig_size, char *sbat, char **core_img, size_t *core_size,
+->>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 				    Elf_Addr target_addr,
+ 				    struct grub_mkimage_layout *layout)
+ {
+@@ -260,7 +253,6 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phnum++;
+       footer_size += ALIGN_UP (sizeof (struct grub_sbat_note) + layout->sbat_size, 4);
+     }
+-<<<<<<< HEAD
+ 
+   if (appsig_size)
+     {
+@@ -268,14 +260,7 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       footer_size += ALIGN_UP (sizeof (struct grub_appended_signature_note), 4);
+       footer_size += ALIGN_UP_OVERHEAD (appsig_size, 4);
+     }
+-=======
+->>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 
+-  if (appsig_size)
+-    {
+-      phnum++;
+-      footer_size += ALIGN_UP(sizeof (struct grub_appended_signature_note) + appsig_size, 4);
+-    }
+ 
+   if (image_target->id != IMAGE_LOONGSON_ELF)
+     phnum += 2;
+@@ -567,7 +552,6 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phdr->p_filesz = grub_host_to_target32 (note_size);
+       phdr->p_memsz = 0;
+       phdr->p_offset = grub_host_to_target32 (header_size + program_size + footer_offset);
+-<<<<<<< HEAD
+       footer += note_size;
+       footer_offset += note_size;
+     }
+@@ -592,31 +576,8 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phdr->p_filesz = grub_host_to_target32 (note_size);
+       phdr->p_memsz = 0;
+       phdr->p_offset = grub_host_to_target32 (header_size + program_size + footer_offset);
+-=======
+->>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+     }
+ 
+-  if (appsig_size) {
+-    int note_size = ALIGN_UP(sizeof (struct grub_appended_signature_note) + appsig_size, 4);
+-    struct grub_appended_signature_note *note_ptr = (struct grub_appended_signature_note *)
+-      (elf_img + program_size + header_size + (note ? sizeof (struct grub_ieee1275_note) : 0));
+-
+-    note_ptr->header.n_namesz = grub_host_to_target32 (sizeof (GRUB_APPENDED_SIGNATURE_NOTE_NAME));
+-    /* needs to sit at the end, so we round this up and sign some zero padding */
+-    note_ptr->header.n_descsz = grub_host_to_target32 (ALIGN_UP(appsig_size, 4));
+-    note_ptr->header.n_type = grub_host_to_target32 (GRUB_APPENDED_SIGNATURE_NOTE_TYPE);
+-    strcpy (note_ptr->name, GRUB_APPENDED_SIGNATURE_NOTE_NAME);
+-
+-    phdr++;
+-    phdr->p_type = grub_host_to_target32 (PT_NOTE);
+-    phdr->p_flags = grub_host_to_target32 (PF_R);
+-    phdr->p_align = grub_host_to_target32 (image_target->voidp_sizeof);
+-    phdr->p_vaddr = 0;
+-    phdr->p_paddr = 0;
+-    phdr->p_filesz = grub_host_to_target32 (note_size);
+-    phdr->p_memsz = 0;
+-    phdr->p_offset = grub_host_to_target32 (header_size + program_size + (note ? sizeof (struct grub_ieee1275_note) : 0));
+-  }
+ 
+   {
+     char *str_start = (elf_img + sizeof (*ehdr) + phnum * sizeof (*phdr)

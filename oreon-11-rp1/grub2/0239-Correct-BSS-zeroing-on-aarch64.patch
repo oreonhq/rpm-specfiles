@@ -1,0 +1,68 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jeremy Linton <jeremy.linton@arm.com>
+Date: Tue, 16 Apr 2024 13:26:55 -0600
+Subject: [PATCH 239/356] Correct BSS zeroing on aarch64
+
+The aarch64 loader doesn't use efi bootservices, and
+therefor it has a very minimal loader which makes a lot
+of assumptions about the kernel layout. With the ZBOOT
+changes, the layout has changed a bit and we not should
+really be parsing the PE sections to determine how much
+data to copy, otherwise the BSS won't be setup properly.
+
+This code still makes a lot of assumptions about the
+the kernel layout, so its far from ideal, but it works.
+
+Resolves: rhbz#2125069
+
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+---
+ grub-core/loader/efi/linux.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index 69be4ba..6f7679c 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -549,10 +549,12 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+ static grub_err_t
+ parse_pe_header (void *kernel, grub_uint64_t *total_size,
+ 		 grub_uint32_t *entry_offset,
+-		 grub_uint32_t *alignment)
++		 grub_uint32_t *alignment, grub_uint32_t *code_size)
+ {
+   struct linux_arch_kernel_header *lh = kernel;
+   struct grub_armxx_linux_pe_header *pe;
++  grub_uint16_t i;
++  struct grub_pe32_section_table *sections;
+ 
+   pe = (void *)((unsigned long)kernel + lh->hdr_offset);
+ 
+@@ -562,6 +564,19 @@ parse_pe_header (void *kernel, grub_uint64_t *total_size,
+   *total_size   = pe->opt.image_size;
+   *entry_offset = pe->opt.entry_addr;
+   *alignment    = pe->opt.section_alignment;
++  *code_size    = pe->opt.section_alignment;
++
++  sections = (struct grub_pe32_section_table *) ((char *)&pe->opt +
++						 pe->coff.optional_header_size);
++  grub_dprintf ("linux", "num_sections     : %d\n",  pe->coff.num_sections );
++  for (i = 0 ; i < pe->coff.num_sections; i++)
++    {
++      grub_dprintf ("linux", "raw_size   : %lld\n",
++		    (long long) sections[i].raw_data_size);
++      grub_dprintf ("linux", "virt_size  : %lld\n",
++		    (long long) sections[i].virtual_size);
++      *code_size += sections[i].raw_data_size;
++    }
+ 
+   return GRUB_ERR_NONE;
+ }
+@@ -575,6 +590,7 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+   struct linux_arch_kernel_header lh;
+   grub_off_t filelen;
+   grub_uint32_t align;
++  grub_uint32_t code_size;
+   void *kernel = NULL;
+   grub_err_t err;
+ 

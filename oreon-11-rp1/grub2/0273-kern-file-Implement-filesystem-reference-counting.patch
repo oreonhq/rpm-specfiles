@@ -1,0 +1,299 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: B Horn <b@horn.uk>
+Date: Tue, 11 Feb 2025 13:44:25 -0600
+Subject: [PATCH 273/356] kern/file: Implement filesystem reference counting
+
+The grub_file_open() and grub_file_close() should be the only places
+that allow a reference to a filesystem to stay open. So, add grub_dl_t
+to grub_fs_t and set this in the GRUB_MOD_INIT() for each filesystem to
+avoid issues when filesystems forget to do it themselves or do not track
+their own references, e.g. squash4.
+
+The fs_label(), fs_uuid(), fs_mtime() and fs_read() should all ref and
+unref in the same function but it is essentially redundant in GRUB
+single threaded model.
+
+Signed-off-by: B Horn <b@horn.uk>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/affs.c     | 5 +++++
+ grub-core/fs/bfs.c      | 5 +++++
+ grub-core/fs/cbfs.c     | 5 +++++
+ grub-core/fs/jfs.c      | 5 +++++
+ grub-core/fs/minix.c    | 5 +++++
+ grub-core/fs/nilfs2.c   | 5 +++++
+ grub-core/fs/ntfs.c     | 5 +++++
+ grub-core/fs/reiserfs.c | 5 +++++
+ grub-core/fs/romfs.c    | 5 +++++
+ grub-core/fs/sfs.c      | 5 +++++
+ grub-core/fs/udf.c      | 5 +++++
+ grub-core/fs/ufs.c      | 5 +++++
+ grub-core/kern/file.c   | 3 +++
+ 13 files changed, 63 insertions(+)
+
+diff --git a/grub-core/fs/affs.c b/grub-core/fs/affs.c
+index 520a001..dcd1e3f 100644
+--- a/grub-core/fs/affs.c
++++ b/grub-core/fs/affs.c
+@@ -704,11 +704,16 @@ static struct grub_fs grub_affs_fs =
+ 
+ GRUB_MOD_INIT(affs)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_affs_fs.mod = mod;
+       grub_fs_register (&grub_affs_fs);
+     }
++=======
++  grub_affs_fs.mod = mod;
++  grub_fs_register (&grub_affs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/bfs.c b/grub-core/fs/bfs.c
+index 78aeb05..b7893ff 100644
+--- a/grub-core/fs/bfs.c
++++ b/grub-core/fs/bfs.c
+@@ -1107,11 +1107,16 @@ GRUB_MOD_INIT (bfs)
+ {
+   COMPILE_TIME_ASSERT (1 << LOG_EXTENT_SIZE ==
+ 		       sizeof (struct grub_bfs_extent));
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_bfs_fs.mod = mod;
+       grub_fs_register (&grub_bfs_fs);
+     }
++=======
++  grub_bfs_fs.mod = mod;
++  grub_fs_register (&grub_bfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+ }
+ 
+ #ifdef MODE_AFS
+diff --git a/grub-core/fs/cbfs.c b/grub-core/fs/cbfs.c
+index b62c877..1c48c20 100644
+--- a/grub-core/fs/cbfs.c
++++ b/grub-core/fs/cbfs.c
+@@ -391,11 +391,16 @@ GRUB_MOD_INIT (cbfs)
+ #if (defined (__i386__) || defined (__x86_64__)) && !defined (GRUB_UTIL) && !defined (GRUB_MACHINE_EMU) && !defined (GRUB_MACHINE_XEN)
+   init_cbfsdisk ();
+ #endif
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_cbfs_fs.mod = mod;
+       grub_fs_register (&grub_cbfs_fs);
+     }
++=======
++  grub_cbfs_fs.mod = mod;
++  grub_fs_register (&grub_cbfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+ }
+ 
+ GRUB_MOD_FINI (cbfs)
+diff --git a/grub-core/fs/jfs.c b/grub-core/fs/jfs.c
+index fa707fc..d307834 100644
+--- a/grub-core/fs/jfs.c
++++ b/grub-core/fs/jfs.c
+@@ -1027,11 +1027,16 @@ static struct grub_fs grub_jfs_fs =
+ 
+ GRUB_MOD_INIT(jfs)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_jfs_fs.mod = mod;
+       grub_fs_register (&grub_jfs_fs);
+     }
++=======
++  grub_jfs_fs.mod = mod;
++  grub_fs_register (&grub_jfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/minix.c b/grub-core/fs/minix.c
+index 4440fcc..4828be0 100644
+--- a/grub-core/fs/minix.c
++++ b/grub-core/fs/minix.c
+@@ -735,11 +735,16 @@ GRUB_MOD_INIT(minix)
+ #endif
+ #endif
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_minix_fs.mod = mod;
+       grub_fs_register (&grub_minix_fs);
+     }
++=======
++  grub_minix_fs.mod = mod;
++  grub_fs_register (&grub_minix_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/nilfs2.c b/grub-core/fs/nilfs2.c
+index 26e6077..110e189 100644
+--- a/grub-core/fs/nilfs2.c
++++ b/grub-core/fs/nilfs2.c
+@@ -1232,11 +1232,16 @@ GRUB_MOD_INIT (nilfs2)
+ 				  grub_nilfs2_dat_entry));
+   COMPILE_TIME_ASSERT (1 << LOG_INODE_SIZE
+ 		       == sizeof (struct grub_nilfs2_inode));
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_nilfs2_fs.mod = mod;
+       grub_fs_register (&grub_nilfs2_fs);
+     }
++=======
++  grub_nilfs2_fs.mod = mod;
++  grub_fs_register (&grub_nilfs2_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/ntfs.c b/grub-core/fs/ntfs.c
+index caa4ea7..11e4868 100644
+--- a/grub-core/fs/ntfs.c
++++ b/grub-core/fs/ntfs.c
+@@ -1677,11 +1677,16 @@ static struct grub_fs grub_ntfs_fs =
+ 
+ GRUB_MOD_INIT (ntfs)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_ntfs_fs.mod = mod;
+       grub_fs_register (&grub_ntfs_fs);
+     }
++=======
++  grub_ntfs_fs.mod = mod;
++  grub_fs_register (&grub_ntfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/reiserfs.c b/grub-core/fs/reiserfs.c
+index ca47e0a..bb5ede3 100644
+--- a/grub-core/fs/reiserfs.c
++++ b/grub-core/fs/reiserfs.c
+@@ -1408,11 +1408,16 @@ static struct grub_fs grub_reiserfs_fs =
+ 
+ GRUB_MOD_INIT(reiserfs)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_reiserfs_fs.mod = mod;
+       grub_fs_register (&grub_reiserfs_fs);
+     }
++=======
++  grub_reiserfs_fs.mod = mod;
++  grub_fs_register (&grub_reiserfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/romfs.c b/grub-core/fs/romfs.c
+index eafab03..0e203c2 100644
+--- a/grub-core/fs/romfs.c
++++ b/grub-core/fs/romfs.c
+@@ -476,11 +476,16 @@ static struct grub_fs grub_romfs_fs =
+ 
+ GRUB_MOD_INIT(romfs)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_romfs_fs.mod = mod;
+       grub_fs_register (&grub_romfs_fs);
+     }
++=======
++  grub_romfs_fs.mod = mod;
++  grub_fs_register (&grub_romfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+ }
+ 
+ GRUB_MOD_FINI(romfs)
+diff --git a/grub-core/fs/sfs.c b/grub-core/fs/sfs.c
+index bad4ae8..ea71232 100644
+--- a/grub-core/fs/sfs.c
++++ b/grub-core/fs/sfs.c
+@@ -783,11 +783,16 @@ static struct grub_fs grub_sfs_fs =
+ 
+ GRUB_MOD_INIT(sfs)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_sfs_fs.mod = mod;
+       grub_fs_register (&grub_sfs_fs);
+     }
++=======
++  grub_sfs_fs.mod = mod;
++  grub_fs_register (&grub_sfs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/udf.c b/grub-core/fs/udf.c
+index 3d5ee5a..a9b311c 100644
+--- a/grub-core/fs/udf.c
++++ b/grub-core/fs/udf.c
+@@ -1456,11 +1456,16 @@ static struct grub_fs grub_udf_fs = {
+ 
+ GRUB_MOD_INIT (udf)
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_udf_fs.mod = mod;
+       grub_fs_register (&grub_udf_fs);
+     }
++=======
++  grub_udf_fs.mod = mod;
++  grub_fs_register (&grub_udf_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/fs/ufs.c b/grub-core/fs/ufs.c
+index 8b5adbd..c1b8f0a 100644
+--- a/grub-core/fs/ufs.c
++++ b/grub-core/fs/ufs.c
+@@ -900,11 +900,16 @@ GRUB_MOD_INIT(ufs1)
+ #endif
+ #endif
+ {
++<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_ufs_fs.mod = mod;
+       grub_fs_register (&grub_ufs_fs);
+     }
++=======
++  grub_ufs_fs.mod = mod;
++  grub_fs_register (&grub_ufs_fs);
++>>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+   my_mod = mod;
+ }
+ 
+diff --git a/grub-core/kern/file.c b/grub-core/kern/file.c
+index db8deb5..54532f3 100644
+--- a/grub-core/kern/file.c
++++ b/grub-core/kern/file.c
+@@ -226,6 +226,9 @@ grub_file_read (grub_file_t file, void *buf, grub_size_t len)
+ grub_err_t
+ grub_file_close (grub_file_t file)
+ {
++  if (file->fs->mod)
++    grub_dl_unref (file->fs->mod);
++
+   grub_dprintf ("file", "Closing `%s' ...\n", file->name);
+   if (file->fs->fs_close)
+     (file->fs->fs_close) (file);

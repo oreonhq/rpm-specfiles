@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Michael Chang via Grub-devel <grub-devel@gnu.org>
+Date: Fri, 17 Oct 2025 17:01:40 +0800
+Subject: [PATCH 308/356] btrfs: add environment block to reserved header area
+
+This patch reserves space for the GRUB environment block inside the
+Btrfs header. The block is placed at an offset of GRUB_ENV_BTRFS_OFFSET
+, 256 KiB from the start of the device, and occupies one sector. To
+protect the space, overflow guard sectors are placed before and after
+the reserved block.
+
+The Btrfs header already defines regions for bootloader use. By adding
+this entry, GRUB gains a fixed and safe location to store the
+environment block without conflicting with other structures in the
+header.
+
+Add Btrfs and its reserved area information to the fs_envblk_spec table.
+With the groundworks done in previous patches, the function is now
+complete and working in grub-editenv.
+
+Signed-off-by: Michael Chang <mchang@suse.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+---
+ util/grub-editenv.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/util/grub-editenv.c b/util/grub-editenv.c
+index 20baf61..3ae8c1c 100644
+--- a/util/grub-editenv.c
++++ b/util/grub-editenv.c
+@@ -302,9 +302,16 @@ static fs_envblk_ops_t fs_envblk_ops = {
+ 
+ /*
+  * fs_envblk_spec describes the file-system specific layout of reserved raw
+- * blocks used as environment blocks.
++ * blocks used as environment blocks. At present only Btrfs is supported. Other
++ * file-systems may be added if they provide a similar facility and avoid the
++ * limitation of writing to COW.
++ *
++ * Note: If this table is modified, also update
++ * grub-core/fs/btrfs.c::btrfs_head, which defines the layout in the Btrfs
++ * header and exports GRUB_ENV_BTRFS_OFFSET, so that both stay consistent.
+  */
+ static fs_envblk_spec_t fs_envblk_spec[] = {
++  { "btrfs", GRUB_ENV_BTRFS_OFFSET, GRUB_DISK_SECTOR_SIZE },
+   { NULL, 0, 0 }
+ };
+ 

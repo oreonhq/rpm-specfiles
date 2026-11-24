@@ -1,0 +1,53 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Peter Jones <pjones@redhat.com>
+Date: Wed, 3 Apr 2013 14:35:34 -0400
+Subject: [PATCH 009/356] Move bash completion script (#922997)
+
+Apparently these go in a new place now.
+---
+ configure.ac                       | 11 +++++++++++
+ util/bash-completion.d/Makefile.am |  2 +-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 47a96c3..bf22f0e 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -320,6 +320,14 @@ AC_SUBST(grubdirname)
+ AC_DEFINE_UNQUOTED(GRUB_DIR_NAME, "$grubdirname",
+     [Default grub directory name])
+ 
++PKG_PROG_PKG_CONFIG
++AS_IF([$($PKG_CONFIG --exists bash-completion)], [
++	bashcompletiondir=$($PKG_CONFIG --variable=completionsdir bash-completion)
++] , [
++	bashcompletiondir=${datadir}/bash-completion/completions
++])
++AC_SUBST(bashcompletiondir)
++
+ #
+ # Checks for build programs.
+ #
+@@ -535,6 +543,9 @@ HOST_CFLAGS="$HOST_CFLAGS $grub_cv_cc_w_extra_flags"
+ # Check for target programs.
+ #
+ 
++# This makes sure pkg.m4 is available.
++m4_pattern_forbid([^_?PKG_[A-Z_]+$],[*** pkg.m4 missing, please install pkg-config])
++
+ # Find tools for the target.
+ if test "x$target_alias" != x && test "x$host_alias" != "x$target_alias"; then
+   tmp_ac_tool_prefix="$ac_tool_prefix"
+diff --git a/util/bash-completion.d/Makefile.am b/util/bash-completion.d/Makefile.am
+index ede14af..a2c6e8a 100644
+--- a/util/bash-completion.d/Makefile.am
++++ b/util/bash-completion.d/Makefile.am
+@@ -58,7 +58,7 @@ CLEANFILES = $(bash_completion_script) \
+ 	$(grub_sparc64_setup_script) \
+ 	config.log
+ 
+-bashcompletiondir = $(datarootdir)/bash-completion/completions
++bashcompletiondir = @bashcompletiondir@
+ bashcompletion_DATA = $(bash_completion_script) \
+ 	$(grub_bios_setup_script) \
+ 	$(grub_editenv_script) \

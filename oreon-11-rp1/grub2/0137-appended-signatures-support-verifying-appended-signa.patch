@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Axtens <dja@axtens.net>
+Date: Thu, 30 Jul 2020 01:35:43 +1000
+Subject: [PATCH 137/356] appended signatures: support verifying appended
+ signatures
+
+Building on the parsers and the ability to embed x509 certificates, as
+well as the existing gcrypt functionality, add a module for verifying
+appended signatures.
+
+This includes a verifier that requires that Linux kernels and grub modules
+have appended signatures, and commands to manage the list of trusted
+certificates for verification.
+
+Verification must be enabled by setting check_appended_signatures. If
+GRUB is locked down when the module is loaded, verification will be
+enabled and locked automatically.
+
+As with the PGP verifier, it is not a complete secure-boot solution:
+other mechanisms, such as a password or lockdown, must be used to ensure
+that a user cannot drop to the grub shell and disable verification.
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+[pjones: fix missing format specifier]
+Signed-off-by: Robbie Harwood <rharwood@redhat.com>
+---
+ grub-core/Makefile.core.def | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index 67e180e..230f366 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -1054,6 +1054,30 @@ module = {
+   depends = crypto, gcry_rsa, gcry_sha256, gcry_sha512, mpi, asn1;
+ };
+ 
++module = {
++  name = appendedsig;
++  common = commands/appendedsig/appendedsig.c;
++  common = commands/appendedsig/x509.c;
++  common = commands/appendedsig/pkcs7.c;
++  common = commands/appendedsig/asn1util.c;
++  common = commands/appendedsig/gnutls_asn1_tab.c;
++  common = commands/appendedsig/pkix_asn1_tab.c;
++  cflags = '$(CFLAGS_POSIX)';
++  cppflags = '-I$(srcdir)/lib/posix_wrap';
++};
++
++module = {
++  name = appendedsig;
++  common = commands/appendedsig/appendedsig.c;
++  common = commands/appendedsig/x509.c;
++  common = commands/appendedsig/pkcs7.c;
++  common = commands/appendedsig/asn1util.c;
++  common = commands/appendedsig/gnutls_asn1_tab.c;
++  common = commands/appendedsig/pkix_asn1_tab.c;
++  cflags = '$(CFLAGS_POSIX)';
++  cppflags = '-I$(srcdir)/lib/posix_wrap';
++};
++
+ module = {
+   name = hdparm;
+   common = commands/hdparm.c;

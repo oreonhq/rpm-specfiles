@@ -1,0 +1,70 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Date: Thu, 4 Dec 2025 21:38:09 +0100
+Subject: [PATCH 319/356] Revert "Correct BSS zeroing on aarch64"
+
+This fully reverts commit 81dbbbc6f97fe5d24e0627007b014c96be7b084f.
+
+Note the modifed code is not used on x86 (#ifdef !x86).
+
+This is part of a series of reverts to move non x86 vmlinuz loading back
+to using EFI boot services load_image + start_image calls.
+
+The current DYI approach breaks booting kernel EFI binaries which have
+the stubble stub for automatic DTB loading.
+
+Switching back to EFI boot services load_image + start_image fixes this
+and also brings Fedora's grub inline with how upstream grub is loading
+and booting kernels on arm64 platforms.
+
+Signed-off-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+---
+ grub-core/loader/efi/linux.c | 18 +-----------------
+ 1 file changed, 1 insertion(+), 17 deletions(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index f1e867b..006a335 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -787,12 +787,10 @@ grub_cmd_initrd (grub_command_t cmd __attribute__ ((unused)),
+ static grub_err_t
+ parse_pe_header (void *kernel, grub_uint64_t *total_size,
+ 		 grub_uint32_t *entry_offset,
+-		 grub_uint32_t *alignment, grub_uint32_t *code_size)
++		 grub_uint32_t *alignment)
+ {
+   struct linux_arch_kernel_header *lh = kernel;
+   struct grub_armxx_linux_pe_header *pe;
+-  grub_uint16_t i;
+-  struct grub_pe32_section_table *sections;
+ 
+   pe = (void *)((unsigned long)kernel + lh->hdr_offset);
+ 
+@@ -802,19 +800,6 @@ parse_pe_header (void *kernel, grub_uint64_t *total_size,
+   *total_size   = pe->opt.image_size;
+   *entry_offset = pe->opt.entry_addr;
+   *alignment    = pe->opt.section_alignment;
+-  *code_size    = pe->opt.section_alignment;
+-
+-  sections = (struct grub_pe32_section_table *) ((char *)&pe->opt +
+-						 pe->coff.optional_header_size);
+-  grub_dprintf ("linux", "num_sections     : %d\n",  pe->coff.num_sections );
+-  for (i = 0 ; i < pe->coff.num_sections; i++)
+-    {
+-      grub_dprintf ("linux", "raw_size   : %lld\n",
+-		    (long long) sections[i].raw_data_size);
+-      grub_dprintf ("linux", "virt_size  : %lld\n",
+-		    (long long) sections[i].virtual_size);
+-      *code_size += sections[i].raw_data_size;
+-    }
+ 
+   return GRUB_ERR_NONE;
+ }
+@@ -828,7 +813,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+   struct linux_arch_kernel_header lh;
+   grub_off_t filelen;
+   grub_uint32_t align;
+-  grub_uint32_t code_size;
+   void *kernel = NULL;
+   grub_err_t err;
+ 

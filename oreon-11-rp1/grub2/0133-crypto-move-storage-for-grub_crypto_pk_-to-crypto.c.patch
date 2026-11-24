@@ -1,0 +1,74 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Axtens <dja@axtens.net>
+Date: Fri, 2 Oct 2020 10:49:26 +1000
+Subject: [PATCH 133/356] crypto: move storage for grub_crypto_pk_* to crypto.c
+
+The way gcry_rsa and friends (the asymmetric ciphers) are loaded for the
+pgp module is a bit quirky.
+
+include/grub/crypto.h contains:
+  extern struct gcry_pk_spec *grub_crypto_pk_rsa;
+
+commands/pgp.c contains the actual storage:
+  struct gcry_pk_spec *grub_crypto_pk_rsa;
+
+And the module itself saves to the storage in pgp.c:
+  GRUB_MOD_INIT(gcry_rsa)
+  {
+    grub_crypto_pk_rsa = &_gcry_pubkey_spec_rsa;
+  }
+
+This is annoying: gcry_rsa now has a dependency on pgp!
+
+We want to be able to bring in gcry_rsa without bringing in PGP,
+so move the storage to crypto.c.
+
+Previously, gcry_rsa depended on pgp and mpi. Now it depends on
+crypto and mpi. As pgp depends on crypto, this doesn't add any new
+module dependencies using the PGP verfier.
+
+[FWIW, the story is different for the symmetric ciphers. cryptodisk
+and friends (zfs encryption etc) use grub_crypto_lookup_cipher_by_name()
+to get a cipher handle. That depends on grub_ciphers being populated
+by people calling grub_cipher_register. import_gcry.py ensures that the
+symmetric ciphers call it.]
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+---
+ grub-core/commands/pgp.c | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+diff --git a/grub-core/commands/pgp.c b/grub-core/commands/pgp.c
+index 228388c..87381d8 100644
+--- a/grub-core/commands/pgp.c
++++ b/grub-core/commands/pgp.c
+@@ -377,29 +377,6 @@ grub_crypto_pk_locate_subkey_in_trustdb (grub_uint64_t keyid)
+   return 0;
+ }
+ 
+-<<<<<<< HEAD
+-=======
+-
+-static int
+-dsa_pad (gcry_mpi_t *hmpi, grub_uint8_t *hval,
+-	 const gcry_md_spec_t *hash, struct grub_public_subkey *sk)
+-{
+-  unsigned nbits = gcry_mpi_get_nbits (sk->mpis[1]);
+-  grub_dprintf ("crypt", "must be %u bits got %d bits\n", nbits,
+-		(int)(8 * hash->mdlen));
+-  return gcry_mpi_scan (hmpi, GCRYMPI_FMT_USG, hval,
+-			nbits / 8 < (unsigned) hash->mdlen ? nbits / 8
+-			: (unsigned) hash->mdlen, 0);
+-}
+-
+-static int
+-rsa_pad (gcry_mpi_t *hmpi, grub_uint8_t *hval,
+-	 const gcry_md_spec_t *hash, struct grub_public_subkey *sk)
+-{
+-  return grub_crypto_rsa_pad(hmpi, hval, hash, sk->mpis[0]);
+-}
+-
+->>>>>>> 537401e (pgp: factor out rsa_pad)
+ struct grub_pubkey_context
+ {
+   grub_file_t sig;

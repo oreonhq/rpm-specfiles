@@ -1,0 +1,31 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Michael Chang <mchang@suse.com>
+Date: Fri, 31 May 2024 15:14:23 +0800
+Subject: [PATCH 269/356] fs/ext2: Fix out-of-bounds read for inline extents
+
+When inline extents are used, i.e. the extent tree depth equals zero,
+a maximum of four entries can fit into the inode's data block. If the
+extent header states a number of entries greater than four the current
+ext2 implementation causes an out-of-bounds read. Fix this issue by
+capping the number of extents to four when reading inline extents.
+
+Reported-by: Daniel Axtens <dja@axtens.net>
+Signed-off-by: Michael Chang <mchang@suse.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/ext2.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/grub-core/fs/ext2.c b/grub-core/fs/ext2.c
+index 2f262dc..3199131 100644
+--- a/grub-core/fs/ext2.c
++++ b/grub-core/fs/ext2.c
+@@ -496,6 +496,8 @@ grub_ext2_read_block (grub_fshelp_node_t node, grub_disk_addr_t fileblock)
+       int i;
+       grub_disk_addr_t ret;
+       grub_uint16_t nent;
++      const grub_uint16_t max_inline_ext = sizeof (inode->blocks) / sizeof (*ext) - 1; /* Minus 1 extent header. */
++      grub_uint16_t nent;
+       /* Maximum number of extent entries in the inode's inline extent area. */
+       const grub_uint16_t max_inline_ext = sizeof (inode->blocks) / sizeof (*ext) - 1; /* Minus 1 extent header. */
+       /* Maximum number of extent entries in the external extent block. */

@@ -1,0 +1,78 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Axtens <dja@axtens.net>
+Date: Mon, 28 Sep 2020 11:11:17 +1000
+Subject: [PATCH 140/356] ieee1275: enter lockdown based on /ibm,secure-boot
+
+If the 'ibm,secure-boot' property of the root node is 2 or greater,
+enter lockdown.
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+---
+ grub-core/Makefile.core.def    |  1 +
+ grub-core/kern/ieee1275/init.c | 27 +++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
+
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index 0eaecca..562bb0d 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -337,6 +337,7 @@ kernel = {
+   mips_loongson = commands/keylayouts.c;
+ 
+   powerpc_ieee1275 = kern/powerpc/cache.S;
++  powerpc_ieee1275 = kern/lockdown.c;
+   powerpc_ieee1275 = kern/powerpc/dl.c;
+   powerpc_ieee1275 = kern/powerpc/compiler-rt.S;
+   powerpc_ieee1275 = kern/lockdown.c;
+diff --git a/grub-core/kern/ieee1275/init.c b/grub-core/kern/ieee1275/init.c
+index 84521cc..21dd467 100644
+--- a/grub-core/kern/ieee1275/init.c
++++ b/grub-core/kern/ieee1275/init.c
+@@ -54,6 +54,7 @@
+ #include <grub/powerpc/ieee1275/ieee1275.h>
+ #include <grub/powerpc/ieee1275/platform_keystore.h>
+ #endif
++#include <grub/lockdown.h>
+ 
+ #ifdef __powerpc__
+ #define GRUB_SB_DISABLED        ((grub_uint32_t) 0)
+@@ -898,6 +899,30 @@ grub_ieee1275_ibm_cas (void)
+   args.ihandle = root;
+   args.cas_addr = (grub_ieee1275_cell_t) &vector;
+ 
++static void
++grub_get_ieee1275_secure_boot (void)
++{
++  grub_ieee1275_phandle_t root;
++  int rc;
++  grub_uint32_t is_sb;
++
++  grub_ieee1275_finddevice ("/", &root);
++
++  rc = grub_ieee1275_get_integer_property (root, "ibm,secure-boot", &is_sb,
++                                           sizeof (is_sb), 0);
++
++  /* ibm,secure-boot:
++   * 0 - disabled
++   * 1 - audit
++   * 2 - enforce
++   * 3 - enforce + OS-specific behaviour
++   *
++   * We only support enforce.
++   */
++  if (rc >= 0 && is_sb >= 2)
++    grub_lockdown ();
++}
++
+   grub_printf ("Calling ibm,client-architecture-support from grub...");
+   IEEE1275_CALL_ENTRY_FN (&args);
+   grub_printf ("done\n");
+@@ -1091,6 +1116,8 @@ grub_machine_init (void)
+ #ifdef __powerpc__
+   grub_ieee1275_get_secure_boot ();
+ #endif
++
++  grub_get_ieee1275_secure_boot ();
+ }
+ 
+ void

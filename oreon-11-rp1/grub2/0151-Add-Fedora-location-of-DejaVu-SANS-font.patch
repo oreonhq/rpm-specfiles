@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: fluteze <fluteze@gmail.com>
+Date: Sat, 27 Nov 2021 10:54:44 -0600
+Subject: [PATCH 151/356] Add Fedora location of DejaVu SANS font
+
+In Fedora 35, and possibly earlier, grub would fail to configure with a
+complaint about DejaVu being "not found" even though it was installed.
+The DejaVu sans font search path is updated to reflect the
+distribution's current install path.
+
+Signed-off-by: Erik Edwards <fluteze@gmail.com>
+[rharwood@redhat.com: slight commit message edits]
+Signed-off-by: Robbie Harwood <rharwood@redhat.com>
+---
+ configure.ac | 13 -------------
+ 1 file changed, 13 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 461f937..66444f1 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -939,7 +939,6 @@ if test "x$target_cpu" = xloongarch64; then
+   TARGET_CCASFLAGS="$TARGET_CCASFLAGS -Wa,-mla-global-with-abs"
+ fi
+ 
+-<<<<<<< HEAD
+ if test "x$target_cpu" = xriscv64 || test "x$target_cpu" = xriscv32; then
+   AC_CACHE_CHECK([for no-relax options], grub_cv_target_cc_mno_relax, [
+     grub_cv_target_cc_mno_relax=no
+@@ -963,18 +962,6 @@ if test "x$target_cpu" = xriscv64 || test "x$target_cpu" = xriscv32; then
+     TARGET_CFLAGS="$TARGET_CFLAGS $grub_cv_target_cc_mno_relax"
+     TARGET_CCASFLAGS="$TARGET_CCASFLAGS $grub_cv_target_cc_mno_relax"
+   fi
+-=======
+-# Should grub utils get the host CFLAGS, or the target CFLAGS?
+-AC_ARG_WITH([utils],
+-            AS_HELP_STRING([--with-utils=host|target|build],
+-                           [choose which flags to build utilities with. (default=target)]),
+-	    [have_with_utils=y],
+-	    [have_with_utils=n])
+-if test x"$have_with_utils" = xy ; then
+-  with_utils="$withval"
+-else
+-  with_utils=target
+->>>>>>> 130b59a (Make it so we can tell configure which cflags utils are built with)
+ fi
+ 
+ # GRUB doesn't use float or doubles at all. Yet some toolchains may decide

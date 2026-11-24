@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Date: Thu, 4 Dec 2025 21:25:54 +0100
+Subject: [PATCH 318/356] Revert "arm64: Use proper memory type for kernel
+ allocation"
+
+This fully reverts commit ba84a3e50533138afe65c5b87b13cf8a0df90393.
+
+Note the modifed code is not used on x86 (#ifdef !x86).
+
+This is part of a series of reverts to move non x86 vmlinuz loading back
+to using EFI boot services load_image + start_image calls.
+
+The current DYI approach breaks booting kernel EFI binaries which have
+the stubble stub for automatic DTB loading.
+
+Switching back to EFI boot services load_image + start_image fixes this
+and also brings Fedora's grub inline with how upstream grub is loading
+and booting kernels on arm64 platforms.
+
+Signed-off-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+---
+ grub-core/loader/efi/linux.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index 09a8a5c..f1e867b 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -25,9 +25,7 @@
+ #include <grub/loader.h>
+ #include <grub/mm.h>
+ #include <grub/types.h>
+-#include <grub/efi/api.h>
+ #include <grub/efi/efi.h>
+-#include <grub/cpu/efi/memory.h>
+ #include <grub/efi/fdtload.h>
+ #include <grub/efi/memory.h>
+ #include <grub/efi/linux.h>

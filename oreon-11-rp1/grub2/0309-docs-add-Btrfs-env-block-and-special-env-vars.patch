@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Leo Sandoval <lsandova@redhat.com>
+Date: Mon, 27 Oct 2025 11:18:45 -0600
+Subject: [PATCH 309/356] docs: add Btrfs env block and special env vars
+
+Update grub.texi to describe the external environment block in the
+reserved area of Btrfs header used for grub-reboot and savedefault,
+and add a section documenting the saved_entry, next_entry, and
+env_block variables.
+
+Signed-off-by: Michael Chang <mchang@suse.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ docs/grub.texi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/docs/grub.texi b/docs/grub.texi
+index 8336d0c..d5d6391 100644
+--- a/docs/grub.texi
++++ b/docs/grub.texi
+@@ -3265,6 +3265,7 @@ by pressing @key{RET} at the end of a line.  To boot the edited entry, press
+ 
+ Although GRUB unfortunately does not support @dfn{undo}, you can do almost
+ the same thing by just returning to the main menu using @key{ESC}.
++* Special environment block variables::
+ 
+ 
+ @node Environment

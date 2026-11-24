@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: B Horn <b@horn.uk>
+Date: Tue, 11 Feb 2025 15:22:28 -0600
+Subject: [PATCH 276/356] disk/loopback: Reference tracking for the loopback
+
+It was possible to delete a loopback while there were still references
+to it. This led to an exploitable use-after-free.
+
+Fixed by implementing a reference counting in the grub_loopback struct.
+
+Reported-by: B Horn <b@horn.uk>
+Signed-off-by: B Horn <b@horn.uk>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ include/grub/loopback.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/grub/loopback.h b/include/grub/loopback.h
+index 3b9a9e3..915ef65 100644
+--- a/include/grub/loopback.h
++++ b/include/grub/loopback.h
+@@ -25,6 +25,7 @@ struct grub_loopback
+   grub_file_t file;
+   struct grub_loopback *next;
+   unsigned long id;
++  grub_uint64_t refcnt;
+ };
+ 
+ #endif /* ! GRUB_LOOPBACK_HEADER */

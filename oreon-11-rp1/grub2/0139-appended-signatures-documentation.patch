@@ -1,0 +1,181 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Axtens <dja@axtens.net>
+Date: Thu, 1 Oct 2020 13:02:09 +1000
+Subject: [PATCH 139/356] appended signatures: documentation
+
+This explains how appended signatures can be used to form part of
+a secure boot chain, and documents the commands and variables
+introduced.
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+---
+ docs/grub.texi | 112 +++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 112 insertions(+)
+
+diff --git a/docs/grub.texi b/docs/grub.texi
+index d5db0a0..1901c95 100644
+--- a/docs/grub.texi
++++ b/docs/grub.texi
+@@ -3275,6 +3275,7 @@ all Unix-like systems.  Environment variables have a name, which is unique
+ and is usually a short identifier, and a value, which is an arbitrary string
+ of characters.  They may be set (@pxref{set}), unset (@pxref{unset}), or
+ looked up (@pxref{Shell-like scripting}) by name.
++* check_appended_signatures::
+ 
+ A number of environment variables have special meanings to various parts of
+ GRUB.  Others may be used freely in GRUB configuration files.
+@@ -6691,6 +6692,7 @@ you forget a command, you can run the command @command{help}
+ * date::                        Display or set current date and time
+ * devicetree::                  Load a device tree blob
+ * distrust::                    Remove a pubkey from trusted keys
++* distrust_certificate::        Remove a certificate from the list of trusted certificates
+ * drivemap::                    Map a drive to another
+ * echo::                        Display a line of text
+ * efitextmode::                 Set/Get text output mode resolution
+@@ -6709,6 +6711,7 @@ you forget a command, you can run the command @command{help}
+ * hexdump::                     Show raw contents of a file or memory
+ * insmod::                      Insert a module
+ * keystatus::                   Check key modifier status
++* list_certificates::           List trusted certificates
+ * list_env::                    List variables in environment block
+ * list_trusted::                List trusted public keys
+ * load_env::                    Load variables from environment block
+@@ -6755,8 +6758,10 @@ you forget a command, you can run the command @command{help}
+ * true::                        Do nothing, successfully
+ * trust::                       Add public key to list of trusted keys
+ * uki::                         Load Unified Kernel Image menu entries
++* trust_certificate::           Add an x509 certificate to the list of trusted certificates
+ * unset::                       Unset an environment variable
+ @comment * vbeinfo::                     List available video modes
++* verify_appended::             Verify appended digital signature
+ * verify_detached::             Verify detached digital signature
+ * videoinfo::                   List available video modes
+ * wrmsr::                       Write values to model-specific registers
+@@ -7720,6 +7725,21 @@ only if checking key modifier status is supported.
+ @end deffn
+ 
+ 
++@node list_certificates
++@subsection list_certificates
++
++@deffn Command list_certificates
++List all x509 certificates trusted by GRUB for validating appended signatures.
++The output is a numbered list of certificates, showing the certificate's serial
++number and Common Name.
++
++The certificate number can be used as an argument to
++@command{distrust_certificate} (@pxref{distrust_certificate}).
++
++See @xref{Using appended signatures} for more information.
++@end deffn
++
++
+ @node list_env
+ @subsection list_env
+ 
+@@ -8750,6 +8770,18 @@ only on PC BIOS platforms.
+ @end deffn
+ @end ignore
+ 
++@node verify_appended
++@subsection verify_appended
++
++@deffn Command verify_appended file
++Verifies an appended signature on @var{file} against the trusted certificates
++known to GRUB (See @pxref{list_certificates}, @pxref{trust_certificate}, and
++@pxref{distrust_certificate}).
++
++Exit code @code{$?} is set to 0 if the signature validates
++successfully.  If validation fails, it is set to a non-zero value.
++See @xref{Using appended signatures}, for more information.
++@end deffn
+ 
+ @node verify_detached
+ @subsection verify_detached
+@@ -9546,6 +9578,86 @@ signature verification cannot be @strong{disabled} by setting the
+ to @code{no} or using the @command{load_env} (@pxref{load_env}) command from
+ the GRUB console.
+ 
++@node Using appended signatures
++@section Using appended signatures in GRUB
++
++GRUB supports verifying Linux-style 'appended signatures' for secure boot.
++Appended signatures are PKCS#7 messages containing a signature over the
++contents of a file, plus some metadata, appended to the end of a file. A file
++with an appended signature ends with the magic string:
++
++@example
++~Module signature appended~\n
++@end example
++
++where @code{\n} represents the line-feed character, @code{0x0a}.
++
++Certificates can be managed at boot time using the @pxref{trust_certificate},
++@pxref{distrust_certificate} and @pxref{list_certificates} commands.
++Certificates can also be built in to the core image using the @code{--x509}
++parameter to @command{grub-install} or @command{grub-mkimage}.
++
++A file can be explictly verified using the @pxref{verify_appended} command.
++
++Only signatures made with the SHA-256 or SHA-512 hash algorithm are supported,
++and only RSA signatures are supported.
++
++A file can be signed with the @command{sign-file} utility supplied with the
++Linux kernel source. For example, if you have @code{signing.key} as the private
++key and @code{certificate.der} as the x509 certificate containing the public key:
++
++@example
++sign-file SHA256 signing.key certificate.der vmlinux vmlinux.signed
++@end example
++
++Enforcement of signature verification is controlled by the
++@code{check_appended_signatures} variable.
++
++@itemize
++@item @samp{no}: no verification is performed. This is the default when GRUB
++      is not in @pxref{Lockdown} mode.
++@item @samp{enforce}: verification is performed. Verification can be disabled
++      by setting the variable back to @samp{no}.
++@item @samp{forced}: verification is performed and cannot be disabled. This is
++      set when GRUB is in Lockdown when the appendedsig module is loaded.
++@end itemize
++
++Unlike GPG-style signatures, not all files loaded by GRUB are required to be
++signed. Once verification is turned on, the following file types will have
++appended signatures verified:
++
++@itemize
++@item Linux kernels
++@item GRUB modules, except those built into the core image
++@item Any new certificate files to be trusted
++@end itemize
++
++ACPI tables and Device Tree images will not be checked for appended signatures
++but must be verified by another mechanism such as GPG-style signatures before
++they will be loaded.
++
++Unless lockdown mode is enabled, signature checking does @strong{not}
++stop an attacker with console access from dropping manually to the GRUB
++console and executing:
++
++@example
++set check_appended_signatures=no
++@end example
++
++Refer to the section on password-protecting GRUB (@pxref{Authentication
++and authorisation}) for more information on preventing this.
++
++Additionally, unless lockdown mode is enabled:
++
++@itemize
++@item Special care must be taken around the @command{loadenv} command, which
++      can be used to turn off @code{check_appended_signature}.
++
++@item If the grub configuration file is loaded from the disk, anyone who can
++      modify the file on disk can turn off @code{check_appended_signature}.
++      Consider embedding the configuration into the core grub image.
++@end itemize
++
+ @node UEFI secure boot and shim
+ @section UEFI secure boot and shim support
+ 

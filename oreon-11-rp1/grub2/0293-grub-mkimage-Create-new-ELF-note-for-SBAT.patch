@@ -1,0 +1,151 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Sudhakar Kuppusamy <sudhakar@linux.ibm.com>
+Date: Wed, 23 Oct 2024 17:54:32 +0530
+Subject: [PATCH 293/356] grub-mkimage: Create new ELF note for SBAT
+
+In order to store the SBAT data we create a new ELF note. The string
+".sbat", zero-padded to 4 byte alignment, shall be entered in the name
+field. The string "SBAT"'s ASCII values, 0x53424154, should be entered
+in the type field.
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+Signed-off-by: Sudhakar Kuppusamy <sudhakar@linux.ibm.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ include/grub/util/mkimage.h |  8 ++++++++
+ util/grub-mkimagexx.c       | 13 +++++++++++++
+ util/mkimage.c              | 11 +++++++++++
+ 3 files changed, 32 insertions(+)
+
+diff --git a/include/grub/util/mkimage.h b/include/grub/util/mkimage.h
+index 0d40383..8079558 100644
+--- a/include/grub/util/mkimage.h
++++ b/include/grub/util/mkimage.h
+@@ -51,12 +51,20 @@ grub_mkimage_load_image64 (const char *kernel_path,
+ 			   const struct grub_install_image_target_desc *image_target);
+ void
+ grub_mkimage_generate_elf32 (const struct grub_install_image_target_desc *image_target,
++<<<<<<< HEAD
+ 			     int note, char *sbat, size_t appsig_size, char **core_img, size_t *core_size,
++=======
++			     int note, size_t appsig_size, char *sbat, char **core_img, size_t *core_size,
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 			     Elf32_Addr target_addr,
+ 			     struct grub_mkimage_layout *layout);
+ void
+ grub_mkimage_generate_elf64 (const struct grub_install_image_target_desc *image_target,
++<<<<<<< HEAD
+ 			     int note, char *sbat, size_t appsig_size, char **core_img, size_t *core_size,
++=======
++			     int note, size_t appsig_size, char *sbat, char **core_img, size_t *core_size,
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 			     Elf64_Addr target_addr,
+ 			     struct grub_mkimage_layout *layout);
+ 
+diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
+index 46f0be1..7aeee12 100644
+--- a/util/grub-mkimagexx.c
++++ b/util/grub-mkimagexx.c
+@@ -124,6 +124,7 @@ struct grub_sbat_note {
+   char name[ALIGN_UP(sizeof(GRUB_SBAT_NOTE_NAME), 4)];
+ };
+ 
++<<<<<<< HEAD
+ #define GRUB_APPENDED_SIGNATURE_NOTE_NAME "Appended-Signature"
+ #define GRUB_APPENDED_SIGNATURE_NOTE_TYPE 0x41536967 /* "ASig" */
+ struct grub_appended_signature_note
+@@ -132,6 +133,8 @@ struct grub_appended_signature_note
+   char name[ALIGN_UP (sizeof (GRUB_APPENDED_SIGNATURE_NOTE_NAME), 4)];
+ };
+ 
++=======
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ static int
+ is_relocatable (const struct grub_install_image_target_desc *image_target)
+ {
+@@ -233,7 +236,11 @@ grub_arm_reloc_jump24 (grub_uint32_t *target, Elf32_Addr sym_addr)
+ 
+ void
+ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc *image_target,
++<<<<<<< HEAD
+ 				    int note, char *sbat, size_t appsig_size, char **core_img, size_t *core_size,
++=======
++				    int note, size_t appsig_size, char *sbat, char **core_img, size_t *core_size,
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 				    Elf_Addr target_addr,
+ 				    struct grub_mkimage_layout *layout)
+ {
+@@ -253,6 +260,7 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phnum++;
+       footer_size += ALIGN_UP (sizeof (struct grub_sbat_note) + layout->sbat_size, 4);
+     }
++<<<<<<< HEAD
+ 
+   if (appsig_size)
+     {
+@@ -260,6 +268,8 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       footer_size += ALIGN_UP (sizeof (struct grub_appended_signature_note), 4);
+       footer_size += ALIGN_UP_OVERHEAD (appsig_size, 4);
+     }
++=======
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 
+   if (appsig_size)
+     {
+@@ -557,6 +567,7 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phdr->p_filesz = grub_host_to_target32 (note_size);
+       phdr->p_memsz = 0;
+       phdr->p_offset = grub_host_to_target32 (header_size + program_size + footer_offset);
++<<<<<<< HEAD
+       footer += note_size;
+       footer_offset += note_size;
+     }
+@@ -581,6 +592,8 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phdr->p_filesz = grub_host_to_target32 (note_size);
+       phdr->p_memsz = 0;
+       phdr->p_offset = grub_host_to_target32 (header_size + program_size + footer_offset);
++=======
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+     }
+ 
+   if (appsig_size) {
+diff --git a/util/mkimage.c b/util/mkimage.c
+index c94121e..d5d6bad 100644
+--- a/util/mkimage.c
++++ b/util/mkimage.c
+@@ -1910,12 +1910,15 @@ grub_install_generate_image (const char *dir, const char *prefix,
+       {
+ 	grub_uint64_t target_addr;
+ 	char *sbat = NULL;
++<<<<<<< HEAD
+ 	if (sbat_path != NULL)
+ 	  {
+ 	    sbat = xmalloc (sbat_size);
+ 	    grub_util_load_image (sbat_path, sbat);
+ 	    layout.sbat_size = sbat_size;
+ 	  }
++=======
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+ 	if (image_target->id == IMAGE_LOONGSON_ELF)
+ 	  {
+ 	    if (comp == GRUB_COMPRESSION_NONE)
+@@ -1927,11 +1930,19 @@ grub_install_generate_image (const char *dir, const char *prefix,
+ 	else
+ 	  target_addr = image_target->link_addr;
+ 	if (image_target->voidp_sizeof == 4)
++<<<<<<< HEAD
+ 	  grub_mkimage_generate_elf32 (image_target, note, sbat, appsig_size, &core_img, &core_size,
+ 				       target_addr, &layout);
+ 	else
+ 	  grub_mkimage_generate_elf64 (image_target, note, sbat, appsig_size, &core_img, &core_size,
+ 				       target_addr, &layout);
++=======
++	  grub_mkimage_generate_elf32 (image_target, note, appsig_size, sbat, &core_img,
++				       &core_size, target_addr, &layout);
++	else
++	  grub_mkimage_generate_elf64 (image_target, note, appsig_size, sbat, &core_img,
++				       &core_size, target_addr, &layout);
++>>>>>>> bbe3c75 (grub-mkimage: Create new ELF note for SBAT)
+       }
+       break;
+     }

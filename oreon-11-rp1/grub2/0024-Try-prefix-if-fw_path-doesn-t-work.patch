@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Peter Jones <pjones@redhat.com>
+Date: Tue, 9 Jul 2019 10:35:16 +0200
+Subject: [PATCH 024/356] Try $prefix if $fw_path doesn't work.
+
+Related: rhbz#1148652
+
+Signed-off-by: Peter Jones <pjones@redhat.com>
+---
+ grub-core/net/net.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/grub-core/net/net.c b/grub-core/net/net.c
+index 6c94a3b..94dc1ca 100644
+--- a/grub-core/net/net.c
++++ b/grub-core/net/net.c
+@@ -2070,7 +2070,7 @@ grub_net_search_config_file (char *config, grub_size_t config_buf_len)
+   /* Remove the remaining minus sign at the end. */
+   config[config_len] = '\0';
+ 
+-  return GRUB_ERR_NONE;
++  return GRUB_ERR_FILE_NOT_FOUND;
+ }
+ 
+ static struct grub_preboot *fini_hnd;

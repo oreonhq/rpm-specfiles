@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Laszlo Ersek <lersek@redhat.com>
+Date: Fri, 7 Apr 2023 16:56:09 +0200
+Subject: [PATCH 176/356] grub_dl_load_segments(): page-align the tramp/GOT
+ areas too
+
+The tramp/GOT write-protection in grub_dl_set_mem_attrs() requires that
+the tramp/GOT areas of the module image *not* share a page with any other
+memory allocations. Page-align the tramp/GOT areas, while satisfying their
+intrinsic alignment requirements too.
+
+Fixes: 887f1d8fa976 (modules: load module sections at page-aligned addresses)
+Fixes: ad1b904d325b (nx: set page permissions for loaded modules.)
+Signed-off-by: Laszlo Ersek <lersek@redhat.com>
+---
+ grub-core/kern/dl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/grub-core/kern/dl.c b/grub-core/kern/dl.c
+index 0f6d5ea..b9cc12f 100644
+--- a/grub-core/kern/dl.c
++++ b/grub-core/kern/dl.c
+@@ -286,9 +286,11 @@ grub_dl_load_segments (grub_dl_t mod, const Elf_Ehdr *e)
+       if (s->sh_size == 0 || !(s->sh_flags & SHF_ALLOC))
+ 	continue;
+ 
++  grub_size_t tramp_align;
+   grub_size_t tramp_align;
+   grub_size_t got;
+   grub_size_t got_align;
++  grub_size_t got_align;
+   grub_err_t err;
+ #endif
+   char *ptr;

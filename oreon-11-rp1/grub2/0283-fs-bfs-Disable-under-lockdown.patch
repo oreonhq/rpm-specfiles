@@ -1,0 +1,39 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Daniel Axtens <dja@axtens.net>
+Date: Sat, 23 Mar 2024 15:59:43 +1100
+Subject: [PATCH 283/356] fs/bfs: Disable under lockdown
+
+The BFS is not fuzz-clean. Don't allow it to be loaded under lockdown.
+This will also disable the AFS.
+
+Fixes: CVE-2024-45778
+Fixes: CVE-2024-45779
+
+Reported-by: Nils Langius <nils@langius.de>
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/bfs.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/grub-core/fs/bfs.c b/grub-core/fs/bfs.c
+index b7893ff..78aeb05 100644
+--- a/grub-core/fs/bfs.c
++++ b/grub-core/fs/bfs.c
+@@ -1107,16 +1107,11 @@ GRUB_MOD_INIT (bfs)
+ {
+   COMPILE_TIME_ASSERT (1 << LOG_EXTENT_SIZE ==
+ 		       sizeof (struct grub_bfs_extent));
+-<<<<<<< HEAD
+   if (!grub_is_lockdown ())
+     {
+       grub_bfs_fs.mod = mod;
+       grub_fs_register (&grub_bfs_fs);
+     }
+-=======
+-  grub_bfs_fs.mod = mod;
+-  grub_fs_register (&grub_bfs_fs);
+->>>>>>> 9c19b57 (kern/file: Implement filesystem reference counting)
+ }
+ 
+ #ifdef MODE_AFS

@@ -1,0 +1,35 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Alec Brown <alec.r.brown@oracle.com>
+Date: Wed, 22 Jan 2025 02:55:11 +0000
+Subject: [PATCH 286/356] disk: Check if returned pointer for allocated memory
+ is NULL
+
+When using grub_malloc(), grub_zalloc() or grub_calloc(), these functions can
+fail if we are out of memory. After allocating memory we should check if these
+functions returned NULL and handle this error if they did.
+
+On the occasion make a NULL check in ATA code more obvious.
+
+Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/disk/ldm.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/grub-core/disk/ldm.c b/grub-core/disk/ldm.c
+index 6f58e49..308d397 100644
+--- a/grub-core/disk/ldm.c
++++ b/grub-core/disk/ldm.c
+@@ -292,6 +292,12 @@ make_vg (grub_disk_t disk,
+ 	    }
+ 	  grub_memcpy (pv->internal_id, ptr, (grub_size_t) ptr[0] + 1);
+ 	  pv->internal_id[(grub_size_t) ptr[0] + 1] = 0;
++	  if (pv->id.uuid == NULL)
++	    {
++	      grub_free (pv->internal_id);
++	      grub_free (pv);
++	      goto fail2;
++	    }
+ 
+ 	  ptr += *ptr + 1;
+ 	  if (ptr + *ptr + 1 >= vblk[i].dynamic

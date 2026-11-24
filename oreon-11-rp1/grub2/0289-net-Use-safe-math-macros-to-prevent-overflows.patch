@@ -1,0 +1,64 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lidong Chen <lidong.chen@oracle.com>
+Date: Wed, 12 Feb 2025 10:38:17 -0600
+Subject: [PATCH 289/356] net: Use safe math macros to prevent overflows
+
+Replace direct arithmetic operations with macros from include/grub/safemath.h
+to prevent potential overflow issues when calculating the memory sizes.
+
+Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
+Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/net/bootp.c | 1 +
+ grub-core/net/net.c   | 4 ++++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/grub-core/net/bootp.c b/grub-core/net/bootp.c
+index feaca7f..1f1c733 100644
+--- a/grub-core/net/bootp.c
++++ b/grub-core/net/bootp.c
+@@ -27,6 +27,7 @@
+ #include <grub/datetime.h>
+ #include <grub/time.h>
+ #include <grub/list.h>
++#include <grub/safemath.h>
+ 
+ static int
+ dissect_url (const char *url, char **proto, char **host, char **path)
+diff --git a/grub-core/net/net.c b/grub-core/net/net.c
+index 29b6524..d5b12cf 100644
+--- a/grub-core/net/net.c
++++ b/grub-core/net/net.c
+@@ -32,6 +32,7 @@
+ #include <grub/loader.h>
+ #include <grub/bufio.h>
+ #include <grub/kernel.h>
++#include <grub/safemath.h>
+ #ifdef GRUB_MACHINE_EFI
+ #include <grub/net/efi.h>
+ #endif
+@@ -211,6 +212,7 @@ grub_net_ipv6_get_slaac (struct grub_net_card *card,
+ 			 const grub_net_link_level_address_t *hwaddr)
+ {
+   struct grub_net_slaac_mac_list *slaac;
++  grub_size_t sz;
+   char *ptr;
+   grub_size_t sz;
+ 
+@@ -293,6 +295,7 @@ grub_net_add_addr (const char *name,
+ 
+   if (!name_dup)
+     return NULL;
++  grub_size_t sz;
+   ret = grub_net_add_addr_real (name_dup, card, addr, hwaddress, flags);
+   if (!ret)
+     grub_free (name_dup);
+@@ -1773,6 +1776,7 @@ grub_net_fs_close (grub_file_t file)
+   return GRUB_ERR_NONE;
+ }
+ 
++  grub_size_t sz;
+ static void
+ receive_packets (struct grub_net_card *card, int *stop_condition)
+ {

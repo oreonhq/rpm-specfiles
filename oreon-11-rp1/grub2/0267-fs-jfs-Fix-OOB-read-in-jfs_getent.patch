@@ -1,0 +1,51 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lidong Chen <lidong.chen@oracle.com>
+Date: Fri, 22 Nov 2024 06:27:59 +0000
+Subject: [PATCH 267/356] fs/jfs: Fix OOB read in jfs_getent()
+
+The JFS fuzzing revealed an OOB read in grub_jfs_getent(). The crash
+was caused by an invalid leaf nodes count, diro->dirpage->header.count,
+which was larger than the maximum number of leaf nodes allowed in an
+inode. This fix is to ensure that the leaf nodes count is validated in
+grub_jfs_opendir() before calling grub_jfs_getent().
+
+On the occasion replace existing raw numbers with newly defined constant.
+
+Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+Reviewed-by: Alec Brown <alec.r.brown@oracle.com>
+---
+ grub-core/fs/jfs.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/grub-core/fs/jfs.c b/grub-core/fs/jfs.c
+index 03be9ef..fdca2a6 100644
+--- a/grub-core/fs/jfs.c
++++ b/grub-core/fs/jfs.c
+@@ -49,6 +49,12 @@ GRUB_MOD_LICENSE ("GPLv3+");
+ #define GRUB_JFS_INODE_INLINE_ENTRIES	8
+ #define GRUB_JFS_DIR_MAX_SLOTS		128
+ 
++/*
++ * Define max entries stored in-line in an inode.
++ * https://jfs.sourceforge.net/project/pub/jfslayout.pdf
++ */
++#define GRUB_JFS_INODE_INLINE_ENTRIES	8
++
+ struct grub_jfs_sblock
+ {
+   /* The magic for JFS.  It should contain the string "JFS1".  */
+@@ -461,6 +467,13 @@ grub_jfs_opendir (struct grub_jfs_data *data, struct grub_jfs_inode *inode)
+   struct grub_jfs_diropen *diro;
+   grub_disk_addr_t blk;
+ 
++      if (inode->dir.header.count > GRUB_JFS_INODE_INLINE_ENTRIES)
++	{
++	  grub_free (diro);
++	  grub_error (GRUB_ERR_BAD_FS, N_("invalid JFS inode"));
++	  return 0;
++	}
++
+   de = (struct grub_jfs_internal_dirent *) inode->dir.dirents;
+ 
+   if (!((grub_le_to_cpu32 (inode->mode)

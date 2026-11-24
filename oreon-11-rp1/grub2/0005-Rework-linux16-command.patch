@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Matthew Garrett <mjg59@coreos.com>
 Date: Sun, 9 Aug 2015 16:20:58 -0700
-Subject: [PATCH] Rework linux16 command
+Subject: [PATCH 005/356] Rework linux16 command
 
 We want a single buffer that contains the entire kernel image in order to
 perform a TPM measurement. Allocate one and copy the entire kernel int it
@@ -9,11 +9,11 @@ before pulling out the individual blocks later on.
 
 Signed-off-by: Matthew Garrett <mjg59@coreos.com>
 ---
- grub-core/loader/i386/pc/linux.c | 33 +++++++++++++++++++++------------
+ grub-core/loader/i386/pc/linux.c | 33 ++++++++++++++++++++------------
  1 file changed, 21 insertions(+), 12 deletions(-)
 
 diff --git a/grub-core/loader/i386/pc/linux.c b/grub-core/loader/i386/pc/linux.c
-index 4adeee9ae00..600530a742b 100644
+index 0c2a4ae..cc2d990 100644
 --- a/grub-core/loader/i386/pc/linux.c
 +++ b/grub-core/loader/i386/pc/linux.c
 @@ -124,13 +124,14 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),

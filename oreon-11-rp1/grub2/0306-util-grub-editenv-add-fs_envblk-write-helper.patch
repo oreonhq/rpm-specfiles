@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Michael Chang via Grub-devel <grub-devel@gnu.org>
+Date: Fri, 17 Oct 2025 17:01:35 +0800
+Subject: [PATCH 306/356] util/grub-editenv: add fs_envblk write helper
+
+This patch adds the function fs_envblk_write to update the reserved
+environment block on disk. The helper takes an in memory envblk buffer
+and writes it back to the device at the location defined by the
+fs_envblk specification. It performs size checks and uses file sync to
+ensure that the updated data is flushed.
+
+The helper is also added into the fs_envblk ops table, together with the
+open helper from the previous patch. With this change the basic input
+and output path for an external environment block is complete. The
+choice of which variables should be written externally will be handled
+by later patches.
+
+Signed-off-by: Michael Chang <mchang@suse.com>
+Reviewed-by: Neal Gompa <ngompa13@gmail.com>
+Reviewed-by: Avnish Chouhan <avnish@linux.ibm.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ util/grub-editenv.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/util/grub-editenv.c b/util/grub-editenv.c
+index 6bf066f..1c90f64 100644
+--- a/util/grub-editenv.c
++++ b/util/grub-editenv.c
+@@ -284,6 +284,7 @@ static grub_envblk_t fs_envblk_open (grub_envblk_t envblk);
+ 
+ struct fs_envblk_ops {
+   grub_envblk_t (*open) (grub_envblk_t);
++  void (*write) (grub_envblk_t);
+ };
+ typedef struct fs_envblk_ops fs_envblk_ops_t;
+ 
+@@ -295,7 +296,8 @@ struct fs_envblk {
+ typedef struct fs_envblk *fs_envblk_t;
+ 
+ static fs_envblk_ops_t fs_envblk_ops = {
+-  .open = fs_envblk_open
++  .open = fs_envblk_open,
++  .write = fs_envblk_write
+ };
+ 
+ /*

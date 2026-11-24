@@ -1,0 +1,192 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Rashmica Gupta <rashmica.g@gmail.com>
+Date: Thu, 11 Jun 2020 11:26:23 +1000
+Subject: [PATCH 128/356] Add suport for signing grub with an appended
+ signature
+
+Add infrastructure to allow firmware to verify the integrity of grub
+by use of a Linux-kernel-module-style appended signature. We initially
+target powerpc-ieee1275, but the code should be extensible to other
+platforms.
+
+Usually these signatures are appended to a file without modifying the
+ELF file itself. (This is what the 'sign-file' tool does, for example.)
+The verifier loads the signed file from the file system and looks at the
+end of the file for the appended signature. However, on powerpc-ieee1275
+platforms, the bootloader is often stored directly in the PReP partition
+as raw bytes without a file-system. This makes determining the location
+of an appended signature more difficult.
+
+To address this, we add a new ELF note.
+
+The name field of shall be the string "Appended-Signature", zero-padded
+to 4 byte alignment. The type field shall be 0x41536967 (the ASCII values
+for the string "ASig"). It must be the final section in the ELF binary.
+
+The description shall contain the appended signature structure as defined
+by the Linux kernel. The description will also be padded to be a multiple
+of 4 bytes. The padding shall be added before the appended signature
+structure (not at the end) so that the final bytes of a signed ELF file
+are the appended signature magic.
+
+A subsequent patch documents how to create a grub core.img validly signed
+under this scheme.
+
+Signed-off-by: Daniel Axtens <dja@axtens.net>
+Signed-off-by: Rashmica Gupta <rashmica.g@gmail.com>
+---
+ include/grub/util/install.h |  3 +++
+ util/grub-install-common.c  |  8 ++++++++
+ util/grub-mkimage.c         | 10 ++++++++++
+ util/grub-mkimagexx.c       | 37 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 58 insertions(+)
+
+diff --git a/include/grub/util/install.h b/include/grub/util/install.h
+index 6f27e2e..7ddd2ab 100644
+--- a/include/grub/util/install.h
++++ b/include/grub/util/install.h
+@@ -67,6 +67,9 @@
+       N_("SBAT metadata"), 0 },						\
+   { "disable-shim-lock", GRUB_INSTALL_OPTIONS_DISABLE_SHIM_LOCK, 0, 0,	\
+       N_("disable shim_lock verifier"), 0 },				\
++  { "appended-signature-size", GRUB_INSTALL_OPTIONS_APPENDED_SIGNATURE_SIZE,\
++    "SIZE", 0, N_("Add a note segment reserving SIZE bytes for an appended signature"), \
++    1},                                                                 \
+   { "disable-cli", GRUB_INSTALL_OPTIONS_DISABLE_CLI, 0, 0,		\
+     N_("disabled command line interface access"), 0 },			\
+   { "x509key",   'x', N_("FILE"), 0,					\
+diff --git a/util/grub-install-common.c b/util/grub-install-common.c
+index c1c3c57..4c8cf1f 100644
+--- a/util/grub-install-common.c
++++ b/util/grub-install-common.c
+@@ -470,11 +470,13 @@ static int disable_shim_lock;
+ static grub_compression_t compression;
+ static int disable_cli;
+ static size_t appsig_size;
++static size_t appsig_size;
+ 
+ int
+ grub_install_parse (int key, char *arg)
+ {
+   const char *end;
++  const char *end;
+ 
+   switch (key)
+     {
+@@ -587,6 +589,12 @@ grub_install_parse (int key, char *arg)
+       else if (appsig_size == 0)
+         grub_util_error (_("appended signature size `%s', and it should not be zero"), arg);
+       return 1;
++    case GRUB_INSTALL_OPTIONS_APPENDED_SIGNATURE_SIZE:
++      grub_errno = 0;
++      appsig_size = grub_strtol(arg, &end, 10);
++      if (grub_errno)
++        return 0;
++      return 1;
+     default:
+       return 0;
+     }
+diff --git a/util/grub-mkimage.c b/util/grub-mkimage.c
+index fb14aa7..f96771e 100644
+--- a/util/grub-mkimage.c
++++ b/util/grub-mkimage.c
+@@ -87,6 +87,7 @@ static struct argp_option options[] = {
+   {"disable-cli", GRUB_INSTALL_OPTIONS_DISABLE_CLI, 0, 0, N_("disable command line interface access"), 0},
+   {"appended-signature-size", 'S', N_("SIZE"), 0, N_("Add a note segment reserving SIZE bytes for an appended signature"), 0},
+   {"verbose",     'v', 0,      0, N_("print verbose messages."), 0},
++  {"appended-signature-size", 'S', N_("SIZE"), 0, N_("Add a note segment reserving SIZE bytes for an appended signature"), 0},
+   { 0, 0, 0, 0, 0, 0 }
+ };
+ 
+@@ -131,6 +132,7 @@ struct arguments
+   char *font;
+   char *config;
+   char *sbat;
++  size_t appsig_size;
+   int note;
+   int disable_shim_lock;
+   int disable_cli;
+@@ -141,6 +143,7 @@ struct arguments
+ 
+ static error_t
+ argp_parser (int key, char *arg, struct argp_state *state)
++  const char* end;
+ {
+   /* Get the input argument from argp_parse, which we
+      know is a pointer to our arguments structure. */
+@@ -186,6 +189,13 @@ argp_parser (int key, char *arg, struct argp_state *state)
+         grub_util_error (_("appended signature size `%s', and it should not be zero"), arg);
+       break;
+ 
++    case 'S':
++      grub_errno = 0;
++      arguments->appsig_size = grub_strtol(arg, &end, 10);
++      if (grub_errno)
++        return 0;
++      break;
++
+     case 'm':
+       if (arguments->memdisk)
+ 	free (arguments->memdisk);
+diff --git a/util/grub-mkimagexx.c b/util/grub-mkimagexx.c
+index 1a453a5..46f0be1 100644
+--- a/util/grub-mkimagexx.c
++++ b/util/grub-mkimagexx.c
+@@ -85,6 +85,15 @@ struct grub_ieee1275_note
+   struct grub_ieee1275_note_desc descriptor;
+ };
+ 
++#define GRUB_APPENDED_SIGNATURE_NOTE_NAME "Appended-Signature"
++#define GRUB_APPENDED_SIGNATURE_NOTE_TYPE 0x41536967 /* "ASig" */
++
++struct grub_appended_signature_note
++{
++  Elf32_Nhdr header;
++  char name[ALIGN_UP(sizeof (GRUB_APPENDED_SIGNATURE_NOTE_NAME), 4)];
++};
++
+ #define GRUB_XEN_NOTE_NAME "Xen"
+ 
+ struct fixup_block_list
+@@ -252,6 +261,12 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       footer_size += ALIGN_UP_OVERHEAD (appsig_size, 4);
+     }
+ 
++  if (appsig_size)
++    {
++      phnum++;
++      footer_size += ALIGN_UP(sizeof (struct grub_appended_signature_note) + appsig_size, 4);
++    }
++
+   if (image_target->id != IMAGE_LOONGSON_ELF)
+     phnum += 2;
+ 
+@@ -568,6 +583,28 @@ SUFFIX (grub_mkimage_generate_elf) (const struct grub_install_image_target_desc
+       phdr->p_offset = grub_host_to_target32 (header_size + program_size + footer_offset);
+     }
+ 
++  if (appsig_size) {
++    int note_size = ALIGN_UP(sizeof (struct grub_appended_signature_note) + appsig_size, 4);
++    struct grub_appended_signature_note *note_ptr = (struct grub_appended_signature_note *)
++      (elf_img + program_size + header_size + (note ? sizeof (struct grub_ieee1275_note) : 0));
++
++    note_ptr->header.n_namesz = grub_host_to_target32 (sizeof (GRUB_APPENDED_SIGNATURE_NOTE_NAME));
++    /* needs to sit at the end, so we round this up and sign some zero padding */
++    note_ptr->header.n_descsz = grub_host_to_target32 (ALIGN_UP(appsig_size, 4));
++    note_ptr->header.n_type = grub_host_to_target32 (GRUB_APPENDED_SIGNATURE_NOTE_TYPE);
++    strcpy (note_ptr->name, GRUB_APPENDED_SIGNATURE_NOTE_NAME);
++
++    phdr++;
++    phdr->p_type = grub_host_to_target32 (PT_NOTE);
++    phdr->p_flags = grub_host_to_target32 (PF_R);
++    phdr->p_align = grub_host_to_target32 (image_target->voidp_sizeof);
++    phdr->p_vaddr = 0;
++    phdr->p_paddr = 0;
++    phdr->p_filesz = grub_host_to_target32 (note_size);
++    phdr->p_memsz = 0;
++    phdr->p_offset = grub_host_to_target32 (header_size + program_size + (note ? sizeof (struct grub_ieee1275_note) : 0));
++  }
++
+   {
+     char *str_start = (elf_img + sizeof (*ehdr) + phnum * sizeof (*phdr)
+ 		       + shnum * sizeof (*shdr));

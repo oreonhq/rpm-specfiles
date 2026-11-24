@@ -1,0 +1,59 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lidong Chen <lidong.chen@oracle.com>
+Date: Fri, 22 Nov 2024 06:27:58 +0000
+Subject: [PATCH 266/356] fs/tar: Integer overflow leads to heap OOB write
+
+Both namesize and linksize are derived from hd.size, a 12-digit octal
+number parsed by read_number(). Later direct arithmetic calculation like
+"namesize + 1" and "linksize + 1" may exceed the maximum value of
+grub_size_t leading to heap OOB write. This patch fixes the issue by
+using grub_add() and checking for an overflow.
+
+Fixes: CVE-2024-45780
+
+Reported-by: Nils Langius <nils@langius.de>
+Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+Reviewed-by: Alec Brown <alec.r.brown@oracle.com>
+---
+ grub-core/fs/tar.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/grub-core/fs/tar.c b/grub-core/fs/tar.c
+index 1eaa534..7bf0ee2 100644
+--- a/grub-core/fs/tar.c
++++ b/grub-core/fs/tar.c
+@@ -99,10 +99,16 @@ grub_cpio_find_file (struct grub_archelp_data *data, char **name,
+       if (hd.typeflag == 'L')
+ 	{
+ 	  grub_err_t err;
++<<<<<<< HEAD
+ 	  grub_size_t namesize;
+ 
+ 	  if (grub_cast (read_number (hd.size, sizeof (hd.size)), &namesize) ||
+ 	      grub_add (namesize, 1, &sz))
++=======
++	  grub_size_t namesize = read_number (hd.size, sizeof (hd.size));
++
++	  if (grub_add (namesize, 1, &sz))
++>>>>>>> ba560c3 (fs/tar: Integer overflow leads to heap OOB write)
+ 	    return grub_error (GRUB_ERR_BAD_FS, N_("name size overflow"));
+ 
+ 	  *name = grub_malloc (sz);
+@@ -124,10 +130,16 @@ grub_cpio_find_file (struct grub_archelp_data *data, char **name,
+       if (hd.typeflag == 'K')
+ 	{
+ 	  grub_err_t err;
++<<<<<<< HEAD
+ 	  grub_size_t linksize;
+ 
+ 	  if (grub_cast (read_number (hd.size, sizeof (hd.size)), &linksize) ||
+ 	      grub_add (linksize, 1, &sz))
++=======
++	  grub_size_t linksize = read_number (hd.size, sizeof (hd.size));
++
++	  if (grub_add (linksize, 1, &sz))
++>>>>>>> ba560c3 (fs/tar: Integer overflow leads to heap OOB write)
+ 	    return grub_error (GRUB_ERR_BAD_FS, N_("link size overflow"));
+ 
+ 	  if (data->linkname_alloc < sz)

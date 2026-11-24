@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Diego Domingos <diegodo@br.ibm.com>
+Date: Mon, 14 Dec 2020 17:47:16 +0100
+Subject: [PATCH 126/356] ieee1275/powerpc: enables device mapper discovery
+
+this patch enables the device mapper discovery on ofpath.c. Currently,
+when we are dealing with a device like /dev/dm-* the ofpath returns null
+since there is no function implemented to handle this case.
+
+This patch implements a function that will look into /sys/block/dm-*
+devices and search recursively inside slaves directory to find the root
+disk.
+
+Signed-off-by: Diego Domingos <diegodo@br.ibm.com>
+---
+ grub-core/osdep/linux/ofpath.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/grub-core/osdep/linux/ofpath.c b/grub-core/osdep/linux/ofpath.c
+index 1177556..260f356 100644
+--- a/grub-core/osdep/linux/ofpath.c
++++ b/grub-core/osdep/linux/ofpath.c
+@@ -37,6 +37,7 @@
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <ctype.h>
++#include <dirent.h>
+ 
+ #ifdef __sparc__
+ typedef enum

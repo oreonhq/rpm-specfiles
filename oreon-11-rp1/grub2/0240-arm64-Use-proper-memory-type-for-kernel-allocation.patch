@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Maximilian Luz <luzmaximilian@gmail.com>
+Date: Tue, 16 Apr 2024 14:21:49 -0600
+Subject: [PATCH 240/356] arm64: Use proper memory type for kernel allocation
+
+Currently, the kernel pages are allocated with type EFI_LOADER_DATA.
+While the vast majority of systems will happily execute code from those
+pages (i.e. don't care about memory protection), the Microsoft Surface
+Pro X stalls, as this memory is not designated as "executable".
+
+Therefore, allocate the kernel pages as EFI_LOADER_CODE to request
+memory that is actually executable.
+
+Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+---
+ grub-core/loader/efi/linux.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index 6f7679c..cef32f1 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -25,7 +25,9 @@
+ #include <grub/loader.h>
+ #include <grub/mm.h>
+ #include <grub/types.h>
++#include <grub/efi/api.h>
+ #include <grub/efi/efi.h>
++#include <grub/cpu/efi/memory.h>
+ #include <grub/efi/fdtload.h>
+ #include <grub/efi/memory.h>
+ #include <grub/efi/linux.h>

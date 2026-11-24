@@ -1,0 +1,23 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Peter Jones <pjones@redhat.com>
+Date: Mon, 8 Jan 2024 16:03:54 -0500
+Subject: [PATCH 186/356] power: Fix use after free in get_slave_from_dm()
+
+Signed-off-by: Peter Jones <pjones@redhat.com>
+---
+ grub-core/osdep/linux/ofpath.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/grub-core/osdep/linux/ofpath.c b/grub-core/osdep/linux/ofpath.c
+index 260f356..2fe92d6 100644
+--- a/grub-core/osdep/linux/ofpath.c
++++ b/grub-core/osdep/linux/ofpath.c
+@@ -775,6 +775,8 @@ grub_util_devname_to_ofpath (const char *sys_devname)
+   if (devicenode == NULL)
+     goto devicenode_fail;
+ 
++    if (dp == NULL)
++      grub_util_warn (_("cannot open directory `%s'"), device_path);
+   if (device[0] == 'h' && device[1] == 'd')
+     ofpath = of_path_of_ide(name_buf, device, devnode, devicenode);
+   else if (device[0] == 's'

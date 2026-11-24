@@ -1,0 +1,72 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: B Horn <b@horn.uk>
+Date: Tue, 14 May 2024 12:39:56 +0100
+Subject: [PATCH 271/356] fs/ntfs: Use a helper function to access attributes
+
+Right now to access the next attribute the code reads the length of the
+current attribute and adds that to the current pointer. This is error
+prone as bounds checking needs to be performed all over the place. So,
+implement a helper and ensure its used across find_attr() and read_attr().
+
+This commit does *not* implement full bounds checking. It is just the
+preparation work for this to be added into the helper.
+
+Signed-off-by: B Horn <b@horn.uk>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/ntfs.c | 21 ++++++++++++++++++++-
+ include/grub/ntfs.h |  2 ++
+ 2 files changed, 22 insertions(+), 1 deletion(-)
+
+diff --git a/grub-core/fs/ntfs.c b/grub-core/fs/ntfs.c
+index 790b67f..caa4ea7 100644
+--- a/grub-core/fs/ntfs.c
++++ b/grub-core/fs/ntfs.c
+@@ -247,6 +247,25 @@ next_attribute (grub_uint8_t *curr_attribute, void *end, bool validate)
+ }
+ 
+ 
++/* Return the next attribute if it exists, otherwise return NULL. */
++static grub_uint8_t *
++next_attribute (grub_uint8_t *curr_attribute, void *end)
++{
++  grub_uint8_t *next = curr_attribute;
++
++  /*
++   * Need to verify we aren't exceeding the end of the buffer by reading the
++   * header for the current attribute
++   */
++  if (curr_attribute + GRUB_NTFS_ATTRIBUTE_HEADER_SIZE >= (grub_uint8_t *) end)
++    return NULL;
++
++  next += u16at (curr_attribute, 4);
++
++  return next;
++}
++
++
+ grub_ntfscomp_func_t grub_ntfscomp_func;
+ 
+ static grub_err_t
+@@ -553,7 +572,7 @@ find_attr (struct grub_ntfs_attr *at, grub_uint8_t attr)
+ 		   u32at (pa, 0x10) * (at->mft->data->mft_size << GRUB_NTFS_BLK_SHR),
+ 		   at->mft->data->mft_size << GRUB_NTFS_BLK_SHR, 0, 0, 0))
+ 		return NULL;
+-	      pa += u16at (pa, 4);
++	      pa = next_attribute (pa, pa_end);
+ 	      if (pa >= pa_end)
+ 	        pa = NULL;
+ 	    }
+diff --git a/include/grub/ntfs.h b/include/grub/ntfs.h
+index 77b182a..7a1ea5d 100644
+--- a/include/grub/ntfs.h
++++ b/include/grub/ntfs.h
+@@ -72,6 +72,8 @@ enum
+     GRUB_NTFS_ATTR_INDEX_VIEW  = 0x20000000
+   };
+ 
++#define GRUB_NTFS_ATTRIBUTE_HEADER_SIZE 16
++
+ enum
+   {
+     GRUB_NTFS_FLAG_COMPRESSED		= 1,

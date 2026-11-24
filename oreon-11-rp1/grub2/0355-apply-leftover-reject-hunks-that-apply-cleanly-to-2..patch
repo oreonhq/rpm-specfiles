@@ -1,0 +1,777 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: x <x>
+Date: Mon, 23 Nov 2026 22:30:09 -0800
+Subject: [PATCH 355/356] apply leftover reject hunks that apply cleanly to
+ 2.14
+
+---
+ grub-core/Makefile.core.def        |   3 +
+ grub-core/disk/mdraid_linux.c      |   5 +
+ grub-core/kern/efi/mm.c            |  32 +++++
+ grub-core/loader/efi/chainloader.c |   2 +-
+ grub-core/loader/efi/linux.c       |   2 +-
+ grub-core/loader/i386/efi/linux.c  |   8 ++
+ grub-core/net/bootp.c              | 173 +++++++++++++++++++++++
+ grub-core/net/drivers/efi/efinet.c |   3 +
+ include/grub/efi/efi.h             |  45 +++++-
+ include/grub/net.h                 |  60 ++++++++
+ util/grub-install.c                |  19 +++
+ util/grub.d/10_linux.in            | 212 +++++++++++++++++++++++++++++
+ 12 files changed, 561 insertions(+), 3 deletions(-)
+
+diff --git a/grub-core/Makefile.core.def b/grub-core/Makefile.core.def
+index b52fd20..11ee542 100644
+--- a/grub-core/Makefile.core.def
++++ b/grub-core/Makefile.core.def
+@@ -204,6 +204,9 @@ kernel = {
+ 
+   softdiv = lib/division.c;
+ 
++  x86 = lib/i386/backtrace.c;
++  x86 = lib/backtrace.c;
++
+   i386 = kern/i386/dl.c;
+   i386_xen = kern/i386/dl.c;
+   i386_xen_pvh = kern/i386/dl.c;
+diff --git a/grub-core/disk/mdraid_linux.c b/grub-core/disk/mdraid_linux.c
+index 79145f8..502f79d 100644
+--- a/grub-core/disk/mdraid_linux.c
++++ b/grub-core/disk/mdraid_linux.c
+@@ -194,6 +194,11 @@ grub_mdraid_detect (grub_disk_t disk,
+   return NULL;
+ #endif
+ 
++#ifdef __powerpc__
++  /* Firmware will yell at us for reading too far. */
++  return NULL;
++#endif
++
+   /* The sector where the mdraid 0.90 superblock is stored, if available.  */
+   size = grub_disk_native_sectors (disk);
+   if (size == GRUB_DISK_SIZE_UNKNOWN)
+diff --git a/grub-core/kern/efi/mm.c b/grub-core/kern/efi/mm.c
+index 3984688..d78afd9 100644
+--- a/grub-core/kern/efi/mm.c
++++ b/grub-core/kern/efi/mm.c
+@@ -146,6 +146,38 @@ grub_efi_allocate_pages_max (grub_efi_physical_address_t max,
+   return (void *) ((grub_addr_t) address);
+ }
+ 
++/* Allocate pages below a specified address */
++void *
++grub_efi_allocate_pages_max (grub_efi_physical_address_t max,
++			     grub_efi_uintn_t pages)
++{
++  grub_efi_status_t status;
++  grub_efi_boot_services_t *b;
++  grub_efi_physical_address_t address = max;
++
++  if (max > 0xffffffff)
++    return 0;
++
++  b = grub_efi_system_table->boot_services;
++  status = b->allocate_pages (GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_DATA, pages, &address);
++
++  if (status != GRUB_EFI_SUCCESS)
++    return 0;
++
++  if (address == 0)
++    {
++      /* Uggh, the address 0 was allocated... This is too annoying,
++	 so reallocate another one.  */
++      address = max;
++      status = b->allocate_pages (GRUB_EFI_ALLOCATE_MAX_ADDRESS, GRUB_EFI_LOADER_DATA, pages, &address);
++      grub_efi_free_pages (0, pages);
++      if (status != GRUB_EFI_SUCCESS)
++	return 0;
++    }
++
++  return (void *) ((grub_addr_t) address);
++}
++
+ /* Allocate pages. Return the pointer to the first of allocated pages.  */
+ void *
+ grub_efi_allocate_pages_real (grub_efi_physical_address_t address,
+diff --git a/grub-core/loader/efi/chainloader.c b/grub-core/loader/efi/chainloader.c
+index 325cd11..0d25da8 100644
+--- a/grub-core/loader/efi/chainloader.c
++++ b/grub-core/loader/efi/chainloader.c
+@@ -565,7 +565,7 @@ handle_image (struct grub_secureboot_chainloader_context *load_context)
+       grub_dprintf ("chain", "Failed to read header\n");
+       goto error_exit;
+     }
+-  else if (rc == 0)
++  else
+     {
+       grub_dprintf ("chain", "Secure Boot is not enabled\n");
+       return 0;
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index f5888a9..054cc0a 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -476,7 +476,7 @@ finalize_params_linux (void)
+ 
+ failure:
+   grub_fdt_unload();
+-  return grub_error(GRUB_ERR_BAD_OS, "failed to install/update FDT");
++  return err;
+ }
+ #endif
+ 
+diff --git a/grub-core/loader/i386/efi/linux.c b/grub-core/loader/i386/efi/linux.c
+index 6c310d9..be0cc95 100644
+--- a/grub-core/loader/i386/efi/linux.c
++++ b/grub-core/loader/i386/efi/linux.c
+@@ -117,6 +117,8 @@ kernel_alloc(kernel_alloc_purpose_t purpose,
+   grub_efi_physical_address_t prev_max = 0;
+ 
+   for (i = 0; max_addresses[i].addr != 0 && addr == 0; i++)
++  grub_dprintf ("linux", "initrd_mem = %lx\n", (unsigned long) initrd_mem);
++
+     {
+       grub_uint64_t max = max_addresses[i].addr;
+       grub_efi_uintn_t pages;
+@@ -157,6 +159,7 @@ kernel_alloc(kernel_alloc_purpose_t purpose,
+ 
+   if (addr == NULL)
+     grub_error (GRUB_ERR_OUT_OF_MEMORY, "%s", errmsg);
++  int rc;
+ 
+   return addr;
+ }
+@@ -200,6 +203,8 @@ grub_linuxefi_unload (void *data)
+ #define BOUNCE_BUFFER_MAX 0x1000000ull
+ 
+ static grub_ssize_t
++  grub_dprintf ("linux", "params = %lx\n", (unsigned long) params);
++
+ read(grub_file_t file, grub_uint8_t *bufp, grub_size_t len)
+ {
+   grub_ssize_t bufpos = 0;
+@@ -236,6 +241,9 @@ read(grub_file_t file, grub_uint8_t *bufp, grub_size_t len)
+ }
+ 
+ #define LOW_U32(val) ((grub_uint32_t)(((grub_addr_t)(val)) & 0xffffffffull))
++  grub_dprintf ("linux", "linux_cmdline = %lx\n",
++                (unsigned long)linux_cmdline);
++
+ #define HIGH_U32(val) ((grub_uint32_t)(((grub_addr_t)(val) >> 32) & 0xffffffffull))
+ 
+ static grub_err_t
+diff --git a/grub-core/net/bootp.c b/grub-core/net/bootp.c
+index 1f1c733..02a96aa 100644
+--- a/grub-core/net/bootp.c
++++ b/grub-core/net/bootp.c
+@@ -1881,6 +1881,179 @@ grub_cmd_bootp6 (struct grub_command *cmd __attribute__ ((unused)),
+ 
+ static grub_command_t cmd_getdhcp, cmd_bootp, cmd_dhcp, cmd_bootp6;
+ 
++struct grub_net_network_level_interface *
++grub_net_configure_by_dhcpv6_ack (const char *name,
++				  struct grub_net_card *card,
++				  grub_net_interface_flags_t flags
++				    __attribute__((__unused__)),
++				  const grub_net_link_level_address_t *hwaddr,
++				  const struct grub_net_dhcpv6_packet *packet,
++				  int is_def, char **device, char **path)
++{
++  struct grub_net_network_level_interface *inter = NULL;
++  struct grub_net_network_level_address addr;
++  int mask = -1;
++
++  if (!device || !path)
++    return NULL;
++
++  *device = 0;
++  *path = 0;
++
++  grub_dprintf ("net", "mac address is %02x:%02x:%02x:%02x:%02x:%02x\n",
++		hwaddr->mac[0], hwaddr->mac[1], hwaddr->mac[2],
++		hwaddr->mac[3], hwaddr->mac[4], hwaddr->mac[5]);
++
++  if (is_def)
++    grub_net_default_server = 0;
++
++  if (is_def && !grub_net_default_server && packet)
++    {
++      const grub_uint8_t *options = packet->dhcp_options;
++      unsigned int option_max = 1024 - OFFSET_OF (dhcp_options, packet);
++      unsigned int i;
++
++      for (i = 0; i < option_max - sizeof (grub_net_dhcpv6_option_t); )
++	{
++	  grub_uint16_t num, len;
++	  grub_net_dhcpv6_option_t *opt =
++	    (grub_net_dhcpv6_option_t *)(options + i);
++
++	  num = grub_be_to_cpu16(opt->option_num);
++	  len = grub_be_to_cpu16(opt->option_len);
++
++	  grub_dprintf ("net", "got dhcpv6 option %d len %d\n", num, len);
++
++	  if (len == 0)
++	    break;
++
++	  if (len + i > 1024)
++	    break;
++
++	  if (num == GRUB_NET_DHCP6_BOOTFILE_URL)
++	    {
++	      char *scheme, *userinfo, *host, *file;
++	      char *tmp;
++	      int hostlen;
++	      int port;
++	      int rc = extract_url_info ((const char *)opt->option_data,
++					 (grub_size_t)len,
++					 &scheme, &userinfo, &host, &port,
++					 &file);
++	      if (rc < 0)
++		continue;
++
++	      /* right now this only handles tftp. */
++	      if (grub_strcmp("tftp", scheme))
++		{
++		  grub_free (scheme);
++		  grub_free (userinfo);
++		  grub_free (host);
++		  grub_free (file);
++		  continue;
++		}
++	      grub_free (userinfo);
++
++	      hostlen = grub_strlen (host);
++	      if (hostlen > 2 && host[0] == '[' && host[hostlen-1] == ']')
++		{
++		  tmp = host+1;
++		  host[hostlen-1] = '\0';
++		}
++	      else
++		tmp = host;
++
++	      *device = grub_xasprintf ("%s,%s", scheme, tmp);
++	      grub_free (scheme);
++	      grub_free (host);
++
++	      if (file && *file)
++		{
++		  tmp = grub_strrchr (file, '/');
++		  if (tmp)
++		    *(tmp+1) = '\0';
++		  else
++		    file[0] = '\0';
++		}
++	      else if (!file)
++		file = grub_strdup ("");
++
++	      if (file[0] == '/')
++		{
++		  *path = grub_strdup (file+1);
++		  grub_free (file);
++		}
++	      else
++		*path = file;
++	    }
++	  else if (num == GRUB_NET_DHCP6_IA_NA)
++	    {
++	      const grub_net_dhcpv6_option_t *ia_na_opt;
++	      const grub_net_dhcpv6_opt_ia_na_t *ia_na =
++		(const grub_net_dhcpv6_opt_ia_na_t *)opt;
++	      unsigned int left = len - OFFSET_OF (options, ia_na);
++	      unsigned int j;
++
++	      if ((grub_uint8_t *)ia_na + left >
++		  (grub_uint8_t *)options + option_max)
++		left -= ((grub_uint8_t *)ia_na + left)
++		        - ((grub_uint8_t *)options + option_max);
++
++	      if (len < OFFSET_OF (option_data, opt)
++			+ sizeof (grub_net_dhcpv6_option_t))
++		{
++		  grub_dprintf ("net",
++				"found dhcpv6 ia_na option with no address\n");
++		  continue;
++		}
++
++	      for (j = 0; left > sizeof (grub_net_dhcpv6_option_t); )
++		{
++		  ia_na_opt = (const grub_net_dhcpv6_option_t *)
++			       (ia_na->options + j);
++		  grub_uint16_t ia_na_opt_num, ia_na_opt_len;
++
++		  ia_na_opt_num = grub_be_to_cpu16 (ia_na_opt->option_num);
++		  ia_na_opt_len = grub_be_to_cpu16 (ia_na_opt->option_len);
++		  if (ia_na_opt_len == 0)
++		    break;
++		  if (j + ia_na_opt_len > left)
++		    break;
++		  if (ia_na_opt_num == GRUB_NET_DHCP6_IA_ADDRESS)
++		    {
++		      const grub_net_dhcpv6_opt_ia_address_t *ia_addr;
++
++		      ia_addr = (const grub_net_dhcpv6_opt_ia_address_t *)
++				 ia_na_opt;
++		      addr.type = GRUB_NET_NETWORK_LEVEL_PROTOCOL_IPV6;
++		      grub_memcpy(addr.ipv6, ia_addr->ipv6_address,
++				  sizeof (ia_addr->ipv6_address));
++		      inter = grub_net_add_addr (name, card, &addr, hwaddr, 0);
++		    }
++
++		  j += ia_na_opt_len;
++		  left -= ia_na_opt_len;
++		}
++	    }
++
++	  i += len + 4;
++	}
++
++      grub_print_error ();
++    }
++
++  if (is_def)
++    {
++      grub_env_set ("net_default_interface", name);
++      grub_env_export ("net_default_interface");
++    }
++
++    if (inter)
++      grub_net_add_ipv6_local (inter, mask);
++    return inter;
++}
++
++
+ void
+ grub_bootp_init (void)
+ {
+diff --git a/grub-core/net/drivers/efi/efinet.c b/grub-core/net/drivers/efi/efinet.c
+index 924f436..2dbbd7c 100644
+--- a/grub-core/net/drivers/efi/efinet.c
++++ b/grub-core/net/drivers/efi/efinet.c
+@@ -19,6 +19,7 @@
+ #include <grub/net/netbuff.h>
+ #include <grub/dl.h>
+ #include <grub/env.h>
++#include <grub/env.h>
+ #include <grub/net.h>
+ #include <grub/time.h>
+ #include <grub/efi/api.h>
+@@ -26,6 +27,8 @@
+ #include <grub/i18n.h>
+ #include <grub/lib/hexdump.h>
+ #include <grub/types.h>
++#include <grub/lib/hexdump.h>
++#include <grub/types.h>
+ #include <grub/net/netbuff.h>
+ #include <grub/env.h>
+ 
+diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
+index 7e8a14f..c06b4a2 100644
+--- a/include/grub/efi/efi.h
++++ b/include/grub/efi/efi.h
+@@ -20,7 +20,6 @@
+ #ifndef GRUB_EFI_EFI_HEADER
+ #define GRUB_EFI_EFI_HEADER	1
+ 
+-#include <grub/efi/pe32.h>
+ #include <grub/types.h>
+ #include <grub/dl.h>
+ #include <grub/efi/api.h>
+@@ -52,10 +51,12 @@ struct grub_arm64_linux_pe_header
+ };
+ 
+ #if defined(__arm__)
++# define GRUB_PE32_PEXX_MAGIC GRUB_PE32_PE32_MAGIC
+ # define grub_armxx_linux_pe_header grub_arm_linux_pe_header
+ #endif
+ 
+ #if defined(__aarch64__)
++# define GRUB_PE32_PEXX_MAGIC GRUB_PE32_PE64_MAGIC
+ # define grub_armxx_linux_pe_header grub_arm64_linux_pe_header
+ #endif
+ 
+@@ -64,6 +65,11 @@ struct grub_arm64_linux_pe_header
+     { 0x94, 0x9d, 0x06, 0xfd, 0xe8, 0x11, 0x28, 0xe8 } \
+   }
+ 
++#define GRUB_EFI_GRUB_VARIABLE_GUID \
++  { 0x91376aff, 0xcba6, 0x42be, \
++    { 0x94, 0x9d, 0x06, 0xfd, 0xe8, 0x11, 0x28, 0xe8 } \
++  }
++
+ /* Variables.  */
+ extern grub_efi_system_table_t *EXPORT_VAR(grub_efi_system_table);
+ extern grub_efi_handle_t EXPORT_VAR(grub_efi_image_handle);
+@@ -196,6 +202,43 @@ extern grub_size_t EXPORT_VAR(grub_stack_size);
+ void *EXPORT_FUNC(grub_efi_get_firmware_fdt)(void);
+ grub_err_t EXPORT_FUNC(grub_efi_get_ram_base)(grub_addr_t *);
+ #endif
++grub_efi_status_t
++EXPORT_FUNC (grub_efi_load_image) (grub_efi_boolean_t boot_policy,
++				   grub_efi_handle_t parent_image_handle,
++				   grub_efi_device_path_t *file_path,
++				   void *source_buffer, grub_efi_uintn_t source_size,
++				   grub_efi_handle_t *image_handle);
++
++grub_efi_status_t
++EXPORT_FUNC (grub_efi_start_image) (grub_efi_handle_t image_handle,
++				    grub_efi_uintn_t *exit_data_size,
++				    grub_efi_char16_t **exit_data);
++
++grub_efi_status_t
++EXPORT_FUNC (grub_efi_unload_image) (grub_efi_handle_t image_handle);
++
++typedef struct grub_efi_loader
++{
++  grub_efi_status_t (__grub_efi_api *load_image) (grub_efi_boolean_t boot_policy,
++				   grub_efi_handle_t parent_image_handle,
++				   grub_efi_device_path_t *file_path,
++				   void *source_buffer,
++				   grub_efi_uintn_t source_size,
++				   grub_efi_handle_t *image_handle);
++
++  grub_efi_status_t (__grub_efi_api *start_image) (grub_efi_handle_t image_handle,
++				    grub_efi_uintn_t *exit_data_size,
++				    grub_efi_char16_t **exit_data);
++
++  grub_efi_status_t (__grub_efi_api *unload_image) (grub_efi_handle_t image_handle);
++} grub_efi_loader_t;
++
++grub_err_t
++EXPORT_FUNC (grub_efi_register_loader) (const grub_efi_loader_t *loader);
++
++grub_err_t
++EXPORT_FUNC (grub_efi_unregister_loader) (const grub_efi_loader_t *loader);
++
+ #include <grub/file.h>
+ grub_err_t grub_arch_efi_linux_load_image_header(grub_file_t file,
+                                                 struct linux_arch_kernel_header *lh);
+diff --git a/include/grub/net.h b/include/grub/net.h
+index d280acd..a8c9db5 100644
+--- a/include/grub/net.h
++++ b/include/grub/net.h
+@@ -513,6 +513,51 @@ enum
+     GRUB_NET_DHCP6_OPTION_BOOTFILE_URL = 59
+   };
+ 
++enum
++  {
++    GRUB_NET_DHCP6_IA_NA = 3,
++    GRUB_NET_DHCP6_IA_ADDRESS = 5,
++    GRUB_NET_DHCP6_BOOTFILE_URL = 59,
++  };
++
++struct grub_net_dhcpv6_option
++{
++  grub_uint16_t option_num;
++  grub_uint16_t option_len;
++  grub_uint8_t option_data[];
++} GRUB_PACKED;
++typedef struct grub_net_dhcpv6_option grub_net_dhcpv6_option_t;
++
++struct grub_net_dhcpv6_opt_ia_na
++{
++  grub_uint16_t option_num;
++  grub_uint16_t option_len;
++  grub_uint32_t iaid;
++  grub_uint32_t t1;
++  grub_uint32_t t2;
++  grub_uint8_t options[];
++} GRUB_PACKED;
++typedef struct grub_net_dhcpv6_opt_ia_na grub_net_dhcpv6_opt_ia_na_t;
++
++struct grub_net_dhcpv6_opt_ia_address
++{
++  grub_uint16_t option_num;
++  grub_uint16_t option_len;
++  grub_uint64_t ipv6_address[2];
++  grub_uint32_t preferred_lifetime;
++  grub_uint32_t valid_lifetime;
++  grub_uint8_t options[];
++} GRUB_PACKED;
++typedef struct grub_net_dhcpv6_opt_ia_address grub_net_dhcpv6_opt_ia_address_t;
++
++struct grub_net_dhcpv6_packet
++{
++  grub_uint32_t message_type:8;
++  grub_uint32_t transaction_id:24;
++  grub_uint8_t dhcp_options[1024];
++} GRUB_PACKED;
++typedef struct grub_net_dhcpv6_packet grub_net_dhcpv6_packet_t;
++
+ #define	GRUB_NET_BOOTP_RFC1048_MAGIC_0	0x63
+ #define	GRUB_NET_BOOTP_RFC1048_MAGIC_1	0x82
+ #define	GRUB_NET_BOOTP_RFC1048_MAGIC_2	0x53
+@@ -560,6 +605,21 @@ grub_net_configure_by_dhcpv6_reply (const char *name,
+ int
+ grub_ipv6_get_masksize(grub_uint16_t *mask);
+ 
++struct grub_net_network_level_interface *
++grub_net_configure_by_dhcpv6_ack (const char *name,
++				 struct grub_net_card *card,
++				 grub_net_interface_flags_t flags,
++				 const grub_net_link_level_address_t *hwaddr,
++				 const struct grub_net_dhcpv6_packet *packet,
++				 int is_def, char **device, char **path);
++
++int
++grub_ipv6_get_masksize(grub_uint16_t *mask);
++
++grub_err_t
++grub_net_add_ipv6_local (struct grub_net_network_level_interface *inf,
++			 int mask);
++
+ grub_err_t
+ grub_net_add_ipv6_local (struct grub_net_network_level_interface *inf,
+ 			 int mask);
+diff --git a/util/grub-install.c b/util/grub-install.c
+index 46c1b8d..ec5ba6a 100644
+--- a/util/grub-install.c
++++ b/util/grub-install.c
+@@ -915,6 +915,25 @@ main (int argc, char *argv[])
+ 
+   platform = grub_install_get_target (grub_install_source_directory);
+ 
++  switch (platform)
++    {
++    case GRUB_INSTALL_PLATFORM_ARM_EFI:
++    case GRUB_INSTALL_PLATFORM_ARM64_EFI:
++    case GRUB_INSTALL_PLATFORM_I386_EFI:
++    case GRUB_INSTALL_PLATFORM_IA64_EFI:
++    case GRUB_INSTALL_PLATFORM_LOONGARCH64_EFI:
++    case GRUB_INSTALL_PLATFORM_RISCV32_EFI:
++    case GRUB_INSTALL_PLATFORM_RISCV64_EFI:
++    case GRUB_INSTALL_PLATFORM_X86_64_EFI:
++      is_efi = 1;
++      grub_util_error (_("this utility cannot be used for EFI platforms"
++                         " because it does not support UEFI Secure Boot"));
++      break;
++    default:
++      is_efi = 0;
++      break;
++    }
++
+   {
+     char *platname = grub_install_get_platform_name (platform);
+     fprintf (stderr, _("Installing for %s platform.\n"), platname);
+diff --git a/util/grub.d/10_linux.in b/util/grub.d/10_linux.in
+index 704038d..b2b9df4 100644
+--- a/util/grub.d/10_linux.in
++++ b/util/grub.d/10_linux.in
+@@ -310,6 +310,218 @@ EOF
+   exit 0
+ fi
+ 
++populate_header_warn()
++{
++if [ "x${BLS_POPULATE_MENU}" = "xtrue" ]; then
++  bls_parser="10_linux script"
++else
++  bls_parser="blscfg command"
++fi
++cat <<EOF
++
++# This section was generated by a script. Do not modify the generated file - all changes
++# will be lost the next time file is regenerated. Instead edit the BootLoaderSpec files.
++#
++# The $bls_parser parses the BootLoaderSpec files stored in /boot/loader/entries and
++# populates the boot menu. Please refer to the Boot Loader Specification documentation
++# for the files format: https://systemd.io/BOOT_LOADER_SPECIFICATION/.
++
++EOF
++}
++
++read_config()
++{
++    config_file=${1}
++    title=""
++    initrd=""
++    options=""
++    linux=""
++    grub_arg=""
++
++    while read -r line
++    do
++        record=$(echo ${line} | cut -f 1 -d ' ')
++        value=$(echo ${line} | cut -s -f2- -d ' ')
++        case "${record}" in
++            "title")
++                title=${value}
++                ;;
++            "initrd")
++                initrd=${value}
++                ;;
++            "linux")
++                linux=${value}
++                ;;
++            "options")
++                options=${value}
++                ;;
++            "grub_arg")
++                grub_arg=${value}
++                ;;
++        esac
++    done < ${config_file}
++}
++
++blsdir="/boot/loader/entries"
++
++get_sorted_bls()
++{
++    if ! [ -d "${blsdir}" ]; then
++        return
++    fi
++
++    local IFS=$'\n'
++
++    files=($(for bls in ${blsdir}/*.conf; do
++        if ! [[ -e "${bls}" ]] ; then
++            continue
++        fi
++        bls="${bls%.conf}"
++        bls="${bls##*/}"
++        echo "${bls}"
++    done | sort -Vr 2>/dev/null)) || :
++
++    echo "${files[@]}"
++}
++
++update_bls_cmdline()
++{
++    local cmdline="root=${LINUX_ROOT_DEVICE} ro ${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
++    local -a files=($(get_sorted_bls))
++
++    for bls in "${files[@]}"; do
++        local options="${cmdline}"
++        if [ -z "${bls##*debug*}" ]; then
++            options="${options} ${GRUB_CMDLINE_LINUX_DEBUG}"
++        fi
++        options="$(echo "${options}" | sed -e 's/\//\\\//g')"
++        sed -i -e "s/^options.*/options ${options}/" "${blsdir}/${bls}.conf"
++    done
++}
++
++populate_menu()
++{
++    local -a files=($(get_sorted_bls))
++
++    gettext_printf "Generating boot entries from BLS files...\n" >&2
++
++    for bls in "${files[@]}"; do
++        read_config "${blsdir}/${bls}.conf"
++
++        menu="${menu}menuentry '${title}' ${grub_arg} --id=${bls} {\n"
++        menu="${menu}\t linux ${linux} ${options}\n"
++        if [ -n "${initrd}" ] ; then
++            menu="${menu}\t initrd ${boot_prefix}${initrd}\n"
++        fi
++        menu="${menu}}\n\n"
++    done
++    # The printf command seems to be more reliable across shells for special character (\n, \t) evaluation
++    printf "$menu"
++}
++
++# Make BLS the default if GRUB_ENABLE_BLSCFG was not set and grubby is not installed.
++if [ -z "${GRUB_ENABLE_BLSCFG}" ] && ! command -v new-kernel-pkg >/dev/null; then
++	  GRUB_ENABLE_BLSCFG="true"
++fi
++
++if [ "x${GRUB_ENABLE_BLSCFG}" = "xtrue" ]; then
++  if [ x$dirname = x/ ]; then
++    if [ -z "${prepare_root_cache}" ]; then
++      prepare_grub_to_access_device ${GRUB_DEVICE}
++    fi
++  else
++    if [ -z "${prepare_boot_cache}" ]; then
++      prepare_grub_to_access_device ${GRUB_DEVICE_BOOT}
++    fi
++  fi
++
++  if [ -d /sys/firmware/efi ]; then
++      bootefi_device="`${grub_probe} --target=device /boot/efi/`"
++      prepare_grub_to_access_device_with_variable boot ${bootefi_device}
++  else
++      boot_device="`${grub_probe} --target=device /boot/`"
++      prepare_grub_to_access_device_with_variable boot ${boot_device}
++  fi
++
++  arch="$(uname -m)"
++  if [ "x${arch}" = "xppc64le" ] && [ -d /sys/firmware/opal ]; then
++
++      BLS_POPULATE_MENU="true"
++      petitboot_path="/sys/firmware/devicetree/base/ibm,firmware-versions/petitboot"
++
++      if test -e ${petitboot_path}; then
++          read -r -d '' petitboot_version < ${petitboot_path}
++          petitboot_version="$(echo ${petitboot_version//v})"
++
++	  if test -n ${petitboot_version}; then
++              major_version="$(echo ${petitboot_version} | cut -d . -f1)"
++              minor_version="$(echo ${petitboot_version} | cut -d . -f2)"
++
++              re='^[0-9]+$'
++              if [[ $major_version =~ $re ]] && [[ $minor_version =~ $re ]] &&
++                 ([[ ${major_version} -gt 1 ]] ||
++                  [[ ${major_version} -eq 1 &&
++                     ${minor_version} -ge 8  ]]); then
++                  BLS_POPULATE_MENU="false"
++              fi
++          fi
++      fi
++  fi
++
++  populate_header_warn
++
++  cat << EOF
++# The kernelopts variable should be defined in the grubenv file. But to ensure that menu
++# entries populated from BootLoaderSpec files that use this variable work correctly even
++# without a grubenv file, define a fallback kernelopts variable if this has not been set.
++#
++# The kernelopts variable in the grubenv file can be modified using the grubby tool or by
++# executing the grub2-mkconfig tool. For the latter, the values of the GRUB_CMDLINE_LINUX
++# and GRUB_CMDLINE_LINUX_DEFAULT options from /etc/default/grub file are used to set both
++# the kernelopts variable in the grubenv file and the fallback kernelopts variable.
++if [ -z "\${kernelopts}" ]; then
++  set kernelopts="root=${LINUX_ROOT_DEVICE} ro ${GRUB_CMDLINE_LINUX} ${GRUB_CMDLINE_LINUX_DEFAULT}"
++fi
++EOF
++
++  update_bls_cmdline
++
++  if [ "x${BLS_POPULATE_MENU}" = "xtrue" ]; then
++      populate_menu
++  else
++      cat << EOF
++
++insmod blscfg
++blscfg
++EOF
++  fi
++
++  if [ "x${GRUB_GRUBENV_UPDATE}" = "xyes" ]; then
++      blsdir="/boot/loader/entries"
++      [ -d "${blsdir}" ] && GRUB_BLS_FS="$(${grub_probe} --target=fs ${blsdir})"
++      if [ "x${GRUB_BLS_FS}" = "xbtrfs" ] || [ "x${GRUB_BLS_FS}" = "xzfs" ]; then
++          blsdir=$(make_system_path_relative_to_its_root "${blsdir}")
++          if [ "x${blsdir}" != "x/loader/entries" ] && [ "x${blsdir}" != "x/boot/loader/entries" ]; then
++              ${grub_editenv} - set blsdir="${blsdir}"
++          fi
++      fi
++
++      if [ -n "${GRUB_EARLY_INITRD_LINUX_CUSTOM}" ]; then
++          ${grub_editenv} - set early_initrd="${GRUB_EARLY_INITRD_LINUX_CUSTOM}"
++      fi
++
++      if [ -n "${GRUB_DEFAULT_DTB}" ]; then
++          ${grub_editenv} - set devicetree="${GRUB_DEFAULT_DTB}"
++      fi
++
++      if [ -n "${GRUB_SAVEDEFAULT}" ]; then
++           ${grub_editenv} - set save_default="${GRUB_SAVEDEFAULT}"
++      fi
++  fi
++
++  exit 0
++fi
++
+ mktitle ()
+ {
+   local title_type

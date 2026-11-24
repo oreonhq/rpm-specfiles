@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Date: Thu, 4 Dec 2025 21:22:32 +0100
+Subject: [PATCH 317/356] Revert "loader/efi/linux.c: read the kernel image
+ before header"
+
+This fully reverts commit 9728e07d670899ed9cb61ca467c4a3eb4e40fa1f.
+
+Note that the modifed version of grub_cmd_linux() is never used on x86,
+which uses linux_cmd() from grub-core/loader/i386/efi/linux.c .
+
+This is part of a series of reverts to move non x86 vmlinuz loading back
+to using EFI boot services load_image + start_image calls.
+
+The current DYI approach breaks booting kernel EFI binaries which have
+the stubble stub for automatic DTB loading.
+
+Switching back to EFI boot services load_image + start_image fixes this
+and also brings Fedora's grub inline with how upstream grub is loading
+and booting kernels on arm64 platforms.
+
+Signed-off-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+---
+ grub-core/loader/efi/linux.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index d167b64..09a8a5c 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -829,7 +829,6 @@ grub_cmd_linux (grub_command_t cmd __attribute__ ((unused)),
+   grub_file_t file = 0;
+   struct linux_arch_kernel_header lh;
+   grub_off_t filelen;
+-  grub_off_t filereadlen;
+   grub_uint32_t align;
+   grub_uint32_t code_size;
+   void *kernel = NULL;

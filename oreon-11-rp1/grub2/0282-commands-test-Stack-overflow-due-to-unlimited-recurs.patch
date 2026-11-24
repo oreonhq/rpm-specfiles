@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lidong Chen <lidong.chen@oracle.com>
+Date: Mon, 16 Dec 2024 20:22:41 +0000
+Subject: [PATCH 282/356] commands/test: Stack overflow due to unlimited
+ recursion depth
+
+The test_parse() evaluates test expression recursively. Due to lack of
+recursion depth check a specially crafted expression may cause a stack
+overflow. The recursion is only triggered by the parentheses usage and
+it can be unlimited. However, sensible expressions are unlikely to
+contain more than a few parentheses. So, this patch limits the recursion
+depth to 100, which should be sufficient.
+
+Reported-by: Nils Langius <nils@langius.de>
+Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/commands/test.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/grub-core/commands/test.c b/grub-core/commands/test.c
+index ee47ab2..c9c375c 100644
+--- a/grub-core/commands/test.c
++++ b/grub-core/commands/test.c
+@@ -403,7 +403,11 @@ test_parse (char **args, int *argn, int argc, int *depth)
+ 	  if (++(*depth) > MAX_TEST_RECURSION_DEPTH)
+ 	    {
+ 	      grub_error (GRUB_ERR_OUT_OF_RANGE, N_("max recursion depth exceeded"));
++<<<<<<< HEAD
+ 	      (*depth)--;
++=======
++	      depth--;
++>>>>>>> 1aa49f6 (commands/test: Stack overflow due to unlimited recursion depth)
+ 	      return ctx.or || ctx.and;
+ 	    }
+ 

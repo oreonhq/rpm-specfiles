@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Lidong Chen <lidong.chen@oracle.com>
+Date: Wed, 12 Feb 2025 10:33:31 -0600
+Subject: [PATCH 287/356] fs: Use safe math macros to prevent overflows
+
+Replace direct arithmetic operations with macros from include/grub/safemath.h
+to prevent potential overflow issues when calculating the memory sizes.
+
+Signed-off-by: Lidong Chen <lidong.chen@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/fs/btrfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/grub-core/fs/btrfs.c b/grub-core/fs/btrfs.c
+index 5911ae9..243a3e4 100644
+--- a/grub-core/fs/btrfs.c
++++ b/grub-core/fs/btrfs.c
+@@ -1390,6 +1390,7 @@ grub_btrfs_mount (grub_device_t dev)
+   struct grub_btrfs_data *data;
+   grub_err_t err;
+   const char *relpath = grub_env_get ("btrfs_relative_path");
++  grub_size_t sz;
+ 
+   if (!dev->disk)
+     {
+@@ -2375,6 +2376,7 @@ grub_btrfs_dir (grub_device_t device, const char *path,
+   grub_size_t est_size = 0;
+   grub_size_t sz;
+   char *new_path = NULL;
++  grub_size_t sz;
+ 
+   if (!data)
+     return grub_errno;

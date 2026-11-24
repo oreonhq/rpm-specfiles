@@ -1,0 +1,137 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Matthew Garrett <mjg@redhat.com>
+Date: Mon, 15 Apr 2024 11:19:31 -0600
+Subject: [PATCH 235/356] Add support for Linux EFI stub loading on arm
+ architectures
+
+---
+ grub-core/loader/efi/linux.c | 20 ++++++++++++++------
+ include/grub/efi/efi.h       | 28 +++++++++++++++++++++++++---
+ 2 files changed, 39 insertions(+), 9 deletions(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index dc63881..84772df 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -28,6 +28,7 @@
+ #include <grub/efi/efi.h>
+ #include <grub/efi/fdtload.h>
+ #include <grub/efi/memory.h>
++#include <grub/efi/linux.h>
+ #include <grub/efi/pe32.h>
+ #include <grub/efi/linux.h>
+ #include <grub/efi/sb.h>
+@@ -42,6 +43,7 @@ static int loaded;
+ 
+ static void *kernel_addr;
+ static grub_uint64_t kernel_size;
++static grub_uint32_t handover_offset;
+ 
+ static char *linux_args;
+ static grub_uint32_t cmdline_size;
+@@ -102,7 +104,7 @@ static grub_efi_load_file2_t initrd_lf2 = {
+ typedef void (*handover_func) (void *, grub_efi_system_table_t *, void *);
+ 
+ grub_err_t
+-grub_efi_linux_boot (void *kernel_address, grub_off_t handover_offset,
++grub_efi_linux_boot (void *kernel_address, grub_off_t ho_offset,
+ 		     void *kernel_params)
+ {
+   grub_efi_loaded_image_t *loaded_image = NULL;
+@@ -125,8 +127,8 @@ grub_efi_linux_boot (void *kernel_address, grub_off_t handover_offset,
+     grub_dprintf ("linux", "Loaded Image base address could not be set\n");
+ 
+   grub_dprintf ("linux", "kernel_address: %p handover_offset: %p params: %p\n",
+-		kernel_address, (void *)(grub_efi_uintn_t)handover_offset, kernel_params);
+-  hf = (handover_func)((char *)kernel_address + handover_offset + offset);
++		kernel_address, (void *)(grub_efi_uintn_t)ho_offset, kernel_params);
++  hf = (handover_func)((char *)kernel_address + ho_offset + offset);
+   hf (grub_efi_image_handle, grub_efi_system_table, kernel_params);
+ 
+   return GRUB_ERR_BUG;
+@@ -186,7 +188,8 @@ grub_arch_efi_linux_load_image_header (grub_file_t file,
+ static grub_err_t
+ finalize_params_linux (void)
+ {
+-  int node, retval;
++  grub_efi_loaded_image_t *loaded_image = NULL;
++  int node, retval, len;
+ 
+   void *fdt;
+ 
+@@ -313,8 +316,7 @@ grub_linux_boot (void)
+     return grub_errno;
+ #endif
+ 
+-  return grub_arch_efi_linux_boot_image ((grub_addr_t) kernel_addr,
+-					 kernel_size, linux_args);
++  return grub_arch_efi_linux_boot_image ((grub_addr_t) kernel_addr, linux_args);
+ }
+ 
+ static grub_err_t
+@@ -593,6 +595,12 @@ fallback:
+ 
+   grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
+ 
++#if !defined(__i386__) && !defined(__x86_64__)
++  struct grub_armxx_linux_pe_header *pe;
++  pe = (void *)((unsigned long)kernel_addr + lh.hdr_offset);
++  handover_offset = pe->opt.entry_addr;
++#endif
++
+   cmdline_size = grub_loader_cmdline_size (argc, argv) + sizeof (LINUX_IMAGE);
+   linux_args = grub_malloc (cmdline_size);
+   if (!linux_args)
+diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
+index 6b36c28..ee9761d 100644
+--- a/include/grub/efi/efi.h
++++ b/include/grub/efi/efi.h
+@@ -20,6 +20,7 @@
+ #ifndef GRUB_EFI_EFI_HEADER
+ #define GRUB_EFI_EFI_HEADER	1
+ 
++#include <grub/efi/pe32.h>
+ #include <grub/types.h>
+ #include <grub/dl.h>
+ #include <grub/efi/api.h>
+@@ -36,7 +37,29 @@ struct linux_arch_kernel_header {
+   struct grub_pe_image_header pe_image_header;
+ };
+ 
+-#define GRUB_EFI_GRUB_VARIABLE_GUID \
++struct grub_arm_linux_pe_header
++{
++  grub_uint32_t magic;
++  struct grub_pe32_coff_header coff;
++  struct grub_pe32_optional_header opt;
++};
++
++struct grub_arm64_linux_pe_header
++{
++  grub_uint32_t magic;
++  struct grub_pe32_coff_header coff;
++  struct grub_pe64_optional_header opt;
++};
++
++#if defined(__arm__)
++# define grub_armxx_linux_pe_header grub_arm_linux_pe_header
++#endif
++
++#if defined(__aarch64__)
++# define grub_armxx_linux_pe_header grub_arm64_linux_pe_header
++#endif
++
++#define GRUB_EFI_GRUB_VARIABLE_GUID             \
+   { 0x91376aff, 0xcba6, 0x42be, \
+     { 0x94, 0x9d, 0x06, 0xfd, 0xe8, 0x11, 0x28, 0xe8 } \
+   }
+@@ -173,8 +196,7 @@ grub_err_t EXPORT_FUNC(grub_efi_get_ram_base)(grub_addr_t *);
+ #include <grub/file.h>
+ grub_err_t grub_arch_efi_linux_load_image_header(grub_file_t file,
+                                                 struct linux_arch_kernel_header *lh);
+-grub_err_t grub_arch_efi_linux_boot_image(grub_addr_t addr, grub_size_t size,
+-                                           char *args);
++grub_err_t grub_arch_efi_linux_boot_image(grub_addr_t addr, char *args);
+ 
+ grub_efi_status_t
+ EXPORT_FUNC (grub_efi_load_image) (grub_efi_boolean_t boot_policy,

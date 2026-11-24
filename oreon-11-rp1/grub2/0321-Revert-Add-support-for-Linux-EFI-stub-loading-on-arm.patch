@@ -1,0 +1,107 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Hans de Goede <johannes.goede@oss.qualcomm.com>
+Date: Thu, 4 Dec 2025 22:54:11 +0100
+Subject: [PATCH 321/356] Revert "Add support for Linux EFI stub loading on arm
+ architectures"
+
+This fully reverts commit fa8f1996918936126a5e734bc0dac5d53c6a978e.
+
+Note that the modifed version of grub_cmd_linux() is never used on x86,
+which uses linux_cmd() from grub-core/loader/i386/efi/linux.c .
+
+This concludes the series of reverts to move non x86 vmlinuz loading back
+to using EFI boot services load_image + start_image calls.
+
+The current DYI approach breaks booting kernel EFI binaries which have
+the stubble stub for automatic DTB loading.
+
+Switching back to EFI boot services load_image + start_image fixes this
+and also brings Fedora's grub inline with how upstream grub is loading
+and booting kernels on arm64 platforms.
+
+This also fixes 2 issues with the xen_hypervisor and xen_module commands:
+
+1) With the now reverted move of setting loaded_image->load_options in
+finalize_params() the commandline would no longer be set for the xen case.
+
+2) The handover_offset variable passed by grub_efi_linux_boot is a global
+variable set by the linux cmd and this would either be 0 or the value
+from the last run linux cmd, neither of which is likely correct for
+the xen case.
+
+Signed-off-by: Hans de Goede <johannes.goede@oss.qualcomm.com>
+---
+ grub-core/loader/efi/linux.c | 17 +++--------------
+ include/grub/efi/efi.h       |  2 +-
+ 2 files changed, 4 insertions(+), 15 deletions(-)
+
+diff --git a/grub-core/loader/efi/linux.c b/grub-core/loader/efi/linux.c
+index c93b29f..310f1b8 100644
+--- a/grub-core/loader/efi/linux.c
++++ b/grub-core/loader/efi/linux.c
+@@ -28,7 +28,6 @@
+ #include <grub/efi/efi.h>
+ #include <grub/efi/fdtload.h>
+ #include <grub/efi/memory.h>
+-#include <grub/efi/linux.h>
+ #include <grub/efi/pe32.h>
+ #include <grub/efi/linux.h>
+ #include <grub/efi/sb.h>
+@@ -44,7 +43,6 @@ static int loaded;
+ 
+ static void *kernel_addr;
+ static grub_uint64_t kernel_size;
+-static grub_uint32_t handover_offset;
+ 
+ static char *linux_args;
+ static grub_uint32_t cmdline_size;
+@@ -423,9 +421,8 @@ grub_arch_efi_linux_load_image_header (grub_file_t file,
+ static grub_err_t
+ finalize_params_linux (void)
+ {
+-  grub_efi_loaded_image_t *loaded_image = NULL;
+-  int node, retval, len;
+   grub_err_t err = GRUB_ERR_NONE;
++  int node, retval;
+   void *fdt;
+ 
+   /* Set initrd info */
+@@ -569,10 +566,8 @@ grub_linux_boot (void)
+     return grub_errno;
+ #endif
+ 
+-  return grub_arch_efi_linux_boot_image((grub_addr_t)kernel_addr,
+-					(grub_size_t)kernel_size,
+-					linux_args,
+-					0);
++  return grub_arch_efi_linux_boot_image ((grub_addr_t) kernel_addr,
++					 kernel_size, linux_args);
+ }
+ 
+ static grub_err_t
+@@ -882,12 +877,6 @@ fallback:
+ 
+   grub_dprintf ("linux", "kernel @ %p\n", kernel_addr);
+ 
+-#if !defined(__i386__) && !defined(__x86_64__)
+-  struct grub_armxx_linux_pe_header *pe;
+-  pe = (void *)((unsigned long)kernel_addr + lh.hdr_offset);
+-  handover_offset = pe->opt.entry_addr;
+-#endif
+-
+   cmdline_size = grub_loader_cmdline_size (argc, argv) + sizeof (LINUX_IMAGE);
+   linux_args = grub_malloc (cmdline_size);
+   if (!linux_args)
+diff --git a/include/grub/efi/efi.h b/include/grub/efi/efi.h
+index c3874e2..7e8a14f 100644
+--- a/include/grub/efi/efi.h
++++ b/include/grub/efi/efi.h
+@@ -200,7 +200,7 @@ grub_err_t EXPORT_FUNC(grub_efi_get_ram_base)(grub_addr_t *);
+ grub_err_t grub_arch_efi_linux_load_image_header(grub_file_t file,
+                                                 struct linux_arch_kernel_header *lh);
+ grub_err_t grub_arch_efi_linux_boot_image(grub_addr_t addr, grub_size_t size,
+-					  char *args, int nx_enabled);
++					  char *args);
+ grub_efi_status_t
+ EXPORT_FUNC (grub_efi_load_image) (grub_efi_boolean_t boot_policy,
+ 				   grub_efi_handle_t parent_image_handle,

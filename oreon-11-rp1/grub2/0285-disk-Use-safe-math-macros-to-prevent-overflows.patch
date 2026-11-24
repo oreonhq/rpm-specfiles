@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Alec Brown <alec.r.brown@oracle.com>
+Date: Tue, 11 Feb 2025 17:59:04 -0600
+Subject: [PATCH 285/356] disk: Use safe math macros to prevent overflows
+
+Replace direct arithmetic operations with macros from include/grub/safemath.h
+to prevent potential overflow issues when calculating the memory sizes.
+
+Signed-off-by: Alec Brown <alec.r.brown@oracle.com>
+Reviewed-by: Daniel Kiper <daniel.kiper@oracle.com>
+---
+ grub-core/disk/cryptodisk.c | 1 +
+ grub-core/disk/ldm.c        | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/grub-core/disk/cryptodisk.c b/grub-core/disk/cryptodisk.c
+index dc7b3f5..b93a9bf 100644
+--- a/grub-core/disk/cryptodisk.c
++++ b/grub-core/disk/cryptodisk.c
+@@ -26,6 +26,7 @@
+ #include <grub/fs.h>
+ #include <grub/file.h>
+ #include <grub/procfs.h>
++#include <grub/safemath.h>
+ #include <grub/partition.h>
+ #include <grub/key_protector.h>
+ #include <grub/safemath.h>
+diff --git a/grub-core/disk/ldm.c b/grub-core/disk/ldm.c
+index 0f4f22a..6f58e49 100644
+--- a/grub-core/disk/ldm.c
++++ b/grub-core/disk/ldm.c
+@@ -691,6 +691,7 @@ make_vg (grub_disk_t disk,
+       struct grub_ldm_vblk vblk[GRUB_DISK_SECTOR_SIZE
+ 				/ sizeof (struct grub_ldm_vblk)];
+       unsigned i;
++      grub_size_t sz;
+       err = grub_disk_read (disk, cursec, 0,
+ 			    sizeof(vblk), &vblk);
+       if (err)
+@@ -926,6 +927,7 @@ grub_ldm_detect (grub_disk_t disk,
+     if (! vg)
+       vg = make_vg (disk, &label);
+   }
++      grub_size_t sz;
+ 
+   if (!vg)
+     {
