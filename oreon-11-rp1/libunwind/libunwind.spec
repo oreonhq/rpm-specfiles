@@ -7,6 +7,8 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
+%global _lto_cflags %{nil}
+
 # known upstream test failures on these arches, see
 # https://github.com/libunwind/libunwind/issues/388
 # https://github.com/libunwind/libunwind/issues/389
@@ -20,7 +22,7 @@
 Summary: An unwinding library
 Name: libunwind
 Version: 1.8.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: MIT
 URL: https://savannah.nongnu.org/projects/libunwind
 Source0: https://github.com/libunwind/libunwind/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -47,6 +49,8 @@ BuildRequires: texlive-latex2man
 %endif
 BuildRequires: make
 BuildRequires: gcc-c++
+BuildRequires: pkgconfig(liblzma)
+BuildRequires: pkgconfig(zlib)
 
 %global _host %{_target_platform}
 
@@ -116,7 +120,9 @@ echo ====================TESTING END=====================
 %{_libdir}/libunwind*.so
 %{_libdir}/libunwind-ptrace.a
 %{_libdir}/pkgconfig/libunwind*.pc
+%if %{without bootstrap}
 %{_mandir}/*/*
+%endif
 %{_includedir}/unwind.h
 %{_includedir}/libunwind*.h
 
