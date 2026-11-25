@@ -10,7 +10,7 @@
 
 Name: docbook-utils
 Version: 0.6.15
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: Shell scripts for managing DocBook documents
 License: GPL-2.0-or-later
 URL: https://github.com/devexp-db/docbook-utils
@@ -47,12 +47,7 @@ Scripts for converting DocBook files to other formats.
 %package pdf
 Summary: Convert DocBook documents to PDF
 License: GPL-1.0-or-later
-Requires: texlive-jadetex >= 7
-Requires: texlive-passivetex
 Requires: docbook-utils = %{version}
-Requires: tex(dvips)
-Recommends: texlive-collection-fontsrecommended
-Recommends: texlive-collection-latex
 Obsoletes: stylesheets-db2pdf <= %{version}-%{release}
 Provides: stylesheets-db2pdf = %{version}-%{release}
 
