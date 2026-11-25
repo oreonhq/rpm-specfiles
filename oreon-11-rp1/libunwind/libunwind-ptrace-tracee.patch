@@ -1,0 +1,117 @@
+--- a/tests/Makefile.am
++++ b/tests/Makefile.am
+@@ -115,10 +115,7 @@
+ if BUILD_PTRACE
+  check_SCRIPTS_cdep += run-ptrace-mapper run-ptrace-misc
+  check_PROGRAMS_cdep += test-ptrace
+- noinst_PROGRAMS_cdep += mapper test-ptrace-misc
+-if ARCH_X86
+- XFAIL_TESTS += test-ptrace
+-endif
++ noinst_PROGRAMS_cdep += mapper ptrace-tracee test-ptrace-misc
+ endif
+ 
+ if BUILD_SETJMP
+--- a/tests/test-ptrace.c
++++ b/tests/test-ptrace.c
+@@ -187,18 +187,22 @@
+ 
+   if (argc == 1)
+     {
+-#ifdef HAVE_EXECVPE
+-      static char *args[] = { "self", "ls", "/", NULL };
+-#else
+-      static char *args[] = { "self", "/bin/ls", "/", NULL };
+-#endif
+-      /* automated test case */
++      /* Automated test case: trace the tracee that was built alongside
++         this program.  A program from the host system may have a
++         different word size than the library was built for (a -m32 build
++         on an x86_64 machine, say), and a process of a different word
++         size cannot be unwound.  The test suite runs with the test
++         directory as the working directory; UNW_PTRACE_TRACEE overrides
++         the path for runs from elsewhere.  */
++      static char *args[] = { "self", NULL, NULL };
++      char *tracee = getenv ("UNW_PTRACE_TRACEE");
++
++      /* args[0] stands in for argv[0]; the program to trace is picked up
++         at argv[optind], which is 1 here.  */
++      args[1] = tracee != NULL ? tracee : "./ptrace-tracee";
+       argv = args;
+ 
+-      /* Unless the args array is 'walked' the child
+-         process is unable to access it and dies with a segfault */
+-      fprintf(stderr, "Automated test (%s,%s,%s,%s)\n",
+-              args[0],args[1],args[2],args[3]);
++      fprintf (stderr, "Automated test (%s)\n", args[1]);
+     }
+   else if (argc > 1)
+     while (argv[optind][0] == '-')
+--- a/tests/ptrace-tracee.c
++++ b/tests/ptrace-tracee.c
+@@ -0,0 +1,65 @@
++/* libunwind - a platform-independent unwind library
++
++This file is part of libunwind.
++
++Permission is hereby granted, free of charge, to any person obtaining
++a copy of this software and associated documentation files (the
++"Software"), to deal in the Software without restriction, including
++without limitation the rights to use, copy, modify, merge, publish,
++distribute, sublicense, and/or sell copies of the Software, and to
++permit persons to whom the Software is furnished to do so, subject to
++the following conditions:
++
++The above copyright notice and this permission notice shall be
++included in all copies or substantial portions of the Software.
++
++THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
++EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
++MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
++NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
++LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
++OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
++WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.  */
++
++/* The default tracee for test-ptrace.
++
++   It is built like the rest of the test suite so that the traced
++   process always has the word size the library was configured for: a
++   program taken from the host system does not, in a multilib build, and
++   a process of a different word size cannot be unwound.
++
++   It makes a few system calls and exits, giving test-ptrace something
++   to unwind at each syscall stop without taking long about it.  */
++
++#include <unistd.h>
++
++static void
++level3 (void)
++{
++  (void) getpid ();
++}
++
++static void
++level2 (void)
++{
++  level3 ();
++  (void) getppid ();
++}
++
++static void
++level1 (void)
++{
++  level2 ();
++  (void) getpid ();
++}
++
++int
++main (void)
++{
++  int i;
++
++  for (i = 0; i < 4; ++i)
++    level1 ();
++
++  return 0;
++}
