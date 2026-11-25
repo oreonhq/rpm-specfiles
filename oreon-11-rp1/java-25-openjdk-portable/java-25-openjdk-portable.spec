@@ -15,7 +15,7 @@
 %global patchver 1
 %global buildver 1
 %global portablerelease 1
-%global rpmrelease 1
+%global rpmrelease 2
 
 # Define IcedTea version used for SystemTap tapsets and desktop file
 %global icedteaver      6.0.0pre00-c848b93a8598
@@ -470,8 +470,10 @@ URL:      http://openjdk.java.net/
 %define miscportablearchive()  %{miscportablename}.tar.xz
 
 # JDK to use for bootstrapping
+%if %{include_fastdebug_build}
 %ifarch %{fastdebug_arches}
 %global bootdebugpkg fastdebug
+%endif
 %endif
 %if %{use_seed_bootjdk}
 %global bootjdkpkg_name java-%{buildjdkver}-openjdk
