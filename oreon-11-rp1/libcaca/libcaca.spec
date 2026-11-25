@@ -53,8 +53,6 @@ BuildRequires: python3-setuptools
 BuildRequires: ruby
 BuildRequires: ruby-devel
 %endif
-Buildrequires: texlive-dvips
-Buildrequires: texlive-latex
 %if %{with gl}
 BuildRequires: freeglut-devel
 BuildRequires: mesa-libGLU-devel
