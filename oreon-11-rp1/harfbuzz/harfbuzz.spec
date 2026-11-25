@@ -9,7 +9,7 @@
 
 Name: harfbuzz
 Version: 15.1.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Text shaping library
 License: MIT
 URL: https://github.com/harfbuzz/harfbuzz
@@ -34,7 +34,12 @@ BuildRequires: pkgconfig(gobject-introspection-1.0)
 BuildRequires: pkgconfig(icu-uc)
 BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(zlib)
+BuildRequires: pkgconfig(glew)
+BuildRequires: pkgconfig(glfw3)
+BuildRequires: pkgconfig(gl)
+%if %{without bootstrap}
 BuildRequires: pkgconfig(chafa)
+%endif
 
 %description
 HarfBuzz is a text shaping library that converts Unicode text into
@@ -68,16 +73,16 @@ Command-line tools for shaping, subsetting and inspecting fonts.
   -Dicu=enabled \
   -Dpng=enabled \
   -Dzlib=enabled \
-  -Dchafa=enabled \
-  -Dgpu_demo=disabled \
+  -Dgpu_demo=enabled \
+  -Dtests=enabled \
 %if %{without bootstrap}
+  -Dchafa=enabled \
   -Ddocs=enabled \
-  -Dintrospection=enabled \
-  -Dtests=enabled
+  -Dintrospection=enabled
 %else
+  -Dchafa=disabled \
   -Ddocs=disabled \
-  -Dintrospection=disabled \
-  -Dtests=disabled
+  -Dintrospection=disabled
 %endif
 %meson_build
 
