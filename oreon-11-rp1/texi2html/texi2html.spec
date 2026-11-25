@@ -16,15 +16,12 @@ Patch0: texi2html-5.0-Do-not-install-Unicode-EastAsianWidth-if-external-is.patch
 Patch1: texi2html-5.0-Do-not-install-libintl-perl-if-external-is-used.patch
 URL: http://www.nongnu.org/texi2html/
 Requires: perl-interpreter >= 5.004
-Requires: latex2html
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: autoconf
 BuildRequires: automake
-BuildRequires: latex2html
-BuildRequires: texlive-tex4ht
-BuildRequires: gettext
+BuildBuildRequires: gettext
 BuildRequires: perl-generators
 BuildRequires: perl(Data::Dumper)
 BuildRequires: perl(Locale::Messages)
