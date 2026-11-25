@@ -546,6 +546,7 @@ Patch45: texlive-2026-oreon-texmfcnf.lua.patch
 
 # Fix interpreter on perl scripts (thanks again to Debian)
 Patch46: texlive-base-20230311-fix-scripts.patch
+Patch47: texlive-base-20260301-icu-i18n-pkgconfig.patch
 
 
 # Can't do this because it causes everything else to be noarch
@@ -567,6 +568,9 @@ BuildRequires: fontconfig-devel
 BuildRequires: libpng-devel
 BuildRequires: zlib-devel
 BuildRequires: libicu-devel
+BuildRequires: pkgconfig(icu-uc)
+BuildRequires: pkgconfig(icu-io)
+BuildRequires: pkgconfig(icu-i18n)
 BuildRequires: pixman-devel
 BuildRequires: perl-generators
 BuildRequires: autoconf
@@ -6985,6 +6989,7 @@ ln -s %{_texdir}/licenses/$l $l
 done
 
 %patch -P44 -p1 -b .pdf-header-order-fix
+%patch -P47 -p1 -b .icu-i18n
 
 # Value here is "17" not "16" because we have a source0 at index 1.
 # Source16 at index 17 is our first "normal" noarch source file.
@@ -7020,6 +7025,10 @@ cd work
 --with-system-freetype2 --with-system-cairo --with-system-icu --with-system-pixman \
 %endif
 --with-system-mpfr --with-system-gmp --with-pic --without-x \
+--without-system-harfbuzz --without-system-graphite2 --without-system-teckit \
+--without-system-zziplib --without-system-xpdf --without-system-mpfi \
+--without-system-gd --without-system-potrace --without-system-libpaper \
+--without-system-luajit \
 --enable-shared --enable-compiler-warnings=max --without-cxx-runtime-hack \
 --disable-native-texlive-build --disable-t1utils --enable-psutils --disable-biber --disable-ptexenc --enable-largefile \
 %ifarch %{power64} s390 s390x riscv64
