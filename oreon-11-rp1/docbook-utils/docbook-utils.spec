@@ -10,7 +10,7 @@
 
 Name: docbook-utils
 Version: 0.6.15
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: Shell scripts for managing DocBook documents
 License: GPL-2.0-or-later
 URL: https://github.com/devexp-db/docbook-utils
@@ -31,6 +31,7 @@ BuildRequires: python3
 BuildRequires: make
 
 Requires: docbook-style-dsssl >= 1.72
+Requires: openjade
 Requires: docbook-dtds
 Requires: perl-SGMLSpm >= 1.03ii
 Requires: which
