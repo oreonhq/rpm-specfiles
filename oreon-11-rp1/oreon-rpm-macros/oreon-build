@@ -265,9 +265,49 @@ EOF
   rm -f Cargo.toml.orig
 }
 
+cargo_git_sources() {
+  [ -f Cargo.lock ] || return 0
+  python3 - << 'PY' >> .cargo/config.toml
+import tomllib
+lock = tomllib.load(open("Cargo.lock", "rb"))
+seen = set()
+for p in lock.get("package", []):
+    s = p.get("source", "")
+    if not s.startswith("git+"):
+        continue
+    base = s.split("#")[0]
+    if base in seen:
+        continue
+    seen.add(base)
+    url, _, query = base[4:].partition("?")
+    print(f'\n[source."{base}"]')
+    print(f'git = "{url}"')
+    for kv in (query.split("&") if query else []):
+        k, _, v = kv.partition("=")
+        if k in ("branch", "tag", "rev"):
+            print(f'{k} = "{v}"')
+    print('replace-with = "oreon"')
+PY
+}
+
+cargo_fetch_vendor() {
+  if [ ! -f Cargo.lock ]; then
+    echo "oreon-build: fetch mode needs a Cargo.lock in the source tree" >&2
+    exit 1
+  fi
+  rm -rf oreon-vendor
+  cargo vendor --locked oreon-vendor > /dev/null
+}
+
 cargo_prep() {
   if [ "${#extra[@]}" -gt 0 ]; then
-    write_cargo_config vendor "${extra[0]}"
+    if [ "${extra[0]}" = "fetch" ]; then
+      cargo_fetch_vendor
+      write_cargo_config vendor oreon-vendor
+    else
+      write_cargo_config vendor "${extra[0]}"
+    fi
+    cargo_git_sources
   else
     write_cargo_config registry "$cargo_registry"
   fi
