@@ -14,7 +14,7 @@
 
 Name:           javapackages-tools
 Version:        6.5.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Macros and scripts for Java packaging support
 License:        BSD-3-Clause
 URL:            https://github.com/fedora-java/javapackages
@@ -50,7 +50,7 @@ install their content.
 
 %package -n maven-local-openjdk25
 Summary:        Macros and scripts for Maven packaging support
-Requires:       java-25-openjdk-portable-devel
+Requires:       java-25-openjdk-devel
 Requires:       %{name} = %{version}-%{release}
 Requires:       javapackages-local-openjdk25 = %{version}-%{release}
 Requires:       xmvn-minimal
@@ -93,7 +93,7 @@ Obsoletes:      javapackages-local < 6.3.0
 Requires:       javapackages-common = %{version}-%{release}
 Requires:       xmvn-tools
 # Java build systems don't have hard requirement on java-devel, so it should be there
-Requires:       java-25-openjdk-portable-devel
+Requires:       java-25-openjdk-devel
 Requires:       xmvn-generator
 Requires:       (ant-openjdk25 if ant)
 Obsoletes:      javapackages-generators < 6.3.0
