@@ -19,7 +19,7 @@
 
 Name:           crypto-policies
 Version:        20260731
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        System-wide crypto policies
 
 License:        LGPL-2.1-or-later
@@ -35,7 +35,7 @@ BuildRequires: openssl
 BuildRequires: nss-tools
 BuildRequires: gnutls-utils
 BuildRequires: openssh-clients
-BuildRequires: java-25-openjdk-portable-devel
+BuildRequires: java-25-openjdk-devel
 BuildRequires: bind
 BuildRequires: python3-devel >= 3.12
 BuildRequires: python3-pytest
