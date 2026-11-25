@@ -16,7 +16,7 @@
 Summary: GNU tools and libraries for localized translated messages
 Name: gettext
 Version:        1.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # The following are licensed under LGPLv2+:
 # - libintl and its headers
@@ -62,10 +62,6 @@ BuildRequires: emacs
 BuildRequires: xz
 # for documentation
 BuildRequires: teckit
-BuildRequires: texlive-dvips
-BuildRequires: texlive-dvipdfmx
-BuildRequires: texinfo-tex
-BuildRequires: texlive-xetex
 # following suggested by DEPENDENCIES:
 BuildRequires: ncurses-devel
 BuildRequires: libxml2-devel
