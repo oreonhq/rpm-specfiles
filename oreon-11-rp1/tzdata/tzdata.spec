@@ -13,7 +13,7 @@ Name: tzdata
 Version:        2026f
 %define tzdata_version 2026f
 %define tzcode_version 2026f
-Release:        1%{?dist}
+Release:        2%{?dist}
 License: LicenseRef-Oreon-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
 URL: https://www.iana.org/time-zones
 Source0:        https://data.iana.org/time-zones/releases/tzdata%{version}.tar.gz
@@ -24,7 +24,7 @@ Patch002:        0002-Fix-have-snprintf-error.patch
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gawk, glibc, perl-interpreter
-BuildRequires: java-25-openjdk-portable-devel
+BuildRequires: java-25-openjdk-devel
 BuildRequires: glibc-common >= 2.5.90-7
 BuildRequires:  oreon-rpm-macros
 Conflicts: glibc-common <= 2.3.2-63
