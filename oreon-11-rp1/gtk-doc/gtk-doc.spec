@@ -11,7 +11,7 @@
 
 Name:           gtk-doc
 Version:        1.36.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 %global major_minor 1.36
 Summary:        API documentation generation tool for GTK+ and GNOME
 License:        GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later
@@ -20,10 +20,6 @@ Source0:        http://download.gnome.org/sources/%{name}/%{major_minor}/%{name}
 
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  /usr/bin/xsltproc
-%bcond_with pdf_docs
-%if %{with pdf_docs}
-BuildRequires:  dblatex
-%endif
 BuildRequires:  python3-parameterized
 BuildRequires:  docbook-style-xsl >= 1.79.2-2
 BuildRequires:  docbook-utils
