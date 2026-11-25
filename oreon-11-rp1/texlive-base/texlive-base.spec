@@ -40,7 +40,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 8%{?dist}
+Release: 9%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -7019,7 +7019,7 @@ cd work
 %endif
 --with-system-mpfr --with-system-gmp --with-pic --without-x \
 --enable-shared --enable-compiler-warnings=max --without-cxx-runtime-hack \
---disable-native-texlive-build --disable-t1utils --enable-psutils --disable-biber --disable-ptexenc --disable-largefile \
+--disable-native-texlive-build --disable-t1utils --enable-psutils --disable-biber --disable-ptexenc --enable-largefile \
 %ifarch %{power64} s390 s390x riscv64
 --disable-luajittex --disable-mfluajit --disable-luajithbtex --disable-mfluajit-nowin \
 %endif
