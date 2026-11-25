@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import re
+import os
 import sys
 from pathlib import Path
 
@@ -31,13 +32,73 @@ def unfold(text):
     return fields
 
 
+def _ver_tuple(s):
+    out = []
+    for part in s.split("."):
+        if part.isdigit():
+            out.append(int(part))
+        else:
+            break
+    return tuple(out)
+
+
+def _cmp_ver(left, op, right):
+    ops = {
+        "<": lambda a, b: a < b,
+        "<=": lambda a, b: a <= b,
+        ">": lambda a, b: a > b,
+        ">=": lambda a, b: a >= b,
+        "==": lambda a, b: a == b,
+        "!=": lambda a, b: a != b,
+    }
+    a, b = _ver_tuple(left), _ver_tuple(right)
+    n = max(len(a), len(b), 2)
+    a = a + (0,) * (n - len(a))
+    b = b + (0,) * (n - len(b))
+    return ops[op](a, b)
+
+
+def _env():
+    return {
+        "python_version": "%s.%s" % sys.version_info[:2],
+        "python_full_version": "%s.%s.%s" % sys.version_info[:3],
+        "sys_platform": sys.platform,
+        "os_name": os.name,
+    }
+
+
+def _eval_clause(clause):
+    clause = clause.strip()
+    if re.search(r"extra\s*==", clause, re.I):
+        return False
+    m = re.match(
+        r"^(python_version|python_full_version|sys_platform|os_name)\s*"
+        r"(<=|>=|==|!=|<|>)\s*['\"]([^'\"]+)['\"]$",
+        clause,
+        re.I,
+    )
+    if not m:
+        return True
+    key, op, val = m.group(1).lower(), m.group(2), m.group(3)
+    left = _env()[key]
+    if key in ("python_version", "python_full_version"):
+        return _cmp_ver(left, op, val)
+    if op == "==":
+        return left.lower() == val.lower()
+    if op == "!=":
+        return left.lower() != val.lower()
+    return False
+
+
 def marker_ok(marker):
-    m = marker.lower()
-    if "extra ==" in m or "extra==" in m:
-        return False
-    if any(x in m for x in ("win32", "darwin", "aix")) and "linux" not in m:
-        return False
-    return True
+    marker = marker.strip()
+    if not marker:
+        return True
+    for or_part in re.split(r"\s+or\s+", marker, flags=re.I):
+        clauses = re.split(r"\s+and\s+", or_part, flags=re.I)
+        if all(_eval_clause(c) for c in clauses):
+            return True
+    return False
 
 
 def require_lines(raw):
