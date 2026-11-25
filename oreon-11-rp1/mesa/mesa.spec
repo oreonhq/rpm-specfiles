@@ -743,6 +743,11 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %{_datadir}/vulkan/icd.d/virtio_icd.*.json
 %{_datadir}/drirc.d/00-venus-defaults.conf
 %endif
+%if 0%{?with_d3d12}
+%{_libdir}/libvulkan_dzn.so
+%{_datadir}/vulkan/icd.d/dzn_icd.*.json
+%{_datadir}/drirc.d/00-dzn-defaults.conf
+%endif
 %if 0%{?with_vulkan_hw}
 %{_libdir}/libvulkan_radeon.so
 %{_datadir}/drirc.d/00-radv-defaults.conf
@@ -751,11 +756,6 @@ ln -s libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %{_libdir}/libvulkan_nouveau.so
 %{_datadir}/vulkan/icd.d/nouveau_icd.*.json
 %{_datadir}/drirc.d/00-nvk-defaults.conf
-%endif
-%if 0%{?with_d3d12}
-%{_libdir}/libvulkan_dzn.so
-%{_datadir}/vulkan/icd.d/dzn_icd.*.json
-%{_datadir}/drirc.d/00-dzn-defaults.conf
 %endif
 %ifarch %{ix86} x86_64
 %{_libdir}/libvulkan_intel.so
