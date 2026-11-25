@@ -9,7 +9,7 @@
 Name:          giflib
 Summary:       A library and utilities for processing GIFs
 Version:       6.1.3
-Release:       1%{?dist}
+Release:       2%{?dist}
 
 License:       MIT
 URL:           http://www.sourceforge.net/projects/%{name}/
@@ -27,9 +27,17 @@ BuildRequires: xmlto
 
 BuildRequires: mingw32-filesystem
 BuildRequires: mingw32-gcc
+BuildRequires: mingw32-crt
+BuildRequires: mingw32-headers
+BuildRequires: mingw32-libgcc
+BuildRequires: mingw32-winpthreads
 
 BuildRequires: mingw64-filesystem
 BuildRequires: mingw64-gcc
+BuildRequires: mingw64-crt
+BuildRequires: mingw64-headers
+BuildRequires: mingw64-libgcc
+BuildRequires: mingw64-winpthreads
 
 %description
 giflib is a library for reading and writing gif images.
