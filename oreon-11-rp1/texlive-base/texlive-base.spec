@@ -1,7 +1,7 @@
 # Copyright (C) 2026 Oreon HQ
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-%global source0_hash 32ea827edd3fb80a682ffbdf95d7ba6139ff074516e660c8923260fc82f5e0f0
+%global source0_hash cb120d314d3ceb23ac608af17ddd2c623afcf02331f400a0f25eead5b8ac1d70
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
@@ -40,14 +40,14 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 4%{?dist}
+Release: 5%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
 # So we'll just list the license texts. This is also a bit of a lie, since most of these license texts do not apply to themselves.
 License: Apache-2.0 AND Artistic-2.0 AND BSD-3-Clause AND GFDL-1.1-or-later AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND Knuth-CTAN AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND LPPL-1.3a AND LPPL-1.3c AND MIT AND OFL-1.1 AND LicenseRef-Oreon-Public-Domain
 URL: http://tug.org/texlive/
-Source0: https://ctan.math.illinois.edu/systems/texlive/Source/%{source_name}.tar.xz
+Source0: https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/%{tl_version}/%{source_name}.tar.xz
 Source1: macros.texlive
 Source2: texlive.tlpdb
 Source3: texlive-licenses.tar.xz
