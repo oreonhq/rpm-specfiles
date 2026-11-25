@@ -8,7 +8,7 @@
 %oreon_bootstrap
 
 %global shortname texlive
-%global tlnet_url https://texlive.info/tlnet-archive/2026/03/02/tlnet
+%global tlnet_url https://ctan.math.illinois.edu/systems/texlive/tlnet
 %{!?_texmf: %global _texmf /usr/share/texlive/texmf-local}
 %{!?_texmf_main: %global _texmf_main /usr/share/texlive/texmf-dist}
 %{!?_texmf_vendor: %global _texmf_vendor /usr/share/texlive/texmf-dist}
@@ -40,7 +40,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 5%{?dist}
+Release: 6%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
