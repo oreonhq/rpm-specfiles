@@ -27,7 +27,7 @@
 
 Name:           eigen3
 Version:        5.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A lightweight C++ template library for vector and matrix math
 
 License:        Apache-2.0 AND MPL-2.0 AND BSD-3-Clause AND Minpack
@@ -73,7 +73,6 @@ BuildRequires:  cmake
 BuildRequires:  make
 BuildRequires:  doxygen
 BuildRequires:  graphviz
-BuildRequires:  tex(latex)
 
 %if %{with mingw}
 BuildRequires:  mingw32-filesystem >= 95
