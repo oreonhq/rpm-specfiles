@@ -18,7 +18,7 @@
 
 Name:           libbluray
 Version:        1.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library to access Blu-Ray disks for video playback 
 License:        LGPL-2.0-or-later
 URL:            https://www.videolan.org/developers/libbluray.html
@@ -38,7 +38,6 @@ BuildRequires:  libtool
 BuildRequires:  libudfread-devel >= 1.2.0
 BuildRequires:  libxml2-devel
 BuildRequires:  meson
-BuildRequires:  texlive-latex
 %if %{build_bdj}
 BuildRequires:  ant
 BuildRequires:  java-devel >= 1:1.8.0
