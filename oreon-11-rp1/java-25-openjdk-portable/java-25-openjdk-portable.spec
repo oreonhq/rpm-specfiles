@@ -15,7 +15,7 @@
 %global patchver 1
 %global buildver 1
 %global portablerelease 1
-%global rpmrelease 0
+%global rpmrelease 1
 
 # Define IcedTea version used for SystemTap tapsets and desktop file
 %global icedteaver      6.0.0pre00-c848b93a8598
@@ -113,9 +113,9 @@ URL:      http://openjdk.java.net/
 # Only produce a release build on x86_64:
 # $ fedpkg mockbuild --without slowdebug --without fastdebug
 # Enable fastdebug builds by default on relevant arches.
-%bcond_without fastdebug
+%bcond_with fastdebug
 # Enable slowdebug builds by default on relevant arches.
-%bcond_without slowdebug
+%bcond_with slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
 # Enable static library builds by default.
@@ -1073,7 +1073,7 @@ function buildjdk() {
 
     cat spec.gmk
     LD_LIBRARY_PATH=${LIBPATH} \
-    %{?dts_command} make LOG=trace \
+    %{?dts_command} make LOG=info \
       WARNINGS_ARE_ERRORS="-Wno-error" \
       CFLAGS_WARNINGS_ARE_ERRORS="-Wno-error" $maketargets ||\
         ( pwd; find ${top_dir_abs_src_path} ${top_dir_abs_build_path} -name \"hs_err_pid*.log\" | xargs cat && false )
