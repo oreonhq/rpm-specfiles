@@ -5,7 +5,6 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
 
 %global mingw_build_ucrt64 1
 %{?mingw_package_header}
@@ -14,7 +13,7 @@
 
 Name:           mingw-winpthreads
 Version:        14.0.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        MinGW pthread library
 
 License:        BSD-3-Clause AND MIT AND LicenseRef-Oreon-Public-Domain
