@@ -9,7 +9,7 @@
 
 Name: python3-pytest-asyncio
 Version: 1.5.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Pytest support for asyncio
 License: Apache-2.0
 URL: https://github.com/pytest-dev/pytest-asyncio
