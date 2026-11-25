@@ -98,4 +98,4 @@ packages: procps-ng, iproute, socat, man-db, nano, htop, iotop-c, fastfetch, tmu
 [cosmic-desktop]
 summary: the COSMIC desktop environment and its apps
 maintainer: sk1lld
-packages: cosmic-icons, cosmic-wallpapers, cosmic-sound-theme
+packages: cosmic-icons, cosmic-wallpapers, cosmic-sound-theme, cosmic-randr
