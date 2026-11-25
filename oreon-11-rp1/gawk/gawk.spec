@@ -53,7 +53,7 @@
 Name:             gawk
 Summary:          The GNU version of the AWK text processing utility
 Version:        5.4.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 License:          GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-3-Clause
 
@@ -82,12 +82,6 @@ BuildRequires:    mpfr-devel
 BuildRequires:    readline-devel
 
 # Documentation (gawk-doc):
-BuildRequires:    texinfo-tex
-%bcond_with tex_fonts
-%if %{with tex_fonts}
-BuildRequires:    texlive-ec
-BuildRequires:    texlive-cm-super
-%endif
 
 # Make check
 BuildRequires:    glibc-all-langpacks
@@ -213,7 +207,6 @@ autoreconf --force --verbose
 %make_build
 
 # Build the documentation in PDF, postscript and HTML versions:
-%make_build -C doc pdf
 mkdir -p html/gawk html/gawkinet
 makeinfo --html -I doc -o html/gawk     doc/gawk.texi
 makeinfo --html -I doc -o html/gawkinet doc/gawkinet.texi
@@ -251,8 +244,6 @@ install -m 0755 -d %{buildroot}%{_docdir}/%{name}/eg/data/
 install -m 0644 -p html/gawk/*           %{buildroot}%{_docdir}/%{name}/html/gawk/
 install -m 0644 -p html/gawkinet/*       %{buildroot}%{_docdir}/%{name}/html/gawkinet/
 
-install -m 0644 -p doc/gawk.{pdf,ps}     %{buildroot}%{_docdir}/%{name}
-install -m 0644 -p doc/gawkinet.{pdf,ps} %{buildroot}%{_docdir}/%{name}
 install -m 0644 -p awklib/eg/data/* %{buildroot}%{_docdir}/%{name}/eg/data/
 
 # === PACKAGING INSTRUCTIONS ==================================================
@@ -287,8 +278,6 @@ install -m 0644 -p awklib/eg/data/* %{buildroot}%{_docdir}/%{name}/eg/data/
 
 # NOTE: For some reason, adding all files in one line causes RPM build to fail.
 %files doc
-%doc %{_docdir}/%{name}/gawk.{pdf,ps}
-%doc %{_docdir}/%{name}/gawkinet.{pdf,ps}
 %doc %{_docdir}/%{name}/html
 %doc %{_docdir}/%{name}/eg
 %doc %{_infodir}/gawk_*
