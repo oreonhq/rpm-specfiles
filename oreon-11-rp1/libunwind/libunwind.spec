@@ -22,7 +22,7 @@
 Summary: An unwinding library
 Name: libunwind
 Version: 1.8.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: MIT
 URL: https://savannah.nongnu.org/projects/libunwind
 Source0: https://github.com/libunwind/libunwind/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -39,6 +39,7 @@ Patch9: libunwind-s390x-backtrace-2.patch
 Patch10: libunwind-s390x-backtrace-3.patch
 Patch11: libunwind-gnu-hash-bounds.patch
 Patch12: libunwind-ptrace-tracee.patch
+Patch13: libunwind-docs-without-latex2man.patch
 ExclusiveArch: %{arm} aarch64 hppa ia64 mips ppc %{power64} s390x %{ix86} x86_64 riscv64
 
 BuildRequires: oreon-rpm-macros
@@ -46,9 +47,6 @@ BuildRequires: gnupg2
 BuildRequires: automake
 BuildRequires: libtool
 BuildRequires: autoconf
-%if %{without bootstrap}
-BuildRequires: texlive-latex2man
-%endif
 BuildRequires: make
 BuildRequires: gcc-c++
 BuildRequires: pkgconfig(liblzma)
@@ -122,9 +120,7 @@ echo ====================TESTING END=====================
 %{_libdir}/libunwind*.so
 %{_libdir}/libunwind-ptrace.a
 %{_libdir}/pkgconfig/libunwind*.pc
-%if %{without bootstrap}
 %{_mandir}/*/*
-%endif
 %{_includedir}/unwind.h
 %{_includedir}/libunwind*.h
 
