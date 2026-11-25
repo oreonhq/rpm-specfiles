@@ -4,6 +4,7 @@
 %global source0_hash 1dd5567b315e19cf4cfb2c32931e535fd65b326960a8770f351d7655439b1eb8
 %global source1_hash 59cdcaf255add4721de38eb411d4ecfe779356b61fb671aee63c7dec78054c2b
 %global source2_hash f4a8d27429458a529148f90ebafcd1ae9b1968fa323f9e5e40d579a5c8c0288f
+%global source3_hash 8ad598c73ad796e0d8280b082cebd82a630d73e73cd3c70057938a6501bba5d7
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
 %oreon_bootstrap
@@ -19,7 +20,7 @@
 Name:           java-25-openjdk
 Epoch:          1
 Version:        %{filever}.%{buildver}
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        OpenJDK %{javaver} runtime
 License:        GPL-2.0-only WITH Classpath-exception-2.0
 URL:            https://openjdk.org/
@@ -30,6 +31,7 @@ ExclusiveArch:  x86_64 aarch64
 Source0:        https://github.com/openjdk/jdk%{javaver}u/archive/refs/tags/%{vcstag}.tar.gz#/openjdk-%{vcstag}.tar.gz
 Source1:        https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-x64_bin.tar.gz
 Source2:        https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabeccb5528b/36/GPL/openjdk-25_linux-aarch64_bin.tar.gz
+Source3:        https://github.com/google/googletest/archive/v1.14.0/googletest-1.14.0.tar.gz
 Patch0:         jdk8347901-c2_unused_leaf_removal.patch
 Patch1:         jdk8378713-c2_missing_pow_constant_folding.patch
 
@@ -168,7 +170,9 @@ OpenJDK %{javaver} source zip for debugging.
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
+echo '%{source3_hash}  %{SOURCE3}' | sha256sum -c -
 %autosetup -n jdk%{javaver}u-jdk-%{filever}-%{buildver} -p1
+tar -C .. -xf %{SOURCE3}
 
 %build
 export CC=clang
@@ -195,6 +199,7 @@ bootjdk=%{jvmhome}
 bash ./configure \
     --prefix=%{jvmhome} \
     --with-boot-jdk="$bootjdk" \
+    --with-gtest="$PWD/../googletest-1.14.0" \
     --with-toolchain-type=clang \
     --with-debug-level=release \
     --with-jvm-variants=server \
@@ -223,6 +228,9 @@ bash ./configure \
     --with-vendor-vm-bug-url=https://github.com/oreonhq/rpm-specfiles/issues \
     --with-vendor-version-string=Oreon-%{version}-%{release}
 make LOG=info jdk-image
+
+%check
+make LOG=info test-hotspot-gtest
 
 %install
 install -d %{buildroot}%{jvmhome}
