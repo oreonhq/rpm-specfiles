@@ -19,9 +19,6 @@ BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libtiff-4)
-BuildRequires:  pkgconfig(libwebp)
-BuildRequires:  pkgconfig(libavif)
-BuildRequires:  pkgconfig(librsvg-2.0)
 
 Requires:       chafa-libs%{?_isa} = %{version}-%{release}
 
