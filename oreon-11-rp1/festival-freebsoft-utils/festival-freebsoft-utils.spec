@@ -57,11 +57,9 @@ Summary:        Documentation for festival-freebsoft-utils
 License:        %{doc_license}
 
 BuildRequires:  make
-BuildRequires:  texinfo-tex
-BuildRequires:  tex(latex)
 
 %description doc
-Documentation for festival-freebsoft-utils in info, PDF, and HTML formats.
+Documentation for festival-freebsoft-utils in info and HTML formats.
 
 %prep
 %oreon_sha256
@@ -69,7 +67,7 @@ Documentation for festival-freebsoft-utils in info, PDF, and HTML formats.
 
 %build
 %make_build clean
-%make_build info pdf html
+%make_build info html
 
 %install
 install -D --preserve-timestamps --mode=0644 \
@@ -78,7 +76,7 @@ install -D --preserve-timestamps --mode=0644 \
     --target='%{buildroot}/%{_infodir}' doc/*.info
 install -D --preserve-timestamps --mode=0644 \
     --target='%{buildroot}/%{_pkgdocdir}' \
-    doc/*.pdf doc/*.html ANNOUNCE NEWS README
+    doc/*.html ANNOUNCE NEWS README
 
 %files
 %license COPYING
@@ -90,7 +88,6 @@ install -D --preserve-timestamps --mode=0644 \
 %doc %{_pkgdocdir}/NEWS
 %doc %{_pkgdocdir}/README
 
-%doc %{_pkgdocdir}/festival-freebsoft-utils.pdf
 %doc %{_pkgdocdir}/festival-freebsoft-utils.html
 
 %doc %{_infodir}/festival-freebsoft-utils.info*
