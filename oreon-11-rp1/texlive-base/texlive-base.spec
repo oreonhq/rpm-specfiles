@@ -40,7 +40,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 6%{?dist}
+Release: 7%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -578,9 +578,11 @@ BuildRequires: mpfr-devel
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
 BuildRequires: chrpath
+%if %{without bootstrap}
+BuildRequires: cairo-devel
+%endif
 %bcond_with full_tex_deps
 %if %{with full_tex_deps}
-BuildRequires: cairo-devel
 BuildRequires: texlive-texlive-scripts
 BuildRequires: texlive-amsfonts
 BuildRequires: tex(expl3.sty)
