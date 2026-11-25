@@ -28,7 +28,7 @@ Summary:    A GNU tool for automatically creating Makefiles
 Name:       automake
 # Any bump here requires libtool rebuild, rhbz#1813010
 Version:        1.20
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 # To help future rebase, the following licenses were seen in the following files/folders:
 # usr/bin/* - GPL-2.0-or-later
@@ -94,8 +94,6 @@ BuildRequires: gcc-gfortran
 BuildRequires: gettext-devel
 BuildRequires: libtool
 BuildRequires: sharutils
-BuildREquires: texlive-dvips
-BuildRequires: texinfo-tex
 BuildRequires: vala
 BuildRequires: gcc-objc
 BuildRequires: gcc-objc++
