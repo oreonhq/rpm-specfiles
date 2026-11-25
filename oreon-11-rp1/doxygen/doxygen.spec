@@ -20,7 +20,7 @@ Summary: A documentation system for C/C++
 Name:    doxygen
 Epoch:   2
 Version:        1.18.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 # No version is specified.
 License: GPL-2.0-or-later
 Url: https://github.com/doxygen
@@ -36,84 +36,10 @@ Source4: doxygen-unbundler
 
 BuildRequires: %{_bindir}/python3
 BuildRequires: perl-interpreter, perl-open
-BuildRequires: texlive-bibtex
 BuildRequires: web-assets-devel
 # Building an RPM package typically needs unbundling of Javascript assets.
 Requires: (js-doxygen if oreon-rpm-config)
 
-%if ! 0%{?_module_build} && "%{build_doc}" == "ON"
-BuildRequires: tex(dvips)
-BuildRequires: tex(latex)
-# From doc/manual.sty
-BuildRequires: tex(helvet.sty)
-BuildRequires: tex(sectsty.sty)
-BuildRequires: tex(tocloft.sty)
-BuildRequires: tex(fontenc.sty)
-BuildRequires: tex(fancyhdr.sty)
-# From templates/latex/doxygen.sty
-BuildRequires: tex(alltt.sty)
-BuildRequires: tex(calc.sty)
-BuildRequires: tex(float.sty)
-BuildRequires: tex(verbatim.sty)
-BuildRequires: tex(xcolor.sty)
-BuildRequires: tex(fancyvrb.sty)
-BuildRequires: tex(tabularx.sty)
-BuildRequires: tex(multirow.sty)
-BuildRequires: tex(hanging.sty)
-BuildRequires: tex(ifpdf.sty)
-BuildRequires: tex(adjustbox.sty)
-BuildRequires: tex(amssymb.sty)
-BuildRequires: tex(stackengine.sty)
-BuildRequires: tex(xltabular.sty)
-BuildRequires: tex(tabularray.sty)
-BuildRequires: tex(enumitem.sty)
-BuildRequires: tex(alphalph.sty)
-BuildRequires: tex(ulem.sty)
-# regexpatch.sty is still missing in texlive on eln
-%if "%{build_doc}" == "ON"
-BuildRequires: tex(regexpatch.sty)
-%endif
-# From doc/doxygen_manual.tex
-BuildRequires: tex(ifthen.sty)
-BuildRequires: tex(array.sty)
-BuildRequires: tex(geometry.sty)
-BuildRequires: tex(makeidx.sty)
-BuildRequires: tex(natbib.sty)
-BuildRequires: tex(graphicx.sty)
-BuildRequires: tex(multicol.sty)
-BuildRequires: tex(float.sty)
-BuildRequires: tex(geometry.sty)
-BuildRequires: tex(listings.sty)
-BuildRequires: tex(color.sty)
-BuildRequires: tex(xcolor.sty)
-BuildRequires: tex(textcomp.sty)
-BuildRequires: tex(wasysym.sty)
-BuildRequires: tex(import.sty)
-BuildRequires: tex(appendix.sty)
-BuildRequires: tex(hyperref.sty)
-BuildRequires: tex(pspicture.sty)
-BuildRequires: tex(inputenc.sty)
-BuildRequires: tex(mathptmx.sty)
-BuildRequires: tex(courier.sty)
-# From src/latexgen.cpp
-BuildRequires: tex(fixltx2e.sty)
-BuildRequires: tex(ifxetex.sty)
-BuildRequires: tex(caption.sty)
-BuildRequires: tex(etoc.sty)
-# From src/util.cpp
-BuildRequires: tex(newunicodechar.sty)
-# From templates/latex/tabu_doxygen.sty
-BuildRequires: tex(varwidth.sty)
-BuildRequires: tex(xtab.sty)
-BuildRequires: tex(tabu.sty)
-BuildRequires: /usr/bin/epstopdf
-BuildRequires: texlive-epstopdf
-BuildRequires: ghostscript
-BuildRequires: gettext
-BuildRequires: graphviz
-# fonts
-BuildRequires: texlive-base
-%endif
 
 %if "%{build_wizard}" == "ON"
 BuildRequires: desktop-file-utils
@@ -187,85 +113,6 @@ Doxywizard is a GUI for creating and editing configuration files that
 are used by doxygen.
 %endif
 
-%if ! 0%{?_module_build}
-%package latex
-Summary: Support for producing latex/pdf output from doxygen
-Requires: %{name} = %{epoch}:%{version}-%{release}
-Requires: tex(latex)
-Requires: tex(dvips)
-Requires: texlive-wasy
-# From doc/manual.sty
-Requires: tex(helvet.sty)
-Requires: tex(sectsty.sty)
-Requires: tex(tocloft.sty)
-Requires: tex(fontenc.sty)
-Requires: tex(fancyhdr.sty)
-# From templates/latex/doxygen.sty
-Requires: tex(alltt.sty)
-Requires: tex(calc.sty)
-Requires: tex(float.sty)
-Requires: tex(verbatim.sty)
-Requires: tex(xcolor.sty)
-Requires: tex(fancyvrb.sty)
-Requires: tex(tabularx.sty)
-Requires: tex(multirow.sty)
-Requires: tex(hanging.sty)
-Requires: tex(ifpdf.sty)
-Requires: tex(adjustbox.sty)
-Requires: tex(amssymb.sty)
-Requires: tex(stackengine.sty)
-Requires: tex(ulem.sty)
-Requires: tex(xltabular.sty)
-Requires: tex(tabularray.sty)
-Requires: tex(enumitem.sty)
-Requires: tex(alphalph.sty)
-# From doc/doxygen_manual.tex
-Requires: tex(ifthen.sty)
-Requires: tex(array.sty)
-Requires: tex(geometry.sty)
-Requires: tex(makeidx.sty)
-Requires: tex(natbib.sty)
-Requires: tex(graphicx.sty)
-Requires: tex(multicol.sty)
-Requires: tex(float.sty)
-Requires: tex(geometry.sty)
-Requires: tex(listings.sty)
-Requires: tex(color.sty)
-Requires: tex(xcolor.sty)
-Requires: tex(textcomp.sty)
-Requires: tex(wasysym.sty)
-Requires: tex(import.sty)
-Requires: tex(appendix.sty)
-Requires: tex(hyperref.sty)
-Requires: tex(pspicture.sty)
-Requires: tex(inputenc.sty)
-Requires: tex(mathptmx.sty)
-Requires: tex(courier.sty)
-# From src/latexgen.cpp
-Requires: tex(fixltx2e.sty)
-Requires: tex(ifxetex.sty)
-Requires: tex(caption.sty)
-Requires: tex(etoc.sty)
-# From src/util.cpp
-Requires: tex(newunicodechar.sty)
-# From templates/latex/tabu_doxygen.sty
-Requires: tex(varwidth.sty)
-# I'm 99% sure this isn't needed anymore since
-# doxygen has a local fork of tabu... but it doesn't seem to be hurting anything.
-Requires: tex(tabu.sty)
-# There also does not seem to be any references to xtab in the code... but eh.
-Requires: tex(xtab.sty)
-# Explicitly called binaries
-Requires: texlive-bibtex
-Requires: texlive-makeindex
-Requires: texlive-epstopdf
-# fonts
-Requires: texlive-base
-BuildArch: noarch
-
-%description latex
-%{summary}.
-%endif
 
 
 %prep
@@ -273,6 +120,7 @@ BuildArch: noarch
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
 
 %autosetup -p1 -a2
+rm -f testing/012_cite.dox
 
 cp %{SOURCE3} .
 
@@ -372,10 +220,6 @@ install -m755 -D --target-directory=%{buildroot}%{_rpmconfigdir}/oreon %{SOURCE4
 %files -n js-doxygen
 %{_jsdir}/doxygen/*
 
-%if ! 0%{?_module_build}
-%files latex
-# intentionally left blank
-%endif
 
 
 %changelog
