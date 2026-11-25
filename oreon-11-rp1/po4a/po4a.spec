@@ -57,7 +57,6 @@ BuildRequires: perl(subs)
 BuildRequires: perl(Time::Local)
 BuildRequires: perl(vars)
 BuildRequires: perl(warnings)
-BuildRequires: texlive-base
 BuildRequires: perl(I18N::Langinfo)
 BuildRequires: perl(Locale::gettext) >= 1.01
 BuildRequires: perl(Term::ReadKey)
@@ -69,14 +68,11 @@ BuildRequires: perl(Test::Pod)
 %if %{with extra_perl}
 BuildRequires: perl(Syntax::Keyword::Try)
 BuildRequires: perl(YAML::Tiny)
-BuildRequires: tex(article.cls)
 %endif
 
 Requires: /usr/bin/xsltproc
 Requires: gettext
 Requires: opensp
-Requires: texlive-kpathsea
-Requires: texlive-kpathsea-bin
 Requires: perl(Locale::gettext) >= 1.01
 Requires: perl(I18N::Langinfo)
 Requires: perl(Term::ReadKey)
