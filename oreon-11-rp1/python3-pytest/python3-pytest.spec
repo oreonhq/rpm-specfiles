@@ -5,7 +5,7 @@
 
 Name: python3-pytest
 Version: 9.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: pytest: simple powerful testing with Python
 License: MIT
 URL: https://pypi.org/project/pytest/
