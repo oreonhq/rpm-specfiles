@@ -11,7 +11,7 @@
 
 Name: cosmic-icons
 
-Version: 1.11.0
+Version: 1.12.0
 
 Release: 1%{?dist}
 
@@ -21,7 +21,7 @@ License: CC-BY-SA-4.0
 
 URL: https://github.com/pop-os/cosmic-icons
 
-Source0: https://github.com/pop-os/cosmic-icons/archive/refs/tags/epoch-1.11.0.tar.gz
+Source0: https://github.com/pop-os/cosmic-icons/archive/refs/tags/epoch-1.12.0.tar.gz
 
 BuildArch: noarch
 
@@ -37,7 +37,7 @@ Icon theme for the COSMIC Desktop Environment
 
 %oreon_sha256
 
-%autosetup -n cosmic-icons-epoch-1.11.0
+%autosetup -n cosmic-icons-epoch-1.12.0
 
 %install
 
