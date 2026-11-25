@@ -5,7 +5,6 @@
 
 %{!?oreon_bootstrap:%global oreon_bootstrap %{nil}}
 %bcond bootstrap 0
-%oreon_bootstrap
 
 %ifnarch s390x
 %global with_hardware 1
@@ -19,7 +18,11 @@
 %global with_opencl 0
 %global with_va 1
 %global with_nvk %{with_vulkan_hw}
-%global base_vulkan %{?with_vulkan_hw:,amd}%{!?with_vulkan_hw:%{nil}}
+%if 0%{?with_vulkan_hw}
+%global base_vulkan ,amd
+%else
+%global base_vulkan %{nil}
+%endif
 %endif
 
 %ifarch aarch64 x86_64
@@ -29,7 +32,11 @@
 %ifarch %{ix86} x86_64
 %global with_crocus 1
 %global with_iris   1
-%global intel_platform_vulkan %{?with_vulkan_hw:,intel,intel_hasvk}%{!?with_vulkan_hw:%{nil}}
+%if 0%{?with_vulkan_hw}
+%global intel_platform_vulkan ,intel,intel_hasvk
+%else
+%global intel_platform_vulkan %{nil}
+%endif
 %global with_i915   1
 %endif
 %ifarch x86_64
@@ -49,9 +56,17 @@
 %global with_freedreno 1
 %global with_panfrost  0
 %if 0%{?with_asahi}
-%global asahi_platform_vulkan %{?with_vulkan_hw:,asahi}%{!?with_vulkan_hw:%{nil}}
+%if 0%{?with_vulkan_hw}
+%global asahi_platform_vulkan ,asahi
+%else
+%global asahi_platform_vulkan %{nil}
 %endif
-%global extra_platform_vulkan %{?with_vulkan_hw:,broadcom,freedreno,panfrost,imagination}%{!?with_vulkan_hw:%{nil}}
+%endif
+%if 0%{?with_vulkan_hw}
+%global extra_platform_vulkan ,broadcom,freedreno,panfrost,imagination
+%else
+%global extra_platform_vulkan %{nil}
+%endif
 %endif
 
 %global with_libunwind 1
@@ -83,7 +98,22 @@
 %bcond_with valgrind
 %endif
 
-%global vulkan_drivers swrast%{?base_vulkan}%{?intel_platform_vulkan}%{?asahi_platform_vulkan}%{?extra_platform_vulkan}%{?with_nvk:,nouveau}%{?with_virtio:,virtio}%{?with_d3d12:,microsoft-experimental}
+%if 0%{?with_nvk}
+%global vk_nouveau ,nouveau
+%else
+%global vk_nouveau %{nil}
+%endif
+%if 0%{?with_virtio}
+%global vk_virtio ,virtio
+%else
+%global vk_virtio %{nil}
+%endif
+%if 0%{?with_d3d12}
+%global vk_d3d12 ,microsoft-experimental
+%else
+%global vk_d3d12 %{nil}
+%endif
+%global vulkan_drivers swrast%{?base_vulkan}%{?intel_platform_vulkan}%{?asahi_platform_vulkan}%{?extra_platform_vulkan}%{?vk_nouveau}%{?vk_virtio}%{?vk_d3d12}
 
 %global _lto_cflags %nil
 
@@ -146,6 +176,9 @@ BuildRequires:  lm_sensors-devel
 %endif
 %if 0%{?with_va}
 BuildRequires:  pkgconfig(libva) >= 0.38.0
+%endif
+%if 0%{?with_spirv_tools}
+BuildRequires:  pkgconfig(SPIRV-Tools)
 %endif
 BuildRequires:  pkgconfig(libelf)
 BuildRequires:  pkgconfig(libglvnd) >= 1.3.2
@@ -370,18 +403,84 @@ rewrite_wrap_file rustc-hash
 %meson \
   -Dplatforms=x11,wayland \
 %if 0%{?with_hardware}
-  -Dgallium-drivers=llvmpipe,virgl,nouveau%{?with_r300:,r300}%{?with_crocus:,crocus}%{?with_i915:,i915}%{?with_iris:,iris}%{?with_vmware:,svga}%{?with_radeonsi:,radeonsi}%{?with_r600:,r600}%{?with_asahi:,asahi}%{?with_freedreno:,freedreno}%{?with_etnaviv:,etnaviv}%{?with_tegra:,tegra}%{?with_vc4:,vc4}%{?with_v3d:,v3d}%{?with_lima:,lima}%{?with_panfrost:,panfrost}%{?with_vulkan_hw:,zink}%{?with_d3d12:,d3d12}%{?with_teflon:,ethosu,rocket} \
+%if 0%{?with_r300}
+%global gd_r300 ,r300
+%endif
+%if 0%{?with_crocus}
+%global gd_crocus ,crocus
+%endif
+%if 0%{?with_i915}
+%global gd_i915 ,i915
+%endif
+%if 0%{?with_iris}
+%global gd_iris ,iris
+%endif
+%if 0%{?with_vmware}
+%global gd_svga ,svga
+%endif
+%if 0%{?with_radeonsi}
+%global gd_radeonsi ,radeonsi
+%endif
+%if 0%{?with_r600}
+%global gd_r600 ,r600
+%endif
+%if 0%{?with_asahi}
+%global gd_asahi ,asahi
+%endif
+%if 0%{?with_freedreno}
+%global gd_freedreno ,freedreno
+%endif
+%if 0%{?with_etnaviv}
+%global gd_etnaviv ,etnaviv
+%endif
+%if 0%{?with_tegra}
+%global gd_tegra ,tegra
+%endif
+%if 0%{?with_vc4}
+%global gd_vc4 ,vc4
+%endif
+%if 0%{?with_v3d}
+%global gd_v3d ,v3d
+%endif
+%if 0%{?with_lima}
+%global gd_lima ,lima
+%endif
+%if 0%{?with_panfrost}
+%global gd_panfrost ,panfrost
+%endif
+%if 0%{?with_vulkan_hw}
+%global gd_zink ,zink
+%endif
+%if 0%{?with_d3d12}
+%global gd_d3d12 ,d3d12
+%endif
+%if 0%{?with_teflon}
+%global gd_teflon ,ethosu,rocket
+%endif
+  -Dgallium-drivers=llvmpipe,virgl,nouveau%{?gd_r300}%{?gd_crocus}%{?gd_i915}%{?gd_iris}%{?gd_svga}%{?gd_radeonsi}%{?gd_r600}%{?gd_asahi}%{?gd_freedreno}%{?gd_etnaviv}%{?gd_tegra}%{?gd_vc4}%{?gd_v3d}%{?gd_lima}%{?gd_panfrost}%{?gd_zink}%{?gd_d3d12}%{?gd_teflon} \
 %else
   -Dgallium-drivers=llvmpipe,virgl \
 %endif
-  -Dgallium-va=%{?with_va:enabled}%{!?with_va:disabled} \
+%if 0%{?with_va}
+  -Dgallium-va=enabled \
+%else
+  -Dgallium-va=disabled \
+%endif
   -Dgallium-mediafoundation=disabled \
-  -Dteflon=%{?with_teflon:true}%{!?with_teflon:false} \
+%if 0%{?with_teflon}
+  -Dteflon=true \
+%else
+  -Dteflon=false \
+%endif
 %if 0%{?with_opencl}
   -Dgallium-rusticl=true \
 %endif
   -Dvulkan-drivers=%{?vulkan_drivers} \
-  -Dvulkan-layers=device-select%{?with_vulkan_layers_anti_lag:,anti-lag} \
+%if 0%{?with_vulkan_layers_anti_lag}
+  -Dvulkan-layers=device-select,anti-lag \
+%else
+  -Dvulkan-layers=device-select \
+%endif
   -Dgles1=enabled \
   -Dgles2=enabled \
   -Dopengl=true \
@@ -389,7 +488,11 @@ rewrite_wrap_file rustc-hash
   -Dglx=dri \
   -Degl=enabled \
   -Dglvnd=enabled \
-  -Dintel-rt=%{?with_intel_vk_rt:enabled}%{!?with_intel_vk_rt:disabled} \
+%if 0%{?with_intel_vk_rt}
+  -Dintel-rt=enabled \
+%else
+  -Dintel-rt=disabled \
+%endif
   -Dmicrosoft-clc=disabled \
   -Dllvm=enabled \
   -Dshared-llvm=enabled \
@@ -405,7 +508,11 @@ rewrite_wrap_file rustc-hash
 %ifarch %{ix86}
   -Dglx-read-only-text=true \
 %endif
-  -Dspirv-tools=%{?with_spirv_tools:enabled}%{!?with_spirv_tools:disabled} \
+%if 0%{?with_spirv_tools}
+  -Dspirv-tools=enabled \
+%else
+  -Dspirv-tools=disabled \
+%endif
   %{nil}
 %meson_build
 
