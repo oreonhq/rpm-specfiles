@@ -13,7 +13,7 @@
 
 Name:           meson
 Version:        1.12.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        High productivity build system
 
 License:        Apache-2.0
@@ -47,7 +47,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  gcc-objc
 BuildRequires:  gcc-objc++
-BuildRequires:  java-25-openjdk-portable-devel
+BuildRequires:  java-25-openjdk-devel
 BuildRequires:  libomp-devel
 BuildRequires:  mono-core mono-devel
 BuildRequires:  rust
