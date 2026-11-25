@@ -39,7 +39,6 @@ BuildRequires:  libpng-devel
 Obsoletes: %{name}-devel-docs < %{epoch}:%{version}-%{release}
 %else
 BuildRequires:  doxygen
-BuildRequires:  tetex-latex
 BuildRequires:  transfig
 %endif
 
@@ -93,9 +92,6 @@ sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %{make_build}
 
-%if %{with devel_docs}
-make -C doc/spec %{?_smp_mflags}
-%endif
 
 %install
 %{make_install}
@@ -122,7 +118,7 @@ install -m 755 examples/.libs/png2theora $RPM_BUILD_ROOT/%{_bindir}/png2theora
 
 %if %{with devel_docs}
 %files devel-docs
-%doc doc/libtheora/html doc/vp3-format.txt doc/spec/Theora.pdf
+%doc doc/libtheora/html doc/vp3-format.txt
 %doc doc/color.html doc/draft-ietf-avt-rtp-theora-00.txt
 %endif
 
