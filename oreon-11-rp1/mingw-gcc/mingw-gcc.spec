@@ -68,6 +68,9 @@ BuildRequires:  ucrt64-crt
 BuildRequires:  mingw32-winpthreads
 BuildRequires:  mingw64-winpthreads
 BuildRequires:  ucrt64-winpthreads
+BuildRequires:  mingw32-winpthreads-static
+BuildRequires:  mingw64-winpthreads-static
+BuildRequires:  ucrt64-winpthreads-static
 %endif
 Provides: bundled(libiberty)
 
