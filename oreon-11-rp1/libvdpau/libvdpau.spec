@@ -8,7 +8,7 @@
 
 Name:           libvdpau
 Version:        1.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://freedesktop.org/wiki/Software/VDPAU/
@@ -22,7 +22,6 @@ BuildRequires:  doxygen
 BuildRequires:  graphviz
 BuildRequires:  libX11-devel
 BuildRequires:  meson >= 0.41
-BuildRequires:  tex(latex)
 BuildRequires:  pkgconfig(dri2proto) >= 2.2
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
