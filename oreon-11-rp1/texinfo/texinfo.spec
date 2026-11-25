@@ -11,7 +11,7 @@
 Summary: Tools needed to create Texinfo format documentation files
 Name: texinfo
 Version:        7.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 License: GPL-3.0-or-later
 Url: http://www.gnu.org/software/texinfo/
 Source0:        https://mirror.cs.odu.edu/gnu/texinfo/texinfo-%{version}.tar.xz
@@ -64,11 +64,8 @@ browser program for viewing texinfo files.
 %package tex
 Summary: Tools for formatting Texinfo documentation files using TeX
 Requires: texinfo = %{version}-%{release}
-Requires: tex(tex) tex(epsf.tex)
 Requires: /usr/bin/cmp
 Requires: /usr/bin/diff
-Requires(post): %{_bindir}/texconfig-sys
-Requires(postun): %{_bindir}/texconfig-sys
 Provides: tex-texinfo
 Provides: texlive-texinfo
 Obsoletes: texlive-texinfo <= 9:2019-15
@@ -110,11 +107,6 @@ install -Dpm0755 -t %{buildroot}%{_sbindir} contrib/fix-info-dir
 %check
 %make_build check
 
-%post tex
-%{_bindir}/texconfig-sys rehash 2> /dev/null || :
-
-%postun tex
-%{_bindir}/texconfig-sys rehash 2> /dev/null || :
 
 %transfiletriggerin -n info -- %{_infodir}
 [ -f %{_infodir}/dir ] && create_arg="" || create_arg="--create"
