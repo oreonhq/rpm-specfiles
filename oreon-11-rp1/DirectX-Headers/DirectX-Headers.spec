@@ -19,7 +19,7 @@
 
 Name:           DirectX-Headers
 Version:        1.619.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Official Direct3D 12 headers
 
 License:        MIT
@@ -35,12 +35,27 @@ BuildRequires:  gcc-c++
 
 BuildRequires: mingw32-filesystem
 BuildRequires: mingw32-gcc-c++
+BuildRequires: mingw32-crt
+BuildRequires: mingw32-headers
+BuildRequires: mingw32-libgcc
+BuildRequires: mingw32-libstdc++
+BuildRequires: mingw32-winpthreads
 
 BuildRequires: mingw64-filesystem
 BuildRequires: mingw64-gcc-c++
+BuildRequires: mingw64-crt
+BuildRequires: mingw64-headers
+BuildRequires: mingw64-libgcc
+BuildRequires: mingw64-libstdc++
+BuildRequires: mingw64-winpthreads
 
 BuildRequires: ucrt64-filesystem
 BuildRequires: ucrt64-gcc-c++
+BuildRequires: ucrt64-crt
+BuildRequires: ucrt64-headers
+BuildRequires: ucrt64-libgcc
+BuildRequires: ucrt64-libstdc++
+BuildRequires: ucrt64-winpthreads
 
 
 %description
