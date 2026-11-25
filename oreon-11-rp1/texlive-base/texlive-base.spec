@@ -563,6 +563,7 @@ BuildRequires: file
 BuildRequires: perl(Digest::MD5)
 BuildRequires: texinfo
 BuildRequires: freetype-devel
+BuildRequires: fontconfig-devel
 BuildRequires: libpng-devel
 BuildRequires: zlib-devel
 BuildRequires: libicu-devel
@@ -6800,6 +6801,7 @@ Obsoletes: texlive-xetex-doc < 7:20170520
 License: MIT
 Requires(post,postun): coreutils
 Requires: teckit
+Requires: fontconfig
 Requires: tex(xetex.def)
 Requires: texlive-atbegshi
 Requires: texlive-atveryend
