@@ -14,7 +14,7 @@
 %global patchver 1
 %global buildver 1
 %global portablerelease 1
-%global rpmrelease 1
+%global rpmrelease 2
 
 # Define IcedTea version used for SystemTap tapsets and desktop file
 %global icedteaver      6.0.0pre00-c848b93a8598
@@ -118,9 +118,9 @@ URL:      http://openjdk.java.net/
 # $ fedpkg mockbuild --without slowdebug --without fastdebug
 
 # Enable fastdebug builds by default on relevant arches.
-%bcond_without fastdebug
+%bcond_with fastdebug
 # Enable slowdebug builds by default on relevant arches.
-%bcond_without slowdebug
+%bcond_with slowdebug
 # Enable release builds by default on relevant arches.
 %bcond_without release
 # Enable static library builds by default.
