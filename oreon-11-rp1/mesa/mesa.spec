@@ -211,6 +211,7 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-mako
 BuildRequires:  python3-pycparser
 BuildRequires:  python3-pyyaml
+BuildRequires:  python3-packaging
 BuildRequires:  vulkan-headers
 BuildRequires:  glslang
 %if 0%{?with_vulkan_hw}
