@@ -1,0 +1,33 @@
+--- a/src/elfxx.c
++++ b/src/elfxx.c
+@@ -175,15 +175,26 @@
+ 
+   if (gnu_hash)
+     {
+-        uint32_t *buckets = gnu_hash + 4 + (gnu_hash[2] * sizeof(size_t)/4);
+-        uint32_t *hashval;
+-        for (i = sym_num = 0; i < gnu_hash[0]; i++)
++        uint32_t nbuckets, symoffset, bloom_size, *buckets, *hashval;
++        if ((char *) gnu_hash < (char *) ei->image
++            || (char *) gnu_hash + 4 * sizeof (Elf_W (Word)) > (char *) ei->image + ei->size)
++          return -UNW_ENOINFO;
++        nbuckets = gnu_hash[0];
++        symoffset = gnu_hash[1];
++        bloom_size = gnu_hash[2];
++        buckets = gnu_hash + 4 + (bloom_size * sizeof(size_t)/4);
++        if (nbuckets == 0 || bloom_size == 0 || symoffset == 0
++            || (char *) (buckets + nbuckets) > (char *) ei->image + ei->size)
++          return -UNW_ENOINFO;
++        for (i = sym_num = 0; i < nbuckets; i++)
+           if (buckets[i] > sym_num)
+             sym_num = buckets[i];
+ 
+         if (sym_num)
+           {
+-            hashval = buckets + gnu_hash[0] + (sym_num - gnu_hash[1]);
++            hashval = buckets + nbuckets + (sym_num - symoffset);
++            if ((char *) hashval >= (char *) ei->image + ei->size)
++              return -UNW_ENOINFO;
+             do sym_num++;
+             while (!(*hashval++ & 1));
+           }

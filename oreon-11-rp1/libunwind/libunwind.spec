@@ -22,7 +22,7 @@
 Summary: An unwinding library
 Name: libunwind
 Version: 1.8.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: MIT
 URL: https://savannah.nongnu.org/projects/libunwind
 Source0: https://github.com/libunwind/libunwind/releases/download/v%{version}/%{name}-%{version}.tar.gz
@@ -37,6 +37,7 @@ Patch7: libunwind-s390x-glibc-mmap.patch
 Patch8: libunwind-s390x-backtrace-1.patch
 Patch9: libunwind-s390x-backtrace-2.patch
 Patch10: libunwind-s390x-backtrace-3.patch
+Patch11: libunwind-gnu-hash-bounds.patch
 ExclusiveArch: %{arm} aarch64 hppa ia64 mips ppc %{power64} s390x %{ix86} x86_64 riscv64
 
 BuildRequires: oreon-rpm-macros
