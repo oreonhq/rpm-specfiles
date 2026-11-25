@@ -5,7 +5,7 @@
 
 Name:           chafa
 Version:        1.18.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Terminal graphics library and image converter
 License:        LGPL-3.0-or-later
 URL:            https://hpjansson.org/chafa/
@@ -19,6 +19,8 @@ BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libtiff-4)
+BuildRequires:  pkgconfig(libwebp)
+BuildRequires:  pkgconfig(librsvg-2.0)
 
 Requires:       chafa-libs%{?_isa} = %{version}-%{release}
 
