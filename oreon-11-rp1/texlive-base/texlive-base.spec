@@ -40,7 +40,7 @@
 
 Name: %{shortname}-base
 Version: %{source_date}
-Release: 7%{?dist}
+Release: 8%{?dist}
 Epoch: 12
 Summary: TeX formatting system
 # The only files in the base package are directories, cache, and license texts
@@ -531,8 +531,6 @@ Patch1: tl-kpfix.patch
 Patch2: tl-format.patch
 Patch5: texlive-2016-kpathsea-texlive-path.patch
 Patch8: texlive-base-20260301-texinfo-path-fix.patch
-# fix annocheck issue detected by rpmdiff
-Patch17: texlive-20180414-annocheck.patch
 # Since we need to include tlmgr.pl for texconfig
 # lets try to keep people from shooting themselves with it
 Patch21: texlive-20190410-tlmgr-ignore-warning.patch
@@ -6977,7 +6975,6 @@ tar xf %{SOURCE0}
 %patch -P2 -p1 -b .format
 %patch -P5 -p0
 %patch -P8 -p1 -b .texinfo-fix
-%patch -P17 -p1 -b .annocheck
 %patch -P30 -p1 -b .out_of_memory
 
 # Setup copies of the licenses
