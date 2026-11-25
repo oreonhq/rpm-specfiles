@@ -115,6 +115,11 @@
 %endif
 %global vulkan_drivers swrast%{?base_vulkan}%{?intel_platform_vulkan}%{?asahi_platform_vulkan}%{?extra_platform_vulkan}%{?vk_nouveau}%{?vk_virtio}%{?vk_d3d12}
 
+%global with_clc 0
+%if 0%{?with_opencl} || 0%{?with_nvk} || 0%{?with_asahi} || 0%{?with_panfrost} || 0%{?with_crocus} || 0%{?with_iris} || 0%{?with_vulkan_hw}
+%global with_clc 1
+%endif
+
 %global _lto_cflags %nil
 
 Name:           mesa
@@ -162,6 +167,7 @@ BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(xcb-dri2) >= 1.8
 BuildRequires:  pkgconfig(xcb-dri3)
 BuildRequires:  pkgconfig(xcb-present)
+BuildRequires:  pkgconfig(xcb-shm)
 BuildRequires:  pkgconfig(xcb-sync)
 BuildRequires:  pkgconfig(xshmfence) >= 1.1
 BuildRequires:  pkgconfig(dri2proto) >= 2.8
@@ -188,11 +194,12 @@ BuildRequires:  flatbuffers-devel
 BuildRequires:  flatbuffers-compiler
 BuildRequires:  xtensor-devel
 %endif
-%if 0%{?with_opencl} || 0%{?with_nvk} || 0%{?with_asahi} || 0%{?with_panfrost}
+%if 0%{?with_clc}
 BuildRequires:  clang-devel
-BuildRequires:  pkgconfig(libclc)
-BuildRequires:  pkgconfig(SPIRV-Tools)
 BuildRequires:  pkgconfig(LLVMSPIRVLib)
+%endif
+%if 0%{?with_opencl} || 0%{?with_nvk} || 0%{?with_asahi} || 0%{?with_panfrost}
+BuildRequires:  pkgconfig(libclc)
 %endif
 %if 0%{?with_opencl} || 0%{?with_nvk}
 BuildRequires:  bindgen
