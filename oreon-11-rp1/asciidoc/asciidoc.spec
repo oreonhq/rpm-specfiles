@@ -49,14 +49,6 @@ Requires:       %{name} = %{version}-%{release}
 %description doc
 Additional documentation and examples for asciidoc.
 
-%package latex
-Summary:        Support for asciidoc latex output
-Requires:       %{name} = %{version}-%{release}
-Requires:       dblatex
-Requires:       texlive-dvipng-bin
-
-%description latex
-Support for asciidoc latex output.
 
 %prep
 %oreon_sha256
@@ -88,7 +80,6 @@ rm %{buildroot}/share/doc/{BUGS.adoc,CHANGELOG.adoc,INSTALL.adoc,README.md,dblat
 %{_bindir}/asciidoc
 %{python3_sitelib}/asciidoc-%{version}.dist-info/
 %{python3_sitelib}/asciidoc/
-%exclude %{python3_sitelib}/asciidoc/resources/filters/latex
 %exclude %{python3_sitelib}/asciidoc/resources/filters/music
 %exclude %{_pkgdocdir}/doc
 
@@ -96,9 +87,6 @@ rm %{buildroot}/share/doc/{BUGS.adoc,CHANGELOG.adoc,INSTALL.adoc,README.md,dblat
 %license COPYRIGHT
 %{_pkgdocdir}/doc/
 
-%files latex
-%license COPYRIGHT
-%dir %{python3_sitelib}/asciidoc/resources/filters/latex
 
 %changelog
 %autochangelog
