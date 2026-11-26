@@ -30,6 +30,8 @@ BuildRequires: pkgconfig(gobject-2.0) >= 2.88
 BuildRequires: pkgconfig(gobject-introspection-1.0) >= 1.83.2
 %endif
 BuildRequires: pkgconfig(harfbuzz) >= 11.0.0
+BuildRequires: pkgconfig(libthai)
+BuildRequires: pkgconfig(xft)
 
 %description
 Pango is a library for laying out and rendering international text. It
@@ -59,6 +61,8 @@ Command-line utilities for inspecting fonts and Pango text layout.
   -Dcairo=enabled \
   -Dfontconfig=enabled \
   -Dfreetype=enabled \
+  -Dlibthai=enabled \
+  -Dxft=enabled \
 %if %{without bootstrap}
   -Dintrospection=enabled
 %else
