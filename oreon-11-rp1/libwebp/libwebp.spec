@@ -8,18 +8,6 @@
 
 %global _hardened_build 1
 
-%bcond enable_java %[!0%{?rhel}]
-
-%if %{with enable_java}
-%ifarch %{java_arches}
-%bcond_without java
-%else
-%bcond_with java
-%endif
-%else
-%bcond_with java
-%endif
-
 %if 0%{?rhel} || 0%{?oreon}
 %bcond_with mingw
 %else
@@ -33,7 +21,6 @@ URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
 License:       Apache-2.0 AND BSD-3-Clause WITH Google-Patent-WebM AND BSD-3-Clause AND FSFULLRWD
 Source0:       https://storage.googleapis.com/downloads.webmproject.org/releases/webp/%{name}-%{version}.tar.gz
-Source1:       libwebp_jni_example.java
 Patch0:        libwebp-freeglut.patch
 Patch1:        libwebp-mingw-libsuffix.patch
 Patch2:        libwebp-cmakedir.patch
@@ -48,11 +35,6 @@ BuildRequires: giflib-devel
 BuildRequires: libjpeg-devel
 BuildRequires: libpng-devel
 BuildRequires: libtiff-devel
-%if %{with java}
-BuildRequires: java-devel
-BuildRequires: jpackage-utils
-BuildRequires: swig
-%endif
 
 %if %{with mingw}
 BuildRequires:  mingw32-filesystem >= 95
@@ -99,17 +81,6 @@ container based on RIFF. Webmasters, web developers and browser
 developers can use WebP to compress, archive and distribute digital
 images more efficiently.
 
-%if %{with java}
-%package java
-Summary:       Java bindings for libwebp, a library for the WebP format
-Requires:      %{name}%{?_isa} = %{version}-%{release}
-Requires:      java-headless
-Requires:      jpackage-utils
-
-%description java
-Java bindings for libwebp.
-%endif
-
 %if %{with mingw}
 %package -n mingw32-%{name}
 Summary:       MinGW Windows %{name} library
@@ -141,28 +112,6 @@ MinGW Windows %{name} library.
 %mingw_make_build
 %endif
 
-%if %{with java}
-cp %{SOURCE1} .
-cd swig
-rm -rf libwebp.jar libwebp_java_wrap.c
-mkdir -p java/com/google/webp
-swig -ignoremissing -I../src -java \
-    -package com.google.webp  \
-    -outdir java/com/google/webp \
-    -o libwebp_java_wrap.c libwebp.swig
-
-$CC %{__global_ldflags} %{optflags} -shared \
-    -I/usr/lib/jvm/java/include \
-    -I/usr/lib/jvm/java/include/linux \
-    -I../src \
-    -L../%{_vpath_builddir} -lwebp libwebp_java_wrap.c \
-    -o libwebp_jni.so
-
-cd java
-javac com/google/webp/libwebp.java
-jar cvf ../libwebp.jar com/google/webp/*.class
-%endif
-
 %install
 %cmake_install
 
@@ -173,11 +122,6 @@ rm -rf %{buildroot}%{mingw64_mandir}
 %endif
 
 find "%{buildroot}/%{_libdir}" -type f -name "*.la" -delete
-
-%if %{with java}
-mkdir -p %{buildroot}/%{_libdir}/%{name}-java
-cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
-%endif
 
 %{?mingw_debug_install_post}
 
@@ -216,12 +160,6 @@ cp swig/*.jar swig/*.so %{buildroot}/%{_libdir}/%{name}-java/
 %{_bindir}/webpmux
 %{_bindir}/vwebp
 %{_mandir}/man*/*
-
-%if %{with java}
-%files java
-%doc libwebp_jni_example.java
-%{_libdir}/%{name}-java/
-%endif
 
 %if %{with mingw}
 %files -n mingw32-libwebp
