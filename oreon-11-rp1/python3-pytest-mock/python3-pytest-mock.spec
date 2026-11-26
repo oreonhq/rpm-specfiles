@@ -45,6 +45,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 
 %check
 PYTHONPATH="%{buildroot}%{python3_sitelib}" python3 -m pytest -q
+%oreon_filelist
 
 %files -f %{_builddir}/%{name}.files
 
