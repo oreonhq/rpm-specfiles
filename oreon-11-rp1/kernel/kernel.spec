@@ -71,8 +71,6 @@ Source5: oreonsecureboot-ca.cer
 Source6: mod-denylist.sh
 Source7: oreonsecureboot-kernel.cer
 Source8: mod-sign.sh
-Patch0001: 0001-linux7.3-rc2-bore-7.0.0.patch
-
 BuildRequires: oreon-rpm-macros
 BuildRequires: asciidoc
 BuildRequires: audit-libs-devel
@@ -148,8 +146,7 @@ Provides: installonlypkg(kernel)
 
 %description
 The kernel meta package. It pulls in the Linux kernel image and the modules
-that match it. This kernel is built with clang and ThinLTO and carries the
-BORE scheduler.
+that match it. This kernel is built with clang and ThinLTO.
 
 %package core
 Summary: The Linux kernel image
@@ -371,7 +368,6 @@ cp -p %{SOURCE1} .config
 cp -p %{SOURCE2} .config
 %endif
 scripts/config --file .config \
-    -e SCHED_BORE \
     -d PREEMPT_LAZY -e PREEMPT -e PREEMPT_DYNAMIC \
     -e TCP_CONG_BBR -d DEFAULT_CUBIC -e DEFAULT_BBR \
     -d ZSWAP_COMPRESSOR_DEFAULT_LZO -e ZSWAP_COMPRESSOR_DEFAULT_ZSTD \
@@ -389,7 +385,7 @@ scripts/config --file .config \
 %endif
 %{kmake} olddefconfig
 
-for opt in SCHED_BORE PREEMPT PREEMPT_DYNAMIC HZ_1000 TCP_CONG_BBR DEFAULT_BBR \
+for opt in PREEMPT PREEMPT_DYNAMIC HZ_1000 TCP_CONG_BBR DEFAULT_BBR \
     ZSWAP_COMPRESSOR_DEFAULT_ZSTD ZRAM_DEF_COMP_ZSTD MODULE_COMPRESS_ZSTD \
     LRU_GEN LRU_GEN_ENABLED SCHED_CLASS_EXT DEBUG_INFO_BTF DEBUG_INFO_BTF_MODULES \
     TRANSPARENT_HUGEPAGE_MADVISE MODULE_SIG MODULE_SIG_ALL CPU_MITIGATIONS \
