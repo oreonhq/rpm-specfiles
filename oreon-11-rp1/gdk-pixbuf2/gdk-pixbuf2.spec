@@ -31,6 +31,7 @@ BuildRequires: pkgconfig(gobject-introspection-1.0)
 %endif
 BuildRequires: pkgconfig(libjpeg)
 BuildRequires: pkgconfig(libpng)
+BuildRequires: pkgconfig(libtiff-4)
 
 Requires: shared-mime-info
 
@@ -70,6 +71,7 @@ Installed tests for checking GdkPixbuf on a running system.
 %endif
   -Djpeg=enabled \
   -Dpng=enabled \
+  -Dtiff=enabled \
   -Dtests=true
 %meson_build
 
