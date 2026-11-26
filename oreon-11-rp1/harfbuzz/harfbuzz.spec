@@ -9,7 +9,7 @@
 
 Name: harfbuzz
 Version: 15.1.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Text shaping library
 License: MIT
 URL: https://github.com/harfbuzz/harfbuzz
@@ -28,9 +28,7 @@ BuildRequires: pkgconfig(cairo)
 BuildRequires: pkgconfig(freetype2)
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gobject-2.0)
-%if %{without bootstrap}
 BuildRequires: pkgconfig(gobject-introspection-1.0)
-%endif
 BuildRequires: pkgconfig(icu-uc)
 BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(zlib)
@@ -76,14 +74,13 @@ export CXXFLAGS="${CXXFLAGS} -fno-exceptions"
   -Dzlib=enabled \
   -Dgpu_demo=enabled \
   -Dtests=enabled \
+  -Dintrospection=enabled \
 %if %{without bootstrap}
   -Dchafa=enabled \
-  -Ddocs=enabled \
-  -Dintrospection=enabled
+  -Ddocs=enabled
 %else
   -Dchafa=disabled \
-  -Ddocs=disabled \
-  -Dintrospection=disabled
+  -Ddocs=disabled
 %endif
 %meson_build
 
@@ -99,17 +96,15 @@ export CXXFLAGS="${CXXFLAGS} -fno-exceptions"
 %license COPYING
 %doc AUTHORS NEWS README.md
 %{_libdir}/libharfbuzz*.so.0*
-%if %{without bootstrap}
 %{_libdir}/girepository-1.0/HarfBuzz-0.0.typelib
-%endif
 
 %files devel
 %{_includedir}/harfbuzz/
 %{_libdir}/libharfbuzz*.so
 %{_libdir}/pkgconfig/harfbuzz*.pc
 %{_libdir}/cmake/harfbuzz/
-%if %{without bootstrap}
 %{_datadir}/gir-1.0/HarfBuzz-0.0.gir
+%if %{without bootstrap}
 %{_datadir}/gtk-doc/html/harfbuzz/
 %endif
 
