@@ -36,6 +36,9 @@ python3 -m build --wheel --no-isolation
 
 %install
 python3 -m installer --destdir %{buildroot} dist/*.whl
+find %{buildroot} -type f -exec grep -I -l -E '^#! */usr/bin/env python' {} + | while read -r f; do
+  sed -i '1s|^#! */usr/bin/env python.*|#!/usr/bin/python3|' "$f"
+done
 %oreon_filelist
 
 %check
