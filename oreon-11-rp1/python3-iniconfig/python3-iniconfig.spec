@@ -8,7 +8,7 @@
 
 Name: python3-iniconfig
 Version: 2.3.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: brain-dead simple config-ini parsing
 License: MIT
 URL: https://pypi.org/project/iniconfig/
@@ -17,12 +17,14 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-wheel
 BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
 Requires: python3
+Provides: python3dist(iniconfig) = %{version}
 
 %description
 brain-dead simple config-ini parsing
