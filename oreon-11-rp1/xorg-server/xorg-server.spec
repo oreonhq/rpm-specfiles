@@ -29,7 +29,7 @@ BuildRequires: libxkbfile-devel
 BuildRequires: xkbcomp
 BuildRequires: zlib-devel
 BuildRequires: openssl-devel
-BuildRequires: libglvnd-devel
+BuildRequires: libglvnd-devel >= 1:1.7.0-5
 BuildRequires: mesa-libGL-devel
 
 Provides: xorg-x11-server-Xvfb = %{version}-%{release}
