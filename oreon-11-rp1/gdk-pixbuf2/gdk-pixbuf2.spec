@@ -19,6 +19,7 @@ Source0: https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-%{version
 BuildRequires: oreon-rpm-macros
 BuildRequires: gcc
 BuildRequires: meson
+BuildRequires: gettext
 BuildRequires: python3
 BuildRequires: python3-docutils
 BuildRequires: shared-mime-info
