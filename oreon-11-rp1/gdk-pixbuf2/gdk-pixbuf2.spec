@@ -29,6 +29,7 @@ BuildRequires: pkgconfig(gobject-2.0) >= 2.56
 %if %{without bootstrap}
 BuildRequires: pkgconfig(gobject-introspection-1.0)
 %endif
+BuildRequires: libjpeg-turbo-devel
 BuildRequires: pkgconfig(libjpeg)
 BuildRequires: pkgconfig(libpng)
 BuildRequires: pkgconfig(libtiff-4)
