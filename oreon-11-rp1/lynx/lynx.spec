@@ -36,7 +36,6 @@ BuildRequires: bzip2-devel
 BuildRequires: dos2unix
 BuildRequires: clang
 BuildRequires: gettext
-BuildRequires: openpgpverify
 BuildRequires: libidn2-devel
 BuildRequires: make
 BuildRequires: ncurses-devel
@@ -56,7 +55,7 @@ exits quickly and swiftly displays web pages.
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
-%{openpgpverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -p1 -n lynx%{version}%{devrel}
 
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
