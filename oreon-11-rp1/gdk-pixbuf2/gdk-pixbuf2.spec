@@ -59,6 +59,8 @@ Installed tests for checking GdkPixbuf on a running system.
 
 %build
 %meson \
+  -Dandroid=disabled \
+  -Dglycin=disabled \
   -Dgif=enabled \
   -Dinstalled_tests=true \
 %if %{without bootstrap}
