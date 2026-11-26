@@ -15,6 +15,7 @@ BuildArch: noarch
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
 BuildRequires: python3-build
+BuildRequires: python3-hatchling
 BuildRequires: python3-installer
 BuildRequires: python3-pytest
 BuildRequires: python3-setuptools
@@ -40,6 +41,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %check
 PYTHONPATH=%{buildroot}%{python3_sitelib} \
   python3 -m pytest -v typogrify/packages/titlecase/tests.py
+%oreon_filelist
 
 %files -f %{_builddir}/%{name}.files
 %license LICENSE.txt
