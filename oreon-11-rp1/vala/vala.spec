@@ -23,10 +23,8 @@ BuildRequires: bison
 BuildRequires: dbus-x11 >= 1:1.16.4
 BuildRequires: flex
 BuildRequires: gcc
-%if %{without bootstrap}
 BuildRequires: gobject-introspection-devel
 BuildRequires: graphviz-devel
-%endif
 BuildRequires: libxslt
 BuildRequires: make
 BuildRequires: pkgconfig(gobject-2.0)
