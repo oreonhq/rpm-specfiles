@@ -34,6 +34,7 @@ Source2:        https://download.java.net/java/GA/jdk25/bd75d5f9689641da8e1daabe
 Source3:        https://github.com/google/googletest/archive/v1.14.0/googletest-1.14.0.tar.gz
 Patch0:         jdk8347901-c2_unused_leaf_removal.patch
 Patch1:         jdk8378713-c2_missing_pow_constant_folding.patch
+Patch2:         jdk8367051-clang_noexcept_includes.patch
 
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  bash

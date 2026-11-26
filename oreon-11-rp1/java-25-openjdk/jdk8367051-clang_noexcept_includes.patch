@@ -1,0 +1,31 @@
+From b653ae92d5941202780873fad1a7cefd51e4e7a8 Mon Sep 17 00:00:00 2001
+From: Kim Barrett <kbarrett@openjdk.org>
+Date: Tue, 9 Sep 2025 15:02:54 +0000
+Subject: [PATCH] 8367051: Build failure with clang on linux and AIX after
+ switch to C++17
+
+Reviewed-by: dholmes, ayang, mbaesken, mdoerr
+---
+ src/hotspot/share/utilities/forbiddenFunctions.hpp | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/src/hotspot/share/utilities/forbiddenFunctions.hpp b/src/hotspot/share/utilities/forbiddenFunctions.hpp
+index a8dcba95a6d3..871fff5b7273 100644
+--- a/src/hotspot/share/utilities/forbiddenFunctions.hpp
++++ b/src/hotspot/share/utilities/forbiddenFunctions.hpp
+@@ -38,6 +38,15 @@
+ #include <stdlib.h>
+ #endif
+ 
++// Workaround for noexcept functions in glibc when using clang.
++// clang errors if declaration without exception specification preceeds
++// noexcept declaration, but not the other way around.
++#ifdef __clang__
++#include <stdio.h>
++#include <string.h>
++#include <wchar.h>
++#endif
++
+ #ifdef _WINDOWS
+ #include "forbiddenFunctions_windows.hpp"
+ #else
