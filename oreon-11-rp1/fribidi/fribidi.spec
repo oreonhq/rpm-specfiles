@@ -59,6 +59,7 @@ Headers and development files for applications using FriBidi.
 %{_includedir}/fribidi/
 %{_libdir}/libfribidi.so
 %{_libdir}/pkgconfig/fribidi.pc
+%{_mandir}/man3/fribidi_*.3*
 
 %changelog
 %autochangelog
