@@ -15,8 +15,11 @@ BuildArch: noarch
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3
 BuildRequires: python3-build
+BuildRequires: python3-devel
 BuildRequires: python3-docutils
 BuildRequires: python3-installer
+BuildRequires: python3-pytest
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-setuptools
 
 Requires: python3
@@ -38,7 +41,7 @@ python3 -m installer --destdir %{buildroot} dist/*.whl
 %oreon_filelist
 
 %check
-PYTHONPATH=%{buildroot}%{python3_sitelib} python3 -m unittest discover
+PYTHONPATH=%{buildroot}%{python3_sitelib} pytest
 
 %files -f %{_builddir}/%{name}.files
 %license COPYING
