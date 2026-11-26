@@ -23,6 +23,12 @@ BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: cargo
 BuildRequires: rust
 BuildRequires: gcc
+BuildRequires: pkgconfig(libssl)
+BuildRequires: pkgconfig(libcurl)
+BuildRequires: pkgconfig(libgit2)
+BuildRequires: pkgconfig(libssh2)
+BuildRequires: pkgconfig(sqlite3)
+BuildRequires: pkgconfig(zlib)
 
 %description
 cargo-cbuild, cargo-cinstall, cargo-ctest and cargo-capi build and install
@@ -37,6 +43,10 @@ cp %{SOURCE1} Cargo.lock
 tar -xf %{SOURCE2}
 
 %build
+export LIBSSH2_SYS_USE_PKG_CONFIG=1
+export LIBGIT2_NO_VENDOR=1
+export LIBSQLITE3_SYS_USE_PKG_CONFIG=1
+export PKG_CONFIG_ALLOW_CROSS=1
 %oreon_cargo_prep vendor
 %oreon_cargo_build
 
