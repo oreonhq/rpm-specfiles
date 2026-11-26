@@ -30,6 +30,7 @@ BuildRequires: pkgconfig(xcb-xkb) >= 1.10
 BuildRequires: pkgconfig(libxml-2.0)
 BuildRequires: xorg-server
 BuildRequires: xkbcomp
+BuildRequires: setxkbmap
 
 Requires: xkeyboard-config
 
