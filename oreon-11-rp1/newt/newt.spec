@@ -18,6 +18,7 @@ Source0:        https://github.com/mlichvar/newt/archive/r0-52-25/newt-%{version
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  autoconf
 BuildRequires:  docbook-utils
+BuildRequires:  docbook-dtds >= 1.0-7
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  lynx
