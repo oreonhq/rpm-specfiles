@@ -7,17 +7,13 @@
 %bcond bootstrap 0
 %oreon_bootstrap
 
-%if %{with bootstrap}
-%global _without_mesa_glvnd_default 1
-%endif
-
 %global commit0 faa23f21fc677af5792825dc30cb1ccef4bf33a6
 
 %global compositor weston
 
 Name:           libglvnd
 Version:        1.7.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Epoch:          1
 Summary:        The GL Vendor-Neutral Dispatch library
 
