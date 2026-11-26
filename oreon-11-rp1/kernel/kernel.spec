@@ -23,6 +23,7 @@
 
 %global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}"
 %global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} CFLAGS="%{build_cflags}" EXTRA_CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}"
+%global isst_make CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}" %{__make} CC=%{__cc} HOSTCC=%{__cc}
 %ifarch aarch64
 %global perf_extra_opts CORESIGHT=1
 %endif
@@ -413,7 +414,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %{tools_make} %{?_smp_mflags} -C tools/power/cpupower/debug/x86_64 centrino-decode powernow-k8-decode
 %{tools_make} -C tools/power/x86/x86_energy_perf_policy
 %{tools_make} -C tools/power/x86/turbostat
-%{tools_make} -C tools/power/x86/intel-speed-select
+%{isst_make} -C tools/power/x86/intel-speed-select
 %{tools_make} -C tools/arch/x86/intel_sdsi
 %endif
 %{tools_make} -C tools/thermal/tmon
@@ -636,7 +637,7 @@ install -m 0755 tools/power/cpupower/debug/x86_64/powernow-k8-decode %{buildroot
 mkdir -p %{buildroot}%{_mandir}/man8
 %{tools_make} -C tools/power/x86/x86_energy_perf_policy DESTDIR=%{buildroot} install
 %{tools_make} -C tools/power/x86/turbostat DESTDIR=%{buildroot} install
-%{tools_make} -C tools/power/x86/intel-speed-select DESTDIR=%{buildroot} install
+%{isst_make} -C tools/power/x86/intel-speed-select DESTDIR=%{buildroot} install
 %{tools_make} -C tools/arch/x86/intel_sdsi DESTDIR=%{buildroot} BINDIR=%{_sbindir} install
 %endif
 %{tools_make} -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
