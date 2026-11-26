@@ -180,8 +180,8 @@ export CC=clang
 export CXX=clang++
 export AR=llvm-ar
 export NM=llvm-nm
-extra_cflags="$(printf '%s\n' "${CFLAGS:-}" | sed -e 's/-fexceptions//g')"
-extra_cxxflags="$(printf '%s\n' "${CXXFLAGS:-}" | sed -e 's/-fexceptions//g')"
+extra_cflags="$(printf '%s\n' "${CFLAGS:-}" | sed -e 's/-fexceptions//g') -gdwarf-4 -gdwarf-aranges"
+extra_cxxflags="$(printf '%s\n' "${CXXFLAGS:-}" | sed -e 's/-fexceptions//g') -gdwarf-4 -gdwarf-aranges"
 extra_ldflags="${LDFLAGS:-}"
 export CFLAGS= CXXFLAGS= LDFLAGS=
 %if %{with bootstrap}
