@@ -35,7 +35,7 @@ supporters of the cause from all over the Internet.
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
 echo '%{source2_hash}  %{SOURCE2}' | sha256sum -c -
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%oreon_gpgverify --key %{SOURCE2} --sig %{SOURCE1} --data %{SOURCE0}
 %autosetup -p1
 
 %build
