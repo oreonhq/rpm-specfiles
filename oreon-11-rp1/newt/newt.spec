@@ -20,10 +20,7 @@ BuildRequires:  autoconf
 BuildRequires:  docbook-utils
 BuildRequires:  gcc
 BuildRequires:  gettext
-%bcond_with lynx_docs
-%if %{with lynx_docs}
 BuildRequires:  lynx
-%endif
 BuildRequires:  make
 BuildRequires:  popt-devel
 BuildRequires:  python3-devel
