@@ -14,6 +14,7 @@ Summary: System for layout and rendering of international text
 License: LGPL-2.1-or-later
 URL: https://www.pango.org/
 Source0: https://download.gnome.org/sources/pango/1.58/pango-%{version}.tar.xz
+Patch0:         clang-unused-but-set-global.patch
 
 BuildRequires: oreon-rpm-macros >= 1-14
 BuildRequires: gcc
@@ -54,7 +55,7 @@ Command-line utilities for inspecting fonts and Pango text layout.
 
 %prep
 %oreon_sha256
-%autosetup
+%autosetup -p1
 
 %build
 %meson \
