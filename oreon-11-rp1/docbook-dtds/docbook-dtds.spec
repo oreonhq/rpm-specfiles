@@ -14,7 +14,7 @@
 
 Name: docbook-dtds
 Version: 1.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: DocBook document type definitions
 License: OASIS
 URL: https://www.oasis-open.org/docbook/
@@ -66,7 +66,6 @@ mkdir -p %{buildroot}%{_datadir}/sgml/docbook/sgml-dtd-3.0
 python3 -m zipfile -e %{SOURCE5} %{buildroot}%{_datadir}/sgml/docbook/sgml-dtd-3.0
 python3 -c 'import pathlib,sys
 root=pathlib.Path(sys.argv[1])
-iso=sys.argv[2]
 for cat in root.glob("sgml-dtd-*/docbook.cat"):
     lines=[]
     for line in cat.read_text(encoding="latin1").splitlines():
@@ -74,9 +73,13 @@ for cat in root.glob("sgml-dtd-*/docbook.cat"):
             continue
         lines.append(line)
     lines.append("")
-    lines.append("CATALOG \"%%s\"" % iso)
+    for path in sys.argv[2:]:
+        lines.append("CATALOG \"%%s\"" % path)
     cat.write_text("\n".join(lines)+"\n", encoding="latin1")
-' %{buildroot}%{_datadir}/sgml/docbook %{_datadir}/sgml/sgml-iso-entities-8879.1986/catalog
+' %{buildroot}%{_datadir}/sgml/docbook \
+  %{_datadir}/sgml/sgml-iso-entities-8879.1986/catalog \
+  %{_datadir}/sgml/docbook/dsssl-stylesheets/catalog \
+  %{_sysconfdir}/sgml/openjade.soc
 
 mkdir -p %{buildroot}%{_sysconfdir}/sgml/docbook
 CAT=%{buildroot}%{_sysconfdir}/sgml/docbook/docbook-dtds.xml
