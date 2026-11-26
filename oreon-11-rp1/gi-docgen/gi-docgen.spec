@@ -13,7 +13,7 @@ Source0: %{url}/-/archive/%{version}/gi-docgen-%{version}.tar.gz
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
-BuildRequires: graphviz
+BuildRequires: graphviz >= 15.1.1-7
 BuildRequires: meson
 BuildRequires: python3
 BuildRequires: python3-jinja2
