@@ -32,6 +32,7 @@ BuildRequires: cantarell-fonts
 BuildRequires: dejavu-fonts
 BuildRequires: liberation-fonts
 BuildRequires: pkgconfig(harfbuzz) >= 11.0.0
+BuildRequires: %{_datadir}/gir-1.0/HarfBuzz-0.0.gir
 BuildRequires: pkgconfig(libthai)
 BuildRequires: pkgconfig(xft)
 
