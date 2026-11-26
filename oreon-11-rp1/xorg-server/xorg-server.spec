@@ -108,6 +108,7 @@ chmod 0755 %{buildroot}%{_bindir}/xvfb-run
 %{_bindir}/xvfb-run
 %{_mandir}/man1/Xvfb.1*
 %{_mandir}/man1/Xserver.1*
+%{_libdir}/xorg/protocol.txt
 
 %changelog
 %autochangelog
