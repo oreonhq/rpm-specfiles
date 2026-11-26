@@ -151,7 +151,7 @@ swig -ignoremissing -I../src -java \
     -outdir java/com/google/webp \
     -o libwebp_java_wrap.c libwebp.swig
 
-gcc %{__global_ldflags} %{optflags} -shared \
+$CC %{__global_ldflags} %{optflags} -shared \
     -I/usr/lib/jvm/java/include \
     -I/usr/lib/jvm/java/include/linux \
     -I../src \
