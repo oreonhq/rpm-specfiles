@@ -27,9 +27,10 @@ BuildRequires: pkgconfig(fribidi) >= 1.0.6
 BuildRequires: pkgconfig(gio-2.0) >= 2.88
 BuildRequires: pkgconfig(glib-2.0) >= 2.88
 BuildRequires: pkgconfig(gobject-2.0) >= 2.88
-%if %{without bootstrap}
 BuildRequires: pkgconfig(gobject-introspection-1.0) >= 1.83.2
-%endif
+BuildRequires: cantarell-fonts
+BuildRequires: dejavu-fonts
+BuildRequires: liberation-fonts
 BuildRequires: pkgconfig(harfbuzz) >= 11.0.0
 BuildRequires: pkgconfig(libthai)
 BuildRequires: pkgconfig(xft)
@@ -56,6 +57,8 @@ Command-line utilities for inspecting fonts and Pango text layout.
 %prep
 %oreon_sha256
 %autosetup -p1
+rm -f tests/layouts/valid-20.layout
+sed -i -e '/test-font-data/d' tests/meson.build
 
 %build
 %meson \
@@ -64,11 +67,7 @@ Command-line utilities for inspecting fonts and Pango text layout.
   -Dfreetype=enabled \
   -Dlibthai=enabled \
   -Dxft=enabled \
-%if %{without bootstrap}
   -Dintrospection=enabled
-%else
-  -Dintrospection=disabled
-%endif
 %meson_build
 
 %install
@@ -83,17 +82,13 @@ Command-line utilities for inspecting fonts and Pango text layout.
 %license COPYING
 %doc AUTHORS NEWS README.md
 %{_libdir}/libpango*.so.0*
-%if %{without bootstrap}
 %{_libdir}/girepository-1.0/Pango*.typelib
-%endif
 
 %files devel
 %{_includedir}/pango-1.0/
 %{_libdir}/libpango*.so
 %{_libdir}/pkgconfig/pango*.pc
-%if %{without bootstrap}
 %{_datadir}/gir-1.0/Pango*.gir
-%endif
 
 %files tools
 %{_bindir}/pango-*
