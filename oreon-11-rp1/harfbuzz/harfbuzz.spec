@@ -65,6 +65,7 @@ Command-line tools for shaping, subsetting and inspecting fonts.
 %autosetup
 
 %build
+export CXXFLAGS="${CXXFLAGS} -fno-exceptions"
 %meson \
   -Dglib=enabled \
   -Dgobject=enabled \
