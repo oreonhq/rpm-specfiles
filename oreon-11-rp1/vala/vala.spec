@@ -20,7 +20,7 @@ Patch0: vala-warn-on-unknown-xml.patch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: bison
-BuildRequires: dbus-x11
+BuildRequires: dbus-x11 >= 1:1.16.4
 BuildRequires: flex
 BuildRequires: gcc
 %if %{without bootstrap}
