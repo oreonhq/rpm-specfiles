@@ -13,6 +13,7 @@ Source0:        https://github.com/nigels-com/glew/releases/download/glew-%{vers
 
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  clang
+BuildRequires:  llvm
 BuildRequires:  make
 BuildRequires:  pkgconfig(gl)
 BuildRequires:  pkgconfig(glu)
