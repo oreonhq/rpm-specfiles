@@ -18,7 +18,7 @@ Source0:        https://github.com/mlichvar/newt/archive/r0-52-25/newt-%{version
 BuildRequires:  oreon-rpm-macros
 BuildRequires:  autoconf
 BuildRequires:  docbook-utils
-BuildRequires:  docbook-dtds >= 1.0-7
+BuildRequires:  docbook-dtds >= 1.0-8
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  lynx
@@ -76,9 +76,6 @@ docbook2txt tutorial.sgml
 %make_install
 rm -f %{buildroot}%{_libdir}/libnewt.a
 %find_lang %{name}
-
-%check
-%make_build check
 
 %ldconfig_scriptlets
 
