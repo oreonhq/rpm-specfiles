@@ -8,7 +8,7 @@
 
 Name: python3-pluggy
 Version: 1.7.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: plugin and hook calling mechanisms for python
 License: MIT
 URL: https://pypi.org/project/pluggy/
@@ -17,12 +17,14 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-wheel
 BuildRequires: python3-setuptools
 BuildRequires: python3-setuptools_scm
 Requires: python3
+Provides: python3dist(pluggy) = %{version}
 
 %description
 plugin and hook calling mechanisms for python
