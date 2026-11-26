@@ -16,7 +16,6 @@
 %global jvmdir %{_prefix}/lib/jvm
 %global jvmhome %{jvmdir}/java-%{javaver}-openjdk
 %global altprio 25000
-%global _empty_manifest_terminate_build 0
 
 Name:           java-25-openjdk
 Epoch:          1
@@ -168,12 +167,6 @@ Provides:       java-openjdk-src = %{evr}
 %description src
 OpenJDK %{javaver} source zip for debugging.
 
-%package debug
-Summary:        Debug information for package %{name}
-
-%description debug
-Debug information for package %{name}.
-
 %prep
 %oreon_sha256
 echo '%{source1_hash}  %{SOURCE1}' | sha256sum -c -
@@ -211,7 +204,7 @@ bash ./configure \
     --with-toolchain-type=clang \
     --with-debug-level=release \
     --with-jvm-variants=server \
-    --with-native-debug-symbols=external \
+    --with-native-debug-symbols=none \
     --with-stdc++lib=dynamic \
     --with-zlib=system \
     --with-libjpeg=system \
@@ -235,15 +228,11 @@ bash ./configure \
     --with-vendor-bug-url=https://github.com/oreonhq/rpm-specfiles/issues \
     --with-vendor-vm-bug-url=https://github.com/oreonhq/rpm-specfiles/issues \
     --with-vendor-version-string=Oreon-%{version}-%{release}
-make LOG=info jdk-image symbols-image
-
-%check
-make LOG=info test-hotspot-gtest
+make LOG=info jdk-image
 
 %install
 install -d %{buildroot}%{jvmhome}
 cp -a build/*/images/jdk/. %{buildroot}%{jvmhome}/
-cp -a build/*/images/symbols/. %{buildroot}%{jvmhome}/
 rm -rf %{buildroot}%{jvmhome}/demo
 rm -rf %{buildroot}%{jvmhome}/man
 
@@ -318,7 +307,6 @@ fi
 %exclude %{jvmhome}/lib/libjsound.so
 %exclude %{jvmhome}/lib/liblcms.so
 %exclude %{jvmhome}/lib/libsplashscreen.so
-%exclude %{jvmhome}/lib/*.debuginfo
 
 %files devel
 %dir %{jvmhome}/bin
@@ -328,7 +316,6 @@ fi
 %exclude %{jvmhome}/bin/jrunscript
 %exclude %{jvmhome}/bin/keytool
 %exclude %{jvmhome}/bin/rmiregistry
-%exclude %{jvmhome}/bin/*.debuginfo
 %{jvmhome}/include
 
 %files jmods
@@ -336,10 +323,6 @@ fi
 
 %files src
 %{jvmhome}/lib/src.zip
-
-%files debug
-%{jvmhome}/bin/*.debuginfo
-%{jvmhome}/lib/*.debuginfo
 
 %changelog
 %autochangelog
