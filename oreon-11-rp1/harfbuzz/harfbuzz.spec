@@ -9,7 +9,7 @@
 
 Name: harfbuzz
 Version: 15.1.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Text shaping library
 License: MIT
 URL: https://github.com/harfbuzz/harfbuzz
