@@ -8,7 +8,7 @@
 
 Name: python3-pygments
 Version: 2.21.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Pygments is a syntax highlighting package written in Python.
 License: MIT
 URL: https://pypi.org/project/pygments/
@@ -17,10 +17,12 @@ BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
 BuildRequires: python3-devel
+BuildRequires: python3-rpm-macros
 BuildRequires: python3-build
 BuildRequires: python3-installer
 BuildRequires: python3-hatchling
 Requires: python3
+Provides: python3dist(pygments) = %{version}
 
 %description
 Pygments is a syntax highlighting package written in Python.
