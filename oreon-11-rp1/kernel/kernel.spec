@@ -28,8 +28,8 @@
 %ifarch aarch64
 %global perf_extra_opts CORESIGHT=1
 %endif
-%global perf_make %{__make} %{?_smp_mflags} -C tools/perf V=1 CC=%{__cc} CXX=%{__cxx} HOSTCC=%{__cc} CLANG=clang HOST_EXTRACFLAGS="%{build_cflags}" EXTRA_CFLAGS="%{build_cflags}" EXTRA_CXXFLAGS="%{build_cxxflags}" LDFLAGS="%{build_ldflags} -Wl,-E" NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_BIONIC=1 %{?perf_extra_opts} prefix=%{_prefix} PYTHON=%{__python3}
-%global libperf_make %{__make} %{?_smp_mflags} -C tools/lib/perf V=1 CC=%{__cc} EXTRA_CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}"
+%global perf_make %{__make} %{?_smp_mflags} -C tools/perf V=1 CC=%{__cc} CXX=%{__cxx} HOSTCC=%{__cc} LD=%{__cc} CLANG=clang LDFLAGS="-Wl,-E" NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_BIONIC=1 %{?perf_extra_opts} prefix=%{_prefix} PYTHON=%{__python3}
+%global libperf_make %{__make} %{?_smp_mflags} -C tools/lib/perf V=1 CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
 
 %undefine _auto_set_build_flags
 %undefine _include_minidebuginfo
@@ -418,11 +418,11 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %endif
 %{tools_make} -C tools/thermal/tmon
 %{tools_make} -C tools/bootconfig
-%{tools_make} -C tools/iio
-%{tools_make} -C tools/gpio
+%{isst_make} -C tools/iio
+%{isst_make} -C tools/gpio
 %{tools_make} -C tools/mm slabinfo page_owner_sort
-%{tools_make} -C tools/verification/rv
-%{tools_make} -C tools/tracing/rtla LDFLAGS="%{build_ldflags} -L../../power/cpupower" INCLUDES="-I../../power/cpupower/lib" SYSTEM_BPFTOOL=$PWD/tools/bpf/bpftool/bootstrap/bpftool
+%{isst_make} -C tools/verification/rv
+%{isst_make} -C tools/tracing/rtla LDFLAGS="-L../../power/cpupower" INCLUDES="-I../../power/cpupower/lib" SYSTEM_BPFTOOL=$PWD/tools/bpf/bpftool/bootstrap/bpftool
 %{perf_make} DESTDIR=%{buildroot} all
 %{libperf_make} DESTDIR=%{buildroot}
 
@@ -654,12 +654,12 @@ mkdir -p %{buildroot}%{_mandir}/man8
 %endif
 %{tools_make} -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
 %{tools_make} -C tools/bootconfig DESTDIR=%{buildroot} install
-%{tools_make} -C tools/iio DESTDIR=%{buildroot} install
-%{tools_make} -C tools/gpio DESTDIR=%{buildroot} install
+%{isst_make} -C tools/iio DESTDIR=%{buildroot} install
+%{isst_make} -C tools/gpio DESTDIR=%{buildroot} install
 install -m 0755 tools/mm/slabinfo %{buildroot}%{_bindir}/slabinfo
 install -m 0755 tools/mm/page_owner_sort %{buildroot}%{_bindir}/page_owner_sort
-%{tools_make} -C tools/verification/rv DESTDIR=%{buildroot} STRIP=/bin/true install
-%{tools_make} -C tools/tracing/rtla DESTDIR=%{buildroot} STRIP=/bin/true install
+%{isst_make} -C tools/verification/rv DESTDIR=%{buildroot} STRIP=/bin/true install
+%{isst_make} -C tools/tracing/rtla DESTDIR=%{buildroot} STRIP=/bin/true install
 %{perf_make} DESTDIR=%{buildroot} lib=%{_lib} install-bin
 rm -f %{buildroot}%{_bindir}/trace
 %{perf_make} DESTDIR=%{buildroot} install-python_ext
