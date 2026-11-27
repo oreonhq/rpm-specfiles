@@ -420,7 +420,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %{tools_make} -C tools/bootconfig
 %{isst_make} -C tools/iio
 %{isst_make} -C tools/gpio
-%{tools_make} -C tools/mm slabinfo page_owner_sort
+%{isst_make} -C tools/mm slabinfo page_owner_sort
 %{isst_make} -C tools/verification/rv
 %{isst_make} -C tools/tracing/rtla LDFLAGS="-L../../power/cpupower" INCLUDES="-I../../power/cpupower/lib" SYSTEM_BPFTOOL=$PWD/tools/bpf/bpftool/bootstrap/bpftool
 %{perf_make} DESTDIR=%{buildroot} all
