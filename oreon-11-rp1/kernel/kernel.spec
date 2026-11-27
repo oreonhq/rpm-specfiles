@@ -23,8 +23,7 @@
 
 %global kobj ../kbuild
 %global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}" O=%{kobj}
-%global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} CFLAGS="%{build_cflags}" EXTRA_CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}"
-%global isst_make %{__make} CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
+%global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
 %ifarch aarch64
 %global perf_extra_opts CORESIGHT=1
 %endif
@@ -413,16 +412,16 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %{tools_make} %{?_smp_mflags} -C tools/power/cpupower/debug/x86_64 centrino-decode powernow-k8-decode
 %{tools_make} -C tools/power/x86/x86_energy_perf_policy
 %{tools_make} -C tools/power/x86/turbostat
-%{isst_make} -C tools/power/x86/intel-speed-select
+%{tools_make} -C tools/power/x86/intel-speed-select
 %{tools_make} -C tools/arch/x86/intel_sdsi
 %endif
 %{tools_make} -C tools/thermal/tmon
 %{tools_make} -C tools/bootconfig
-%{isst_make} -C tools/iio
-%{isst_make} -C tools/gpio
-%{isst_make} -C tools/mm slabinfo page_owner_sort
-%{isst_make} -C tools/verification/rv
-%{isst_make} -C tools/tracing/rtla LDFLAGS="-L../../power/cpupower" INCLUDES="-I../../power/cpupower/lib" SYSTEM_BPFTOOL=$PWD/tools/bpf/bpftool/bootstrap/bpftool
+%{tools_make} -C tools/iio
+%{tools_make} -C tools/gpio
+%{tools_make} -C tools/mm slabinfo page_owner_sort
+%{tools_make} -C tools/verification/rv
+%{tools_make} -C tools/tracing/rtla LDFLAGS="-L../../power/cpupower" INCLUDES="-I../../power/cpupower/lib" SYSTEM_BPFTOOL=$PWD/tools/bpf/bpftool/bootstrap/bpftool
 %{perf_make} DESTDIR=%{buildroot} all
 %{libperf_make} DESTDIR=%{buildroot}
 
@@ -548,7 +547,9 @@ cp -a --parents scripts/syscalltbl.sh %{buildroot}%{kmoddir}/build/
 cp -a --parents scripts/syscallhdr.sh %{buildroot}%{kmoddir}/build/
 cp -a --parents tools/arch/x86/include/asm %{buildroot}%{kmoddir}/build
 cp -a --parents tools/arch/x86/include/uapi/asm %{buildroot}%{kmoddir}/build
-cp -a --parents tools/objtool/arch/x86/lib %{buildroot}%{kmoddir}/build
+if [ -d tools/objtool/arch/x86/lib ]; then
+    cp -a --parents tools/objtool/arch/x86/lib %{buildroot}%{kmoddir}/build
+fi
 cp -a --parents tools/arch/x86/lib/ %{buildroot}%{kmoddir}/build
 cp -a --parents tools/arch/x86/tools/gen-insn-attr-x86.awk %{buildroot}%{kmoddir}/build
 cp -a --parents tools/objtool/arch/x86/ %{buildroot}%{kmoddir}/build
@@ -649,17 +650,17 @@ install -m 0755 tools/power/cpupower/debug/x86_64/powernow-k8-decode %{buildroot
 mkdir -p %{buildroot}%{_mandir}/man8
 %{tools_make} -C tools/power/x86/x86_energy_perf_policy DESTDIR=%{buildroot} install
 %{tools_make} -C tools/power/x86/turbostat DESTDIR=%{buildroot} install
-%{isst_make} -C tools/power/x86/intel-speed-select DESTDIR=%{buildroot} install
+%{tools_make} -C tools/power/x86/intel-speed-select DESTDIR=%{buildroot} install
 %{tools_make} -C tools/arch/x86/intel_sdsi DESTDIR=%{buildroot} BINDIR=%{_sbindir} install
 %endif
 %{tools_make} -C tools/thermal/tmon INSTALL_ROOT=%{buildroot} install
 %{tools_make} -C tools/bootconfig DESTDIR=%{buildroot} install
-%{isst_make} -C tools/iio DESTDIR=%{buildroot} install
-%{isst_make} -C tools/gpio DESTDIR=%{buildroot} install
+%{tools_make} -C tools/iio DESTDIR=%{buildroot} install
+%{tools_make} -C tools/gpio DESTDIR=%{buildroot} install
 install -m 0755 tools/mm/slabinfo %{buildroot}%{_bindir}/slabinfo
 install -m 0755 tools/mm/page_owner_sort %{buildroot}%{_bindir}/page_owner_sort
-%{isst_make} -C tools/verification/rv DESTDIR=%{buildroot} STRIP=/bin/true install
-%{isst_make} -C tools/tracing/rtla DESTDIR=%{buildroot} STRIP=/bin/true install
+%{tools_make} -C tools/verification/rv DESTDIR=%{buildroot} STRIP=/bin/true install
+%{tools_make} -C tools/tracing/rtla DESTDIR=%{buildroot} STRIP=/bin/true install
 %{perf_make} DESTDIR=%{buildroot} lib=%{_lib} install-bin
 rm -f %{buildroot}%{_bindir}/trace
 %{perf_make} DESTDIR=%{buildroot} install-python_ext
