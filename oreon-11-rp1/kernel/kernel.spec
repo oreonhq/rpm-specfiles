@@ -21,7 +21,8 @@
 %global kimage arch/arm64/boot/vmlinuz.efi
 %endif
 
-%global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}"
+%global kobj ../kbuild
+%global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}" O=%{kobj}
 %global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} CFLAGS="%{build_cflags}" EXTRA_CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}"
 %global isst_make %{__make} CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
 %ifarch aarch64
@@ -43,7 +44,7 @@
 %global _no_recompute_build_ids 1
 
 %define __modsign_install_post \
-  bash %{SOURCE8} certs/signing_key.pem certs/signing_key.x509 %{buildroot}%{kmoddir}/ \
+  bash %{SOURCE8} %{kobj}/certs/signing_key.pem %{kobj}/certs/signing_key.x509 %{buildroot}%{kmoddir}/ \
   find %{buildroot}%{kmoddir} -type f -name '*.ko' -exec chmod 0644 {} + \
   find %{buildroot}%{kmoddir} -type f -name '*.ko' -print0 | xargs -0 -r -n 16 -P %{_smp_build_ncpus} zstd -q --rm -19 \
 %{nil}
@@ -361,13 +362,15 @@ openssl x509 -inform DER -in %{SOURCE5} -out certs/oreon-secureboot-ca.pem
 openssl x509 -inform DER -in %{SOURCE7} -out certs/oreon-secureboot-kernel.pem
 cat certs/oreon-secureboot-ca.pem certs/oreon-secureboot-kernel.pem > certs/oreon-secureboot.pem
 
+mkdir -p %{kobj}/certs
+cp -p certs/oreon-secureboot.pem %{kobj}/certs/
 %ifarch x86_64
-cp -p %{SOURCE1} .config
+cp -p %{SOURCE1} %{kobj}/.config
 %endif
 %ifarch aarch64
-cp -p %{SOURCE2} .config
+cp -p %{SOURCE2} %{kobj}/.config
 %endif
-scripts/config --file .config \
+scripts/config --file %{kobj}/.config \
     -d PREEMPT_LAZY -e PREEMPT -e PREEMPT_DYNAMIC \
     -e TCP_CONG_BBR -d DEFAULT_CUBIC -e DEFAULT_BBR \
     -d ZSWAP_COMPRESSOR_DEFAULT_LZO -e ZSWAP_COMPRESSOR_DEFAULT_ZSTD \
@@ -378,7 +381,7 @@ scripts/config --file .config \
     --set-str MODULE_SIG_KEY certs/signing_key.pem \
     -e MODULE_SIG_ALL
 %if %{with thinlto}
-scripts/config --file .config \
+scripts/config --file %{kobj}/.config \
     -d LTO_NONE -e LTO_CLANG_THIN \
     -d RUST -e ANDROID_BINDER_IPC -e ANDROID_BINDERFS \
     --set-str DRM_PANIC_SCREEN user
@@ -390,11 +393,11 @@ for opt in PREEMPT PREEMPT_DYNAMIC HZ_1000 TCP_CONG_BBR DEFAULT_BBR \
     LRU_GEN LRU_GEN_ENABLED SCHED_CLASS_EXT DEBUG_INFO_BTF DEBUG_INFO_BTF_MODULES \
     TRANSPARENT_HUGEPAGE_MADVISE MODULE_SIG MODULE_SIG_ALL CPU_MITIGATIONS \
     %{?with_thinlto:LTO_CLANG_THIN ANDROID_BINDER_IPC ANDROID_BINDERFS} %{!?with_thinlto:RUST}; do
-    grep -qx "CONFIG_$opt=y" .config || { echo "CONFIG_$opt is not set" >&2; exit 1; }
+    grep -qx "CONFIG_$opt=y" %{kobj}/.config || { echo "CONFIG_$opt is not set" >&2; exit 1; }
 done
-grep -qx 'CONFIG_SYSTEM_TRUSTED_KEYS="certs/oreon-secureboot.pem"' .config || { echo "CONFIG_SYSTEM_TRUSTED_KEYS is wrong" >&2; exit 1; }
-grep -qx 'CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"' .config || { echo "CONFIG_MODULE_SIG_KEY is wrong" >&2; exit 1; }
-if grep -q '^CONFIG_X86_NATIVE_CPU=y' .config; then
+grep -qx 'CONFIG_SYSTEM_TRUSTED_KEYS="certs/oreon-secureboot.pem"' %{kobj}/.config || { echo "CONFIG_SYSTEM_TRUSTED_KEYS is wrong" >&2; exit 1; }
+grep -qx 'CONFIG_MODULE_SIG_KEY="certs/signing_key.pem"' %{kobj}/.config || { echo "CONFIG_MODULE_SIG_KEY is wrong" >&2; exit 1; }
+if grep -q '^CONFIG_X86_NATIVE_CPU=y' %{kobj}/.config; then
     echo "CONFIG_X86_NATIVE_CPU must stay off" >&2
     exit 1
 fi
@@ -402,7 +405,7 @@ fi
 %build
 %{kmake} all
 %{__make} %{?_smp_mflags} -C tools/bpf/bpftool LLVM=1 bootstrap
-tools/bpf/bpftool/bootstrap/bpftool btf dump file vmlinux format c > vmlinux.h
+tools/bpf/bpftool/bootstrap/bpftool btf dump file %{kobj}/vmlinux format c > vmlinux.h
 
 chmod +x tools/power/cpupower/utils/version-gen.sh
 %{tools_make} %{?_smp_mflags} -C tools/power/cpupower CPUFREQ_BENCH=false DEBUG=false
@@ -425,13 +428,13 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 
 %install
 install -d %{buildroot}/boot %{buildroot}%{kmoddir}
-install -m 0755 %{kimage} %{buildroot}%{kmoddir}/vmlinuz
-install -m 0755 %{kimage} %{buildroot}/boot/vmlinuz-%{kverrel}
-install -m 0644 System.map %{buildroot}%{kmoddir}/System.map
-install -m 0644 System.map %{buildroot}/boot/System.map-%{kverrel}
-install -m 0644 .config %{buildroot}%{kmoddir}/config
-install -m 0644 .config %{buildroot}/boot/config-%{kverrel}
-xz --compress --check=crc32 --lzma2=dict=1MiB --stdout < Module.symvers > %{buildroot}%{kmoddir}/symvers.xz
+install -m 0755 %{kobj}/%{kimage} %{buildroot}%{kmoddir}/vmlinuz
+install -m 0755 %{kobj}/%{kimage} %{buildroot}/boot/vmlinuz-%{kverrel}
+install -m 0644 %{kobj}/System.map %{buildroot}%{kmoddir}/System.map
+install -m 0644 %{kobj}/System.map %{buildroot}/boot/System.map-%{kverrel}
+install -m 0644 %{kobj}/.config %{buildroot}%{kmoddir}/config
+install -m 0644 %{kobj}/.config %{buildroot}/boot/config-%{kverrel}
+xz --compress --check=crc32 --lzma2=dict=1MiB --stdout < %{kobj}/Module.symvers > %{buildroot}%{kmoddir}/symvers.xz
 cp %{buildroot}%{kmoddir}/symvers.xz %{buildroot}/boot/symvers-%{kverrel}.xz
 dd if=/dev/zero of=%{buildroot}/boot/initramfs-%{kverrel}.img bs=1M count=40
 
@@ -449,9 +452,9 @@ rm -f %{buildroot}%{kmoddir}/build %{buildroot}%{kmoddir}/source
 mkdir -p %{buildroot}%{kmoddir}/build %{buildroot}%{kmoddir}/updates %{buildroot}%{kmoddir}/weak-updates %{buildroot}%{kmoddir}/systemtap
 ln -s build %{buildroot}%{kmoddir}/source
 cp --parents $(find . -type f -name "Makefile*" -o -name "Kconfig*") %{buildroot}%{kmoddir}/build
-cp Module.symvers System.map %{buildroot}%{kmoddir}/build
+cp %{kobj}/Module.symvers %{kobj}/System.map %{buildroot}%{kmoddir}/build
 rm -rf %{buildroot}%{kmoddir}/build/scripts %{buildroot}%{kmoddir}/build/include
-cp .config %{buildroot}%{kmoddir}/build
+cp %{kobj}/.config %{buildroot}%{kmoddir}/build
 cp -a scripts %{buildroot}%{kmoddir}/build
 rm -rf %{buildroot}%{kmoddir}/build/scripts/tracing
 rm -f %{buildroot}%{kmoddir}/build/scripts/spdxcheck.py
@@ -482,19 +485,22 @@ cp --parents tools/objtool/Build %{buildroot}%{kmoddir}/build
 cp --parents tools/objtool/include/objtool/*.h %{buildroot}%{kmoddir}/build
 cp -a --parents tools/lib/bpf %{buildroot}%{kmoddir}/build
 cp --parents tools/lib/bpf/Build %{buildroot}%{kmoddir}/build
-if [ -f tools/objtool/objtool ]; then
-    cp -a tools/objtool/objtool %{buildroot}%{kmoddir}/build/tools/objtool/
+if [ -f %{kobj}/tools/objtool/objtool ]; then
+    cp -a %{kobj}/tools/objtool/objtool %{buildroot}%{kmoddir}/build/tools/objtool/
 fi
-if [ -f tools/objtool/fixdep ]; then
-    cp -a tools/objtool/fixdep %{buildroot}%{kmoddir}/build/tools/objtool/
+if [ -f %{kobj}/tools/objtool/fixdep ]; then
+    cp -a %{kobj}/tools/objtool/fixdep %{buildroot}%{kmoddir}/build/tools/objtool/
 fi
-if ls rust/*.rmeta >/dev/null 2>&1; then
+if ls %{kobj}/rust/*.rmeta >/dev/null 2>&1; then
     mkdir -p %{buildroot}%{kmoddir}/build/rust
-    cp -a rust/*.rmeta %{buildroot}%{kmoddir}/build/rust/
+    cp -a %{kobj}/rust/*.rmeta %{buildroot}%{kmoddir}/build/rust/
 fi
-if ls rust/*.so >/dev/null 2>&1; then
+if ls %{kobj}/rust/*.so >/dev/null 2>&1; then
     mkdir -p %{buildroot}%{kmoddir}/build/rust
-    cp -a rust/*.so %{buildroot}%{kmoddir}/build/rust/
+    cp -a %{kobj}/rust/*.so %{buildroot}%{kmoddir}/build/rust/
+fi
+if [ -d %{kobj}/arch/%{karch}/scripts ]; then
+    cp -a %{kobj}/arch/%{karch}/scripts %{buildroot}%{kmoddir}/build/arch/%{karch}
 fi
 if [ -d arch/%{karch}/scripts ]; then
     cp -a arch/%{karch}/scripts %{buildroot}%{kmoddir}/build/arch/%{karch}
@@ -512,6 +518,16 @@ cp -a --parents arch/arm/include/asm/xen %{buildroot}%{kmoddir}/build/
 cp -a --parents arch/arm/include/asm/opcodes.h %{buildroot}%{kmoddir}/build/
 %endif
 cp -a include %{buildroot}%{kmoddir}/build/include
+cp -a %{kobj}/include/generated %{buildroot}%{kmoddir}/build/include/
+cp -a %{kobj}/include/config %{buildroot}%{kmoddir}/build/include/
+if [ -d %{kobj}/arch/%{karch}/include/generated ]; then
+    cp -a %{kobj}/arch/%{karch}/include/generated %{buildroot}%{kmoddir}/build/arch/%{karch}/include/
+fi
+cp -a %{kobj}/scripts/. %{buildroot}%{kmoddir}/build/scripts/
+if [ -f %{kobj}/tools/bpf/resolve_btfids/resolve_btfids ]; then
+    mkdir -p %{buildroot}%{kmoddir}/build/tools/bpf/resolve_btfids
+    cp -a %{kobj}/tools/bpf/resolve_btfids/resolve_btfids %{buildroot}%{kmoddir}/build/tools/bpf/resolve_btfids/
+fi
 cp -a sound/soc/sof/sof-audio.h %{buildroot}%{kmoddir}/build/sound/soc/sof
 %ifarch x86_64
 cp -a --parents arch/x86/entry/syscalls/syscall_32.tbl %{buildroot}%{kmoddir}/build/
@@ -545,7 +561,7 @@ touch -r %{buildroot}%{kmoddir}/build/Makefile \
 install -m 0644 vmlinux.h %{buildroot}%{kmoddir}/build/vmlinux.h
 
 mkdir -p %{buildroot}%{_prefix}/lib/debug%{kmoddir}
-cp vmlinux %{buildroot}%{_prefix}/lib/debug%{kmoddir}/vmlinux
+cp %{kobj}/vmlinux %{buildroot}%{_prefix}/lib/debug%{kmoddir}/vmlinux
 
 find %{buildroot}%{kmoddir} -name '*.ko' -type f > modnames
 xargs --no-run-if-empty chmod u+x < modnames
