@@ -27,8 +27,8 @@
 %ifarch aarch64
 %global perf_extra_opts CORESIGHT=1
 %endif
-%global perf_make %{__make} %{?_smp_mflags} -C tools/perf V=1 CC=%{__cc} CXX=%{__cxx} HOSTCC=%{__cc} LD=%{__cc} CLANG=clang LDFLAGS="-Wl,-E" NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_BIONIC=1 %{?perf_extra_opts} prefix=%{_prefix} PYTHON=%{__python3}
-%global libperf_make %{__make} %{?_smp_mflags} -C tools/lib/perf V=1 CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
+%global perf_make %{__make} %{?_smp_mflags} -C tools/perf V=1 CC=%{__cc} CXX=%{__cxx} HOSTCC=%{__cc} LD=%{__cc} CLANG=clang LDFLAGS="-Wl,-E" NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_BIONIC=1 %{?perf_extra_opts} prefix=%{_prefix} PYTHON=%{__python3} PERF_VERSION=%{version} KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH +%%F)"
+%global libperf_make %{__make} %{?_smp_mflags} -C tools/lib/perf V=1 CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc} EVENT_PARSE_VERSION=%{version}
 
 %undefine _auto_set_build_flags
 %undefine _include_minidebuginfo
@@ -423,6 +423,7 @@ chmod +x tools/power/cpupower/utils/version-gen.sh
 %{tools_make} -C tools/verification/rv
 %{tools_make} -C tools/tracing/rtla LDFLAGS="-L../../power/cpupower" INCLUDES="-I../../power/cpupower/lib" SYSTEM_BPFTOOL=$PWD/tools/bpf/bpftool/bootstrap/bpftool
 %{perf_make} DESTDIR=%{buildroot} all
+%{perf_make} man
 %{libperf_make} DESTDIR=%{buildroot}
 
 %install
