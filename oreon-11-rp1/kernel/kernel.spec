@@ -23,7 +23,7 @@
 
 %global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}"
 %global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} CFLAGS="%{build_cflags}" EXTRA_CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}"
-%global isst_make CFLAGS="%{build_cflags}" LDFLAGS="%{build_ldflags}" %{__make} CC=%{__cc} HOSTCC=%{__cc}
+%global isst_make %{__make} CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
 %ifarch aarch64
 %global perf_extra_opts CORESIGHT=1
 %endif
