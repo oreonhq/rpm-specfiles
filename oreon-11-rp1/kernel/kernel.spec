@@ -125,7 +125,7 @@ BuildRequires: systemd-rpm-macros
 BuildRequires: tar
 BuildRequires: which
 BuildRequires: xmlto
-BuildRequires: docbook-style-xsl
+BuildRequires: docbook-style-xsl >= 1.79.2-3%{?dist}
 BuildRequires: xz
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
