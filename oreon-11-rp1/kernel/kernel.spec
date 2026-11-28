@@ -22,13 +22,17 @@
 %endif
 
 %global kobj ../kbuild
-%global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}" O=%{kobj}
+%global kmake %{__make} %{?_smp_mflags} ARCH=%{karch} LLVM=1 LLVM_IAS=1 HOSTLDFLAGS="%{_build_id_flags}" O="$(cd %{kobj} && pwd)"
 %global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc}
 %ifarch aarch64
-%global perf_extra_opts CORESIGHT=1
+%global tools_make %{__make} CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc} ARCH=%{karch}
+%global perf_extra_opts CORESIGHT=1 ARCH=%{karch}
 %endif
 %global perf_make %{__make} %{?_smp_mflags} -C tools/perf V=1 CC=%{__cc} CXX=%{__cxx} HOSTCC=%{__cc} LD=%{__cc} CLANG=clang LDFLAGS="-Wl,-E" NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 WERROR=0 NO_LIBUNWIND=1 HAVE_CPLUS_DEMANGLE=1 NO_GTK2=1 NO_BIONIC=1 %{?perf_extra_opts} prefix=%{_prefix} PYTHON=%{__python3} PERF_VERSION=%{version} KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH +%%F)"
 %global libperf_make %{__make} %{?_smp_mflags} -C tools/lib/perf V=1 CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc} EVENT_PARSE_VERSION=%{version}
+%ifarch aarch64
+%global libperf_make %{__make} %{?_smp_mflags} -C tools/lib/perf V=1 CC=%{__cc} HOSTCC=%{__cc} LD=%{__cc} EVENT_PARSE_VERSION=%{version} ARCH=%{karch}
+%endif
 
 %undefine _auto_set_build_flags
 %undefine _include_minidebuginfo
@@ -43,7 +47,8 @@
 %global _no_recompute_build_ids 1
 
 %define __modsign_install_post \
-  bash %{SOURCE8} %{kobj} %{kobj}/certs/signing_key.pem %{kobj}/certs/signing_key.x509 %{buildroot}%{kmoddir}/ \
+  kobj=$(cd %{kobj} && pwd) \
+  bash %{SOURCE8} $kobj $kobj/certs/signing_key.pem $kobj/certs/signing_key.x509 %{buildroot}%{kmoddir}/ \
   find %{buildroot}%{kmoddir} -type f -name '*.ko' -exec chmod 0644 {} + \
   find %{buildroot}%{kmoddir} -type f -name '*.ko' -print0 | xargs -0 -r -n 16 -P %{_smp_build_ncpus} zstd -q --rm -19 \
 %{nil}
@@ -404,7 +409,7 @@ fi
 
 %build
 %{kmake} all
-%{__make} %{?_smp_mflags} -C tools/bpf/bpftool LLVM=1 bootstrap
+%{__make} %{?_smp_mflags} -C tools/bpf/bpftool LLVM=1 ARCH=%{karch} bootstrap
 tools/bpf/bpftool/bootstrap/bpftool btf dump file %{kobj}/vmlinux format c > vmlinux.h
 
 chmod +x tools/power/cpupower/utils/version-gen.sh
