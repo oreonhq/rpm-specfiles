@@ -80,7 +80,7 @@ sed -i -e '/test-font-data/d' tests/meson.build
 
 %files
 %license COPYING
-%doc AUTHORS NEWS README.md
+%doc NEWS README.md
 %{_libdir}/libpango*.so.0*
 %{_libdir}/girepository-1.0/Pango*.typelib
 
