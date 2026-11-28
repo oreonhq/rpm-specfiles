@@ -9,11 +9,12 @@
 
 Name: docbook-style-xsl
 Version: 1.79.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: DocBook XSL stylesheets
 License: DocBook
 URL: https://github.com/docbook/xslt10-stylesheets
 Source0: https://github.com/docbook/xslt10-stylesheets/releases/download/release/%{version}/docbook-xsl-nons-%{version}.tar.bz2
+Patch0: non-recursive-string-subst.patch
 BuildArch: noarch
 
 BuildRequires: oreon-rpm-macros
