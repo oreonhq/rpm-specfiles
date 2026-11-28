@@ -869,6 +869,7 @@ fi
 %{_mandir}/man3/libperf.3*
 %{_mandir}/man7/libperf-counting.7*
 %{_mandir}/man7/libperf-sampling.7*
+%{_datadir}/doc/libperf/
 
 %files -n rtla
 %{_bindir}/rtla
