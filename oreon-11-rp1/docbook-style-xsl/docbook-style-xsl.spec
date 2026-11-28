@@ -28,7 +28,7 @@ XSL stylesheets that turn DocBook XML into man pages and HTML.
 
 %prep
 %oreon_sha256
-%autosetup -n docbook-xsl-nons-%{version}
+%autosetup -n docbook-xsl-nons-%{version} -p1
 
 %build
 
