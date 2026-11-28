@@ -43,7 +43,7 @@
 %global _no_recompute_build_ids 1
 
 %define __modsign_install_post \
-  bash %{SOURCE8} %{kobj}/certs/signing_key.pem %{kobj}/certs/signing_key.x509 %{buildroot}%{kmoddir}/ \
+  bash %{SOURCE8} %{kobj} %{kobj}/certs/signing_key.pem %{kobj}/certs/signing_key.x509 %{buildroot}%{kmoddir}/ \
   find %{buildroot}%{kmoddir} -type f -name '*.ko' -exec chmod 0644 {} + \
   find %{buildroot}%{kmoddir} -type f -name '*.ko' -print0 | xargs -0 -r -n 16 -P %{_smp_build_ncpus} zstd -q --rm -19 \
 %{nil}

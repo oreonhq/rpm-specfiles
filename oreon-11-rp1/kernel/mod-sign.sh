@@ -9,11 +9,12 @@
 # This essentially duplicates the 'modules_sign' Kbuild target and runs the
 # same commands for those modules.
 
-MODSECKEY=$1
-MODPUBKEY=$2
-moddir=$3
+KOBJ=$1
+MODSECKEY=$2
+MODPUBKEY=$3
+moddir=$4
 
-MODULE_SIG_HASH=$(grep -s '^CONFIG_MODULE_SIG_HASH=' .config | cut -d= -f2 | tr -d '"')
+MODULE_SIG_HASH=$(grep -s '^CONFIG_MODULE_SIG_HASH=' "$KOBJ/.config" | cut -d= -f2 | tr -d '"')
 MODULE_SIG_HASH=${MODULE_SIG_HASH:-sha512}
 
 modules=$(find "$moddir" -type f -name '*.ko')
@@ -24,7 +25,7 @@ NPROC=$(nproc)
 # NB: this loop runs 2000+ iterations. Try to be fast.
 echo "$modules" | xargs -r -n16 -P "$NPROC" sh -c "
 for mod; do
-    ./scripts/sign-file $MODULE_SIG_HASH $MODSECKEY $MODPUBKEY \$mod
+    $KOBJ/scripts/sign-file $MODULE_SIG_HASH $MODSECKEY $MODPUBKEY \$mod
     rm -f \$mod.sig \$mod.dig
 done
 " DUMMYARG0   # xargs appends ARG1 ARG2..., which go into $mod in for loop.
